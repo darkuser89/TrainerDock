@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "id": "dead-island-2",
+  "name": "Dead Island 2",
+  "version": "1.0.0",
+  "profiles": [
+    {
+      "id": "mas",
+      "name": "Dead Island 2 · Mac App Store",
+      "enabled": true,
+      "bundleIdentifier": "com.plaion.DeadIsland2Usk",
+      "executable": "DeadIsland2",
+      "uuids": [
+        "33AE24EE-5FDC-379A-BD9E-8B1BDE36B6EC"
+      ],
+      "teamIdentifier": "XSBJ2Q9R2T",
+      "version": "0.6.4",
+      "store": "Mac App Store"
+    },
+    {
+      "id": "steam",
+      "name": "Dead Island 2 · Steam",
+      "enabled": true,
+      "bundleIdentifier": "com.plaion.DeadIsland2",
+      "executable": "DeadIsland2",
+      "uuids": [
+        "9EB36C68-45E5-3C11-B465-FFD49164B1DA"
+      ],
+      "teamIdentifier": "XSBJ2Q9R2T",
+      "version": "0.6.4",
+      "store": "Steam",
+      "steamAppId": "934700",
+      "launchEnvironment": {
+        "SteamAppId": "934700",
+        "SteamGameId": "934700"
+      }
+    }
+  ],
+  "groups": [
+    {
+      "id": "player",
+      "title": "Spieler",
+      "symbol": "person",
+      "features": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        12,
+        21,
+        22,
+        23
+      ]
+    },
+    {
+      "id": "weapons",
+      "title": "Waffen & Kampf",
+      "symbol": "scope",
+      "features": [
+        3,
+        8,
+        9,
+        10,
+        11,
+        17,
+        18,
+        19,
+        20
+      ]
+    },
+    {
+      "id": "inventory",
+      "title": "Inventar & Herstellung",
+      "symbol": "shippingbox",
+      "features": [
+        13,
+        14,
+        15,
+        16
+      ]
+    },
+    {
+      "id": "progress",
+      "title": "Fortschritt",
+      "symbol": "chart.bar",
+      "features": [
+        24,
+        25
+      ]
+    },
+    {
+      "id": "world",
+      "title": "Spiel",
+      "symbol": "timer",
+      "features": [
+        7
+      ]
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "id": "control",
+  "name": "Control Ultimate Edition",
+  "version": "0.3.0",
+  "profiles": [
+    {
+      "id": "control-steam-arm64",
+      "name": "Control Ultimate Edition · Steam",
+      "enabled": true,
+      "bundleIdentifier": "com.remedygames.control-ue-steam",
+      "executable": "Game",
+      "uuids": [
+        "CF65DC88-F5CE-38A4-8A2A-21FD5F43F14B"
+      ],
+      "teamIdentifier": "WPFU4HYKCV",
+      "version": "1.34",
+      "store": "Steam",
+      "steamAppId": "870780",
+      "launchEnvironment": {
+        "SteamAppId": "870780",
+        "SteamGameId": "870780"
+      }
+    },
+    {
+      "id": "control-mas-1-33-1-arm64",
+      "name": "Control Ultimate Edition · Mac App Store 1.33.1",
+      "enabled": true,
+      "bundleIdentifier": "com.remedygames.control-ue",
+      "executable": "Control Ultimate Edition",
+      "uuids": [
+        "CF9FCD9D-B85A-3AB7-8C3E-55A060D8B260"
+      ],
+      "teamIdentifier": "WPFU4HYKCV",
+      "version": "1.33.1",
+      "store": "Mac App Store"
+    },
+    {
+      "id": "control-mas-arm64",
+      "name": "Control Ultimate Edition · Mac App Store",
+      "enabled": true,
+      "bundleIdentifier": "com.remedygames.control-ue",
+      "executable": "Game",
+      "uuids": [
+        "DB36B7EC-1D93-3FF4-9737-46E9D6F7082F"
+      ],
+      "teamIdentifier": "WPFU4HYKCV",
+      "version": "1.371",
+      "store": "Mac App Store"
+    }
+  ],
+  "groups": [
+    {
+      "id": "player",
+      "title": "Spieler",
+      "symbol": "person",
+      "features": [
+        0,
+        1,
+        6
+      ]
+    },
+    {
+      "id": "combat",
+      "title": "Waffen & Kampf",
+      "symbol": "scope",
+      "features": [
+        2,
+        8,
+        9
+      ]
+    },
+    {
+      "id": "inventory",
+      "title": "Inventar & Fortschritt",
+      "symbol": "shippingbox",
+      "features": [
+        3,
+        4,
+        5,
+        10,
+        11
+      ]
+    },
+    {
+      "id": "world",
+      "title": "Spieltempo",
+      "symbol": "timer",
+      "features": [
+        7
+      ]
+    }
+  ]
+}

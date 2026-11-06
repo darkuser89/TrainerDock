@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    "TrainerFeatures.m",
+    "GameAdapter.m",
+    "CrimsonAdapter.m",
+    "CrimsonNative.mm",
+    "GameBridge.m",
+    "SelectionSettings.m",
+    "GameProfile.m",
+    "MemoryAccess.m",
+    "TrainerMaterial.m",
+    "Overlay.m",
+    "OverlaySettings.m",
+    "OverlayShortcuts.m",
+    "Runtime.m"
+  ],
+  "defines": [],
+  "catalogSources": [
+    "TrainerFeatures.m"
+  ],
+  "sourceRoot": "Sources",
+  "family": "CrimsonDesert",
+  "sdkSources": [
+    "MHTGlassIntensity.m"
+  ]
+}

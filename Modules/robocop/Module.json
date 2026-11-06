@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "id": "robocop",
+  "name": "RoboCop: Rogue City",
+  "version": "1.0.0",
+  "profiles": [
+    {
+      "id": "robocop-steam-arm64",
+      "name": "RoboCop: Rogue City · Steam arm64",
+      "enabled": true,
+      "bundleIdentifier": "com.nacon.robocoproguecitysteam",
+      "executable": "RoboCop",
+      "uuids": [
+        "1FA73710-C3C8-3F83-97C3-CBF0ED3215ED"
+      ],
+      "teamIdentifier": "H3YRMAJQ3D",
+      "version": "0.0.1",
+      "steamAppId": "1681430",
+      "store": "Steam",
+      "launchEnvironment": {
+        "SteamAppId": "1681430",
+        "SteamGameId": "1681430"
+      }
+    }
+  ],
+  "groups": [
+    {
+      "id": "player",
+      "title": "Spieler",
+      "symbol": "person",
+      "features": [
+        0,
+        1,
+        9,
+        13,
+        14
+      ]
+    },
+    {
+      "id": "weapons",
+      "title": "Waffen & Kampf",
+      "symbol": "scope",
+      "features": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ]
+    },
+    {
+      "id": "progress",
+      "title": "Fortschritt",
+      "symbol": "chart.bar",
+      "features": [
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "id": "world",
+      "title": "Spieltempo",
+      "symbol": "timer",
+      "features": [
+        15,
+        16
+      ]
+    }
+  ]
+}

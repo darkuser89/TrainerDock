@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    "TrainerMaterial.m",
+    "Overlay.m",
+    "OverlaySettings.m",
+    "OverlayShortcuts.m",
+    "TrainerFeatures.m",
+    "SelectionSettings.m",
+    "GameBridge.m",
+    "OverlayInput.m",
+    "GameAccess.m",
+    "GameEdition.m",
+    "ExtraFeatures.m",
+    "Runtime.m"
+  ],
+  "defines": [
+    "MHT_DI2=1"
+  ],
+  "catalogSources": [
+    "TrainerFeatures.m"
+  ],
+  "sourceRoot": "Sources",
+  "family": "DeadIsland2",
+  "sdkSources": [
+    "MHTOverlayHost.m",
+    "MHTGlassIntensity.m"
+  ]
+}

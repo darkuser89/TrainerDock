@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "sourceRoot": "Sources",
+  "family": "NoMansSky",
+  "developmentOnly": false,
+  "sources": [
+    "TrainerFeatures.m",
+    "GameAdapter.m",
+    "GameBridge.m",
+    "SelectionSettings.m",
+    "GameProfile.m",
+    "MemoryAccess.m",
+    "TrainerMaterial.m",
+    "Overlay.m",
+    "OverlaySettings.m",
+    "OverlayShortcuts.m",
+    "Runtime.m",
+    "NMSAdapter.m",
+    "OverlayCursor.m"
+  ],
+  "defines": [],
+  "catalogSources": [
+    "TrainerFeatures.m"
+  ],
+  "sdkSources": [
+    "MHTOverlayHost.m",
+    "MHTGlassIntensity.m"
+  ],
+  "testSuite": "mt",
+  "nativeContractTests": "Tests/NoMansSky/NativeContractTests.m"
+}

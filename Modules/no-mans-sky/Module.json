@@ -1,0 +1,298 @@
+{
+  "schemaVersion": 1,
+  "id": "no-mans-sky",
+  "name": "No Man’s Sky",
+  "version": "1.0.0",
+  "profiles": [
+    {
+      "id": "steam-arm64",
+      "name": "No Man’s Sky · Steam",
+      "enabled": true,
+      "store": "Steam",
+      "bundleIdentifier": "uk.co.hellogames.nms",
+      "executable": "No Man's Sky",
+      "version": "4.70",
+      "uuids": [
+        "1FABCC98-D6B6-3905-BF1B-823BD5033DA9"
+      ],
+      "teamIdentifier": "8H477MC9Y6",
+      "steamAppId": "275850",
+      "steamBuildId": "26386568",
+      "launchEnvironment": {
+        "SteamAppId": "275850",
+        "SteamGameId": "275850"
+      },
+      "signatureScope": "sha256-original",
+      "integrityFiles": [
+        "Contents/Info.plist",
+        "Contents/MacOS/No Man's Sky"
+      ],
+      "fileChecks": [
+        {
+          "path": "Contents/Info.plist",
+          "fileSize": 2068,
+          "offset": 0,
+          "length": 2068,
+          "sha256": "25284789c8b355d8bbe1066089bec761afa9263bc3c7e38dce81a850f4f29652"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "84ffddb1cde453fec4e6d579ae82a765b0cc9f9d9b825834c86a1e576a3dfce9"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 8388608,
+          "length": 8388608,
+          "sha256": "e2668063985dce75f0f4b5317ee28f779a6bdaa7334f49e69a1a0c7745c32e06"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 16777216,
+          "length": 8388608,
+          "sha256": "2d13b32f2360614c6e7fc6d14171dbf0c1f86ddb4e4e5610b43907cd47d5c0b0"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 25165824,
+          "length": 8388608,
+          "sha256": "09846c147c3165b34f8811537f0c799054bb8e96fb016ef287f742304898eecb"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 33554432,
+          "length": 8388608,
+          "sha256": "88d52e652866a7c4f2e050c2d920415927d4df42410133bee62a4f45f779d4eb"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 41943040,
+          "length": 8388608,
+          "sha256": "9decd26a539b859e2b728db6b05ed47b25fb94bf556d4110e0bb522e150a83ae"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 50331648,
+          "length": 8388608,
+          "sha256": "9365e4332a70208cbfeb3a447ad21eacc6ad65ff2d8714d9b2570a29d6c06b5f"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 58720256,
+          "length": 8388608,
+          "sha256": "d3edfe61341473aa6c1b8c9150e59d82b6af7a6e0c87f7d81b10f4815a4c93ee"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 67108864,
+          "length": 8388608,
+          "sha256": "da62020eaa6beb06e41ac91b4ef95e69a4d333e40fbbc28d0836af31a507b66b"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 75497472,
+          "length": 8388608,
+          "sha256": "22946363b24690ee8f5421b5f70a3415e19a2be2d8fac17d3948c725a4e1ff4c"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 83886080,
+          "length": 8388608,
+          "sha256": "9b85b8683f1a1ba90d99ef61bbc2c90eb63bf9b8f1ed006c720339c29d202d75"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 92274688,
+          "length": 8388608,
+          "sha256": "9f53e05314fa7f5ea79d284826e5c76c7aa6103206796d34e6968ba485309173"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 100663296,
+          "length": 8388608,
+          "sha256": "c10bfc9a4c0a24b77ba86554769465cb97fc09a4c8167750e93abf852389f8c1"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 109051904,
+          "length": 8388608,
+          "sha256": "62ddc81c7e4e03aab39985c874bd150b955b982a144ea7b15902d78bec65a05a"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 117440512,
+          "length": 8388608,
+          "sha256": "979024bbcffb753b6a93e039de89dfe7a198ab7409e55eb768584104a9f699a1"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 125829120,
+          "length": 8388608,
+          "sha256": "f7e1808dbc08e8704b02ffab63320ce4a7190c7ed9c89674a3a6130e02d11a4c"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 134217728,
+          "length": 8388608,
+          "sha256": "e42a78ada952891d1e364776be0d5bd40cb0d745faed5543d5abdb6c2278052e"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 142606336,
+          "length": 8388608,
+          "sha256": "259ffc51d440a3104d1b284fe6c3bc3d6b5c1a3125999cf0f2189794dc7e48ff"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 150994944,
+          "length": 8388608,
+          "sha256": "ddee6cd43ff21514bbf534def6de0e3ca86bcf7f9f7e4b9dba6c5fe79f126f1c"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 159383552,
+          "length": 8388608,
+          "sha256": "92b2725dc15b4245df4a17e13fc10bb53051c8ecd909116870bdc2a411db4a5e"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 167772160,
+          "length": 8388608,
+          "sha256": "2af0fdd9f80f370f51421f83f3065a69ea1730142d1cd280d2c8f2ecc96884a4"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 176160768,
+          "length": 8388608,
+          "sha256": "4dd2721f969eae1bd09593eeb9c1e2b24892c1600ef3dbc7e7ad0fb3801f0c3c"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 184549376,
+          "length": 8388608,
+          "sha256": "90bed76e3e6e1f0e64889576aef576a99048019848e6c2009a315468620af3f6"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 192937984,
+          "length": 8388608,
+          "sha256": "02a2fa3276dc26940e25a03b3092bdce49b8296b723bce925c5890e04c3c6024"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 201326592,
+          "length": 8388608,
+          "sha256": "a4e5bb086d7898174203980ae71ea40eaa07284a3da147ac6f8b4a7b1e3d89f7"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 209715200,
+          "length": 8388608,
+          "sha256": "7b5dfa07478b077cfb9bba89845e1f756645b709b8f6a3e4a9b0f2cf8b9d5e30"
+        },
+        {
+          "path": "Contents/MacOS/No Man's Sky",
+          "fileSize": 221600128,
+          "offset": 218103808,
+          "length": 3496320,
+          "sha256": "e7c0233fe9c290b745eb810fd7294eb8dd1d30e334b076a49c83613146d361be"
+        }
+      ],
+      "integrityApproval": "user-confirmed-steam-original"
+    }
+  ],
+  "groups": [
+    {
+      "id": "player",
+      "title": "Spieler",
+      "symbol": "person",
+      "features": [
+        0,
+        1,
+        2,
+        3,
+        6,
+        9,
+        10
+      ]
+    },
+    {
+      "id": "inventory",
+      "title": "Inventar & Währungen",
+      "symbol": "shippingbox",
+      "features": [
+        4,
+        5,
+        8,
+        14,
+        15,
+        20,
+        23,
+        24
+      ]
+    },
+    {
+      "id": "weapons",
+      "title": "Multi-Tool & Kampf",
+      "symbol": "scope",
+      "features": [
+        11,
+        12,
+        13,
+        16,
+        29
+      ]
+    },
+    {
+      "id": "ship",
+      "title": "Raumschiff",
+      "symbol": "airplane",
+      "features": [
+        17,
+        18,
+        19,
+        25,
+        26,
+        27
+      ]
+    },
+    {
+      "id": "world",
+      "title": "Erkundung & Spielwelt",
+      "symbol": "globe.europe.africa",
+      "features": [
+        7,
+        21,
+        22,
+        28
+      ]
+    }
+  ]
+}

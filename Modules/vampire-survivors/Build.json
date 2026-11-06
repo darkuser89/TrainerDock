@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "sourceRoot": "Sources",
+  "family": "VampireSurvivors",
+  "developmentOnly": false,
+  "sources": [
+    "TrainerFeatures.m",
+    "GameAdapter.m",
+    "NativeAdapter.m",
+    "GameBridge.m",
+    "SelectionSettings.m",
+    "GameProfile.m",
+    "MemoryAccess.m",
+    "TrainerMaterial.m",
+    "Overlay.m",
+    "OverlaySettings.m",
+    "OverlayShortcuts.m",
+    "Runtime.m",
+    "MonoRuntime.mm"
+  ],
+  "defines": [],
+  "catalogSources": [
+    "TrainerFeatures.m"
+  ],
+  "sdkSources": [
+    "MHTOverlayHost.m",
+    "MHTGlassIntensity.m"
+  ],
+  "testSuite": "mt",
+  "managed": {
+    "referenceProfile": "steam-arm64",
+    "referenceDirectory": "Contents/Resources/Data/Managed",
+    "sources": [
+      "Sources/Managed/Trainer.cs",
+      "Sources/Managed/Policy.cs"
+    ],
+    "header": "VSManagedImage.h",
+    "policySources": [
+      "Sources/Managed/Policy.cs"
+    ],
+    "policyTests": [
+      "Tests/VampireSurvivors/PolicyTests.cs"
+    ]
+  },
+  "nativeContractTests": "Tests/VampireSurvivors/NativeContractTests.m"
+}

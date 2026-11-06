@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 1,
+  "id": "escape-from-duckov",
+  "name": "Escape from Duckov",
+  "version": "1.0.0",
+  "profiles": [
+    {
+      "id": "steam-arm64",
+      "name": "Steam · 2.3.30",
+      "store": "Steam",
+      "bundleIdentifier": "com.Unity-Technologies.com.unity.template.urp-blank",
+      "executable": "Duckov",
+      "version": "2.3.30",
+      "teamIdentifier": "",
+      "uuids": [
+        "16630B36-4C21-385E-94E1-848EEBB8E956"
+      ],
+      "steamAppId": "3167020",
+      "gameVersion": "2.3.30",
+      "enabled": true,
+      "fileChecks": [
+        {
+          "path": "Contents/Resources/Data/Managed/TeamSoda.Duckov.Core.dll",
+          "fileSize": 1806336,
+          "offset": 0,
+          "length": 1806336,
+          "sha256": "78e6bf269be1b8286a70f83af8e2a79dff7fda8f7f137c997b8c1b4ae9167f6d"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/ItemStatsSystem.dll",
+          "fileSize": 98304,
+          "offset": 0,
+          "length": 98304,
+          "sha256": "567c0704c96b99ef3160290cb80b969dd1bd3635d7b11e769747d95bef8a780c"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/TeamSoda.Duckov.Utilities.dll",
+          "fileSize": 29696,
+          "offset": 0,
+          "length": 29696,
+          "sha256": "b554294f17615b9c2d564897b7e18b566285e23d6ba64e55ff7527d1b06afe13"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/UniTask.dll",
+          "fileSize": 564224,
+          "offset": 0,
+          "length": 564224,
+          "sha256": "1828187ad73b37d1df53ea46a61444fad9fcee6c14fd7c3bebb59432e2aa1cf1"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/UnityEngine.CoreModule.dll",
+          "fileSize": 1381888,
+          "offset": 0,
+          "length": 1381888,
+          "sha256": "ce064ee6dcc296f6108771ab9fe817828a7f3e1aa3af6ae95aea2dd0a2f087d2"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/Newtonsoft.Json.dll",
+          "fileSize": 691712,
+          "offset": 0,
+          "length": 691712,
+          "sha256": "a56146202232958f46bd6a28b5a7da166aea123ee0d646735a46e5c341dfbf1f"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/FOW.dll",
+          "fileSize": 60928,
+          "offset": 0,
+          "length": 60928,
+          "sha256": "f4bb67cb004bdedd3471cd8a6e5436dd417e9c7f2e52540d18aa7b1be1ce2c9b"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/Cinemachine.dll",
+          "fileSize": 311296,
+          "offset": 0,
+          "length": 311296,
+          "sha256": "0117c15cce8922133048c1033ee28008b9a804ff3701d986ec5ca3c6df44f708"
+        }
+      ],
+      "launchEnvironment": {
+        "SteamAppId": "3167020",
+        "SteamGameId": "3167020"
+      }
+    }
+  ],
+  "groups": [
+    {
+      "id": "player",
+      "title": "Spieler",
+      "symbol": "person",
+      "features": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        7,
+        22,
+        27,
+        28,
+        32,
+        33,
+        34
+      ]
+    },
+    {
+      "id": "combat",
+      "title": "Waffen & Kampf",
+      "symbol": "scope",
+      "features": [
+        5,
+        6,
+        8,
+        9,
+        10,
+        11,
+        15
+      ]
+    },
+    {
+      "id": "inventory",
+      "title": "Inventar & Herstellung",
+      "symbol": "shippingbox",
+      "features": [
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        29,
+        30,
+        31
+      ]
+    },
+    {
+      "id": "progress",
+      "title": "Fortschritt",
+      "symbol": "chart.bar",
+      "features": [
+        20,
+        21
+      ]
+    },
+    {
+      "id": "world",
+      "title": "Spielwelt",
+      "symbol": "globe.europe.africa",
+      "features": [
+        19,
+        23,
+        24,
+        25,
+        26
+      ]
+    }
+  ]
+}

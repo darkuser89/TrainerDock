@@ -1,0 +1,115 @@
+// SPDX-License-Identifier: GPL-3.0-only
+#import <Foundation/Foundation.h>
+#include <stdbool.h>
+#include <stdint.h>
+
+typedef struct { int32_t index, serial; } DI2WeakObject;
+typedef struct { void *data; int32_t num, capacity; } DI2Array;
+typedef struct { uint64_t low, high; } DI2Guid;
+typedef struct {
+    void **world;
+    void (*gameThreadCall)(void (^)(void), NSArray *, bool);
+    void *(*playerCharacter)(const void *, int);
+    bool (*standalone)(void *);
+    bool (*valid)(const void *, bool);
+    bool (*classIsChildOf)(void *, void *);
+    void *(*playerClass)(void);
+    void *(*inventoryClass)(void);
+    void *(*healthClass)(void);
+    void *(*staminaClass)(void);
+    void *(*physicalSlotClass)(void);
+    void *(*equippableClass)(void);
+    void *(*rangedClass)(void);
+    void *(*modulesClass)(void);
+    void *(*clipClass)(void);
+    void *(*component)(const void *, void *);
+    void *(*inventory)(const void *);
+    int32_t (*count)(const void *, const void *);
+    int32_t (*addCash)(void *, int32_t);
+    void (*name)(void *, const uint16_t *, int);
+    void (*addGod)(void *, uint64_t);
+    void (*removeGod)(void *, uint64_t);
+    void (*fillHealth)(void *, float);
+    float (*stamina)(const void *);
+    float (*maxStamina)(const void *);
+    void (*setStamina)(void *, float);
+    void (*weakAssign)(DI2WeakObject *, const void *);
+    void *(*weakGet)(const DI2WeakObject *);
+    void *(*ammoHandler)(const void *);
+    int32_t (*ammo)(const void *);
+    int32_t (*capacity)(const void *);
+    void (*setAmmo)(void *, int32_t);
+    void *(*playerController)(const void *, int);
+    void *(*meleeClass)(void);
+    void *(*meleeAttributesClass)(void);
+    void *(*attributeClass)(void);
+    void *(*damageableClass)(void);
+    void *(*furyClass)(void);
+    void *(*throwClass)(void);
+    void *(*progressionClass)(void);
+    void *(*levelsClass)(void);
+    void *(*spreadClass)(void);
+    void *(*recoilClass)(void);
+    void (*addDurability)(void *, uint64_t);
+    void (*removeDurability)(void *, uint64_t);
+    void (*repair)(void *);
+    float (*durabilityLoss)(const void *);
+    void (*setIncomingDamage)(void *, float);
+    float (*getGameSpeed)(const void *);
+    void (*setGameSpeed)(const void *, float);
+    void *(*damageAttribute)(void *);
+    void *(*forceAttribute)(void *);
+    float (*getAttribute)(const void *);
+    void (*setAttribute)(void *, float);
+    void *(*spreadHandler)(const void *);
+    void *(*recoilHandler)(const void *);
+    void (*resetCurveballs)(void *);
+    void (*setInfiniteFury)(void *, bool);
+    float (*getFury)(void *);
+    void (*addFury)(void *, float, void *);
+    int32_t (*removeCash)(void *, int32_t);
+    int32_t (*getXP)(const void *);
+    int32_t (*getLevel)(const void *);
+    int32_t (*maxLevel)(const void *);
+    int32_t (*xpForLevel)(const void *, int32_t);
+    void (*addXP)(void *, int32_t, uint64_t);
+    void *ignorePlayers;
+    void *(*aiManager)(void *);
+    void *(*aiManagerClass)(void);
+    void *(*playerStateClass)(void);
+    void (*updateIgnorePlayers)(void *);
+    void (*setIgnorePlayer)(void *, const DI2Array *);
+    void *(*modifiableClass)(void);
+    void *(*movementDefinitionClass)(void);
+    bool (*currentMovementValue)(const void *, const void *, float *);
+    DI2Guid (*addMovementModifier)(void *, const void *, uint64_t, float, int32_t, float, bool);
+    void (*removeMovementModifier)(void *, DI2Guid, float);
+    void (*updateMovementModifier)(void *, const void *, DI2Guid, float);
+    void *(*containerClass)(void);
+    void *(*categoryClass)(void);
+    void *(*itemActorClass)(void);
+    void *(*archetypeClass)(void);
+    int32_t (*nameString)(const void *, uint16_t *, uint32_t);
+    bool (*addItem)(void *, const void *, int32_t, bool);
+    void *(*recipeClass)(void);
+    void *(*ingredientsClass)(void);
+    void (*objectsOfClass)(const void *, DI2Array *, bool, uint32_t, uint32_t);
+    void (*freeMemory)(void *);
+    void *ingredientVTables[3]; // Address points (including the +16 Itanium adjustment).
+    int32_t (*zeroCraftingCost)(const void *, const void *);
+    void *(*controllerClass)(void);
+    void *(*localPlayerClass)(void);
+    void *(*viewportClass)(void);
+    void *(*worldViewport)(const void *);
+    void (*inputUIOnly)(void *, void *, uint8_t);
+    void (*inputGameOnly)(void *);
+} DI2GameAPI;
+
+// This ABI is restricted to the two verified arm64 MAS/Steam 0.6.4 UUIDs.
+BOOL DI2LoadGameAPI(DI2GameAPI *api);
+BOOL DI2ReadMemory(const void *address, void *result, size_t length);
+BOOL DI2WriteByte(void *object, size_t offset, uint8_t value);
+
+BOOL DI2WriteFloat(void *object, size_t offset, float value);
+BOOL DI2WriteInt(void *object, size_t offset, int32_t value);
+BOOL DI2WritePointer(void *object, size_t offset, void *value);

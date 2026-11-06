@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "sourceRoot": "Sources",
+  "family": "Duckov",
+  "developmentOnly": false,
+  "sources": [
+    "TrainerFeatures.m",
+    "GameAdapter.m",
+    "NativeAdapter.m",
+    "GameBridge.m",
+    "SelectionSettings.m",
+    "GameProfile.m",
+    "MemoryAccess.m",
+    "TrainerMaterial.m",
+    "Overlay.m",
+    "OverlaySettings.m",
+    "OverlayShortcuts.m",
+    "Runtime.m",
+    "MonoRuntime.mm"
+  ],
+  "defines": [],
+  "catalogSources": [
+    "TrainerFeatures.m"
+  ],
+  "sdkSources": [
+    "MHTOverlayHost.m",
+    "MHTGlassIntensity.m"
+  ],
+  "testSuite": "mt",
+  "managed": {
+    "referenceProfile": "steam-arm64",
+    "referenceDirectory": "Contents/Resources/Data/Managed",
+    "sources": [
+      "Sources/Managed/Trainer.cs",
+      "Sources/Managed/Safety.cs"
+    ],
+    "header": "DuckovManagedImage.h",
+    "policySources": [
+      "Sources/Managed/Safety.cs"
+    ],
+    "policyTests": [
+      "Tests/Duckov/CapacitySafetyTests.cs"
+    ]
+  },
+  "nativeContractTests": "Tests/Duckov/NativeContractTests.m"
+}

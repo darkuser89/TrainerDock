@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "id": "dome-keeper",
+  "name": "Dome Keeper",
+  "version": "1.0.0",
+  "profiles": [
+    {
+      "id": "steam-arm64",
+      "name": "Steam · 5.0.8.14",
+      "store": "Steam",
+      "bundleIdentifier": "com.bippinbits",
+      "executable": "Dome Keeper",
+      "version": "1.0.0",
+      "teamIdentifier": "",
+      "uuids": [
+        "6516AB35-BDEB-3CCC-84DF-29D44A76C5D5"
+      ],
+      "steamAppId": "1637320",
+      "gameVersion": "5.0.8.14",
+      "fileChecks": [
+        {
+          "path": "Contents/Resources/Dome Keeper.pck",
+          "fileSize": 1249758944,
+          "offset": 0,
+          "length": 1350048,
+          "sha256": "3e2ec12019b44b00af087600f40d3c0bf32e423fddc3e2581a279924b3bc4bac"
+        }
+      ],
+      "enabled": true,
+      "launchEnvironment": {
+        "SteamAppId": "1637320",
+        "SteamGameId": "1637320"
+      },
+      "signatureScope": "arm64-executable",
+      "signatureIdentifier": "godot.macos.template_release.arm64",
+      "signatureCDHash": "d577236cefbc1056af7c27a22b3b98b24717259e",
+      "launchMode": "executable"
+    }
+  ],
+  "groups": [
+    {
+      "id": "player",
+      "title": "Keeper",
+      "symbol": "person",
+      "features": [
+        0
+      ]
+    },
+    {
+      "id": "inventory",
+      "title": "Ressourcen",
+      "symbol": "shippingbox",
+      "features": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "dome",
+      "title": "Kuppel & Kampf",
+      "symbol": "shield",
+      "features": [
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "id": "world",
+      "title": "Wellen & Spieltempo",
+      "symbol": "timer",
+      "features": [
+        8,
+        9
+      ]
+    }
+  ]
+}

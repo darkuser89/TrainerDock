@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "id": "resident-evil-3",
+  "name": "Resident Evil 3",
+  "version": "1.0.0",
+  "profiles": [
+    {
+      "id": "re3-mac-1.0.0",
+      "name": "Resident Evil 3 1.0.0 · arm64",
+      "enabled": true,
+      "bundleIdentifier": "jp.co.capcom.RE3US",
+      "executable": "Resident Evil 3",
+      "uuids": [
+        "4C4C4461-5555-3144-A174-EA43301DB10B"
+      ],
+      "teamIdentifier": "4H8VTS9D6W",
+      "version": "1.0.0",
+      "store": "Mac App Store"
+    }
+  ],
+  "groups": [
+    {
+      "id": "player",
+      "title": "Spieler",
+      "symbol": "person",
+      "features": [
+        0,
+        3,
+        16
+      ]
+    },
+    {
+      "id": "weapons",
+      "title": "Waffen & Kampf",
+      "symbol": "scope",
+      "features": [
+        1,
+        2,
+        4,
+        5,
+        7,
+        17
+      ]
+    },
+    {
+      "id": "inventory",
+      "title": "Inventar & Shop",
+      "symbol": "shippingbox",
+      "features": [
+        8,
+        18,
+        19
+      ]
+    },
+    {
+      "id": "stats",
+      "title": "Statistiken & Zeit",
+      "symbol": "chart.bar",
+      "features": [
+        6,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    }
+  ]
+}

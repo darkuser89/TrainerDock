@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "id": "crimson-desert",
+  "name": "Crimson Desert",
+  "version": "1.0.0",
+  "profiles": [
+    {
+      "id": "crimson-steam-arm64-1.0.35-plus12",
+      "name": "Crimson Desert · Steam · 2.04.05",
+      "enabled": true,
+      "bundleIdentifier": "com.pearlabyss.CrimsonDesert.steam",
+      "executable": "CrimsonDesert_Steam",
+      "uuids": [
+        "083C4A58-7D49-307F-8F0F-8F9EEAE8343C"
+      ],
+      "teamIdentifier": "57S64SYSTT",
+      "version": "1.0.35",
+      "steamAppId": "3321460",
+      "store": "Steam",
+      "launchEnvironment": {
+        "SteamAppId": "3321460",
+        "SteamGameId": "3321460"
+      }
+    }
+  ],
+  "groups": [
+    {
+      "id": "player",
+      "title": "Spieler",
+      "symbol": "person",
+      "features": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "id": "inventory",
+      "title": "Inventar",
+      "symbol": "shippingbox",
+      "features": [
+        7,
+        12
+      ]
+    },
+    {
+      "id": "combat",
+      "title": "Kampf",
+      "symbol": "scope",
+      "features": [
+        9
+      ]
+    },
+    {
+      "id": "world",
+      "title": "Spielwelt",
+      "symbol": "globe.europe.africa",
+      "features": [
+        8,
+        10,
+        11
+      ]
+    }
+  ]
+}

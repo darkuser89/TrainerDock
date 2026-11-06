@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "id": "resident-evil-2",
+  "name": "Resident Evil 2",
+  "version": "1.0.0",
+  "profiles": [
+    {
+      "id": "re2-mac-1.0.2",
+      "name": "Resident Evil 2 1.0.2 · arm64",
+      "enabled": true,
+      "bundleIdentifier": "jp.co.capcom.RE2US",
+      "executable": "Resident Evil 2",
+      "uuids": [
+        "4C4C44ED-5555-3144-A15E-9285028AFD15"
+      ],
+      "teamIdentifier": "4H8VTS9D6W",
+      "version": "1.0.2",
+      "store": "Mac App Store"
+    }
+  ],
+  "groups": [
+    {
+      "id": "player",
+      "title": "Spieler",
+      "symbol": "person",
+      "features": [
+        0,
+        16
+      ]
+    },
+    {
+      "id": "weapons",
+      "title": "Waffen & Kampf",
+      "symbol": "scope",
+      "features": [
+        1,
+        2,
+        4,
+        5,
+        7,
+        15,
+        17
+      ]
+    },
+    {
+      "id": "inventory",
+      "title": "Inventar & Rätsel",
+      "symbol": "shippingbox",
+      "features": [
+        3,
+        8,
+        18,
+        19,
+        20
+      ]
+    },
+    {
+      "id": "stats",
+      "title": "Statistiken & Zeit",
+      "symbol": "chart.bar",
+      "features": [
+        6,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ]
+    }
+  ]
+}

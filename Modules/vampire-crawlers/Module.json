@@ -1,0 +1,368 @@
+{
+  "schemaVersion": 1,
+  "id": "vampire-crawlers",
+  "name": "Vampire Crawlers",
+  "version": "1.0.0",
+  "profiles": [
+    {
+      "id": "steam-arm64-1.6.1",
+      "name": "Steam · 1.6.1",
+      "store": "Steam",
+      "bundleIdentifier": "com.poncle.vampirecrawlers",
+      "executable": "Vampire Crawlers",
+      "version": "1.6.1",
+      "gameVersion": "1.6.1",
+      "teamIdentifier": "",
+      "uuids": [
+        "94E5D2B6-D4AF-34A5-B0C3-D2D6EB396298"
+      ],
+      "steamAppId": "3265700",
+      "enabled": true,
+      "fileChecks": [
+        {
+          "path": "Contents/Info.plist",
+          "fileSize": 1914,
+          "offset": 0,
+          "length": 1914,
+          "sha256": "f5317760ce6edaec5951dd1b384af9dada5ea94db038dd551a476c90f37f542d"
+        },
+        {
+          "path": "Contents/MacOS/Vampire Crawlers",
+          "fileSize": 132027,
+          "offset": 0,
+          "length": 132027,
+          "sha256": "304d88eeb257085351254b6d3606b72ef804f4674177363e5e41ab0b521dff7a"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "e62debf2248db64c8939012262ae61e421e3cbf993bce40c47589ed4b9d460fb"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 8388608,
+          "length": 8388608,
+          "sha256": "9b5d3b0477cda6668f8b4ab6046ff4df099d2dcdc8d78636e4aafbcc2cca2a3b"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 16777216,
+          "length": 8388608,
+          "sha256": "aa7ed9cbd1451c375ae9bb40ae210c8112d7f49564e7d61490b562e2b3f61139"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 25165824,
+          "length": 8388608,
+          "sha256": "824c412007a9f1b300ed841d66f13ee23b03a10b2133d6fe651605f70bfaf41f"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 33554432,
+          "length": 8388608,
+          "sha256": "1338947bfc14a2e087ad252319eb2867c65f8b13914e96c1ffd4a83fcbe88db0"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 41943040,
+          "length": 8388608,
+          "sha256": "aaea054b39b43d844930156f55255fb8addcfe58df18ca52ebdd1849825ca3ee"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 50331648,
+          "length": 8388608,
+          "sha256": "5fead3b024afc04ee98ebbeeeb3b4d2cbe010dd5afe26c31aea29bf2cc37cc7c"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 58720256,
+          "length": 8388608,
+          "sha256": "f6c8a0dfbc4755df5a63a98adad9eb61161c0d62d40c66da2faa8de30c5fa622"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 67108864,
+          "length": 8388608,
+          "sha256": "16206f7edd11d655ed6527116509e20f786fc7476a6496906bf3384d00c1ff9c"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 75497472,
+          "length": 8388608,
+          "sha256": "5219c42f693f32b159d06f264d0fd0e471c8aef7ec6b35be42c30daf106fc635"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 83886080,
+          "length": 8388608,
+          "sha256": "dc5eb3260d5c747b0451de604fcea4ce8cfe91383cde7fd9d06bca8b8bfc7a8a"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 92274688,
+          "length": 8388608,
+          "sha256": "bd9446f257828e1011c2f80ebd447e6e0843c163da983d5d4c44f5a40ae7c42a"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 100663296,
+          "length": 8388608,
+          "sha256": "3a7577c4d764929494f033bf1a26d7c9f6bf203dea388c088cf08d47920c3a31"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 109051904,
+          "length": 8388608,
+          "sha256": "7d74f02616dfc61f92d4295449d63dda27a866e51004f776512ad62bb24c337e"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 117440512,
+          "length": 8388608,
+          "sha256": "577ff3b5adf6d871ca84dde177b48b24b5b1fd22e915db5acd032edb63567ccf"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 125829120,
+          "length": 8388608,
+          "sha256": "84ba5a53c9cf269663430e1be173ad32bd3d3110507a02ea69ffb663edafb2ed"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 134217728,
+          "length": 8388608,
+          "sha256": "c07670de839715703957b4ef29b829556407930afda9617d9f65a64935b8a358"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 142606336,
+          "length": 8388608,
+          "sha256": "782aa5e783019dc42c5e953523a65a10b840ad0b1696fb8fe1dacd19ab6744c0"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 150994944,
+          "length": 8388608,
+          "sha256": "414a9264f0ef9b621ae7a6ba256705a4cadccfffdb3940f83520433f1dd5ee45"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 159383552,
+          "length": 8388608,
+          "sha256": "6de1b8618128e53c6fa0d69a6b10d66b363275725d3b4b4e5e1907a569c19ad8"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 167772160,
+          "length": 8388608,
+          "sha256": "ec1464e74e95548a969aae1e0e7407df9281f6d986fe7fc22f6433104b8f92cb"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 176160768,
+          "length": 8388608,
+          "sha256": "136b3e775646936f6189da6d1b45560b4a8acfa96504ffa3c309e9fc7c35e991"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 184549376,
+          "length": 8388608,
+          "sha256": "77cbd2d0034991b536052650fd934b4cb7e946ecad58ea0c5d22c442c30eb230"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 192937984,
+          "length": 8388608,
+          "sha256": "e975f555fbbb1ae0282293d7d6580ddabd734e5c064421df11cf598f4a526c57"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 201326592,
+          "length": 8388608,
+          "sha256": "cb3eec0f25a41591cf5ab523eb6c7c93226bed88e150b68a9a894bc78ec9fbe3"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211053078,
+          "offset": 209715200,
+          "length": 1337878,
+          "sha256": "d8c5b52b6256e7880d6fb2329646039bef325b6aa4de9979ff628be08b9380d8"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 60280432,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "05a27dbfb8c66213b219699c6ddc50b9d16e5395d064b395f29aacb2244e0e9c"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 60280432,
+          "offset": 8388608,
+          "length": 8388608,
+          "sha256": "5aecdff423bdadb034e7fe009df1827a471feb74ddaef5b80f7796a0c3359c0e"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 60280432,
+          "offset": 16777216,
+          "length": 8388608,
+          "sha256": "a1eef8648bf5392d697b154cce3bd0c17563f4ba57227dc2ed0617c999e1267d"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 60280432,
+          "offset": 25165824,
+          "length": 8388608,
+          "sha256": "3d2a88cf9f3e2da757afede50060f34775562e30979870067cbe6ddd652c6dd1"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 60280432,
+          "offset": 33554432,
+          "length": 8388608,
+          "sha256": "4f4d2e28d3afc442beed4e5becc26a61423531c2401a891762d571f720300662"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 60280432,
+          "offset": 41943040,
+          "length": 8388608,
+          "sha256": "2486872767efa42f2610aeed1b18db4d49ebe3f8bfdbc70fbcdce3a8a0c29f23"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 60280432,
+          "offset": 50331648,
+          "length": 8388608,
+          "sha256": "3a0a884b49a326bf1ddd6e6a348b4693dab0f6e25dc023da499359ce5fd7d646"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 60280432,
+          "offset": 58720256,
+          "length": 1560176,
+          "sha256": "5d35915c82aaacf96fa45c0bf11a782cac5a5b7486398eb3033efb001ec46542"
+        },
+        {
+          "path": "Contents/Resources/Data/il2cpp_data/Metadata/global-metadata.dat",
+          "fileSize": 18151636,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "36584beb563207c1e6f4c0c2e9a86870a72bd42b06be3bf8611a8abcbf2a022e"
+        },
+        {
+          "path": "Contents/Resources/Data/il2cpp_data/Metadata/global-metadata.dat",
+          "fileSize": 18151636,
+          "offset": 8388608,
+          "length": 8388608,
+          "sha256": "0b765315e83d0174a7741aab53d52108277a23d87c11f113f2871b6f4f344e01"
+        },
+        {
+          "path": "Contents/Resources/Data/il2cpp_data/Metadata/global-metadata.dat",
+          "fileSize": 18151636,
+          "offset": 16777216,
+          "length": 1374420,
+          "sha256": "75021e45d9a9f40290c8c7eee36da6807fba44f332cae3452b550a1a1a29376c"
+        }
+      ],
+      "launchEnvironment": {
+        "SteamAppId": "3265700",
+        "SteamGameId": "3265700"
+      },
+      "signatureScope": "sha256-original",
+      "integrityApproval": "user-confirmed-steam-original",
+      "integrityFiles": [
+        "Contents/Info.plist",
+        "Contents/MacOS/Vampire Crawlers",
+        "Contents/Frameworks/GameAssembly.dylib",
+        "Contents/Frameworks/UnityPlayer.dylib",
+        "Contents/Resources/Data/il2cpp_data/Metadata/global-metadata.dat"
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "player",
+      "title": "Spieler",
+      "symbol": "person",
+      "features": [
+        0,
+        1,
+        7,
+        8,
+        15,
+        16,
+        20,
+        21
+      ]
+    },
+    {
+      "id": "combat",
+      "title": "Kampf",
+      "symbol": "scope",
+      "features": [
+        2,
+        9,
+        10,
+        11,
+        19
+      ]
+    },
+    {
+      "id": "inventory",
+      "title": "Münzen & Karten",
+      "symbol": "shippingbox",
+      "features": [
+        4,
+        5,
+        17,
+        22,
+        23,
+        24
+      ]
+    },
+    {
+      "id": "stats",
+      "title": "Werte & Fortschritt",
+      "symbol": "chart.bar",
+      "features": [
+        3,
+        6,
+        12,
+        13,
+        14,
+        18,
+        25,
+        26
+      ]
+    }
+  ]
+}

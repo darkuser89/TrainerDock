@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "sourceRoot": "Sources",
+  "family": "NativeTrainer",
+  "developmentOnly": false,
+  "sources": [
+    "TrainerFeatures.m",
+    "GameAdapter.m",
+    "NativeAdapter.mm",
+    "ControlEngine.mm",
+    "ControlInput.mm",
+    "ControlInventory.mm",
+    "ControlShield.mm",
+    "ControlCombat.mm",
+    "ControlMovement.mm",
+    "GameBridge.m",
+    "SelectionSettings.m",
+    "GameProfile.m",
+    "MemoryAccess.m",
+    "TrainerMaterial.m",
+    "Overlay.m",
+    "OverlaySettings.m",
+    "OverlayShortcuts.m",
+    "Runtime.m"
+  ],
+  "defines": [],
+  "catalogSources": [
+    "TrainerFeatures.m"
+  ],
+  "sdkSources": [
+    "MHTOverlayHost.m",
+    "MHTGlassIntensity.m"
+  ],
+  "nativeContractTests": "Tests/Control/NativeContractTests.mm"
+}

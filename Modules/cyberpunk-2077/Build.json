@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    "SelectionSettings.m",
+    "TrainerFeatures.m",
+    "GameAdapter.m",
+    "GameBridge.m",
+    "GameProfile.m",
+    "MemoryAccess.m",
+    "CyberpunkMetadata.m",
+    "CyberpunkNativeBridge.m",
+    "CyberpunkAdapter.m",
+    "CyberpunkEffects.m",
+    "TrainerMaterial.m",
+    "Overlay.m",
+    "OverlaySettings.m",
+    "OverlayShortcuts.m",
+    "CyberpunkCursor.m",
+    "Runtime.m"
+  ],
+  "defines": [],
+  "catalogSources": [
+    "TrainerFeatures.m"
+  ],
+  "sourceRoot": "Sources",
+  "family": "Cyberpunk2077",
+  "sdkSources": [
+    "MHTGlassIntensity.m"
+  ]
+}

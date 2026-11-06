@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "sourceRoot": "Sources",
+  "family": "DomeKeeper",
+  "developmentOnly": false,
+  "sources": [
+    "TrainerFeatures.m",
+    "GameAdapter.m",
+    "NativeAdapter.m",
+    "GodotABI.mm",
+    "GameBridge.m",
+    "SelectionSettings.m",
+    "GameProfile.m",
+    "MemoryAccess.m",
+    "TrainerMaterial.m",
+    "Overlay.m",
+    "OverlaySettings.m",
+    "OverlayShortcuts.m",
+    "Runtime.m"
+  ],
+  "defines": [],
+  "catalogSources": [
+    "TrainerFeatures.m"
+  ],
+  "sdkSources": [
+    "MHTOverlayHost.m",
+    "MHTGlassIntensity.m"
+  ],
+  "testSuite": "mt"
+}

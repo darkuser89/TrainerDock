@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    "LocalControl.m",
+    "CheatPreferences.m",
+    "TrainerFeatures.m",
+    "RE4Features.m",
+    "RE7Features.m",
+    "GameAdapter.m",
+    "GameBridge.m",
+    "RE2Adapter.m",
+    "RE3Adapter.m",
+    "RE4Adapter.m",
+    "RE7Adapter.m",
+    "RE2Ownership.m",
+    "RE7Ownership.m",
+    "RE8Ownership.m",
+    "RE8Adapter.m",
+    "RE8Features.m",
+    "RE2Engine.m",
+    "RE4Engine.m",
+    "RE7Engine.m",
+    "RE8Engine.m",
+    "MemoryAccess.m",
+    "GameProfile.m",
+    "TrainerMaterial.m",
+    "Overlay.m",
+    "OverlaySettings.m",
+    "OverlayShortcuts.m",
+    "Runtime.m"
+  ],
+  "defines": [
+    "MHT_RE=1"
+  ],
+  "catalogSources": [
+    "TrainerFeatures.m",
+    "RE4Features.m",
+    "RE7Features.m",
+    "RE8Features.m"
+  ],
+  "sourceRoot": "../_Shared/ResidentEvil",
+  "family": "ResidentEvil",
+  "catalogGame": "2",
+  "sdkSources": [
+    "MHTGlassIntensity.m"
+  ]
+}

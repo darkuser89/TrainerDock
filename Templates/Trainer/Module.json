@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "native-trainer",
+  "name": "Native Trainer · Entwicklungsvorlage",
+  "version": "0.1.0",
+  "profiles": [
+    {
+      "id": "native-macos",
+      "name": "Neue native Spielanbindung",
+      "enabled": false,
+      "bundleIdentifier": "",
+      "executable": "",
+      "uuids": [],
+      "teamIdentifier": "",
+      "version": "",
+      "store": "Nicht festgelegt"
+    }
+  ]
+}

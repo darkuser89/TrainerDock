@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "id": "resident-evil-village",
+  "name": "Resident Evil Village",
+  "version": "1.0.0",
+  "profiles": [
+    {
+      "id": "re8-mac-1.1.8",
+      "name": "Resident Evil Village 1.1.8 · arm64",
+      "enabled": true,
+      "bundleIdentifier": "jp.co.capcom.VillageUS",
+      "executable": "Resident Evil Village",
+      "uuids": [
+        "4C4C44EB-5555-3144-A1A1-B2C9A3FC8945"
+      ],
+      "teamIdentifier": "4H8VTS9D6W",
+      "version": "1.1.8",
+      "store": "Mac App Store"
+    }
+  ],
+  "groups": [
+    {
+      "id": "player",
+      "title": "Spieler",
+      "symbol": "person",
+      "features": [
+        0,
+        1,
+        14
+      ]
+    },
+    {
+      "id": "weapons",
+      "title": "Waffen & Kampf",
+      "symbol": "scope",
+      "features": [
+        2,
+        3,
+        4,
+        5,
+        9,
+        10
+      ]
+    },
+    {
+      "id": "inventory",
+      "title": "Inventar & Shop",
+      "symbol": "shippingbox",
+      "features": [
+        6,
+        7,
+        11,
+        13,
+        15,
+        16,
+        17,
+        18
+      ]
+    },
+    {
+      "id": "stats",
+      "title": "Spielzeit",
+      "symbol": "timer",
+      "features": [
+        8,
+        12
+      ]
+    },
+    {
+      "id": "mercenaries",
+      "title": "Söldner",
+      "symbol": "flag",
+      "features": [
+        19,
+        20,
+        21,
+        22
+      ]
+    }
+  ]
+}

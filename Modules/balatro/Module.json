@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "id": "balatro",
+  "name": "Balatro",
+  "version": "1.0.0",
+  "profiles": [
+    {
+      "id": "steam-arm64",
+      "name": "Steam · 1.0.1o-FULL",
+      "store": "Steam",
+      "bundleIdentifier": "com.Balatro.localthunk",
+      "executable": "love",
+      "version": "11.5",
+      "gameVersion": "1.0.1o-FULL",
+      "teamIdentifier": "",
+      "uuids": [
+        "A11F3323-8D67-3EEF-91C5-708189B90B75"
+      ],
+      "steamAppId": "2379780",
+      "steamBuild": "17459173",
+      "signatureScope": "arm64-executable",
+      "signatureIdentifier": "love",
+      "signatureCDHash": "4c32e03ccd9e98b18b0a2b82fe2d3aba0b92d20a",
+      "fileChecks": [
+        {
+          "path": "Contents/Resources/Balatro.love",
+          "fileSize": 55986487,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "b82377c7ace5dca51508c0504d10db0291e13f2d9aaf185e38458d474c84e59e"
+        },
+        {
+          "path": "Contents/Resources/Balatro.love",
+          "fileSize": 55986487,
+          "offset": 8388608,
+          "length": 8388608,
+          "sha256": "1349cf4b4205f1198526121efe6ee43ffd3d4d8a8924788bc459f677d1c3ce04"
+        },
+        {
+          "path": "Contents/Resources/Balatro.love",
+          "fileSize": 55986487,
+          "offset": 16777216,
+          "length": 8388608,
+          "sha256": "58910a85b915e03f263985d908b6abc06194933fe58d30679587624692638244"
+        },
+        {
+          "path": "Contents/Resources/Balatro.love",
+          "fileSize": 55986487,
+          "offset": 25165824,
+          "length": 8388608,
+          "sha256": "628bb8b96d91d7ce1f65e595bee61666f13f74107715affce2569c1072442207"
+        },
+        {
+          "path": "Contents/Resources/Balatro.love",
+          "fileSize": 55986487,
+          "offset": 33554432,
+          "length": 8388608,
+          "sha256": "b194544815e546d274c0a2b690655d5014126af9b070e3a8ebaf1ec46bb4b0df"
+        },
+        {
+          "path": "Contents/Resources/Balatro.love",
+          "fileSize": 55986487,
+          "offset": 41943040,
+          "length": 8388608,
+          "sha256": "9468438c83f29b3395df06ce569fb9a9a986ed66a1591a365d1bcd50fcc7d49e"
+        },
+        {
+          "path": "Contents/Resources/Balatro.love",
+          "fileSize": 55986487,
+          "offset": 50331648,
+          "length": 5654839,
+          "sha256": "86f4fb6d88fb26398a4a0c9b8a6603c7386d7fe818e1f3df6b93567d37d8358c"
+        },
+        {
+          "path": "Contents/Frameworks/Lua.framework/Versions/A/Lua",
+          "fileSize": 1264480,
+          "offset": 0,
+          "length": 1264480,
+          "sha256": "f544b76c6918c3ba6cb67d12b6045f5b776b0dfd8c3ef7d926a66b505cd4e59a"
+        },
+        {
+          "path": "Contents/Frameworks/love.framework/Versions/A/love",
+          "fileSize": 8298528,
+          "offset": 0,
+          "length": 8298528,
+          "sha256": "3a72b53ba0178c3014645d92e95fea60b91185d4dc63af625871926fcddcf0f5"
+        },
+        {
+          "path": "Contents/Frameworks/SDL2.framework/Versions/A/SDL2",
+          "fileSize": 3319280,
+          "offset": 0,
+          "length": 3319280,
+          "sha256": "9c738a1d5a2ed5452aa0799e03d582df6d3ee2167f5229d10c57820ea354a702"
+        }
+      ],
+      "launchEnvironment": {
+        "SteamAppId": "2379780",
+        "SteamGameId": "2379780"
+      },
+      "enabled": true
+    }
+  ],
+  "groups": [
+    {
+      "id": "economy",
+      "title": "Geld",
+      "symbol": "banknote",
+      "features": [
+        0,
+        5
+      ]
+    },
+    {
+      "id": "round",
+      "title": "Runde & Karten",
+      "symbol": "suit.spade",
+      "features": [
+        1,
+        2,
+        3,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "id": "world",
+      "title": "Spiel",
+      "symbol": "timer",
+      "features": [
+        4
+      ]
+    }
+  ]
+}

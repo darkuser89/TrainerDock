@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    "LiesOfPAdapter.mm",
+    "PlatformCursor.m",
+    "SelectionSettings.m",
+    "TrainerFeatures.m",
+    "GameAdapter.m",
+    "GameBridge.m",
+    "GameProfile.m",
+    "MemoryAccess.m",
+    "TrainerMaterial.m",
+    "Overlay.m",
+    "OverlaySettings.m",
+    "OverlayShortcuts.m",
+    "Runtime.m"
+  ],
+  "defines": [
+    "MHT_LOP=1"
+  ],
+  "catalogSources": [
+    "TrainerFeatures.m"
+  ],
+  "sourceRoot": "Sources",
+  "family": "LiesOfP",
+  "sdkSources": [
+    "MHTGlassIntensity.m"
+  ],
+  "nativeContractTests": "Tests/LiesOfP/NativeContractTests.m"
+}

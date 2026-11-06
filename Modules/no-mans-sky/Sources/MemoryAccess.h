@@ -1,0 +1,9 @@
+// SPDX-License-Identifier: GPL-3.0-only
+#import <Foundation/Foundation.h>
+BOOL MTReadMemory(const void *address,void *result,size_t length);
+// Small data-only updates; existing page protections are never changed.
+BOOL MTWriteMemory(void *address,const void *bytes,size_t length);
+BOOL MTWriteByte(void *object,size_t offset,uint8_t value);
+BOOL MTWriteFloat(void *object,size_t offset,float value);
+BOOL MTWriteInt(void *object,size_t offset,int32_t value);
+BOOL MTWritePointer(void *object,size_t offset,void *value);

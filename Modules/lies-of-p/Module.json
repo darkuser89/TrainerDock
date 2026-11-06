@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "id": "lies-of-p",
+  "name": "Lies of P",
+  "version": "2.0.0",
+  "profiles": [
+    {
+      "id": "steam-114-arm64",
+      "name": "Lies of P · Steam 1.14.0 · arm64",
+      "enabled": true,
+      "bundleIdentifier": "com.neowiz.game.lop.steam",
+      "executable": "LiesofP",
+      "uuids": [
+        "0F3CE7C1-0CBC-371B-99D6-28656270D8D7"
+      ],
+      "teamIdentifier": "7B88E3Y2CC",
+      "version": "1.14.0",
+      "steamAppId": "1627720",
+      "store": "Steam",
+      "launchEnvironment": {
+        "SteamAppId": "1627720",
+        "SteamGameId": "1627720"
+      }
+    }
+  ],
+  "groups": [
+    {
+      "id": "player",
+      "title": "Spieler",
+      "symbol": "person",
+      "features": [
+        0,
+        1,
+        2,
+        4,
+        13,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
+      ]
+    },
+    {
+      "id": "combat",
+      "title": "Kampf",
+      "symbol": "scope",
+      "features": [
+        3,
+        7,
+        17
+      ]
+    },
+    {
+      "id": "inventory",
+      "title": "Inventar & Ergo",
+      "symbol": "shippingbox",
+      "features": [
+        11,
+        12,
+        14,
+        15,
+        31
+      ]
+    },
+    {
+      "id": "progress",
+      "title": "Fortschritt",
+      "symbol": "chart.bar",
+      "features": [
+        30,
+        32
+      ]
+    },
+    {
+      "id": "movement",
+      "title": "Bewegung & Teleportation",
+      "symbol": "location",
+      "features": [
+        6,
+        8,
+        9,
+        10,
+        16,
+        18,
+        33,
+        34,
+        35
+      ]
+    },
+    {
+      "id": "world",
+      "title": "Spielzeit",
+      "symbol": "timer",
+      "features": [
+        5,
+        29
+      ]
+    }
+  ],
+  "selectionVersion": "2"
+}

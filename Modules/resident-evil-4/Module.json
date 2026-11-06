@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "id": "resident-evil-4",
+  "name": "Resident Evil 4",
+  "version": "1.0.0",
+  "profiles": [
+    {
+      "id": "re4-mac-1.0.7",
+      "name": "Resident Evil 4 1.0.7 · arm64",
+      "enabled": true,
+      "bundleIdentifier": "jp.co.capcom.RE4US",
+      "executable": "Resident Evil 4",
+      "uuids": [
+        "4C4C44CF-5555-3144-A161-D64EFB82E79F"
+      ],
+      "teamIdentifier": "4H8VTS9D6W",
+      "version": "1.0.7",
+      "store": "Mac App Store"
+    }
+  ],
+  "groups": [
+    {
+      "id": "player",
+      "title": "Spieler",
+      "symbol": "person",
+      "features": [
+        0,
+        1,
+        2,
+        3,
+        9,
+        13
+      ]
+    },
+    {
+      "id": "weapons",
+      "title": "Waffen & Kampf",
+      "symbol": "scope",
+      "features": [
+        5,
+        6,
+        7,
+        10,
+        11,
+        12,
+        21,
+        22
+      ]
+    },
+    {
+      "id": "inventory",
+      "title": "Inventar & Shop",
+      "symbol": "shippingbox",
+      "features": [
+        4,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        25,
+        26
+      ]
+    },
+    {
+      "id": "stats",
+      "title": "Statistiken & Spiel",
+      "symbol": "chart.bar",
+      "features": [
+        8,
+        23,
+        24,
+        27,
+        28,
+        29
+      ]
+    },
+    {
+      "id": "mercenaries",
+      "title": "Söldner",
+      "symbol": "flag",
+      "features": [
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ]
+    }
+  ]
+}

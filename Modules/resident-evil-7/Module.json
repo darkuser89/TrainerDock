@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "id": "resident-evil-7",
+  "name": "Resident Evil 7",
+  "version": "1.0.0",
+  "profiles": [
+    {
+      "id": "re7-mac-1.0.4",
+      "name": "Resident Evil 7 biohazard 1.0.4 · arm64",
+      "enabled": true,
+      "bundleIdentifier": "jp.co.capcom.RE7US",
+      "executable": "RESIDENT EVIL 7 biohazard",
+      "uuids": [
+        "4C4C4466-5555-3144-A1F6-0D461A1E2960"
+      ],
+      "teamIdentifier": "4H8VTS9D6W",
+      "version": "1.0.4",
+      "store": "Mac App Store"
+    }
+  ],
+  "groups": [
+    {
+      "id": "player",
+      "title": "Spieler",
+      "symbol": "person",
+      "features": [
+        0,
+        8
+      ]
+    },
+    {
+      "id": "weapons",
+      "title": "Waffen & Kampf",
+      "symbol": "scope",
+      "features": [
+        1,
+        2,
+        9
+      ]
+    },
+    {
+      "id": "inventory",
+      "title": "Inventar",
+      "symbol": "shippingbox",
+      "features": [
+        3,
+        4
+      ]
+    },
+    {
+      "id": "stats",
+      "title": "Statistiken & Zeit",
+      "symbol": "chart.bar",
+      "features": [
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "id": "extras",
+      "title": "Zusatzmodi",
+      "symbol": "flag",
+      "features": [
+        10,
+        11,
+        12,
+        13,
+        14
+      ]
+    }
+  ]
+}
