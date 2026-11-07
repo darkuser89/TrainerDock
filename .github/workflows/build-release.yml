@@ -1,0 +1,112 @@
+name: Build and release TrainerDock
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: trainerdock-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
+
+jobs:
+  build:
+    runs-on: xcode-27
+    timeout-minutes: 40
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+      DOTNET_NOLOGO: '1'
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Check platform and version
+        env:
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          python3 -B - <<'PY'
+          import os, platform, re, subprocess
+          from pathlib import Path
+          assert platform.machine() == 'arm64', 'Apple Silicon required'
+          assert int(platform.mac_ver()[0].split('.')[0]) >= 27, 'macOS 27+ required'
+          sdk = subprocess.check_output(['xcrun', '--sdk', 'macosx', '--show-sdk-version'], text=True)
+          assert int(sdk.split('.')[0]) >= 27, 'macOS 27 SDK required'
+          version = '1.0.0'
+          if os.environ['REF_TYPE'] == 'tag':
+              tag = os.environ['REF_NAME']
+              assert re.fullmatch(r'v[0-9]+\.[0-9]+\.[0-9]+', tag), 'Use a vMAJOR.MINOR.PATCH tag'
+              version = tag[1:]
+          with open(os.environ['GITHUB_ENV'], 'a') as output:
+              output.write('TRAINERDOCK_VERSION=' + version + '\n')
+              output.write('TRAINERDOCK_MANAGED_IMAGES=' + os.environ['RUNNER_TEMP'] + '/managed-images\n')
+          PY
+          xcodebuild -version
+          dotnet --version
+      - name: Download own managed build inputs
+        run: |
+          python3 -B - <<'PY'
+          import json, os, urllib.request
+          from pathlib import Path
+          from script.managed import verified_managed_image
+          root = Path.cwd()
+          lock = json.loads((root / 'Config/ManagedImages.json').read_text())
+          destination = Path(os.environ['TRAINERDOCK_MANAGED_IMAGES'])
+          destination.mkdir()
+          for name, entry in lock['modules'].items():
+              url = 'https://github.com/darkuser89/TrainerDock/releases/download/' + lock['release'] + '/' + entry['file']
+              with urllib.request.urlopen(url, timeout=60) as response:
+                  data = response.read(1024 * 1024 + 1)
+              (destination / entry['file']).write_bytes(data)
+              module = root / 'Modules' / name
+              verified_managed_image(destination, module, json.loads((module / 'Module.json').read_text()), json.loads((module / 'Build.json').read_text()))
+          PY
+      - name: Check build-input validation
+        run: python3 -B -m unittest discover -s Tests -p test_managed_inputs.py
+      - name: Build launcher, all trainers and synthetic tests
+        run: |
+          python3 -B script/build.py --configuration Release --version "$TRAINERDOCK_VERSION" --build-number "$GITHUB_RUN_NUMBER"
+          git diff --exit-code -- TrainerDock.xcodeproj
+      - name: Package verified products
+        run: python3 -B script/release.py
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: TrainerDock-macOS-arm64
+          path: ~/Library/Developer/TrainerDock/Distribution/*
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
+
+  publish:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: TrainerDock-macOS-arm64
+          path: release
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          cd release
+          sha256sum --check SHA256SUMS
+          printf '%s\n' 'Apple Silicon · macOS 27 oder neuer.' '' 'ZIP vollständig entpacken; TrainerDock.app und Modules zusammen behalten.' '' 'Ad-hoc signiert; nicht Developer-ID-signiert oder notarisiert.' > notes.txt
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo 'Release already exists; refusing to replace published binaries.' >&2
+            exit 1
+          fi
+          gh release create "$RELEASE_TAG" TrainerDock-macOS-arm64.zip SHA256SUMS --verify-tag --title "TrainerDock $RELEASE_TAG" --notes-file notes.txt --latest

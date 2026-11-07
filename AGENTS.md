@@ -88,6 +88,18 @@ inkrementelle Objekte im externen stabilen Buildbaum, nicht im Repository.
 Ein einzelnes Modul wird mit `python3 -B script/build.py --module <id>` gebaut,
 ohne den Launcher neu zu kompilieren. Danach „Trainer & Spiele neu laden“.
 
+GitHub Actions baut über `.github/workflows/build-release.yml` auf `xcode-27` alle
+freigegebenen Trainer und den Launcher. Push/PR liefern geprüfte Artefakte; `vX.Y.Z`-
+Tags veröffentlichen Releases erst nach erfolgreichem Build. `script/release.py`
+verpackt ausschließlich die App, alle echten Module und Lizenz-/Versionsangaben.
+Kein Spielstart und keine Veröffentlichung von Spieldateien gehören zum CI-Build.
+Duckov und Vampire Survivors beziehen nur eigene kompilierte C#-Bausteine aus dem
+vom Nutzer ausdrücklich genehmigten Entwickler-Release `managed-inputs-v1`.
+`Config/ManagedImages.json` bindet deren Bytes, Quellen und Originalprofile;
+bei Änderungen lokal neu kompilieren und die Bausteine bewusst aktualisieren.
+Kein stiller Hashwechsel und keine Ersatz- oder Testassembly. Details:
+`docs/RELEASING.md`. Ad-hoc-Signierung ist keine Notarisierung.
+
 ## Bei neuen Modulen
 
 HiDPI: In Punkten layouten, Original-Iconrepräsentationen erhalten und AppKit die

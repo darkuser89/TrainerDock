@@ -158,7 +158,7 @@ def trainer(module_dir, modules_dir, stage, common, native_objects=None):
     if native_objects is None:run(["codesign","--verify","--strict",runtime])
     return dest
 
-def build(build_dir, module_id=None, launcher_only=False):
+def build(build_dir, module_id=None, launcher_only=False, configuration="Debug", version=None, build_number=None):
     """Xcode owns product compilation, incremental objects, linking and signing."""
     from xcode_project import generate, released_modules
     build_dir.mkdir(parents=True,exist_ok=True)
@@ -173,10 +173,19 @@ def build(build_dir, module_id=None, launcher_only=False):
         raise ValueError("Zuerst einen vollständigen Build mit Trainermodulen erzeugen.")
     generate()
     scheme="Trainer-"+module_id if module_id else "TrainerDock-Launcher" if launcher_only else "TrainerDock"
+    settings=[]
+    if version:
+        if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+",version):raise ValueError("Ungültige App-Version.")
+        settings.append("MARKETING_VERSION="+version)
+    if build_number:
+        if not re.fullmatch(r"[0-9]+",build_number):raise ValueError("Ungültige Buildnummer.")
+        settings.append("CURRENT_PROJECT_VERSION="+build_number)
+    if os.environ.get("TRAINERDOCK_MANAGED_IMAGES"):
+        settings.append("TRAINERDOCK_MANAGED_IMAGES="+os.environ["TRAINERDOCK_MANAGED_IMAGES"])
     run(["xcodebuild","-project",ROOT/"TrainerDock.xcodeproj","-scheme",scheme,
-         "-configuration","Debug","-destination","platform=macOS,arch=arm64","-derivedDataPath",build_dir/"Xcode",
+         "-configuration",configuration,"-destination","platform=macOS,arch=arm64","-derivedDataPath",build_dir/"Xcode",
          "-jobs",str(min(os.cpu_count() or 2,8)),"-quiet",
-         "TRAINERDOCK_BUILD_ROOT="+str(build_dir),"build"],env=dict(os.environ,PYTHONDONTWRITEBYTECODE="1"))
+         "TRAINERDOCK_BUILD_ROOT="+str(build_dir),*settings,"build"],env=dict(os.environ,PYTHONDONTWRITEBYTECODE="1"))
     from xcode_support import verify_products
     verify_products(build_dir,module_id)
     product=build_dir/"Modules"/(module_id+".mhtmodule") if module_id else build_dir/"TrainerDock.app"
@@ -187,6 +196,9 @@ if __name__=="__main__":
     parser=argparse.ArgumentParser();parser.add_argument("--build-dir",default=os.environ.get("TRAINERDOCK_BUILD_DIR",os.environ.get("MHT_BUILD_DIR",str(Path.home()/"Library/Developer/TrainerDock"))))
     parser.add_argument("--module",help="Nur dieses vollständige Trainermodul bauen; den Launcher nicht neu kompilieren.")
     parser.add_argument("--launcher-only",action="store_true",help="Nur den Launcher bauen; vorhandene Trainermodule unverändert verwenden.")
+    parser.add_argument("--configuration",choices=("Debug","Release"),default="Debug")
+    parser.add_argument("--version",help="App-Version für einen Release-Build, z. B. 1.0.0.")
+    parser.add_argument("--build-number",help="Numerische App-Buildnummer.")
     args=parser.parse_args()
     if args.module and args.launcher_only:parser.error("--module und --launcher-only schließen sich aus.")
-    build(external_build_path(args.build_dir),args.module,args.launcher_only)
+    build(external_build_path(args.build_dir),args.module,args.launcher_only,args.configuration,args.version,args.build_number)

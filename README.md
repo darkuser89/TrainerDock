@@ -20,7 +20,7 @@ Enthalten sind siebzehn Trainer:
 | Lies of P | Steam | 1.14.0 |
 | Cyberpunk 2077 | Steam | 2.5.0 |
 | RoboCop: Rogue City | Steam | 0.0.1 |
-| Crimson Desert | Steam | Bundle 1.0.35 / Anzeige 2.04.05 |
+| Crimson Desert | Steam | Bundle 1.0.35 (450) / Anzeige 2.04.08 |
 | Vampire Crawlers | Steam | 1.6.1 (11), Build 25304267 |
 | No Man’s Sky | Steam | Bundle 4.70, Build 26386568 |
 | Vampire Survivors | Steam | 1.16.111 (Build 25984009) |
@@ -65,6 +65,27 @@ Auswahl und Pfade liegen in den Benutzereinstellungen der Anwendung.
 ## Bauen
 
 Apple Silicon, **macOS 27 oder neuer**, Xcode mit macOS-27-SDK oder neuer.
+
+## GitHub-Builds und Downloads
+
+[GitHub Actions](https://github.com/darkuser89/TrainerDock/actions/workflows/build-release.yml)
+baut bei Pushes auf `main`, Pull Requests und manuellem Start den Launcher und alle
+17 nativen Trainer mit Xcode 27. Synthetische Tests und Signaturprüfungen müssen
+bestehen. Das geprüfte ZIP steht sieben Tage als Workflow-Artefakt bereit.
+
+Ein Versions-Tag wie `v1.0.0` baut zusätzlich einen öffentlichen
+[GitHub Release](https://github.com/darkuser89/TrainerDock/releases/latest)
+mit `TrainerDock-macOS-arm64.zip` und `SHA256SUMS`. Den entpackten
+TrainerDock-Ordner mit **TrainerDock.app und Modules zusammen** behalten.
+Die Downloads sind ad-hoc signiert, nicht Developer-ID-signiert oder notarisiert.
+
+Zwei C#-Trainer verwenden im Cloud-Build ausschließlich unsere eigenen kompilierten
+Bausteine. Deren Quellen, Originalbindung und Binärdateien sind über SHA-256 gebunden;
+geänderte Quellen sperren einen veralteten Baustein. Spiel-Assemblies werden weder
+hochgeladen noch veröffentlicht. Lokales Kompilieren gegen geprüfte Originale bleibt
+weiterhin möglich. Ablauf und Aktualisierung: [Release-Anleitung](docs/RELEASING.md).
+
+### Lokal bauen
 
 `TrainerDock.xcodeproj` in Xcode öffnen, Scheme **TrainerDock** wählen und mit **⌘ R** bauen
 und den Launcher starten. Das Projekt enthält ein natives App-Target und für jeden
