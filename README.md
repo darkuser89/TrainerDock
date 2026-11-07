@@ -62,7 +62,7 @@ Dauerschalter werden nur bei eingeschalteter Option und gültigem Spielkontext
 wiederhergestellt. Einmalaktionen werden nie automatisch ausgeführt. Die gespeicherte
 Auswahl und Pfade liegen in den Benutzereinstellungen der Anwendung.
 
-## Bauen
+## Voraussetzungen
 
 Apple Silicon, **macOS 27 oder neuer**, Xcode mit macOS-27-SDK oder neuer.
 
@@ -85,7 +85,7 @@ geänderte Quellen sperren einen veralteten Baustein. Spiel-Assemblies werden we
 hochgeladen noch veröffentlicht. Lokales Kompilieren gegen geprüfte Originale bleibt
 weiterhin möglich. Ablauf und Aktualisierung: [Release-Anleitung](docs/RELEASING.md).
 
-### Lokal bauen
+## Lokal bauen
 
 `TrainerDock.xcodeproj` in Xcode öffnen, Scheme **TrainerDock** wählen und mit **⌘ R** bauen
 und den Launcher starten. Das Projekt enthält ein natives App-Target und für jeden

@@ -70,6 +70,12 @@ jobs:
           PY
       - name: Check build-input validation
         run: python3 -B -m unittest discover -s Tests -p test_managed_inputs.py
+      - name: Install standalone LuaJIT for synthetic Balatro tests
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: '1'
+        run: |
+          brew install luajit
+          printf 'TRAINERDOCK_TEST_LUA_LIBRARY=%s/lib/libluajit-5.1.dylib\n' "$(brew --prefix luajit)" >> "$GITHUB_ENV"
       - name: Build launcher, all trainers and synthetic tests
         run: |
           python3 -B script/build.py --configuration Release --version "$TRAINERDOCK_VERSION" --build-number "$GITHUB_RUN_NUMBER"

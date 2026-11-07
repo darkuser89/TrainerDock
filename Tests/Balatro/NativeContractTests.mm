@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
-// Real original LuaJIT ABI, synthetic gameplay fixture: not an in-game test.
+// LuaJIT ABI and synthetic gameplay fixture: not an in-game test.
+// CI may explicitly supply standalone LuaJIT; it never ships with the product.
 #import <Foundation/Foundation.h>
 #import <dlfcn.h>
 #import <AppKit/AppKit.h>
@@ -11,13 +12,19 @@ static void check(BOOL condition,NSString *message){if(!condition){fprintf(stder
 static int noop(lua_State *L){(void)L;return 0;}
 int main(void){@autoreleasepool{
  check([BAInspect()[@"kind"] intValue]==0 && ![BAEffect(0,YES,0)[@"active"] boolValue],@"No gameplay operations outside confirmed engine frame");
+ NSString *library=NSProcessInfo.processInfo.environment[@"TRAINERDOCK_TEST_LUA_LIBRARY"];
+ BOOL original=!library.length;
+ if(original){
  NSString *bundle=NSProcessInfo.processInfo.environment[@"TRAINERDOCK_REFERENCE_BUNDLE"] ?: NSProcessInfo.processInfo.environment[@"MHT_REFERENCE_BUNDLE"];
  if(!bundle.length)bundle=[[[NSUserDefaults alloc]initWithSuiteName:@"local.trainerdock.launcher"] stringForKey:@"MHT.balatro.path.steam-arm64"];
  if(!bundle.length)bundle=[[[NSUserDefaults alloc]initWithSuiteName:@"local.mht.launcher"] stringForKey:@"MHT.balatro.path.steam-arm64"];
  if(!bundle.length)bundle=[NSWorkspace.sharedWorkspace URLForApplicationWithBundleIdentifier:@"com.Balatro.localthunk"].path;
  check(bundle.length>0,@"Original Balatro bundle required for real Lua ABI tests");
- void *h=dlopen([[bundle stringByAppendingPathComponent:@"Contents/Frameworks/Lua.framework/Versions/A/Lua"] fileSystemRepresentation],RTLD_NOW|RTLD_LOCAL);
- check(h!=NULL,@"Original LuaJIT library loads");
+ library=[bundle stringByAppendingPathComponent:@"Contents/Frameworks/Lua.framework/Versions/A/Lua"];
+ }
+ if(!original)puts("NOT PERFORMED: original Balatro LuaJIT ABI; using explicitly selected standalone test library.");
+ void *h=dlopen(library.fileSystemRepresentation,RTLD_NOW|RTLD_LOCAL);
+ check(h!=NULL,@"Selected LuaJIT test library loads");
  #define FN(ret,name,args) auto name=(ret (*)args)dlsym(h,#name);check(name!=NULL,@#name)
  FN(lua_State *,luaL_newstate,(void));FN(void,luaL_openlibs,(lua_State *));FN(int,luaL_loadbuffer,(lua_State *,const char *,size_t,const char *));
  FN(int,lua_pcall,(lua_State *,int,int,int));FN(void,lua_pushcclosure,(lua_State *,int (*)(lua_State *),int));
@@ -26,7 +33,7 @@ int main(void){@autoreleasepool{
  auto execute=[&](NSData *data,const char *name){int result=luaL_loadbuffer(L,(const char *)data.bytes,data.length,name);if(!result)result=lua_pcall(L,0,0,0);check(!result,[NSString stringWithUTF8String:result ? lua_tolstring(L,-1,NULL) : "OK"]);};
  NSString *fixture=@"G={VERSION='1.0.1o-FULL',STAGE=2,STAGES={RUN=2},STATE=1,STATES={GAME_OVER=9},SETTINGS={paused=false},GAME={dollars=4,chips=0,round=1,round_resets={ante=1},current_round={hands_left=4,discards_left=3,current_hand={}}},HUD={get_UIE_by_ID=function() return nil end,recalculate=function() end},hand={},deck={}};Back={trigger_effect=function(self,args) return args.chips,args.mult end};G.GAME.selected_back=setmetatable({},{__index=Back});love={update=function(dt) last_dt=dt end,mouse={isVisible=function() return visible or false end,setVisible=function(v) visible=v end}}";
  execute([fixture dataUsingEncoding:NSUTF8StringEncoding],"fixture");
- check(!luaL_loadbuffer(L,BAScript,sizeof(BAScript)-1,"@MHT/balatro.lua"),@"Trainer script compiles with original LuaJIT");lua_pushcclosure(L,noop,0);lua_pushcclosure(L,noop,0);
+ check(!luaL_loadbuffer(L,BAScript,sizeof(BAScript)-1,"@MHT/balatro.lua"),@"Trainer script compiles with selected LuaJIT");lua_pushcclosure(L,noop,0);lua_pushcclosure(L,noop,0);
  int result=lua_pcall(L,2,1,0);check(!result,[NSString stringWithUTF8String:result ? lua_tolstring(L,-1,NULL) : "Factory"]);lua_setfield(L,-10002,"trainer");
  NSData *tests=[NSData dataWithContentsOfFile:@"Tests/Balatro/PolicyTests.lua"];check(tests!=nil,@"Policy tests exist");execute(tests,"policy-tests");lua_close(L);dlclose(h);
  [NSApplication sharedApplication];
@@ -44,5 +51,5 @@ int main(void){@autoreleasepool{
   click=[NSEvent mouseEventWithType:NSEventTypeLeftMouseDown location:point modifierFlags:0 timestamp:0 windowNumber:window.windowNumber context:nil eventNumber:0 clickCount:1 pressure:1];
   check([root handleMouseEvent:click] && !root.panelVisible,@"Mouse closes the actual overlay");
  }
- puts("PASS: original LuaJIT ABI; native frame guard; owned values, scoring callback, time factor, readback, edits, owner changes, loading/network and mouse restore.");
+ printf("PASS: %s LuaJIT; native frame guard; owned values, scoring callback, time factor, readback, edits, owner changes, loading/network and mouse restore.\n",original ? "original" : "standalone test");
 }return 0;}

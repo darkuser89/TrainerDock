@@ -182,6 +182,8 @@ def build(build_dir, module_id=None, launcher_only=False, configuration="Debug",
         settings.append("CURRENT_PROJECT_VERSION="+build_number)
     if os.environ.get("TRAINERDOCK_MANAGED_IMAGES"):
         settings.append("TRAINERDOCK_MANAGED_IMAGES="+os.environ["TRAINERDOCK_MANAGED_IMAGES"])
+    if os.environ.get("TRAINERDOCK_TEST_LUA_LIBRARY"):
+        settings.append("TRAINERDOCK_TEST_LUA_LIBRARY="+os.environ["TRAINERDOCK_TEST_LUA_LIBRARY"])
     run(["xcodebuild","-project",ROOT/"TrainerDock.xcodeproj","-scheme",scheme,
          "-configuration",configuration,"-destination","platform=macOS,arch=arm64","-derivedDataPath",build_dir/"Xcode",
          "-jobs",str(min(os.cpu_count() or 2,8)),"-quiet",

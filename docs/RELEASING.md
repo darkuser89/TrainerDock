@@ -3,6 +3,11 @@
 `.github/workflows/build-release.yml` verwendet GitHubs Apple-Silicon-Runner
 `xcode-27` mit macOS 27 und macOS-27-SDK. Die native Mindestversion bleibt 27.0.
 Der Workflow startet keine Spiele und benötigt keine privaten Signierschlüssel.
+Balatros synthetische Lua-/Scoring-/Besitzertests laufen im Cloud-Build mit
+separatem Homebrew-LuaJIT. Die Prüfung mit Balatros ursprünglicher Lua-Bibliothek
+wird dabei ausdrücklich als nicht durchgeführt gemeldet. Der Ersatz befindet sich
+ausschließlich im Testprozess und wird nicht ins Produkt oder ZIP eingebunden.
+Lokale Tests verwenden ohne `TRAINERDOCK_TEST_LUA_LIBRARY` weiterhin das Original.
 
 - Push auf `main`, Pull Request oder **Actions → Build and release TrainerDock →
   Run workflow**: Release-Konfiguration bauen, synthetisch prüfen, ZIP als Artefakt
@@ -75,5 +80,5 @@ Keine Tests, Spiele, Referenzassemblies, Logs oder Xcode-Caches werden verpackt.
 
 Die vorhandene Ad-hoc-Signierung bleibt erhalten. Die App ist damit nicht
 Developer-ID-signiert und nicht notarisiert; GitHub Releases ändern diesen Status
-nicht. Eine spätere notariserte Distribution benötigt eigene Apple-Developer-
+nicht. Eine spätere notarisierte Distribution benötigt eigene Apple-Developer-
 Zertifikate und eine ausdrücklich eingerichtete Notarisierung.
