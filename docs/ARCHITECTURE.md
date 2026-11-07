@@ -17,7 +17,8 @@ Modules/<spiel>.mhtmodule/
   LICENSE
 ```
 
-Die Module liegen neben `TrainerDock.app` im Ordner `Modules`. Zusätzliche bzw. ersetzende
+Die mitgelieferten Module liegen in `TrainerDock.app/Contents/Resources/Modules`.
+Ältere Pakete mit dem benachbarten Ordner `Modules` werden weiterhin gelesen. Zusätzliche bzw. ersetzende
 Module können unter `~/Library/Application Support/TrainerDock/Modules` liegen. Ein
 Benutzermodul mit derselben ID hat Vorrang. „Trainer & Spiele neu laden“ lädt die
 Definitionen neu. Dafür muss die App nicht neu kompiliert werden.
@@ -141,7 +142,8 @@ Das Scheme `TrainerDock` baut die nativen Produkte und danach die Launcherprüfu
 Run-Schritt startet ausschließlich `TrainerDock.app`. Pro Trainer gibt es ein eigenes
 `Trainer-<id>`-Scheme. Katalogexport und synthetische Tests verwenden die tatsächlich
 von Xcode erzeugten Objekte, keine zweite Produktkompilierung. Die nativen Trainer
-bleiben neben der App; kein Dylib wird in den Launcher eingebunden.
+bleiben eigenständige Pakete im externen Buildbaum und werden vollständig in die
+App-Ressourcen übernommen; keine Dylib wird in den Launcherprozess geladen.
 Bei einem Buildfehler den Build korrigieren, bevor die App benutzt wird.
 
 ## Native Oberfläche

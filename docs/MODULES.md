@@ -148,8 +148,9 @@ Der Befehl aktualisiert `TrainerDock.xcodeproj` und baut das native Scheme
 App und Trainer setzen macOS 27.0 voraus; diese Mindestversion nicht absenken.
 
 
-Das Skript prüft das Modul und ersetzt nur
-`~/Library/Developer/TrainerDock/Modules/mein-spiel.mhtmodule`. Die App bleibt unverändert.
+Das Skript prüft und ersetzt
+`~/Library/Developer/TrainerDock/Modules/mein-spiel.mhtmodule` und aktualisiert die
+eingebetteten Modulressourcen der aktuellen App. Der Launcher wird nicht neu kompiliert.
 Danach im Launcher „Trainer & Spiele neu laden“ verwenden. Für die Weitergabe genügt
 das gesamte Modulverzeichnis, keine einzelne herausgelöste Dylib.
 
