@@ -157,7 +157,12 @@ static void checkSettings(MHTApp *app) {
     search.stringValue=@"no-matching-trainer";[controller controlTextDidChange:[NSNotification notificationWithName:NSControlTextDidChangeNotification object:search]];layout(window);
     require(sameSize(expected,window.frame.size),"empty trainer search preserves settings size");
     search.stringValue=@"";[controller controlTextDidChange:[NSNotification notificationWithName:NSControlTextDidChangeNotification object:search]];layout(window);
+    // Hidden-window stress sizes above may exceed a CI display. AppKit fits an
+    // oversized window on showing it; test restoration with a user-selectable size.
+    [window setContentSize:NSMakeSize(680,500)];[window center];layout(window);
+    expected=window.frame.size;
     [window close];[app openSettings:nil];layout(window);
+    if(!sameSize(expected,window.frame.size))fprintf(stderr,"Settings restoration: expected %.0fx%.0f, actual %.0fx%.0f\n",expected.width,expected.height,window.frame.size.width,window.frame.size.height);
     require(sameSize(expected,window.frame.size),"reopening settings preserves the chosen window size");[window close];
     NSMenu *menu=NSApp.mainMenu;
     NSMenuItem *settings=[menu.itemArray.firstObject.submenu itemWithTitle:@"Einstellungen …"];
