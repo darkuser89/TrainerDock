@@ -37,7 +37,7 @@ def compile_object(source, output, includes, defines=()):
 
 FRAMEWORKS = ["-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++"]
 
-def link(objects, output, dynamic=False, undefined_symbols=()):
+def link(objects, output, dynamic=False, undefined_symbols=(), extra_flags=()):
     flags = ["-arch", "arm64", "-mmacosx-version-min=27.0"]
     if dynamic:
         flags += ["-dynamiclib", "-install_name", f"@rpath/{output.name}"]
@@ -45,7 +45,7 @@ def link(objects, output, dynamic=False, undefined_symbols=()):
         if not dynamic or not re.fullmatch(r"_[A-Za-z][A-Za-z0-9_]*", symbol):
             raise ValueError("Ungültiges originales Laufzeitsymbol.")
         flags += [f"-Wl,-U,{symbol}"]
-    run(["xcrun", "clang", *flags, *objects, *FRAMEWORKS, "-o", output])
+    run(["xcrun", "clang", *flags, *objects, *FRAMEWORKS, *extra_flags, "-o", output])
 
 def catalog_source(backend, config):
     catalog=config.get("catalog",{})
@@ -189,6 +189,9 @@ def build(build_dir, module_id=None, launcher_only=False, configuration="Debug",
          "-jobs",str(min(os.cpu_count() or 2,8)),"-quiet",
          "TRAINERDOCK_BUILD_ROOT="+str(build_dir),*settings,"build"],env=dict(os.environ,PYTHONDONTWRITEBYTECODE="1"))
     from xcode_support import verify_products
+    if module_id and (build_dir/"TrainerDock.app/Contents/Resources/Modules").is_dir():
+        from xcode_support import bundle_modules
+        bundle_modules(build_dir)
     verify_products(build_dir,module_id)
     product=build_dir/"Modules"/(module_id+".mhtmodule") if module_id else build_dir/"TrainerDock.app"
     print(f"Xcode-Build und Prüfungen erfolgreich: {product}")

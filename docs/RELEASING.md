@@ -74,11 +74,38 @@ identifizierten Mono-Laufzeit ausgeführt. Synthetische Fixtures bleiben in `Tes
 `python3 -B script/release.py` prüft die aktuelle App und alle freigegebenen Module
 im externen stabilen Buildbaum. Ein kurzlebiger Paketordner wird anschließend
 entfernt. Unter `~/Library/Developer/TrainerDock/Distribution` bleiben nur das
-aktuelle ZIP und `SHA256SUMS`. Das Paket enthält einen TrainerDock-Ordner mit App,
-benachbarten Modulen, GPL-Lizenz, Installationshinweis und Build-/Quellcommitangaben.
+aktuelle ZIP und `SHA256SUMS`. Das Paket enthält genau `TrainerDock.app` mit eingebetteten eigenständigen Modulen,
+GPL-Lizenz und Build-/Quellcommitangaben unter `Contents/Resources/BUILD.json`.
 Keine Tests, Spiele, Referenzassemblies, Logs oder Xcode-Caches werden verpackt.
 
 Die vorhandene Ad-hoc-Signierung bleibt erhalten. Die App ist damit nicht
 Developer-ID-signiert und nicht notarisiert; GitHub Releases ändern diesen Status
 nicht. Eine spätere notarisierte Distribution benötigt eigene Apple-Developer-
 Zertifikate und eine ausdrücklich eingerichtete Notarisierung.
+
+## GitHub-Updater
+
+`App/MHTUpdater.*` fragt ausschließlich stabile Releases des festen Repositorys
+`darkuser89/TrainerDock` ab. Versionsvergleich erfolgt numerisch; keine Downgrades.
+Genau das Asset `TrainerDock-macOS-arm64.zip` mit GitHubs SHA-256-`digest` und
+passender Größe wird akzeptiert. Keine zusätzlichen Signierschlüssel, Sparkle-Secrets
+oder Schlüsselbundzugriffe verwenden. Die Prüfsumme schützt gegen beschädigte bzw.
+abweichende Bytes; sie ist kein unabhängiger Herausgebernachweis.
+
+`MHTUpdatePackage` prüft Größe und Hash vor dem Entpacken. Das ZIP darf ausschließlich
+`TrainerDock.app` enthalten (AppleDouble-Metadaten werden übersprungen); Traversal,
+Links und Spezialdateien werden abgelehnt. Größen-/Eintragsgrenzen verhindern
+unbegrenztes Entpacken. Die vorhandene Ad-hoc-Codeversiegelung wird auf Integrität
+geprüft, ohne Zertifikat oder eigene Signierschlüssel zu verlangen.
+
+Der kopierte eigene Updatehelfer wartet auf das reguläre Ende genau des alten
+Launcherprozesses, prüft laufende Spiele erneut und tauscht das vollständige App-Bundle
+auf demselben Volume atomar aus. Scheitert der Start über LaunchServices, wird der
+Tausch zurückgenommen. Es wird kein Spiel beendet und kein Systemschutz verändert.
+Der kurzlebige Austauschordner liegt neben der App und wird nach Abschluss entfernt.
+Benutzermodule und Einstellungen liegen außerhalb der App und bleiben erhalten.
+
+CI installiert `libarchive` ausschließlich für die Header und LuaJIT ausschließlich
+für synthetische Tests. Die App linkt `/usr/lib/libarchive.2.dylib`; weder Homebrew-
+Bibliotheken noch Tests gelangen ins Paket. Der Archive-Headerpfad ist über
+`TRAINERDOCK_ARCHIVE_INCLUDE` in der Xcode-Konfiguration anpassbar.

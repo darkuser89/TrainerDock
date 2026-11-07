@@ -33,7 +33,12 @@ static BOOL number(id v){return [v isKindOfClass:NSNumber.class] && isfinite([v 
     }
     return seen.count==count;
 }
-+ (NSString *)moduleDirectory {return [NSBundle.mainBundle.bundlePath.stringByDeletingLastPathComponent stringByAppendingPathComponent:@"Modules"];}
++ (NSString *)moduleDirectory {
+    NSString *bundled=[NSBundle.mainBundle.resourcePath stringByAppendingPathComponent:@"Modules"];
+    BOOL directory=NO;
+    if([NSFileManager.defaultManager fileExistsAtPath:bundled isDirectory:&directory] && directory)return bundled;
+    return [NSBundle.mainBundle.bundlePath.stringByDeletingLastPathComponent stringByAppendingPathComponent:@"Modules"];
+}
 + (NSArray<MHTModule *> *)availableModules:(NSMutableArray<NSString *> *)errors {
     NSMutableDictionary *byID=[NSMutableDictionary new];
     for(MHTModule *module in [self loadModules:self.moduleDirectory errors:errors])byID[module.identifier]=module;

@@ -13,6 +13,7 @@ from pathlib import Path
 import plistlib
 import subprocess
 import tempfile
+import shutil
 
 import build
 from managed import compile_managed
@@ -88,6 +89,20 @@ def managed(module_id):
             header.write_bytes(data)
 
 
+def bundle_modules(root):
+    app = root / "TrainerDock.app"
+    if not app.is_dir():
+        return
+    target = app / "Contents/Resources/Modules"
+    if target.exists():
+        shutil.rmtree(target)
+    target.mkdir(parents=True)
+    for source in released_modules():
+        package = root / "Modules" / (source.name + ".mhtmodule")
+        shutil.copytree(package, target / package.name)
+    build.run(["codesign", "--force", "--sign", "-", "--timestamp=none", app], stdout=subprocess.DEVNULL)
+
+
 def package_module(module_id):
     root = build_root()
     _, _, config = module_data(module_id)
@@ -102,12 +117,13 @@ def package_module(module_id):
 
 def check_launcher():
     root = build_root()
+    bundle_modules(root)
     build.run(["/usr/bin/python3", "-B", ROOT / "Tests/test_xcode_project.py"])
     folder = environment_path("PROJECT_TEMP_DIR") / os.environ["CONFIGURATION"] / "TrainerDock.build/Objects-normal/arm64"
     common = object_file(folder, "MHTProtocol.m")
     core = [object_file(folder, p.name) for p in sorted((ROOT / "Core").glob("*.m"))]
     app = [object_file(folder, p.name) for p in sorted((ROOT / "App").glob("*.m")) if p.name != "main.m"]
-    includes = [ROOT / p for p in ("App", "Core", "ModuleSDK")]
+    includes = [ROOT / p for p in ("App", "Core", "ModuleSDK")] + [Path(os.environ.get("TRAINERDOCK_ARCHIVE_INCLUDE", "/opt/homebrew/opt/libarchive/include"))]
     with tempfile.TemporaryDirectory(prefix="checks-", dir=environment_path("TARGET_TEMP_DIR")) as temp:
         stage = Path(temp)
         for name in ("GameIdentityTests", "MHTTests"):
@@ -126,8 +142,19 @@ def check_launcher():
         obj = stage / "LauncherLayoutTests.o"
         build.compile_object(ROOT / "Tests/LauncherLayoutTests.m", obj, includes)
         exe = contents / "MacOS/LayoutTests"
-        build.link([obj, common, *core, *app], exe)
+        extra = ["-larchive.2"]
+        build.link([obj, common, *core, *app], exe, extra_flags=extra)
         build.run([exe])
+        update_obj=stage/"UpdaterTests.o"
+        build.compile_object(ROOT/"Tests/UpdaterTests.m",update_obj,includes)
+        update_contents=stage/"UpdaterTests.app/Contents"
+        (update_contents/"MacOS").mkdir(parents=True)
+        update_info=plistlib.loads((root/"TrainerDock.app/Contents/Info.plist").read_bytes())
+        update_info.update(CFBundleIdentifier="local.trainerdock.updater-tests",CFBundleExecutable="UpdaterTests")
+        (update_contents/"Info.plist").write_bytes(plistlib.dumps(update_info))
+        update_test=update_contents/"MacOS/UpdaterTests"
+        build.link([update_obj,object_file(folder,"MHTUpdater.m"),object_file(folder,"MHTUpdatePackage.m")],update_test,extra_flags=extra)
+        build.run([update_test])
     verify_products(root)
     stamp()
 

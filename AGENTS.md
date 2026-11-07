@@ -72,7 +72,8 @@ der bisherige MHT-Ordner wird weiterhin gelesen.
 - `Tests/`: synthetische Tests, keine Bestandteil der ausgelieferten Anwendung.
 - `script/`: Build und Modulerstellung. `docs/`: versionierte Entwickleranleitungen.
 
-Das Hostprogramm lädt ausschließlich geprüfte Modulmetadaten. Vollständige Trainermodule liegen neben der App unter `Modules`, zusätzliche unter
+Das Hostprogramm lädt ausschließlich geprüfte Modulmetadaten. Vollständige Trainermodule liegen in der App unter `Contents/Resources/Modules`;
+für ältere Pakete wird daneben `Modules` weiterhin gelesen. Zusätzliche liegen unter
 `~/Library/Application Support/TrainerDock/Modules`. Der Launcher enthält keine Spiellogik.
 Native Runtime-
 Bibliotheken werden erst beim ausdrücklich angeforderten Spielstart im ausgewählten
@@ -201,3 +202,18 @@ Der Nutzer hat für Steam-Build-ID 26386568, Bundleversion 4.70, arm64-UUID
 korrekt meldete. Nur die erfassten Originaldateien und Hashes freigeben.
 Keine Spielsignaturen oder Schutzmechanismen verändern; weitere Builds bleiben
 ohne eigene Prüfung und Freigabe gesperrt.
+
+## App-Updates ohne zusätzliche Signierung
+
+Der Nutzer wünscht Updates direkt über GitHub Releases ohne zusätzliche
+Update-Signierung, Zertifikate, Schlüsselbundabfragen oder Signing-Secrets.
+`App/MHTUpdater.*` und `MHTUpdatePackage.*` verwenden ausschließlich stabile neuere
+Releases von `darkuser89/TrainerDock`, prüfen Assetgröße und GitHubs SHA-256-Digest
+vor dem Entpacken und ersetzen App samt eingebetteten Trainermodulen gemeinsam.
+Keine Downgrades, fremden Downloadquellen oder unvollständigen Pakete akzeptieren.
+Das native ZIP-Entpacken erlaubt keine Pfadausbrüche, Links oder Spezialdateien.
+Vor Installation laufende Spiele abwarten und im Helfer erneut prüfen; Spiele
+niemals für Updates schließen. Bei fehlgeschlagenem App-Start den atomaren Tausch
+zurücknehmen. Benutzermodule und Einstellungen bleiben außerhalb der App.
+Die vorhandene technische Ad-hoc-Codeversiegelung der arm64-Produkte bleibt bestehen;
+macOS-Schutzmechanismen nicht verändern. Keine privaten Schlüssel verwenden.

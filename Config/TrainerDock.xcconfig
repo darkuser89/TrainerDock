@@ -4,8 +4,12 @@ TRAINERDOCK_BUILD_ROOT = $(HOME)/Library/Developer/TrainerDock
 SYMROOT = $(TRAINERDOCK_BUILD_ROOT)/Xcode/Build/Products
 OBJROOT = $(TRAINERDOCK_BUILD_ROOT)/Xcode/Build/Intermediates.noindex
 SHARED_PRECOMPS_DIR = $(TRAINERDOCK_BUILD_ROOT)/Xcode/Build/PrecompiledHeaders
+// Only libarchive headers come from Homebrew; runtime links the macOS system library.
+TRAINERDOCK_ARCHIVE_INCLUDE = /opt/homebrew/opt/libarchive/include
 SDKROOT = macosx
 MACOSX_DEPLOYMENT_TARGET = 27.0
+MARKETING_VERSION = 1.1.0
+CURRENT_PROJECT_VERSION = 1
 SUPPORTED_PLATFORMS = macosx
 ARCHS = arm64
 ONLY_ACTIVE_ARCH = YES

@@ -3,10 +3,12 @@
 #import "MHTModule.h"
 #import "MHTDiscovery.h"
 #import "MHTBranding.h"
+#import "MHTUpdatePackage.h"
 int main(int argc,const char *argv[]) {@autoreleasepool {
     if(![NSProcessInfo.processInfo isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){27,0,0}]){
         fprintf(stderr,"TrainerDock benötigt macOS 27 oder neuer.\n");return 1;
     }
+    if(argc==3 && !strcmp(argv[1],"--apply-update"))return MHTApplyUpdate([NSString stringWithUTF8String:argv[2]]);
     MHTMigrateLegacyPreferences();
     if(argc==2 && (!strcmp(argv[1],"--check") || !strcmp(argv[1],"--validate-installed"))) {
         NSMutableArray *errors=[NSMutableArray new];

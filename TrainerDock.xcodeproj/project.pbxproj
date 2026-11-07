@@ -71,6 +71,26 @@
 			"isa" = "PBXBuildFile";
 			"fileRef" = "292991DDDE8DA3463EAA0BCB";
 		};
+		"4CD8372648F00300BAF48BDF" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "App/MHTUpdatePackage.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"8F170029D39DA07380B30926" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "4CD8372648F00300BAF48BDF";
+		};
+		"5B69EE234172352024C9B3D1" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "App/MHTUpdater.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"28ACFAFA28A31D1571AC0824" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "5B69EE234172352024C9B3D1";
+		};
 		"4891A4B31E8F1FF614C4FC25" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.objc";
@@ -134,7 +154,7 @@
 		"1694EF60C3A8EE056828BF55" = {
 			"isa" = "PBXSourcesBuildPhase";
 			"buildActionMask" = 2147483647;
-			"files" = ("816667EAA05D1566EF55C2A8", "8E1752935B1DFCB8BFF60B4E", "D3AF5CADB89B65166CDD9444", "82336DD7D099C5B3196679E2", "E938BE848E3750C74451C7A3", "430BF5B177B1147374591557", "AC5B5134B5BB60B05F6BA3FA", "A0618446616328E0C16B7E4D", "A3D4D281C87F97B48F6C3A64", "E442196840C1F5D424CD14CB", "2D055E32FF0EA40BE88949F1", "CE4889B1E19CBC38F6CA3C2E");
+			"files" = ("816667EAA05D1566EF55C2A8", "8E1752935B1DFCB8BFF60B4E", "D3AF5CADB89B65166CDD9444", "82336DD7D099C5B3196679E2", "E938BE848E3750C74451C7A3", "430BF5B177B1147374591557", "8F170029D39DA07380B30926", "28ACFAFA28A31D1571AC0824", "AC5B5134B5BB60B05F6BA3FA", "A0618446616328E0C16B7E4D", "A3D4D281C87F97B48F6C3A64", "E442196840C1F5D424CD14CB", "2D055E32FF0EA40BE88949F1", "CE4889B1E19CBC38F6CA3C2E");
 			"runOnlyForDeploymentPostprocessing" = 0;
 		};
 		"8FD1CA41DCCFF74B72CD7ADE" = {
@@ -182,13 +202,11 @@
 			"buildSettings" = {
 				"PRODUCT_NAME" = "TrainerDock";
 				"PRODUCT_BUNDLE_IDENTIFIER" = "local.trainerdock.launcher";
-				"MARKETING_VERSION" = "1.0.0";
-				"CURRENT_PROJECT_VERSION" = "1";
 				"INFOPLIST_FILE" = "Config/Info.plist";
 				"GENERATE_INFOPLIST_FILE" = "NO";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)";
-				"HEADER_SEARCH_PATHS" = ("$(SRCROOT)/App", "$(SRCROOT)/Core", "$(SRCROOT)/ModuleSDK");
-				"OTHER_LDFLAGS" = ("$(inherited)", "-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++");
+				"HEADER_SEARCH_PATHS" = ("$(SRCROOT)/App", "$(SRCROOT)/Core", "$(SRCROOT)/ModuleSDK", "$(TRAINERDOCK_ARCHIVE_INCLUDE)");
+				"OTHER_LDFLAGS" = ("$(inherited)", "-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++", "-larchive.2");
 				"CODE_SIGN_INJECT_BASE_ENTITLEMENTS" = "YES";
 			};
 			"name" = "Debug";
@@ -199,13 +217,11 @@
 			"buildSettings" = {
 				"PRODUCT_NAME" = "TrainerDock";
 				"PRODUCT_BUNDLE_IDENTIFIER" = "local.trainerdock.launcher";
-				"MARKETING_VERSION" = "1.0.0";
-				"CURRENT_PROJECT_VERSION" = "1";
 				"INFOPLIST_FILE" = "Config/Info.plist";
 				"GENERATE_INFOPLIST_FILE" = "NO";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)";
-				"HEADER_SEARCH_PATHS" = ("$(SRCROOT)/App", "$(SRCROOT)/Core", "$(SRCROOT)/ModuleSDK");
-				"OTHER_LDFLAGS" = ("$(inherited)", "-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++");
+				"HEADER_SEARCH_PATHS" = ("$(SRCROOT)/App", "$(SRCROOT)/Core", "$(SRCROOT)/ModuleSDK", "$(TRAINERDOCK_ARCHIVE_INCLUDE)");
+				"OTHER_LDFLAGS" = ("$(inherited)", "-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++", "-larchive.2");
 			};
 			"name" = "Release";
 		};
@@ -4208,7 +4224,7 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/script/xcode_project.py", "$(TRAINERDOCK_BUILD_ROOT)/Modules/balatro.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/control.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/crimson-desert.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/cyberpunk-2077.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dead-island-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dome-keeper.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/escape-from-duckov.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/lies-of-p.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/no-mans-sky.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-3.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-4.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-7.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-village.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/robocop.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-crawlers.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-survivors.mhtmodule/Module.json");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/UpdaterTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/script/xcode_project.py", "$(TRAINERDOCK_BUILD_ROOT)/Modules/balatro.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/control.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/crimson-desert.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/cyberpunk-2077.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dead-island-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dome-keeper.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/escape-from-duckov.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/lies-of-p.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/no-mans-sky.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-3.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-4.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-7.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-village.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/robocop.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-crawlers.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-survivors.mhtmodule/Module.json");
 			"outputPaths" = ("$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Verify launcher, module signatures and layout";
 			"shellPath" = "/bin/bash";
@@ -4251,7 +4267,7 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/script/xcode_project.py", "$(TRAINERDOCK_BUILD_ROOT)/Modules/balatro.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/control.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/crimson-desert.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/cyberpunk-2077.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dead-island-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dome-keeper.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/escape-from-duckov.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/lies-of-p.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/no-mans-sky.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-3.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-4.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-7.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-village.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/robocop.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-crawlers.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-survivors.mhtmodule/Module.json");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/UpdaterTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/script/xcode_project.py", "$(TRAINERDOCK_BUILD_ROOT)/Modules/balatro.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/control.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/crimson-desert.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/cyberpunk-2077.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dead-island-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dome-keeper.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/escape-from-duckov.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/lies-of-p.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/no-mans-sky.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-3.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-4.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-7.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-village.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/robocop.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-crawlers.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-survivors.mhtmodule/Module.json");
 			"outputPaths" = ("$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Verify launcher, module signatures and layout";
 			"shellPath" = "/bin/bash";
@@ -4334,9 +4350,21 @@
 			"path" = "App/MHTTrainerViews.h";
 			"sourceTree" = "SOURCE_ROOT";
 		};
+		"E2E08CCC1B95AA8341870DE3" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "App/MHTUpdatePackage.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"3C116C6681C279159939BCBA" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "App/MHTUpdater.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
 		"13C4608B5138EBE9B3A45A55" = {
 			"isa" = "PBXGroup";
-			"children" = ("DC88D5694081BCC3FFDB10E5", "4891A4B31E8F1FF614C4FC25", "7671806C0BD0B16514F4141B", "F2D4E3918D1BBE220C2CA7AE", "890BDE4F897C88F73F278553", "CFD9C2F571E99B733C1BF344", "CCBCA2ADA2F9E98C493A77EA", "2AD78100CC2A2961EE446631", "4ED345BA8AD873B26B4BF6E7", "ECEB8461BC8525DA286936B1", "B14609CCFFEEF157817E7EEB", "32FA36AB74BAC439FCAFDC0D", "ED7D39E3C04D51AFAD0C698B", "292991DDDE8DA3463EAA0BCB");
+			"children" = ("DC88D5694081BCC3FFDB10E5", "4891A4B31E8F1FF614C4FC25", "7671806C0BD0B16514F4141B", "F2D4E3918D1BBE220C2CA7AE", "890BDE4F897C88F73F278553", "CFD9C2F571E99B733C1BF344", "CCBCA2ADA2F9E98C493A77EA", "2AD78100CC2A2961EE446631", "4ED345BA8AD873B26B4BF6E7", "ECEB8461BC8525DA286936B1", "B14609CCFFEEF157817E7EEB", "32FA36AB74BAC439FCAFDC0D", "ED7D39E3C04D51AFAD0C698B", "292991DDDE8DA3463EAA0BCB", "E2E08CCC1B95AA8341870DE3", "4CD8372648F00300BAF48BDF", "3C116C6681C279159939BCBA", "5B69EE234172352024C9B3D1");
 			"name" = "App";
 			"sourceTree" = "<group>";
 		};
@@ -6764,9 +6792,15 @@
 			"path" = "Tests/TrainerTemplateTests.m";
 			"sourceTree" = "SOURCE_ROOT";
 		};
+		"C20FA7C518ADBFC4CFB3FE75" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/UpdaterTests.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
 		"6DC4FAD667A85B8567F612FB" = {
 			"isa" = "PBXGroup";
-			"children" = ("95B85911D95C09F76077731D", "C558322C90F7C824EA333596", "9681BA565B80261048F375D6", "578887ED95FE266FE7E3C8CC", "3C9AA7F0D72E39A723213356", "9ABCB2D9903EA261D4B7675F", "C8438F0955C23E64B24CBFF4", "C7937F2CF58FBDC42DD73A82", "0AB8D325CA82C5A2F0E18B6F", "C3BD1762E47CFABFCD557C0D", "8959DF4A9F4735B4184ED876", "FE179AB05960397A0672CCDC", "272738046A71249570292AA4", "DAB207F704FDB6B20BDD3AA5", "92301B6E4315211EDE150A05", "EE99C02AC506535CD0888494", "46494363C1164468D58AC7DD", "54F9CF01D24044637CF3D68C", "8B873C8801208A32F871EEF6", "C10871D3BA468B9911412563", "3D3477CCF699C841A7E9A36D");
+			"children" = ("95B85911D95C09F76077731D", "C558322C90F7C824EA333596", "9681BA565B80261048F375D6", "578887ED95FE266FE7E3C8CC", "3C9AA7F0D72E39A723213356", "9ABCB2D9903EA261D4B7675F", "C8438F0955C23E64B24CBFF4", "C7937F2CF58FBDC42DD73A82", "0AB8D325CA82C5A2F0E18B6F", "C3BD1762E47CFABFCD557C0D", "8959DF4A9F4735B4184ED876", "FE179AB05960397A0672CCDC", "272738046A71249570292AA4", "DAB207F704FDB6B20BDD3AA5", "92301B6E4315211EDE150A05", "EE99C02AC506535CD0888494", "46494363C1164468D58AC7DD", "54F9CF01D24044637CF3D68C", "8B873C8801208A32F871EEF6", "C10871D3BA468B9911412563", "3D3477CCF699C841A7E9A36D", "C20FA7C518ADBFC4CFB3FE75");
 			"name" = "Tests";
 			"sourceTree" = "<group>";
 		};

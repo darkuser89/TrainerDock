@@ -117,10 +117,10 @@ def generate():
                    for p in sorted((ROOT / folder).glob("*.m"))] + [sdk_source]
     app = native("TrainerDock", app_sources, dict(
         PRODUCT_NAME="TrainerDock", PRODUCT_BUNDLE_IDENTIFIER="local.trainerdock.launcher",
-        MARKETING_VERSION="1.0.0", CURRENT_PROJECT_VERSION="1", INFOPLIST_FILE="Config/Info.plist",
+        INFOPLIST_FILE="Config/Info.plist",
         GENERATE_INFOPLIST_FILE="NO", CONFIGURATION_BUILD_DIR="$(TRAINERDOCK_BUILD_ROOT)",
-        HEADER_SEARCH_PATHS=["$(SRCROOT)/App", "$(SRCROOT)/Core", "$(SRCROOT)/ModuleSDK"],
-        OTHER_LDFLAGS=links), app=True)
+        HEADER_SEARCH_PATHS=["$(SRCROOT)/App", "$(SRCROOT)/Core", "$(SRCROOT)/ModuleSDK", "$(TRAINERDOCK_ARCHIVE_INCLUDE)"],
+        OTHER_LDFLAGS=links+["-larchive.2"]), app=True)
     module_targets = []
     checks = ["$(SRCROOT)/script/" + p for p in ("build.py", "managed.py", "xcode_support.py")]
     for module in released_modules():
@@ -172,7 +172,7 @@ def generate():
     def aggregate(name, dependencies):
         deps = [add(name + ":depends:" + target, "PBXTargetDependency", target=target) for target in dependencies]
         inputs = checks + ["$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock"]
-        inputs += ["$(SRCROOT)/Tests/" + p for p in ("MHTTests.m", "GameIdentityTests.m", "LauncherLayoutTests.m", "test_xcode_project.py")]
+        inputs += ["$(SRCROOT)/Tests/" + p for p in ("MHTTests.m", "GameIdentityTests.m", "LauncherLayoutTests.m", "UpdaterTests.m", "test_xcode_project.py")]
         inputs.append("$(SRCROOT)/script/xcode_project.py")
         inputs += ["$(TRAINERDOCK_BUILD_ROOT)/Modules/" + p.name + ".mhtmodule/Module.json" for p in released_modules()]
         phase = shell(name + ":checks", "Verify launcher, module signatures and layout", "launcher", inputs,

@@ -24,32 +24,23 @@ def package(root):
     destination.mkdir(exist_ok=True)
     archive = destination / "TrainerDock-macOS-arm64.zip"
     with tempfile.TemporaryDirectory(prefix="release-", dir=root) as temporary:
-        payload = Path(temporary) / "TrainerDock"
-        payload.mkdir()
-        shutil.copytree(app, payload / app.name, symlinks=True)
-        modules = payload / "Modules"
-        modules.mkdir()
+        payload = Path(temporary) / "TrainerDock.app"
+        shutil.copytree(app, payload, symlinks=True)
+        modules = payload / "Contents/Resources/Modules"
         inventory = []
         for source in released_modules():
             name = source.name + ".mhtmodule"
             target = modules / name
-            target.mkdir()
-            for filename in ("Module.json", "TrainerConfig.json", "Trainer.dylib", "LICENSE"):
-                shutil.copy2(root / "Modules" / name / filename, target / filename)
             manifest = json.loads((target / "Module.json").read_text())
             inventory.append({"id": manifest["id"], "version": manifest["version"],
                               "sha256": hashlib.sha256((target / "Trainer.dylib").read_bytes()).hexdigest()})
-        shutil.copy2(ROOT / "LICENSE", payload / "LICENSE")
-        (payload / "README.txt").write_text(
-            "TrainerDock – Apple Silicon, macOS 27+\n\n"
-            "Den gesamten TrainerDock-Ordner behalten: TrainerDock.app und Modules gehören zusammen.\n"
-            "TrainerDock.app öffnen und die installierten Spiele in den Pfadeinstellungen auswählen.\n"
-            "Die App ist ad-hoc signiert, nicht Developer-ID-signiert oder notarisiert.\n"
-            "Quellcode und Lizenz: https://github.com/darkuser89/TrainerDock\n")
         commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
-        (payload / "BUILD.json").write_text(json.dumps({"version": info["CFBundleShortVersionString"],
+        (payload / "Contents/Resources/BUILD.json").write_text(json.dumps({"version": info["CFBundleShortVersionString"],
             "build": info["CFBundleVersion"], "commit": commit, "minimumMacOS": "27.0",
             "architecture": "arm64", "modules": inventory}, indent=2) + "\n")
+        subprocess.run(["codesign","--force","--sign","-","--timestamp=none",str(payload)],check=True)
+        subprocess.run(["codesign","--verify","--deep","--strict",str(payload)],check=True)
+        subprocess.run([str(payload/"Contents/MacOS/TrainerDock"),"--check"],check=True)
         temporary_zip = Path(temporary) / archive.name
         subprocess.run(["ditto", "-c", "-k", "--sequesterRsrc", "--keepParent", str(payload), str(temporary_zip)], check=True)
         temporary_zip.replace(archive)

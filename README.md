@@ -75,8 +75,8 @@ bestehen. Das geprüfte ZIP steht sieben Tage als Workflow-Artefakt bereit.
 
 Ein Versions-Tag wie `v1.0.0` baut zusätzlich einen öffentlichen
 [GitHub Release](https://github.com/darkuser89/TrainerDock/releases/latest)
-mit `TrainerDock-macOS-arm64.zip` und `SHA256SUMS`. Den entpackten
-TrainerDock-Ordner mit **TrainerDock.app und Modules zusammen** behalten.
+mit `TrainerDock-macOS-arm64.zip` und `SHA256SUMS`. Das ZIP enthält
+**TrainerDock.app einschließlich aller Trainer**.
 Die Downloads sind ad-hoc signiert, nicht Developer-ID-signiert oder notarisiert.
 
 Zwei C#-Trainer verwenden im Cloud-Build ausschließlich unsere eigenen kompilierten
@@ -84,6 +84,21 @@ Bausteine. Deren Quellen, Originalbindung und Binärdateien sind über SHA-256 g
 geänderte Quellen sperren einen veralteten Baustein. Spiel-Assemblies werden weder
 hochgeladen noch veröffentlicht. Lokales Kompilieren gegen geprüfte Originale bleibt
 weiterhin möglich. Ablauf und Aktualisierung: [Release-Anleitung](docs/RELEASING.md).
+
+## App-Updates
+
+TrainerDock prüft GitHub beim Start und danach stündlich, mit höchstens einer
+erfolgreichen automatischen Abfrage pro Tag. Im Menü **TrainerDock → Nach Updates
+suchen …** jederzeit manuell prüfen; automatische Prüfungen lassen sich dort
+abschalten. Eine neue Version wird angezeigt und erst nach „Laden und installieren“
+installiert. Die SHA-256-Prüfsumme kommt direkt aus den GitHub-Release-Metadaten.
+App und mitgelieferte Trainer werden gemeinsam ersetzt und TrainerDock neu gestartet.
+Laufende Spiele verzögern die Installation; Spielstände, Pfade und Einstellungen
+bleiben erhalten. Zusätzliche Benutzermodule werden nicht ersetzt.
+
+Keine zusätzliche Update-Signierung, Apple-Zertifikate oder Schlüsselbundabfragen.
+macOS-Schutzmechanismen bleiben unverändert. Die erste Version mit integriertem
+Updater muss einmal manuell aus dem GitHub Release installiert werden.
 
 ## Lokal bauen
 
@@ -93,6 +108,8 @@ Trainer ein eigenes natives Dylib-Target. **TrainerDock-Launcher** baut nur die 
 **Trainer-<spiel-id>** baut ausschließlich den jeweiligen vollständigen Trainer.
 Synthetische Prüfungen gehören zum Build; Spiele werden dabei nicht gestartet.
 
+Vor dem ersten lokalen Build `brew install libarchive` ausführen. Nur die Header
+werden benötigt; die App verwendet die macOS-Systembibliothek, keinen Homebrew-Runtimepfad.
 Alternativ denselben Xcode-Build über das vorhandene Skript ausführen:
 
 ```sh
@@ -100,10 +117,11 @@ Alternativ denselben Xcode-Build über das vorhandene Skript ausführen:
 ./script/build_and_run.sh --verify       # zusätzlich den Launcher öffnen
 ```
 
-Die aktuelle App liegt unter `~/Library/Developer/TrainerDock/TrainerDock.app`. Daneben enthält
-`Modules` siebzehn eigenständige Trainerpakete. Die App selbst enthält
-keine Trainerbibliothek. Weitere Module können ohne Neukompilieren der App geladen
-werden; siehe die Modulanleitung. `TRAINERDOCK_BUILD_DIR`
+Die aktuelle App liegt unter `~/Library/Developer/TrainerDock/TrainerDock.app`. Sie enthält
+unter `Contents/Resources/Modules` siebzehn eigenständige Trainerpakete. Der Build
+verwendet daneben `Modules` für inkrementelle Modulbauten. Der Launcher lädt nur
+Metadaten; Trainerbibliotheken werden erst im ausgewählten Spielprozess geladen.
+Weitere Module können ohne Neukompilieren der App ergänzt werden; siehe die Modulanleitung. `TRAINERDOCK_BUILD_DIR`
 kann einen anderen separaten Buildordner bestimmen. Code und Audit sind als
 Buildziel ausgeschlossen. Die App ist ad-hoc signiert, nicht notarisiert.
 

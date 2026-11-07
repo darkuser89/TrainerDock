@@ -5,4 +5,6 @@
 - (void)openSettings:(id)sender;
 - (void)rescan:(id)sender;
 - (void)showLibrary:(id)sender;
+- (void)checkForUpdates:(id)sender;
+- (void)toggleAutomaticChecks:(id)sender;
 @end

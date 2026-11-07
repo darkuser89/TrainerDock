@@ -9,6 +9,8 @@ void MHTInstallMenus(MHTApp *target) {
     [app addItemWithTitle:@"Über TrainerDock" action:@selector(orderFrontStandardAboutPanel:) keyEquivalent:@""];
     [app addItem:NSMenuItem.separatorItem];
     NSMenuItem *settings=[app addItemWithTitle:@"Einstellungen …" action:@selector(openSettings:) keyEquivalent:@","];settings.target=target;
+    NSMenuItem *updates=[app addItemWithTitle:@"Nach Updates suchen …" action:@selector(checkForUpdates:) keyEquivalent:@""];updates.target=target;
+    NSMenuItem *automatic=[app addItemWithTitle:@"Automatisch nach Updates suchen" action:@selector(toggleAutomaticChecks:) keyEquivalent:@""];automatic.target=target;
     [app addItem:NSMenuItem.separatorItem];
     [app addItemWithTitle:@"TrainerDock ausblenden" action:@selector(hide:) keyEquivalent:@"h"];
     NSMenuItem *hide=[app addItemWithTitle:@"Andere ausblenden" action:@selector(hideOtherApplications:) keyEquivalent:@"h"];

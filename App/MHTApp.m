@@ -10,6 +10,7 @@
 #import "MHTTrainerSettings.h"
 #import "MHTMenu.h"
 #import "MHTTrainerViews.h"
+#import "MHTUpdater.h"
 static NSButton *button(NSString *title,id target,SEL action) {return [NSButton buttonWithTitle:title target:target action:action];}
 @interface MHTSession : NSObject
 @property(nonatomic) NSRunningApplication *app;
@@ -59,6 +60,7 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
 @property(nonatomic) id stateObserver;
 @property(nonatomic) NSOperationQueue *inspectionQueue,*discoveryQueue;
 @property(nonatomic) NSUInteger inspectionGeneration;
+@property(nonatomic) MHTUpdater *updater;
 @end
 @implementation MHTApp
 - (NSDictionary *)profile {return self.profiles.indexOfSelectedItem>=0 && self.profiles.indexOfSelectedItem<(NSInteger)self.selected.profiles.count ? self.selected.profiles[self.profiles.indexOfSelectedItem] : self.selected.profiles.firstObject;}
@@ -67,6 +69,11 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification {
     (void)notification;MHTInstallMenus(self);self.sessions=[NSMutableDictionary new];NSMutableArray *errors=[NSMutableArray new];
     self.modules=[MHTModule availableModules:errors];
+    if(!self.smokeTest){
+        __weak MHTApp *weakApp=self;
+        self.updater=[[MHTUpdater alloc]initWithRunningGames:^BOOL{return [weakApp hasRunningGames];}];
+        [self.updater start];
+    }
     self.inspectionQueue=[NSOperationQueue new];self.inspectionQueue.maxConcurrentOperationCount=1;self.inspectionQueue.qualityOfService=NSQualityOfServiceUserInitiated;self.inspectionQueue.name=@"MHT.ProfilePreview";
     self.discoveryQueue=[NSOperationQueue new];self.discoveryQueue.maxConcurrentOperationCount=1;self.discoveryQueue.qualityOfService=NSQualityOfServiceUtility;self.discoveryQueue.name=@"MHT.Discovery";
     self.window=[[NSWindow alloc]initWithContentRect:NSMakeRect(0,0,1160,800) styleMask:NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskMiniaturizable|NSWindowStyleMaskResizable backing:NSBackingStoreBuffered defer:NO];
@@ -424,6 +431,19 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
     (void)sender;[self.window makeKeyAndOrderFront:nil];[NSApp activateIgnoringOtherApps:YES];
 }
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)application{(void)application;for(MHTSession *s in self.sessions.allValues)if(s.launching || s.running)return NO;return YES;}
+- (BOOL)hasRunningGames {
+    for(MHTSession *session in self.sessions.allValues)if(session.launching || session.running)return YES;
+    NSMutableSet *identifiers=[NSMutableSet new];
+    for(MHTModule *module in self.modules)for(NSDictionary *profile in module.profiles)if([profile[@"bundleIdentifier"] length])[identifiers addObject:profile[@"bundleIdentifier"]];
+    for(NSString *identifier in identifiers)if([NSRunningApplication runningApplicationsWithBundleIdentifier:identifier].count)return YES;
+    return NO;
+}
+- (void)checkForUpdates:(id)sender {[self.updater checkForUpdates:sender];}
+- (void)toggleAutomaticChecks:(id)sender {[self.updater toggleAutomaticChecks:sender];}
+- (BOOL)validateMenuItem:(NSMenuItem *)item {
+    if(item.action==@selector(checkForUpdates:) || item.action==@selector(toggleAutomaticChecks:))return [self.updater validateUserInterfaceItem:item];
+    return YES;
+}
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)application hasVisibleWindows:(BOOL)visible{(void)application;if(!visible)[self.window makeKeyAndOrderFront:nil];return YES;}
 - (void)applicationWillTerminate:(NSNotification *)notification{(void)notification;[self.timer invalidate];[self.inspectionQueue cancelAllOperations];[self.discoveryQueue cancelAllOperations];if(self.stateObserver)[NSDistributedNotificationCenter.defaultCenter removeObserver:self.stateObserver];}
 @end

@@ -39,7 +39,7 @@ jobs:
           assert int(platform.mac_ver()[0].split('.')[0]) >= 27, 'macOS 27+ required'
           sdk = subprocess.check_output(['xcrun', '--sdk', 'macosx', '--show-sdk-version'], text=True)
           assert int(sdk.split('.')[0]) >= 27, 'macOS 27 SDK required'
-          version = '1.0.0'
+          version = re.search(r'^MARKETING_VERSION = ([0-9.]+)$', Path('Config/TrainerDock.xcconfig').read_text(), re.M).group(1)
           if os.environ['REF_TYPE'] == 'tag':
               tag = os.environ['REF_NAME']
               assert re.fullmatch(r'v[0-9]+\.[0-9]+\.[0-9]+', tag), 'Use a vMAJOR.MINOR.PATCH tag'
@@ -70,11 +70,11 @@ jobs:
           PY
       - name: Check build-input validation
         run: python3 -B -m unittest discover -s Tests -p test_managed_inputs.py
-      - name: Install standalone LuaJIT for synthetic Balatro tests
+      - name: Install build headers and standalone test LuaJIT
         env:
           HOMEBREW_NO_AUTO_UPDATE: '1'
         run: |
-          brew install luajit
+          brew install luajit libarchive
           printf 'TRAINERDOCK_TEST_LUA_LIBRARY=%s/lib/libluajit-5.1.dylib\n' "$(brew --prefix luajit)" >> "$GITHUB_ENV"
       - name: Build launcher, all trainers and synthetic tests
         run: |
@@ -110,7 +110,7 @@ jobs:
         run: |
           cd release
           sha256sum --check SHA256SUMS
-          printf '%s\n' 'Apple Silicon · macOS 27 oder neuer.' '' 'ZIP vollständig entpacken; TrainerDock.app und Modules zusammen behalten.' '' 'Ad-hoc signiert; nicht Developer-ID-signiert oder notarisiert.' > notes.txt
+          printf '%s\n' 'Apple Silicon · macOS 27 oder neuer.' '' 'TrainerDock.app enthält alle 17 Trainer. Updates über TrainerDock → Nach Updates suchen.' '' 'Ohne Developer-ID-Signierung oder Notarisierung; keine zusätzlichen Signierschlüssel erforderlich.' > notes.txt
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
             echo 'Release already exists; refusing to replace published binaries.' >&2
             exit 1
