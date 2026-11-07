@@ -2,16 +2,16 @@
   "schemaVersion": 1,
   "id": "crimson-desert",
   "name": "Crimson Desert",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "profiles": [
     {
       "id": "crimson-steam-arm64-1.0.35-plus12",
-      "name": "Crimson Desert · Steam · 2.04.05",
+      "name": "Crimson Desert · Steam · Build 450",
       "enabled": true,
       "bundleIdentifier": "com.pearlabyss.CrimsonDesert.steam",
       "executable": "CrimsonDesert_Steam",
       "uuids": [
-        "083C4A58-7D49-307F-8F0F-8F9EEAE8343C"
+        "6D8EEB01-C410-39A0-8460-D3CDAE923532"
       ],
       "teamIdentifier": "57S64SYSTT",
       "version": "1.0.35",

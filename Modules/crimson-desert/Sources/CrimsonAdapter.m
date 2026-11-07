@@ -29,7 +29,7 @@
     }
     context.kind=MTSessionSolo;_valid=YES;
     context.identity=[NSString stringWithFormat:@"%d/%@/%@",NSProcessInfo.processInfo.processIdentifier,_snapshot[@"fieldIndex"],_snapshot[@"actorKey"]];
-    context.note=[NSString stringWithFormat:@"Crimson Desert 2.04.05 · Leben %@/%@ · Ausdauer %@/%@ · Geist %@/%@",_snapshot[@"health"][@"value"],_snapshot[@"health"][@"maximum"],_snapshot[@"stamina"][@"value"],_snapshot[@"stamina"][@"maximum"],_snapshot[@"spirit"][@"value"],_snapshot[@"spirit"][@"maximum"]];return context;
+    context.note=[NSString stringWithFormat:@"Crimson Desert · Build 450 · Leben %@/%@ · Ausdauer %@/%@ · Geist %@/%@",_snapshot[@"health"][@"value"],_snapshot[@"health"][@"maximum"],_snapshot[@"stamina"][@"value"],_snapshot[@"stamina"][@"maximum"],_snapshot[@"spirit"][@"value"],_snapshot[@"spirit"][@"maximum"]];return context;
 }
 - (void)releaseEffects {_releaser();[_requested removeAllObjects];[_actions removeAllObjects];}
 - (MTFeatureState *)applyFeature:(MTFeature)feature wanted:(BOOL)wanted value:(double)value {
