@@ -46,6 +46,12 @@ def package(root):
         temporary_zip.replace(archive)
     digest = hashlib.sha256(archive.read_bytes()).hexdigest()
     (destination / "SHA256SUMS").write_text(digest + "  " + archive.name + "\n")
+    (destination / "RELEASE_NOTES.md").write_text(
+        "Apple Silicon · macOS 27 oder neuer.\n\n"
+        f"TrainerDock.app enthält alle {len(inventory)} Trainer. "
+        "Updates über TrainerDock → Nach Updates suchen.\n\n"
+        "Ohne Developer-ID-Signierung oder Notarisierung; "
+        "keine zusätzlichen Signierschlüssel erforderlich.\n")
     print(f"Verified release package: {archive} ({len(inventory)} trainers)")
 
 

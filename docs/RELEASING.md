@@ -9,15 +9,23 @@ wird dabei ausdrücklich als nicht durchgeführt gemeldet. Der Ersatz befindet s
 ausschließlich im Testprozess und wird nicht ins Produkt oder ZIP eingebunden.
 Lokale Tests verwenden ohne `TRAINERDOCK_TEST_LUA_LIBRARY` weiterhin das Original.
 
-- Push auf `main`, Pull Request oder **Actions → Build and release TrainerDock →
-  Run workflow**: Release-Konfiguration bauen, synthetisch prüfen, ZIP als Artefakt
-  für sieben Tage bereitstellen.
+- Push auf `main` oder **Actions → Build and release TrainerDock → Run workflow**
+  auf `main`: Release-Konfiguration bauen, synthetisch prüfen und anschließend
+  automatisch ein neues stabiles GitHub Release veröffentlichen.
+- Pull Request: nur bauen und prüfen; ZIP als Artefakt für sieben Tage bereitstellen.
 - Tag `vMAJOR.MINOR.PATCH`: denselben vollständigen Build ausführen und erst danach
   ein GitHub Release mit ZIP und SHA-256-Prüfsumme veröffentlichen.
 - Bestehende Releases nicht überschreiben. Für einen korrigierten Download einen
   neuen Versions-Tag verwenden.
 
-Ein Release aus einem bereits geprüften `main` veröffentlichen:
+Für automatische Releases ist `MARKETING_VERSION` die Mindestversion.
+`script/ci_version.py` prüft alle Remote-Versions-Tags und erhöht bei bereits
+verwendeter Mindestversion die Patchnummer. Auch Tags ohne fertiges Release
+werden nicht wiederverwendet. Build und Veröffentlichung laufen seriell; der Tag
+wird erst nach erfolgreichem Build für genau dessen Commit erstellt. Kein zusätzlicher
+Tag-Push ist erforderlich. Die Releasebeschreibung zählt die tatsächlich verpackten Trainer.
+
+Optional eine konkrete Version aus einem bereits geprüften `main` veröffentlichen:
 
 ```sh
 git tag -a v1.0.0 -m 'TrainerDock 1.0.0'

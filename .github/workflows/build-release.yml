@@ -12,13 +12,15 @@ permissions:
   contents: read
 
 concurrency:
-  group: trainerdock-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
+  group: trainerdock-${{ github.workflow }}-${{ (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) && 'release' || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
     runs-on: xcode-27
     timeout-minutes: 40
+    outputs:
+      release_tag: ${{ steps.release_version.outputs.tag }}
     env:
       PYTHONDONTWRITEBYTECODE: '1'
       DOTNET_CLI_TELEMETRY_OPTOUT: '1'
@@ -28,26 +30,20 @@ jobs:
         with:
           persist-credentials: false
       - name: Check platform and version
+        id: release_version
         env:
           REF_TYPE: ${{ github.ref_type }}
           REF_NAME: ${{ github.ref_name }}
         run: |
           python3 -B - <<'PY'
-          import os, platform, re, subprocess
-          from pathlib import Path
+          import platform, subprocess
           assert platform.machine() == 'arm64', 'Apple Silicon required'
           assert int(platform.mac_ver()[0].split('.')[0]) >= 27, 'macOS 27+ required'
           sdk = subprocess.check_output(['xcrun', '--sdk', 'macosx', '--show-sdk-version'], text=True)
           assert int(sdk.split('.')[0]) >= 27, 'macOS 27 SDK required'
-          version = re.search(r'^MARKETING_VERSION = ([0-9.]+)$', Path('Config/TrainerDock.xcconfig').read_text(), re.M).group(1)
-          if os.environ['REF_TYPE'] == 'tag':
-              tag = os.environ['REF_NAME']
-              assert re.fullmatch(r'v[0-9]+\.[0-9]+\.[0-9]+', tag), 'Use a vMAJOR.MINOR.PATCH tag'
-              version = tag[1:]
-          with open(os.environ['GITHUB_ENV'], 'a') as output:
-              output.write('TRAINERDOCK_VERSION=' + version + '\n')
-              output.write('TRAINERDOCK_MANAGED_IMAGES=' + os.environ['RUNNER_TEMP'] + '/managed-images\n')
           PY
+          python3 -B -m unittest discover -s Tests -p test_ci_version.py
+          python3 -B script/ci_version.py
           xcodebuild -version
           dotnet --version
       - name: Download own managed build inputs
@@ -92,7 +88,7 @@ jobs:
 
   publish:
     needs: build
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -106,13 +102,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-          RELEASE_TAG: ${{ github.ref_name }}
+          RELEASE_TAG: ${{ needs.build.outputs.release_tag }}
+          RELEASE_COMMIT: ${{ github.sha }}
         run: |
           cd release
           sha256sum --check SHA256SUMS
-          printf '%s\n' 'Apple Silicon · macOS 27 oder neuer.' '' 'TrainerDock.app enthält alle 17 Trainer. Updates über TrainerDock → Nach Updates suchen.' '' 'Ohne Developer-ID-Signierung oder Notarisierung; keine zusätzlichen Signierschlüssel erforderlich.' > notes.txt
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
             echo 'Release already exists; refusing to replace published binaries.' >&2
             exit 1
           fi
-          gh release create "$RELEASE_TAG" TrainerDock-macOS-arm64.zip SHA256SUMS --verify-tag --title "TrainerDock $RELEASE_TAG" --notes-file notes.txt --latest
+          gh release create "$RELEASE_TAG" TrainerDock-macOS-arm64.zip SHA256SUMS --target "$RELEASE_COMMIT" --title "TrainerDock $RELEASE_TAG" --notes-file RELEASE_NOTES.md --latest

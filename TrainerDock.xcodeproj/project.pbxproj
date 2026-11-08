@@ -2114,6 +2114,338 @@
 			"productReference" = "FBCB12816DDC187D9622F973";
 			"productType" = "com.apple.product-type.library.dynamic";
 		};
+		"8028034DB8077FD63AE82CE2" = {
+			"isa" = "PBXShellScriptBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/frostpunk-2/Module.json", "$(SRCROOT)/Modules/frostpunk-2/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Frostpunk2/UnrealContractTests.mm", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"name" = "Catalog, bridge, native and HiDPI checks";
+			"shellPath" = "/bin/bash";
+			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module frostpunk-2\n";
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"AA3BA311366BDD08C3472D27" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/frostpunk-2/Sources/TrainerFeatures.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"9DF266E7B4FB9BD6C58497C7" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "AA3BA311366BDD08C3472D27";
+		};
+		"F6C2FA6889B511F8D4C2883D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/frostpunk-2/Sources/GameAdapter.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"874D63C7908D411A364FF489" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "F6C2FA6889B511F8D4C2883D";
+		};
+		"F116168F0C035B3167008C77" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/frostpunk-2/Sources/NativeAdapter.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"86BE05A570100DA8257B9AB5" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "F116168F0C035B3167008C77";
+		};
+		"DDC92D6F826A885A94FB6E7E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/frostpunk-2/Sources/GameBridge.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"52729A3D11DC60959959A82F" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "DDC92D6F826A885A94FB6E7E";
+		};
+		"52E2A0F0FCDE61181EDC6171" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/frostpunk-2/Sources/SelectionSettings.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"0A4167BD311EBD75E15AC868" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "52E2A0F0FCDE61181EDC6171";
+		};
+		"EE64EA4CF853CEE93655895A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/frostpunk-2/Sources/GameProfile.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"08ECF16647EBE965E9912284" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "EE64EA4CF853CEE93655895A";
+		};
+		"3DEA9032863C38D78D8A58E2" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/frostpunk-2/Sources/MemoryAccess.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"FA92299B46BED8978CE4231E" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "3DEA9032863C38D78D8A58E2";
+		};
+		"A7EA256EBC5CB2752C18382F" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/frostpunk-2/Sources/TrainerMaterial.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"BE8E8FD6479A3FB4099ABDE6" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "A7EA256EBC5CB2752C18382F";
+		};
+		"D2A975C8613C3A2C0780554A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/frostpunk-2/Sources/Overlay.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"DE05C84C059E1D287A138EC5" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "D2A975C8613C3A2C0780554A";
+		};
+		"2C18B4C745DE27AD7D015BB2" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/frostpunk-2/Sources/OverlaySettings.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"E7E6F7B11E253ADCDDD8FF34" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "2C18B4C745DE27AD7D015BB2";
+		};
+		"75E9398E1BE52C07D2C51505" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/frostpunk-2/Sources/OverlayShortcuts.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"E6D4EE6ECA50CF80379864E3" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "75E9398E1BE52C07D2C51505";
+		};
+		"074317003ED57C907AC01245" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/frostpunk-2/Sources/Runtime.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"DFEA1D98271C133ECD1D1485" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "074317003ED57C907AC01245";
+		};
+		"1BB40A0D60654B26959B2ECE" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/frostpunk-2/Sources/Unreal.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"453530030B136F9668F33878" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "1BB40A0D60654B26959B2ECE";
+		};
+		"C7BF94D70FB58A6D120824B9" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/frostpunk-2/Sources/Context.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"564988B83813B30FE737676E" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "C7BF94D70FB58A6D120824B9";
+		};
+		"AB6ECE79E85B3740A755769A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/frostpunk-2/Sources/GameEffects.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"DB439EB59A177768A5008EC7" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "AB6ECE79E85B3740A755769A";
+		};
+		"B9B5E6865686CAC199F63174" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/frostpunk-2/Sources/Cursor.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"CE3ECE7AB2FA06E83070A51E" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "B9B5E6865686CAC199F63174";
+		};
+		"52D5130335714056819A64AE" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/frostpunk-2/Sources/Backend.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"D6EE7CC231F99BB27EBCD893" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "52D5130335714056819A64AE";
+		};
+		"9AD152D2C6C916B6BE287A8B" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/frostpunk-2/Sources/Population.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"D18690A4F555492380DDA153" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "9AD152D2C6C916B6BE287A8B";
+		};
+		"D800DE71E37631338AD09BBB" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/frostpunk-2/Sources/Speed.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"E7C06B785ACF70FF2BE10B92" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "D800DE71E37631338AD09BBB";
+		};
+		"007A5D2FE4219E4B39AE567C" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/frostpunk-2/Sources/Manager.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"2A57EB806BFCF89344A52514" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "007A5D2FE4219E4B39AE567C";
+		};
+		"0E4286454186B4E967FBCDC5" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/frostpunk-2/Sources/ContinuousFlags.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"61EF6F9C66DAF03CD5A02D44" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "0E4286454186B4E967FBCDC5";
+		};
+		"72399D9200C8B03ADD35AABA" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/frostpunk-2/Sources/CommunitySelection.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"68E32C44E3C388824FC4BB34" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "72399D9200C8B03ADD35AABA";
+		};
+		"909FFB3A49E67D505A82F9DA" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/frostpunk-2/Sources/Operations.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"C3C160E80212E8F113D1DA7A" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "909FFB3A49E67D505A82F9DA";
+		};
+		"54B044E28A0F9ED460DFAAB0" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/frostpunk-2/Sources/Trust.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"3582093C02EDC844BCD32C71" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "54B044E28A0F9ED460DFAAB0";
+		};
+		"06F74C424700E9966B71C0FD" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "22F60203652AD2078DD0A34C";
+		};
+		"EE6479FEBA4189E83354460B" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "A0AEEDF4F51BB81D82826C2B";
+		};
+		"F75E87E5D06A8CF48ACD445C" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "71A295E05EF3AAF22670B173";
+		};
+		"3D9C041A886BDC25A941D1C2" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ("9DF266E7B4FB9BD6C58497C7", "874D63C7908D411A364FF489", "86BE05A570100DA8257B9AB5", "52729A3D11DC60959959A82F", "0A4167BD311EBD75E15AC868", "08ECF16647EBE965E9912284", "FA92299B46BED8978CE4231E", "BE8E8FD6479A3FB4099ABDE6", "DE05C84C059E1D287A138EC5", "E7E6F7B11E253ADCDDD8FF34", "E6D4EE6ECA50CF80379864E3", "DFEA1D98271C133ECD1D1485", "453530030B136F9668F33878", "564988B83813B30FE737676E", "DB439EB59A177768A5008EC7", "CE3ECE7AB2FA06E83070A51E", "D6EE7CC231F99BB27EBCD893", "D18690A4F555492380DDA153", "E7C06B785ACF70FF2BE10B92", "2A57EB806BFCF89344A52514", "61EF6F9C66DAF03CD5A02D44", "68E32C44E3C388824FC4BB34", "C3C160E80212E8F113D1DA7A", "3582093C02EDC844BCD32C71", "06F74C424700E9966B71C0FD", "EE6479FEBA4189E83354460B", "F75E87E5D06A8CF48ACD445C");
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"42D6E4110A9E61C792DCEDF4" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"9CBC248AE6CBF096D8AAD3DD" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "compiled.mach-o.dylib";
+			"path" = "Trainer.dylib";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"CB01CA324BD4364A797E7953" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "F4DEF456225CDD06E427CB99";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "Trainer";
+				"EXECUTABLE_PREFIX" = "";
+				"MACH_O_TYPE" = "mh_dylib";
+				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
+				"SKIP_INSTALL" = "YES";
+				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/frostpunk-2.mhtmodule";
+				"HEADER_SEARCH_PATHS" = ("$(SRCROOT)/Modules/frostpunk-2/Sources", "$(SRCROOT)/ModuleSDK", "$(DERIVED_FILE_DIR)");
+				"GCC_PREPROCESSOR_DEFINITIONS" = ("$(inherited)");
+				"OTHER_LDFLAGS" = ("$(inherited)", "-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++");
+				"ENABLE_HARDENED_RUNTIME" = "NO";
+			};
+			"name" = "Debug";
+		};
+		"E2A691DBE2CF12FBD09D1B16" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "F4DEF456225CDD06E427CB99";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "Trainer";
+				"EXECUTABLE_PREFIX" = "";
+				"MACH_O_TYPE" = "mh_dylib";
+				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
+				"SKIP_INSTALL" = "YES";
+				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/frostpunk-2.mhtmodule";
+				"HEADER_SEARCH_PATHS" = ("$(SRCROOT)/Modules/frostpunk-2/Sources", "$(SRCROOT)/ModuleSDK", "$(DERIVED_FILE_DIR)");
+				"GCC_PREPROCESSOR_DEFINITIONS" = ("$(inherited)");
+				"OTHER_LDFLAGS" = ("$(inherited)", "-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++");
+				"ENABLE_HARDENED_RUNTIME" = "NO";
+			};
+			"name" = "Release";
+		};
+		"935A998944A7D8F2C46506D2" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = ("CB01CA324BD4364A797E7953", "E2A691DBE2CF12FBD09D1B16");
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Debug";
+		};
+		"F568D9165AED75AB55C883D5" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = "935A998944A7D8F2C46506D2";
+			"buildPhases" = ("3D9C041A886BDC25A941D1C2", "42D6E4110A9E61C792DCEDF4", "8028034DB8077FD63AE82CE2");
+			"buildRules" = ();
+			"dependencies" = ();
+			"name" = "Trainer-frostpunk-2";
+			"productName" = "Trainer";
+			"productReference" = "9CBC248AE6CBF096D8AAD3DD";
+			"productType" = "com.apple.product-type.library.dynamic";
+		};
 		"383369642C5FF1B13D7CB053" = {
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
@@ -4900,6 +5232,10 @@
 			"isa" = "PBXTargetDependency";
 			"target" = "240D569859218DE346C7B099";
 		};
+		"C02F4B177F39822F92EA5213" = {
+			"isa" = "PBXTargetDependency";
+			"target" = "F568D9165AED75AB55C883D5";
+		};
 		"6561344919C7BF6BE1F42743" = {
 			"isa" = "PBXTargetDependency";
 			"target" = "C13F7F8275A3CCFB57EEE43D";
@@ -4952,7 +5288,7 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/UpdaterTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/script/xcode_project.py", "$(TRAINERDOCK_BUILD_ROOT)/Modules/balatro.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/control.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/crimson-desert.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/cyberpunk-2077.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dead-island-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/death-stranding.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dome-keeper.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/escape-from-duckov.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/lies-of-p.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/no-mans-sky.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-3.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-4.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-7.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-village.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/robocop.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/terraria.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/the-long-dark.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-crawlers.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-survivors.mhtmodule/Module.json");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/UpdaterTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/script/xcode_project.py", "$(TRAINERDOCK_BUILD_ROOT)/Modules/balatro.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/control.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/crimson-desert.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/cyberpunk-2077.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dead-island-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/death-stranding.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dome-keeper.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/escape-from-duckov.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/frostpunk-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/lies-of-p.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/no-mans-sky.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-3.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-4.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-7.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-village.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/robocop.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/terraria.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/the-long-dark.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-crawlers.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-survivors.mhtmodule/Module.json");
 			"outputPaths" = ("$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Verify launcher, module signatures and layout";
 			"shellPath" = "/bin/bash";
@@ -4983,7 +5319,7 @@
 			"isa" = "PBXAggregateTarget";
 			"buildConfigurationList" = "E22F6C63F7B2C5E22B06EE00";
 			"buildPhases" = ("0B57929311D45D24D41D5FCE");
-			"dependencies" = ("01D96416F6F93BF1DC10B9D8", "A28C28D74AE9FBAEC53CE198", "36013B31F45A59B7C8CB0888", "A0FDF4B37C707111CB32E1A5", "CF6BE48E68C0E99F81083648", "A7BDF65D7E105531D1DC649D", "B92277F24CD027F727D4514F", "34342D799653556E620628DA", "7449C3F3C34131FD0EB3A421", "6561344919C7BF6BE1F42743", "AC1F7B583FE6A11E281B8BDE", "60F380C2074288C6460BFD85", "6DBA4DB370D5F75917CA806D", "995596E49E9F6DA0E42E2708", "336BD94A1A522E8AA5F7397F", "84E408AA69E0E4CB94910C1D", "A9CDD78B45897AE592EEDDB8", "6BA2211DF3C25CAA7F9A92DF", "7DD50E27EA90517EE995A488", "1D62A35B9498B42A1E93A9B5", "07878358E7EDB489DBD1E15B");
+			"dependencies" = ("01D96416F6F93BF1DC10B9D8", "A28C28D74AE9FBAEC53CE198", "36013B31F45A59B7C8CB0888", "A0FDF4B37C707111CB32E1A5", "CF6BE48E68C0E99F81083648", "A7BDF65D7E105531D1DC649D", "B92277F24CD027F727D4514F", "34342D799653556E620628DA", "7449C3F3C34131FD0EB3A421", "C02F4B177F39822F92EA5213", "6561344919C7BF6BE1F42743", "AC1F7B583FE6A11E281B8BDE", "60F380C2074288C6460BFD85", "6DBA4DB370D5F75917CA806D", "995596E49E9F6DA0E42E2708", "336BD94A1A522E8AA5F7397F", "84E408AA69E0E4CB94910C1D", "A9CDD78B45897AE592EEDDB8", "6BA2211DF3C25CAA7F9A92DF", "7DD50E27EA90517EE995A488", "1D62A35B9498B42A1E93A9B5", "07878358E7EDB489DBD1E15B");
 			"name" = "TrainerDock-Verified";
 			"productName" = "TrainerDock-Verified";
 		};
@@ -4995,7 +5331,7 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/UpdaterTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/script/xcode_project.py", "$(TRAINERDOCK_BUILD_ROOT)/Modules/balatro.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/control.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/crimson-desert.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/cyberpunk-2077.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dead-island-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/death-stranding.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dome-keeper.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/escape-from-duckov.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/lies-of-p.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/no-mans-sky.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-3.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-4.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-7.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-village.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/robocop.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/terraria.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/the-long-dark.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-crawlers.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-survivors.mhtmodule/Module.json");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/UpdaterTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/script/xcode_project.py", "$(TRAINERDOCK_BUILD_ROOT)/Modules/balatro.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/control.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/crimson-desert.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/cyberpunk-2077.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dead-island-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/death-stranding.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dome-keeper.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/escape-from-duckov.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/frostpunk-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/lies-of-p.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/no-mans-sky.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-3.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-4.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-7.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-village.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/robocop.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/terraria.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/the-long-dark.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-crawlers.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-survivors.mhtmodule/Module.json");
 			"outputPaths" = ("$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Verify launcher, module signatures and layout";
 			"shellPath" = "/bin/bash";
@@ -6434,6 +6770,216 @@
 			"name" = "escape-from-duckov";
 			"sourceTree" = "<group>";
 		};
+		"76C0F233619A8FCBDD70102F" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/frostpunk-2/Sources/Backend.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"C44C2BC23B24A07104DC2945" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/frostpunk-2/Sources/CommunitySelection.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"8BB5E6FBA6EB11CF44AF1B12" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/frostpunk-2/Sources/Context.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"1B942CDA1EBCCBE15F11EC7C" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/frostpunk-2/Sources/ContinuousFlagBindings.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"4F62C3EB73C056049002C6A6" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/frostpunk-2/Sources/ContinuousFlags.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"532CAD42A75EDCB45568BBB1" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/frostpunk-2/Sources/Cursor.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"B562C2D52B8539C0B58D2934" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/frostpunk-2/Sources/GameAdapter.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"B9B6CCE5D9FDD9FF1D108C22" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/frostpunk-2/Sources/GameBindings.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"2850D29C60476D013F37D234" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/frostpunk-2/Sources/GameBridge.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"C04543A7F83FAB8222250A1C" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/frostpunk-2/Sources/GameEffects.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"8184910C90584A0C55CAEDA3" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/frostpunk-2/Sources/GameProfile.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"41867171FFEB6534BF4A7FBB" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/frostpunk-2/Sources/LICENSE";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"2973EF6641434B67AF6EC04E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/frostpunk-2/Sources/Manager.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"CDCD611918EBD01C717DDDD2" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/frostpunk-2/Sources/MemoryAccess.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"837366D3F6AD5A465E5396D1" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/frostpunk-2/Sources/NativeAdapter.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"76557D270F8988CDC0EF970D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/frostpunk-2/Sources/Operations.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"BBA88F05451645244C65ACA9" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/frostpunk-2/Sources/Overlay.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"10785E036EDB25D6527D76BA" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/frostpunk-2/Sources/OverlaySettings.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"83BA7D6DD7CFFAD6ADB4BD90" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/frostpunk-2/Sources/OverlayShortcuts.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"3BCF78D21FA7504DDBCC3902" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/frostpunk-2/Sources/Population.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"D9F20533F586D3119B1C4AF2" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/frostpunk-2/Sources/ReflectionBindings.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"FF901729E164A51264332F14" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/frostpunk-2/Sources/SelectionSettings.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"E63FC1A4D1B04A4437A73682" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/frostpunk-2/Sources/Speed.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"ACE9E267B8466B8F393E5519" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/frostpunk-2/Sources/ThreadInputBindings.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"5AE981DD0BCFCA4A85960D59" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/frostpunk-2/Sources/TrainerFeatures.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"28B2C7D3B1CD19D95A0DB219" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/frostpunk-2/Sources/TrainerMaterial.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"6DB5957D52205D23C909AB54" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/frostpunk-2/Sources/Trust.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"61576A8850712C466CAFD546" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/frostpunk-2/Sources/Unreal.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"14FC7FDC3348E2468778EEB1" = {
+			"isa" = "PBXGroup";
+			"children" = ("76C0F233619A8FCBDD70102F", "52D5130335714056819A64AE", "C44C2BC23B24A07104DC2945", "72399D9200C8B03ADD35AABA", "8BB5E6FBA6EB11CF44AF1B12", "C7BF94D70FB58A6D120824B9", "1B942CDA1EBCCBE15F11EC7C", "4F62C3EB73C056049002C6A6", "0E4286454186B4E967FBCDC5", "532CAD42A75EDCB45568BBB1", "B9B5E6865686CAC199F63174", "B562C2D52B8539C0B58D2934", "F6C2FA6889B511F8D4C2883D", "B9B6CCE5D9FDD9FF1D108C22", "2850D29C60476D013F37D234", "DDC92D6F826A885A94FB6E7E", "C04543A7F83FAB8222250A1C", "AB6ECE79E85B3740A755769A", "8184910C90584A0C55CAEDA3", "EE64EA4CF853CEE93655895A", "41867171FFEB6534BF4A7FBB", "2973EF6641434B67AF6EC04E", "007A5D2FE4219E4B39AE567C", "CDCD611918EBD01C717DDDD2", "3DEA9032863C38D78D8A58E2", "837366D3F6AD5A465E5396D1", "F116168F0C035B3167008C77", "76557D270F8988CDC0EF970D", "909FFB3A49E67D505A82F9DA", "BBA88F05451645244C65ACA9", "D2A975C8613C3A2C0780554A", "10785E036EDB25D6527D76BA", "2C18B4C745DE27AD7D015BB2", "83BA7D6DD7CFFAD6ADB4BD90", "75E9398E1BE52C07D2C51505", "3BCF78D21FA7504DDBCC3902", "9AD152D2C6C916B6BE287A8B", "D9F20533F586D3119B1C4AF2", "074317003ED57C907AC01245", "FF901729E164A51264332F14", "52E2A0F0FCDE61181EDC6171", "E63FC1A4D1B04A4437A73682", "D800DE71E37631338AD09BBB", "ACE9E267B8466B8F393E5519", "5AE981DD0BCFCA4A85960D59", "AA3BA311366BDD08C3472D27", "28B2C7D3B1CD19D95A0DB219", "A7EA256EBC5CB2752C18382F", "6DB5957D52205D23C909AB54", "54B044E28A0F9ED460DFAAB0", "61576A8850712C466CAFD546", "1BB40A0D60654B26959B2ECE");
+			"name" = "Sources";
+			"sourceTree" = "<group>";
+		};
+		"DA94FE675389B9B8BE76A96D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/frostpunk-2/AGENTS.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"1192C6EA43F7C4DD146820ED" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/frostpunk-2/Build.json";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"85703DFCBA384FD55A5D74C9" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/frostpunk-2/CHAT_START.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"3F5000328DBA131B303509C2" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/frostpunk-2/Module.json";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"45A0AAAF56BEFD5C0A366FC0" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/frostpunk-2/README.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"0AF43817911FFDCB111070D9" = {
+			"isa" = "PBXGroup";
+			"children" = ("14FC7FDC3348E2468778EEB1", "DA94FE675389B9B8BE76A96D", "1192C6EA43F7C4DD146820ED", "85703DFCBA384FD55A5D74C9", "3F5000328DBA131B303509C2", "45A0AAAF56BEFD5C0A366FC0");
+			"name" = "frostpunk-2";
+			"sourceTree" = "<group>";
+		};
 		"1C21F5EF41C5B2D368DF3D23" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.h";
@@ -7402,7 +7948,7 @@
 		};
 		"3797E64238CADC23F937DE2E" = {
 			"isa" = "PBXGroup";
-			"children" = ("F5CD0D66BBAACE9BD02FC0DA", "062F91E27C907B63C78F7073", "F29A61C506744D62FFB58934", "1F9595D298B0BD4FF2FF13AE", "FDFA05E8490CAC3E37AE63AF", "898B94E7AC7DB70258FD2A01", "68C7961B65B1794F4BF28196", "50E4DE60874E10233AA7AFC8", "98439BD32F5C169B43BE76B6", "027A2B1713B83CD8FE2CBA30", "D0394ED0C36569BFD589E21B", "660D1D64EB32477DA11A088A", "4F86B9E2458B5BE159E75394", "173345CF9A59DE6320E20C81", "3838914CEA3D824168E88C24", "378A4E09183E2A1D8A7D4C55", "5808CBF31DC8F0ED68AE438C", "5D681153DFF38506792EA780", "7B5AAD514B418ABABE7D686E", "430F7067714B7904EBD099D9", "D77FA87A6E6576CD5A0AE202");
+			"children" = ("F5CD0D66BBAACE9BD02FC0DA", "062F91E27C907B63C78F7073", "F29A61C506744D62FFB58934", "1F9595D298B0BD4FF2FF13AE", "FDFA05E8490CAC3E37AE63AF", "898B94E7AC7DB70258FD2A01", "68C7961B65B1794F4BF28196", "50E4DE60874E10233AA7AFC8", "98439BD32F5C169B43BE76B6", "0AF43817911FFDCB111070D9", "027A2B1713B83CD8FE2CBA30", "D0394ED0C36569BFD589E21B", "660D1D64EB32477DA11A088A", "4F86B9E2458B5BE159E75394", "173345CF9A59DE6320E20C81", "3838914CEA3D824168E88C24", "378A4E09183E2A1D8A7D4C55", "5808CBF31DC8F0ED68AE438C", "5D681153DFF38506792EA780", "7B5AAD514B418ABABE7D686E", "430F7067714B7904EBD099D9", "D77FA87A6E6576CD5A0AE202");
 			"name" = "Modules";
 			"sourceTree" = "<group>";
 		};
@@ -7778,6 +8324,150 @@
 			"name" = "Duckov";
 			"sourceTree" = "<group>";
 		};
+		"90F841844B912EC2985167C5" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Frostpunk2/BuildCandidate.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"6E1AEB305B5682A4BD93181E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Frostpunk2/CommunitySelectionContract.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"3C5CC4ED20955474CAFD2714" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Frostpunk2/Control.swift";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"DE17C48EAD9D4862AD8729B4" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/Frostpunk2/CursorContractTests.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"86B0A9ED51D4616891D38777" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Frostpunk2/GameBindings.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"E15A425B4FEB06DF14E02266" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Frostpunk2/GameBindingsAssets.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"7F4751874D047EBB882BABFA" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Frostpunk2/Inspect.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"8E55299386E4E23F078B1E48" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Frostpunk2/Launch.swift";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"99083CBCD5925CB4C30980FE" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Frostpunk2/OperationsContract.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"2D7D5F1E166665DDA146F715" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Frostpunk2/OperationsLeaseContract.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"1BF93CB497D0FF02BE275038" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Frostpunk2/PopulationContract.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"4A0FD6B285A43868DFDCEEB3" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/Frostpunk2/Probe.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"831402C3D67B6D14D762C962" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/Frostpunk2/ProfileCheck.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"85532CC8E1C5639C49599F67" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Frostpunk2/Query.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"A002B1975CE0C3BBC7CC99B9" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/Frostpunk2/ReflectionCacheTests.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"B6215731E0E8872E94BB4587" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Frostpunk2/ReflectionCheck.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"D34BBA8ACE7E00D96CCDED9E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Frostpunk2/ReflectionInspect.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"2ACD91E15A5A19C7A532090B" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Frostpunk2/RunChecks.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"1B163B859048400613D26FB7" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/Frostpunk2/ShortcutContractTests.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"43C5CB35A8E18B361F9C725A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/Frostpunk2/SpeedContractTests.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"20BC28E67B5B83B87B906314" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Frostpunk2/ThreadInputContract.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"337C0BA7F5170DE7233543B8" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Frostpunk2/ThreadInputInspect.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"7ACD588A8EE4D30E50C498D0" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/Frostpunk2/UnrealContractTests.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"AAA2EB948E4ACFEE43FAC82B" = {
+			"isa" = "PBXGroup";
+			"children" = ("90F841844B912EC2985167C5", "6E1AEB305B5682A4BD93181E", "3C5CC4ED20955474CAFD2714", "DE17C48EAD9D4862AD8729B4", "86B0A9ED51D4616891D38777", "E15A425B4FEB06DF14E02266", "7F4751874D047EBB882BABFA", "8E55299386E4E23F078B1E48", "99083CBCD5925CB4C30980FE", "2D7D5F1E166665DDA146F715", "1BF93CB497D0FF02BE275038", "4A0FD6B285A43868DFDCEEB3", "831402C3D67B6D14D762C962", "85532CC8E1C5639C49599F67", "A002B1975CE0C3BBC7CC99B9", "B6215731E0E8872E94BB4587", "D34BBA8ACE7E00D96CCDED9E", "2ACD91E15A5A19C7A532090B", "1B163B859048400613D26FB7", "43C5CB35A8E18B361F9C725A", "20BC28E67B5B83B87B906314", "337C0BA7F5170DE7233543B8", "7ACD588A8EE4D30E50C498D0");
+			"name" = "Frostpunk2";
+			"sourceTree" = "<group>";
+		};
 		"127528AD9787CF0891AED4F7" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.objc";
@@ -8096,6 +8786,12 @@
 			"path" = "Tests/ResidentEvilBridgeTests.m";
 			"sourceTree" = "SOURCE_ROOT";
 		};
+		"7392DD52806320306589C2A7" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/test_ci_version.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
 		"54F9CF01D24044637CF3D68C" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "text";
@@ -8128,7 +8824,7 @@
 		};
 		"6DC4FAD667A85B8567F612FB" = {
 			"isa" = "PBXGroup";
-			"children" = ("95B85911D95C09F76077731D", "C558322C90F7C824EA333596", "9681BA565B80261048F375D6", "578887ED95FE266FE7E3C8CC", "774BF8DD634424BA7BD916BA", "3C9AA7F0D72E39A723213356", "9ABCB2D9903EA261D4B7675F", "C8438F0955C23E64B24CBFF4", "C7937F2CF58FBDC42DD73A82", "453BCC9F40C25129A11AFE42", "66C06B56AC0DB42568B2CB8C", "0AB8D325CA82C5A2F0E18B6F", "C3BD1762E47CFABFCD557C0D", "8959DF4A9F4735B4184ED876", "FE179AB05960397A0672CCDC", "272738046A71249570292AA4", "DAB207F704FDB6B20BDD3AA5", "92301B6E4315211EDE150A05", "EE99C02AC506535CD0888494", "46494363C1164468D58AC7DD", "54F9CF01D24044637CF3D68C", "8B873C8801208A32F871EEF6", "C10871D3BA468B9911412563", "3D3477CCF699C841A7E9A36D", "C20FA7C518ADBFC4CFB3FE75");
+			"children" = ("95B85911D95C09F76077731D", "C558322C90F7C824EA333596", "9681BA565B80261048F375D6", "578887ED95FE266FE7E3C8CC", "774BF8DD634424BA7BD916BA", "3C9AA7F0D72E39A723213356", "9ABCB2D9903EA261D4B7675F", "AAA2EB948E4ACFEE43FAC82B", "C8438F0955C23E64B24CBFF4", "C7937F2CF58FBDC42DD73A82", "453BCC9F40C25129A11AFE42", "66C06B56AC0DB42568B2CB8C", "0AB8D325CA82C5A2F0E18B6F", "C3BD1762E47CFABFCD557C0D", "8959DF4A9F4735B4184ED876", "FE179AB05960397A0672CCDC", "272738046A71249570292AA4", "DAB207F704FDB6B20BDD3AA5", "92301B6E4315211EDE150A05", "EE99C02AC506535CD0888494", "46494363C1164468D58AC7DD", "7392DD52806320306589C2A7", "54F9CF01D24044637CF3D68C", "8B873C8801208A32F871EEF6", "C10871D3BA468B9911412563", "3D3477CCF699C841A7E9A36D", "C20FA7C518ADBFC4CFB3FE75");
 			"name" = "Tests";
 			"sourceTree" = "<group>";
 		};
@@ -8342,6 +9038,12 @@
 			"path" = "script/check_template.py";
 			"sourceTree" = "SOURCE_ROOT";
 		};
+		"CFA4B601BAB50361408AA8E6" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "script/ci_version.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
 		"AC3BA1AA1A2857D310AC7927" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "text";
@@ -8380,7 +9082,7 @@
 		};
 		"85487AF95FE8060AE6366092" = {
 			"isa" = "PBXGroup";
-			"children" = ("B2E0D4D5162B5D18A81FBDC4", "54AF040D7250B86A3D44C62F", "1A30D4623DCCCBECC24A5819", "AC3BA1AA1A2857D310AC7927", "2E846E4C478E231648CBC7BC", "F9F3191982F979775719036E", "B1933F8E4EC05F02AC9318E6", "5B6E1FBC07A724EEE167B29B", "D8AFCC943A4121B40CFA77A1");
+			"children" = ("B2E0D4D5162B5D18A81FBDC4", "54AF040D7250B86A3D44C62F", "1A30D4623DCCCBECC24A5819", "CFA4B601BAB50361408AA8E6", "AC3BA1AA1A2857D310AC7927", "2E846E4C478E231648CBC7BC", "F9F3191982F979775719036E", "B1933F8E4EC05F02AC9318E6", "5B6E1FBC07A724EEE167B29B", "D8AFCC943A4121B40CFA77A1");
 			"name" = "script";
 			"sourceTree" = "<group>";
 		};
@@ -8434,7 +9136,7 @@
 		};
 		"0A3E27B8CA818264D75C8D81" = {
 			"isa" = "PBXGroup";
-			"children" = ("A4EA575B674B3360A1567417", "0C54B35A036A6A5F66500870", "8514A5005905E7AC966AA13D", "ABC009279859D95948608A7B", "DAE68E039F16F762988438F5", "B4C2EC0A318F35C0C0F88CC3", "F36F43EECD8C85A9C338A275", "96E0801C832166B4B9D6BAD1", "FBCB12816DDC187D9622F973", "D662E4D0C40E51E0943D2A8C", "8DD27ED101D41C973ED3B0C2", "01A159395358FF6CA61C1BDC", "FF06EF98D1125FEFFB9F65F4", "D16E45F13555F4C93C52D080", "A6158DD26712C538D5C34682", "F3C7869E35D9A1879E8D484B", "9CB3948BF8BF35F41F0822D4", "A2AF556B254194350707E231", "72ECF1D380F962AA039CB4A1", "F049A51994C694CFB36F118F", "4E14C6621731AC7373885BE2");
+			"children" = ("A4EA575B674B3360A1567417", "0C54B35A036A6A5F66500870", "8514A5005905E7AC966AA13D", "ABC009279859D95948608A7B", "DAE68E039F16F762988438F5", "B4C2EC0A318F35C0C0F88CC3", "F36F43EECD8C85A9C338A275", "96E0801C832166B4B9D6BAD1", "FBCB12816DDC187D9622F973", "9CBC248AE6CBF096D8AAD3DD", "D662E4D0C40E51E0943D2A8C", "8DD27ED101D41C973ED3B0C2", "01A159395358FF6CA61C1BDC", "FF06EF98D1125FEFFB9F65F4", "D16E45F13555F4C93C52D080", "A6158DD26712C538D5C34682", "F3C7869E35D9A1879E8D484B", "9CB3948BF8BF35F41F0822D4", "A2AF556B254194350707E231", "72ECF1D380F962AA039CB4A1", "F049A51994C694CFB36F118F", "4E14C6621731AC7373885BE2");
 			"name" = "Products";
 			"sourceTree" = "<group>";
 		};
@@ -8478,7 +9180,7 @@
 			"productRefGroup" = "0A3E27B8CA818264D75C8D81";
 			"projectDirPath" = "";
 			"projectRoot" = "";
-			"targets" = ("9B492FD0BF085E3B7DBB21E0", "6B7CD1EF17007936405E1B6E", "92849A14EE4AD84BE6FBDA13", "1366DF5032A73C177DC2C81B", "6FD9A6562490373088E0BC39", "57169098A783799C3FAC2923", "84C3752285C773770659C886", "0ED9D04802E14338851CEA76", "240D569859218DE346C7B099", "C13F7F8275A3CCFB57EEE43D", "EB68ABF763C47B3B66CB5AA9", "1F6B84363E2CB0E012842A18", "C8AF616DA5CACC5B35BBD736", "789CA890B287F8D8E55DECD9", "F5F2131170E5FCF56D851C7A", "8404F0B645EEB966D7E6C7F6", "6B5C6172466F2377029931F4", "002D7C436B072E071D56EBB8", "544C2AD9AD77B34E7C6D7F06", "AB37692E9208AD9A947631C4", "E4E236468DD5CC8D45F3FA82", "5826C760A6B14C431B64B1F3", "E8D25D95B7BEC2D17E3D01C9");
+			"targets" = ("9B492FD0BF085E3B7DBB21E0", "6B7CD1EF17007936405E1B6E", "92849A14EE4AD84BE6FBDA13", "1366DF5032A73C177DC2C81B", "6FD9A6562490373088E0BC39", "57169098A783799C3FAC2923", "84C3752285C773770659C886", "0ED9D04802E14338851CEA76", "240D569859218DE346C7B099", "F568D9165AED75AB55C883D5", "C13F7F8275A3CCFB57EEE43D", "EB68ABF763C47B3B66CB5AA9", "1F6B84363E2CB0E012842A18", "C8AF616DA5CACC5B35BBD736", "789CA890B287F8D8E55DECD9", "F5F2131170E5FCF56D851C7A", "8404F0B645EEB966D7E6C7F6", "6B5C6172466F2377029931F4", "002D7C436B072E071D56EBB8", "544C2AD9AD77B34E7C6D7F06", "AB37692E9208AD9A947631C4", "E4E236468DD5CC8D45F3FA82", "5826C760A6B14C431B64B1F3", "E8D25D95B7BEC2D17E3D01C9");
 		};
 	};
 	"rootObject" = "244210E48437B6556980A702";

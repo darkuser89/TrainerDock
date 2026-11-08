@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "sourceRoot": "Sources",
+  "family": "Frostpunk2",
+  "developmentOnly": false,
+  "sources": [
+    "TrainerFeatures.m",
+    "GameAdapter.m",
+    "NativeAdapter.mm",
+    "GameBridge.m",
+    "SelectionSettings.m",
+    "GameProfile.m",
+    "MemoryAccess.m",
+    "TrainerMaterial.m",
+    "Overlay.m",
+    "OverlaySettings.m",
+    "OverlayShortcuts.m",
+    "Runtime.m",
+    "Unreal.mm",
+    "Context.mm",
+    "GameEffects.mm",
+    "Cursor.mm",
+    "Backend.mm",
+    "Population.mm",
+    "Speed.mm",
+    "Manager.mm",
+    "ContinuousFlags.mm",
+    "CommunitySelection.mm",
+    "Operations.mm",
+    "Trust.mm"
+  ],
+  "defines": [],
+  "catalogSources": [
+    "TrainerFeatures.m"
+  ],
+  "sdkSources": [
+    "MHTOverlayHost.m",
+    "MHTGlassIntensity.m"
+  ],
+  "testSuite": "mt",
+  "nativeContractTests": "Tests/Frostpunk2/UnrealContractTests.mm"
+}

@@ -90,8 +90,11 @@ Ein einzelnes Modul wird mit `python3 -B script/build.py --module <id>` gebaut,
 ohne den Launcher neu zu kompilieren. Danach „Trainer & Spiele neu laden“.
 
 GitHub Actions baut über `.github/workflows/build-release.yml` auf `xcode-27` alle
-freigegebenen Trainer und den Launcher. Push/PR liefern geprüfte Artefakte; `vX.Y.Z`-
-Tags veröffentlichen Releases erst nach erfolgreichem Build. `script/release.py`
+freigegebenen Trainer und den Launcher. Erfolgreiche Pushes auf `main` veröffentlichen
+automatisch eine neue stabile Version; PRs liefern nur geprüfte Artefakte. Explizite
+`vX.Y.Z`-Tags bleiben möglich. `script/ci_version.py` wählt eine freie Version oberhalb
+vorhandener Remote-Tags; Veröffentlichung und Versionswahl sind serialisiert.
+Releases entstehen erst nach erfolgreichem Build. `script/release.py`
 verpackt ausschließlich die App, alle echten Module und Lizenz-/Versionsangaben.
 Kein Spielstart und keine Veröffentlichung von Spieldateien gehören zum CI-Build.
 Duckov und Vampire Survivors beziehen nur eigene kompilierte C#-Bausteine aus dem
@@ -217,6 +220,21 @@ niemals für Updates schließen. Bei fehlgeschlagenem App-Start den atomaren Tau
 zurücknehmen. Benutzermodule und Einstellungen bleiben außerhalb der App.
 Die vorhandene technische Ad-hoc-Codeversiegelung der arm64-Produkte bleibt bestehen;
 macOS-Schutzmechanismen nicht verändern. Keine privaten Schlüssel verwenden.
+
+## Frostpunk 2: eng begrenzte Originalfreigabe
+
+Der Nutzer hat nach erfolgreicher Steam-Dateiprüfung ausschließlich Steam-Build
+24037022, Bundleversion 0.5.591, arm64-UUID
+`10F7F2EA-0D13-337E-BF07-ABA47A4549CF` für `sha256-original` genehmigt.
+Die vier Originaldateien aus `Modules/frostpunk-2/Module.json` müssen vollständig
+mit ihren 31 lückenlosen SHA-256-Prüfabschnitten übereinstimmen. Keine stillen
+Hashupdates, Signaturänderungen oder Freigaben anderer Builds.
+
+Bei Unreal-Levelstreaming ist `Level.OwningWorld` maßgeblich; der Level-Outer
+kann ein eigenes Paket-Worldobjekt sein. Die echte aktive Weltzugehörigkeit
+prüfen, statt Paket-Outer mit Spielerwelt gleichzusetzen. Native UFunction-
+Parameter aus der geladenen Reflexion prüfen, einschließlich Schreibweise und
+ParmsSize. Einmalaktionen und Ratsphasenwechsel niemals periodisch wiederholen.
 
 ## The Long Dark: eng begrenzte Originalfreigabe
 

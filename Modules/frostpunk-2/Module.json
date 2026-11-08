@@ -1,0 +1,326 @@
+{
+  "schemaVersion": 1,
+  "id": "frostpunk-2",
+  "name": "Frostpunk 2",
+  "version": "0.1.0",
+  "profiles": [
+    {
+      "id": "steam-arm64-24037022",
+      "name": "Steam · Build 24037022",
+      "enabled": true,
+      "bundleIdentifier": "com.11bitstudios.frostpunk2",
+      "executable": "Frostpunk2",
+      "uuids": [
+        "10F7F2EA-0D13-337E-BF07-ABA47A4549CF"
+      ],
+      "teamIdentifier": "P74S99UJ53",
+      "version": "0.5.591",
+      "store": "Steam",
+      "steamAppId": "1601580",
+      "steamBuildId": "24037022",
+      "signatureScope": "sha256-original",
+      "integrityApproval": "user-confirmed-steam-original",
+      "launchEnvironment": {
+        "SteamAppId": "1601580",
+        "SteamGameId": "1601580"
+      },
+      "integrityFiles": [
+        "Contents/Info.plist",
+        "Contents/MacOS/Frostpunk2",
+        "Contents/MacOS/libsteam_api.dylib",
+        "Contents/MacOS/libGalaxy.dylib"
+      ],
+      "fileChecks": [
+        {
+          "path": "Contents/Info.plist",
+          "fileSize": 1863,
+          "offset": 0,
+          "length": 1863,
+          "sha256": "0e91ec4d31cd9fef9717a819676b88ab55b75a76040966600bb6ed2109769df4"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "09b8b2252ec8cbfebeb9fa111e174ee29ea55b8a6311e88ae65a3c290e290260"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 8388608,
+          "length": 8388608,
+          "sha256": "de96cbe01386a1013866735f20fe4aa3644396f6d11127e281ab658e9aa589d8"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 16777216,
+          "length": 8388608,
+          "sha256": "f86ceb6b7ed36c2a76b8ebda56068e8124f14151313f3a62aac8a2f61219213a"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 25165824,
+          "length": 8388608,
+          "sha256": "4be8d6bcf71b64015e1f410e19166edbe06cb098a88525a5abb8c806ebeb4d3a"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 33554432,
+          "length": 8388608,
+          "sha256": "babdc4d6cae104b1e7dff68beab9119c023229a681d8c00fd46e31b2d6ee98a8"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 41943040,
+          "length": 8388608,
+          "sha256": "e0165ffe8d19c812031fadec35a40d15bbe3475bb0d3e5fd8f07ebfbb3c9761a"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 50331648,
+          "length": 8388608,
+          "sha256": "1a68850b5b1389ca824ea7ac9bb54a495310b40822eb18f8aa4a8ce6d5e52f61"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 58720256,
+          "length": 8388608,
+          "sha256": "d87425ca2f8c9ae3a3bc6d74695b826fcb23ef7d9b338a8b9e5f5c20fe068a5e"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 67108864,
+          "length": 8388608,
+          "sha256": "66215e2addecea4192deda68cc4d3ac064538548af4b45c7ab8eead2d40302c1"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 75497472,
+          "length": 8388608,
+          "sha256": "695aac9c5a7aca38cf2619ee6aa47e7ea8189d5e015df7c4e9bfbb7038d94c5e"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 83886080,
+          "length": 8388608,
+          "sha256": "07f5456c39898b7c4b9ad4f97179a9f73216c296eb46747936a25e927e65959a"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 92274688,
+          "length": 8388608,
+          "sha256": "6554b284695ab78d3a513c616ce4749a1121710d855270f5e0b8afe0c61a7efe"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 100663296,
+          "length": 8388608,
+          "sha256": "e5e2abfba0eca5142167ca90310abe0e697d7c070c228c83aeaa2937d0e6c2f7"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 109051904,
+          "length": 8388608,
+          "sha256": "a65ad22dcc677909d3cd72bfcf2a8ac8f97dfc252abbe2a459afe1489414118b"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 117440512,
+          "length": 8388608,
+          "sha256": "c1487ed7db93cce5c51ba165858b638f53d315ba9e247a8451aac3175c0d7eb7"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 125829120,
+          "length": 8388608,
+          "sha256": "ce70ef59a827332ae24308d00a1e3ddbda2227df3f3d067c90b05cd15b47cd8e"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 134217728,
+          "length": 8388608,
+          "sha256": "316cec42da9e93d6822a256114277198617d3158a115cc441872309047ee4d8e"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 142606336,
+          "length": 8388608,
+          "sha256": "ec1a753ffad2fe7355771bf530eaea9d4664e8b906c0282b45cca92cc583b981"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 150994944,
+          "length": 8388608,
+          "sha256": "fa3105ef2d20d1e8bbf5824e37a73e70c3e5c1fc3ea971c5169ab3e036d13c56"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 159383552,
+          "length": 8388608,
+          "sha256": "3703203d4803040eeecab5969c724644ca189b9fd6f8086e6582adc4d4be820d"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 167772160,
+          "length": 8388608,
+          "sha256": "55ab961565727ce27f8b7c83d5ef78bc9ba5c9b4fb89898092f4201bf7903d3b"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 176160768,
+          "length": 8388608,
+          "sha256": "a9a6288b5c17261fb5b507e7ac2dec4e79c916f458a5174122743611b33504cd"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 184549376,
+          "length": 8388608,
+          "sha256": "6c8c9075f338f006a1592f1a1777904dc7436190236e8e1e418c878e6446083d"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 192937984,
+          "length": 8388608,
+          "sha256": "c5e97e2a7ceb39b75b708bff838f092160eb2e24d960d00c8907706cd4546135"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 201326592,
+          "length": 8388608,
+          "sha256": "b8b4ea11904336561e962bd1810fe6d954f0885c9ca8bde37f29df52f586f507"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk2",
+          "fileSize": 212175680,
+          "offset": 209715200,
+          "length": 2460480,
+          "sha256": "bb6d80f76f1222e0855bb0df7825d7983eab8e785304eaed6d719466596f357d"
+        },
+        {
+          "path": "Contents/MacOS/libsteam_api.dylib",
+          "fileSize": 199824,
+          "offset": 0,
+          "length": 199824,
+          "sha256": "4ac9282148848cf32fea5542d94cde76598c4caad8f0588353e4fe1f2746135d"
+        },
+        {
+          "path": "Contents/MacOS/libGalaxy.dylib",
+          "fileSize": 18477184,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "1094e460d6136cefb0493b94801834a5433a65e87ecdbfca11ddf782b1709798"
+        },
+        {
+          "path": "Contents/MacOS/libGalaxy.dylib",
+          "fileSize": 18477184,
+          "offset": 8388608,
+          "length": 8388608,
+          "sha256": "199272956f4355a82096660002664aebd95d72a56932ad99ffa65a394a2d05cd"
+        },
+        {
+          "path": "Contents/MacOS/libGalaxy.dylib",
+          "fileSize": 18477184,
+          "offset": 16777216,
+          "length": 1699968,
+          "sha256": "e6fadbd554bb448254d79c9eb6eea62dea9051b2f1b96538f8a6438114e6baee"
+        }
+      ],
+      "gameVersion": "1.6.1"
+    }
+  ],
+  "groups": [
+    {
+      "id": "resources",
+      "title": "Ressourcen",
+      "symbol": "shippingbox",
+      "features": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ]
+    },
+    {
+      "id": "city",
+      "title": "Stadt & Bevölkerung",
+      "symbol": "building.2",
+      "features": [
+        9,
+        10,
+        26,
+        11
+      ]
+    },
+    {
+      "id": "progress",
+      "title": "Bau & Forschung",
+      "symbol": "hammer",
+      "features": [
+        12,
+        13,
+        14,
+        15,
+        16
+      ]
+    },
+    {
+      "id": "council",
+      "title": "Rat & Gesetze",
+      "symbol": "person.3",
+      "features": [
+        17,
+        18
+      ]
+    },
+    {
+      "id": "needs",
+      "title": "Bedürfnisse",
+      "symbol": "heart",
+      "features": [
+        20,
+        21,
+        22,
+        23,
+        24,
+        25
+      ]
+    },
+    {
+      "id": "game",
+      "title": "Spiel",
+      "symbol": "timer",
+      "features": [
+        19
+      ]
+    }
+  ]
+}
