@@ -9,6 +9,13 @@ wird dabei ausdrücklich als nicht durchgeführt gemeldet. Der Ersatz befindet s
 ausschließlich im Testprozess und wird nicht ins Produkt oder ZIP eingebunden.
 Lokale Tests verwenden ohne `TRAINERDOCK_TEST_LUA_LIBRARY` weiterhin das Original.
 
+Turoks synthetischer Nebel-Pixeltest benötigt einen beschleunigten OpenGL-Kontext.
+Fehlt dieser auf dem GitHub-Runner, meldet der Prüfer ausdrücklich „NOT RUN“
+statt einer bestandenen Grafikprüfung. Nur der Cloud-Build erlaubt dafür den
+Rückgabecode 77 mit `TRAINERDOCK_ALLOW_MISSING_TEST_GPU=1`; lokale Builds bleiben
+streng. Shader-, Pixel-, Rücklese- und Rücknahmefehler brechen weiterhin ab.
+Native Grenz-, Bridge- und HiDPI-Prüfungen laufen auch ohne Test-GPU vollständig.
+
 - Push auf `main` oder **Actions → Build and release TrainerDock → Run workflow**
   auf `main`: Release-Konfiguration bauen, synthetisch prüfen und anschließend
   automatisch ein neues stabiles GitHub Release veröffentlichen.

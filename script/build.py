@@ -17,6 +17,13 @@ ROOT = Path(__file__).resolve().parent.parent
 def run(args, **kwargs):
     return subprocess.run([str(x) for x in args], check=True, **kwargs)
 
+def run_renderer_check(executable, environment):
+    result = subprocess.run([str(executable)], env=environment)
+    if result.returncode == 77 and environment.get("TRAINERDOCK_ALLOW_MISSING_TEST_GPU") == "1":
+        print("NOT RUN: renderer pixels/readback require an unavailable test GPU; native contract checks still required.", flush=True)
+        return
+    result.check_returncode()
+
 def external_build_path(raw):
     path = Path(raw).expanduser().resolve()
     if path == ROOT or ROOT in path.parents or path in ROOT.parents:
@@ -179,7 +186,7 @@ def trainer(module_dir, modules_dir, stage, common, native_objects=None):
         executable=stage/"RendererTests";link_arch([obj],executable)
         environment={k:v for k,v in os.environ.items() if not k.startswith("MHT_")}
         environment["DYLD_INSERT_LIBRARIES"]=str(runtime)+":"+str(fixture)
-        run([executable],env=environment)
+        run_renderer_check(executable,environment)
     if native_objects is None:run(["codesign","--verify","--strict",runtime])
     return dest
 

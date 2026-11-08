@@ -37,4 +37,3 @@ sie gehören nicht zur Trainerbibliothek. Synthetische Tests sind kein Ingame-Er
 
 Die Ingame-Prüfungen verwenden separate kurzlebige Kandidaten. Bereits geladene
 Bibliotheken nicht überschreiben; laufende Spiele niemals für einen Build beenden.
-

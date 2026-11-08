@@ -64,8 +64,10 @@ jobs:
               module = root / 'Modules' / name
               verified_managed_image(destination, module, json.loads((module / 'Module.json').read_text()), json.loads((module / 'Build.json').read_text()))
           PY
-      - name: Check build-input validation
-        run: python3 -B -m unittest discover -s Tests -p test_managed_inputs.py
+      - name: Check build-input and renderer validation
+        run: |
+          python3 -B -m unittest discover -s Tests -p test_managed_inputs.py
+          python3 -B -m unittest discover -s Tests -p test_build_renderer.py
       - name: Install build headers and standalone test LuaJIT
         env:
           HOMEBREW_NO_AUTO_UPDATE: '1'
@@ -73,6 +75,8 @@ jobs:
           brew install luajit libarchive
           printf 'TRAINERDOCK_TEST_LUA_LIBRARY=%s/lib/libluajit-5.1.dylib\n' "$(brew --prefix luajit)" >> "$GITHUB_ENV"
       - name: Build launcher, all trainers and synthetic tests
+        env:
+          TRAINERDOCK_ALLOW_MISSING_TEST_GPU: '1'
         run: |
           python3 -B script/build.py --configuration Release --version "$TRAINERDOCK_VERSION" --build-number "$GITHUB_RUN_NUMBER"
           git diff --exit-code -- TrainerDock.xcodeproj
