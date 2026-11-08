@@ -33,6 +33,7 @@ def package(root):
             target = modules / name
             manifest = json.loads((target / "Module.json").read_text())
             inventory.append({"id": manifest["id"], "version": manifest["version"],
+                              "architecture": json.loads((source/"Build.json").read_text()).get("architecture","arm64"),
                               "sha256": hashlib.sha256((target / "Trainer.dylib").read_bytes()).hexdigest()})
         commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
         (payload / "Contents/Resources/BUILD.json").write_text(json.dumps({"version": info["CFBundleShortVersionString"],

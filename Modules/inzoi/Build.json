@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "sourceRoot": "Sources",
+  "family": "InZOI",
+  "developmentOnly": false,
+  "sources": [
+    "TrainerFeatures.m",
+    "GameAdapter.m",
+    "NativeAdapter.mm",
+    "GameBridge.m",
+    "SelectionSettings.m",
+    "GameProfile.m",
+    "MemoryAccess.m",
+    "TrainerMaterial.m",
+    "Overlay.m",
+    "OverlaySettings.m",
+    "OverlayShortcuts.m",
+    "Runtime.m",
+    "LuaEngine.mm",
+    "OverlayCursor.m",
+    "GameInput.mm",
+    "RuntimeMod.mm",
+    "Movement.mm",
+    "MissionData.mm"
+  ],
+  "defines": [],
+  "catalogSources": [
+    "TrainerFeatures.m"
+  ],
+  "sdkSources": [
+    "MHTOverlayHost.m",
+    "MHTGlassIntensity.m"
+  ],
+  "testSuite": "mt",
+  "undefinedSymbols": [
+    "_lua_pcallk",
+    "_lua_close"
+  ],
+  "testSupportSources": [
+    "Tests/InZOI/LuaSymbols.m"
+  ]
+}

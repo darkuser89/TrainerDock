@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "the-long-dark",
   "name": "The Long Dark",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "profiles": [
     {
       "id": "steam-arm64-2.60",
@@ -327,6 +327,358 @@
           "offset": 0,
           "length": 377933,
           "sha256": "98d4b1b695f72b8df592e2c1131eb3742dafff5012f7b69421e5251b64d9636f"
+        }
+      ]
+    },
+    {
+      "id": "epic-arm64-2.55",
+      "name": "Epic Games Store · 2.55 (zum Testen)",
+      "enabled": true,
+      "bundleIdentifier": "com.Hinterland.The-Long-Dark",
+      "executable": "tld",
+      "uuids": [
+        "96B749EC-0FB3-332F-96F9-1859539DE52C"
+      ],
+      "teamIdentifier": "",
+      "version": "2.55",
+      "store": "Epic Games Store",
+      "epicAppName": "ed93b18355a84230938c705121c63661",
+      "epicNamespace": "58dfcd1952ee48c1a1fa31c6ace5fe3d",
+      "epicBuildVersion": "Mac_181032_321",
+      "launchMode": "epic",
+      "signatureScope": "arm64-executable",
+      "signatureIdentifier": "com.Hinterland.The-Long-Dark",
+      "signatureCDHash": "17b664109d85daac0d97b38f284692a722b3781e",
+      "launchEnvironment": {},
+      "fileChecks": [
+        {
+          "path": "Contents/Info.plist",
+          "fileSize": 1503,
+          "offset": 0,
+          "length": 1503,
+          "sha256": "90da6844be8f818f5d476654edd121f6de61dc3280ba14b5dbfb64d08c140357"
+        },
+        {
+          "path": "Contents/MacOS/tld",
+          "fileSize": 132029,
+          "offset": 0,
+          "length": 132029,
+          "sha256": "5f66473699ae4f8b5a733835ad0c0790f35b1adc17719e7c152a1557041fdb42"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "9a4e2b6db2a48b6b7de2107c014d1e6134b294a50130e157337bc4a5f3f7edd4"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 8388608,
+          "length": 8388608,
+          "sha256": "2152ec41b55c228fd1c1058a8b45f9142eb021aa1df2252fca8f7694c26860c2"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 16777216,
+          "length": 8388608,
+          "sha256": "128f45a6536a43882194a1408bb90fc7495d957c593d06eb1eec968b9c42768a"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 25165824,
+          "length": 8388608,
+          "sha256": "2e8094e1d3f6af421cb47f5b4b8a97c3a69efd5bcc9e552ea59293b74afea6a8"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 33554432,
+          "length": 8388608,
+          "sha256": "3187b48bc4151305559ca454e003e26f6984955c66cb26039e6ee5943fd74333"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 41943040,
+          "length": 8388608,
+          "sha256": "09d74a7d24a6cece8d6d11458e6e254539f6f7adc23c89ddeb1e75a6036992a1"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 50331648,
+          "length": 8388608,
+          "sha256": "14d18f30e716b5ce42717aff801488c6cf59906c9cf52fd6cb860ea4a92f1ee6"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 58720256,
+          "length": 8388608,
+          "sha256": "41a00737834d66b976f3eb1ad58db00264c2c51e978b71d7f3ba3016af486e44"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 67108864,
+          "length": 8388608,
+          "sha256": "6fa4c959cb579cb0a5d663edbd237cc0ebd89994eb3e0ea1cda1aeaa48b34ebe"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 75497472,
+          "length": 8388608,
+          "sha256": "105be9eb66ed5e48080dd3256c541f744cab5451fb1d19da15a79bad52174767"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 83886080,
+          "length": 8388608,
+          "sha256": "bf1a092e2bdb558acdfeadd62946e7c80eea8f61dd4c8725293df943bc513833"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 92274688,
+          "length": 8388608,
+          "sha256": "5e1a77c617f9f99437f61e3d55e86261791104c078069ee7befa0b25e32f497b"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 100663296,
+          "length": 8388608,
+          "sha256": "cd9294d8057af59db00b513cd69eb484430831888c0c9fbe10dd3cff4f2666dd"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 109051904,
+          "length": 8388608,
+          "sha256": "993e43c9dbe2fa24b50f6bb0cf9eda545d6cc7b474e89fde9b64d4432abd1736"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 117440512,
+          "length": 8388608,
+          "sha256": "1fa94c3451ff5020481470c7e36ffd0d3dd18fd116e02388c25088bd6b50d7cb"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 125829120,
+          "length": 8388608,
+          "sha256": "7e4918ea1956813495969380375bcea75fc0b8e0ca9d82dfcdd1ec66ef782cfc"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 134217728,
+          "length": 8388608,
+          "sha256": "46c59174da92bc43230cea6a4bb218b18d501eb69f3834d4ef03579c42ad9224"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 142606336,
+          "length": 8388608,
+          "sha256": "4309ab90b9be6ae5fd854f5c82dec854c1207773b7f8888a75abb81e38d4c9eb"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 150994944,
+          "length": 8388608,
+          "sha256": "2e6803d925aeff6944b5c395146d720f95d73e29e2471449fb64b184958deadc"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 159383552,
+          "length": 8388608,
+          "sha256": "d9789101311c8e38e304a2e75cd7a38f33a90ce93f5379dd39c2daca981ee868"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 167772160,
+          "length": 8388608,
+          "sha256": "87238dea3adda7dbbd92096dce616ff6580e3245014cf47bef02c594b14acb5e"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 176160768,
+          "length": 8388608,
+          "sha256": "94af30e67aa8efe6ecc4b7539ee61918b288e0ba08fbee5a73c907af93adf3fa"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 184549376,
+          "length": 8388608,
+          "sha256": "dfe2f0a21009312b1627d02e0c4b9692d673f5cb88b2998d1cad013d15db2c31"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 192937984,
+          "length": 8388608,
+          "sha256": "6a64f7ac169b6748da3905df10341b139a6c811536cbe9cd3bad037cd96cf6d0"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 201326592,
+          "length": 8388608,
+          "sha256": "851b46954dc03570d2489fe261ac75385cb163b7cb8b8ec94ad0d809080bc55f"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 211724470,
+          "offset": 209715200,
+          "length": 2009270,
+          "sha256": "33d228d29e4666ab817db873a98c1d4473bdf4285cef9c20711cf534fe131cfa"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 60263824,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "423dd006263d5412c4973da85b4f400deeb63422db102e34dc671ceec6678511"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 60263824,
+          "offset": 8388608,
+          "length": 8388608,
+          "sha256": "02e0230e601f7a8520b71f15f45f98d92b67d6af4ea912fc39775e559e06b332"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 60263824,
+          "offset": 16777216,
+          "length": 8388608,
+          "sha256": "b2166e27f0cef604d4a9c59c8ecd8d373b91322fb072c825a291efd5b9e2e510"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 60263824,
+          "offset": 25165824,
+          "length": 8388608,
+          "sha256": "6fabcabccb258419732c71c3de5d3c95b311d580c781eae9c3ea24be2ad60075"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 60263824,
+          "offset": 33554432,
+          "length": 8388608,
+          "sha256": "c6dd3bbc6e9d4c58288a438f97f4e244eff38229295a68637d8991f35a125057"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 60263824,
+          "offset": 41943040,
+          "length": 8388608,
+          "sha256": "8554ea2e64fab65c6cec07120d8f9d31049bca93be96dc277ae2b971f456e23a"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 60263824,
+          "offset": 50331648,
+          "length": 8388608,
+          "sha256": "e1a305df6048c80609e3ee0f770f71238465181067d10405846d0457a5a835cb"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 60263824,
+          "offset": 58720256,
+          "length": 1543568,
+          "sha256": "bbd1e46dbd325adfb00789f4e890a0ff75bb75be42557b7257e5536d269b22bc"
+        },
+        {
+          "path": "Contents/Resources/Data/il2cpp_data/Metadata/global-metadata.dat",
+          "fileSize": 17879580,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "d9e3aef52639060b9dc105d966c4d4e23e3a0eb5c38cee573dc02ea8925e9731"
+        },
+        {
+          "path": "Contents/Resources/Data/il2cpp_data/Metadata/global-metadata.dat",
+          "fileSize": 17879580,
+          "offset": 8388608,
+          "length": 8388608,
+          "sha256": "80308ac18314623ff6481030cabefe796f62a0a9e26d9ff6eaf710ece7c18617"
+        },
+        {
+          "path": "Contents/Resources/Data/il2cpp_data/Metadata/global-metadata.dat",
+          "fileSize": 17879580,
+          "offset": 16777216,
+          "length": 1102364,
+          "sha256": "7b33bdb8fc28515bbde978ac6cb9df8768f0bdfb8945aed9954de02ebeb386e1"
+        },
+        {
+          "path": "Contents/PlugIns/libEOSSDK-Mac-Shipping.dylib",
+          "fileSize": 45059648,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "b6757b5142d2b300f2b7f260cbadefce90cf1fb74137d2ff62f5392ccd2b6ddd"
+        },
+        {
+          "path": "Contents/PlugIns/libEOSSDK-Mac-Shipping.dylib",
+          "fileSize": 45059648,
+          "offset": 8388608,
+          "length": 8388608,
+          "sha256": "fa22a44ad96d71b714288bf540b24d01c9d70a67cc1674b761c9081aac25d55d"
+        },
+        {
+          "path": "Contents/PlugIns/libEOSSDK-Mac-Shipping.dylib",
+          "fileSize": 45059648,
+          "offset": 16777216,
+          "length": 8388608,
+          "sha256": "19519af4aeee1d1d304859f0b3c1b6d6c827fd91ea7eee7c60479805bca27940"
+        },
+        {
+          "path": "Contents/PlugIns/libEOSSDK-Mac-Shipping.dylib",
+          "fileSize": 45059648,
+          "offset": 25165824,
+          "length": 8388608,
+          "sha256": "aa793df329c4da39df98deb5afb86207e6c5efea79f2ea0db617f12e6360ab54"
+        },
+        {
+          "path": "Contents/PlugIns/libEOSSDK-Mac-Shipping.dylib",
+          "fileSize": 45059648,
+          "offset": 33554432,
+          "length": 8388608,
+          "sha256": "af447b51565100966dfe2c61c805774ec7861a8ae142b8b227daf74c44e5a9bc"
+        },
+        {
+          "path": "Contents/PlugIns/libEOSSDK-Mac-Shipping.dylib",
+          "fileSize": 45059648,
+          "offset": 41943040,
+          "length": 3116608,
+          "sha256": "9a9e153773c36926aa4042c263f90db8ee2cc4f636579123735750b4373c7f1e"
+        },
+        {
+          "path": "Contents/PlugIns/AkSoundEngine.bundle/Contents/MacOS/AkSoundEngine",
+          "fileSize": 9784080,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "d2f57a24bc55ead3fe7811e55ba150f1db4ea0d1d3de71f4cb9df65b83aea530"
+        },
+        {
+          "path": "Contents/PlugIns/AkSoundEngine.bundle/Contents/MacOS/AkSoundEngine",
+          "fileSize": 9784080,
+          "offset": 8388608,
+          "length": 1395472,
+          "sha256": "f21e905343a0ac588935ad25e291996b557378b43f007f2753123a3190ad8dc2"
         }
       ]
     }

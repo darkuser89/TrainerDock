@@ -44,6 +44,16 @@ class XcodeProjectTests(unittest.TestCase):
                 self.assertEqual(target["productType"], "com.apple.product-type.library.dynamic")
                 self.assertTrue(all(p.startswith(("Modules/", "ModuleSDK/")) for p in sources))
 
+    def test_each_trainer_uses_its_explicit_game_architecture(self):
+        for name,target in self.targets.items():
+            expected="arm64"
+            if name.startswith("Trainer-"):
+                expected=json.loads((ROOT/"Modules"/name.removeprefix("Trainer-")/"Build.json").read_text()).get("architecture","arm64")
+            for uid in self.objects[target["buildConfigurationList"]]["buildConfigurations"]:
+                settings=self.objects[uid]["buildSettings"]
+                self.assertEqual(settings.get("ARCHS","arm64"),expected)
+                if expected=="x86_64":self.assertEqual(settings["ONLY_ACTIVE_ARCH"],"NO")
+
     def test_launcher_embeds_its_own_signed_broker_dependency(self):
         app = self.targets["TrainerDock"]
         broker = self.targets["TrainerDockEpicBroker"]

@@ -80,6 +80,10 @@
     NSTextField *state=MHTLabel(installed ? @"Installiert" : @"Pfad fehlt",11,NSFontWeightMedium);
     state.textColor=installed ? NSColor.systemGreenColor : NSColor.secondaryLabelColor;
     NSStackView *metadata=MHTStack(@[store,version,MHTSpacer(),state],NO,10);
+    if([profile[@"compatibilityNote"] length]){
+        NSTextField *note=MHTLabel(profile[@"compatibilityNote"],11,NSFontWeightSemibold);note.textColor=NSColor.systemRedColor;note.toolTip=note.stringValue;
+        [metadata insertArrangedSubview:note atIndex:2];
+    }
     NSString *gamePath=[trainer pathForProfile:profile];
     NSTextField *path=MHTLabel(gamePath.length ? gamePath : @"Noch keine Spiele-App ausgewählt",11,NSFontWeightRegular);
     path.lineBreakMode=NSLineBreakByTruncatingMiddle;path.textColor=NSColor.secondaryLabelColor;path.toolTip=gamePath;

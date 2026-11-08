@@ -7,6 +7,7 @@
 #include <fcntl.h>
 #include <cstdio>
 #include <cstdlib>
+#import <mach-o/loader.h>
 namespace {
 int ownerStorage,arrayStorage,targetStorage;
 void *refType=(void *)1,*floatType=(void *)2,*arrayType=(void *)3,*structType=(void *)4,*intType=(void *)5;
@@ -15,6 +16,18 @@ void *stored=nullptr;float storedFloat=0;unsigned referenceWrites=0,rawWrites=0;
 void check(bool value,const char *why){if(!value){fprintf(stderr,"FAIL: %s\n",why);exit(1);}}
 }
 int main(){using namespace tld;
+ check(runtimeMainImageMatches(MH_EXECUTE,"/fixture/tld","/fixture/tld"),"the executable is identified by MH_EXECUTE and its exact target path");
+ check(!runtimeMainImageMatches(MH_DYLIB,"/fixture/tld","/fixture/tld") && !runtimeMainImageMatches(MH_EXECUTE,"/other/tld","/fixture/tld") && !runtimeMainImageMatches(MH_EXECUTE,nullptr,"/fixture/tld"),"an injected first image, other executable and missing path cannot identify the game");
+ uint8_t mainUUID[16]={},steamUUID[16]={},epicUUID[16]={},unityUUID[16]={},unknownUUID[16]={};
+ [[[NSUUID alloc] initWithUUIDString:@"96B749EC-0FB3-332F-96F9-1859539DE52C"] getUUIDBytes:mainUUID];
+ [[[NSUUID alloc] initWithUUIDString:@"D7422E51-B224-34F4-9419-34D0B016C7C1"] getUUIDBytes:steamUUID];
+ [[[NSUUID alloc] initWithUUIDString:@"6E530767-6633-358D-B9E9-1040EB15D4B9"] getUUIDBytes:epicUUID];
+ [[[NSUUID alloc] initWithUUIDString:@"B60C3F2B-6C55-315A-BD77-178670DD569E"] getUUIDBytes:unityUUID];
+ check(runtimeImagesMatch("steam-arm64-2.60",mainUUID,steamUUID,unityUUID),"the exact Steam profile and all three original images match");
+ check(runtimeImagesMatch("epic-arm64-2.55",mainUUID,epicUUID,unityUUID),"the exact Epic profile and all three original images match");
+ check(!runtimeImagesMatch("epic-arm64-2.55",mainUUID,steamUUID,unityUUID) && !runtimeImagesMatch("steam-arm64-2.60",mainUUID,epicUUID,unityUUID),"store profiles never accept each other's IL2CPP images");
+ check(!runtimeImagesMatch("epic-arm64-2.55",unknownUUID,epicUUID,unityUUID) && !runtimeImagesMatch("epic-arm64-2.55",mainUUID,epicUUID,unknownUUID) && !runtimeImagesMatch("epic-arm64-2.55",mainUUID,unknownUUID,unityUUID),"each original image is mandatory");
+ check(!runtimeImagesMatch("epic-arm64-unknown",mainUUID,epicUUID,unityUUID) && !runtimeImagesMatch(nullptr,mainUUID,epicUUID,unityUUID) && !runtimeImagesMatch("epic-arm64-2.55",mainUUID,nullptr,unityUUID),"unknown profiles and incomplete image tuples stay rejected");
  check(![TLDInspect()[@"kind"] integerValue] && !TLDValues().count,"outside the engine callback no gameplay can be read");
  check(!TLDEffect(0,YES,0).count && !TLDMouse(YES),"outside the engine callback no effect or cursor lease is accepted");
  api.objectClass=[](Object o)->tld::Class{return o==&arrayStorage?arrayType:refType;};
@@ -49,5 +62,5 @@ int main(){using namespace tld;
  hp=100;int mode=1;create(protectedPath);TLDProtectSaves({protectedPath},(uintptr_t)&hp,(uintptr_t)&mode);
  check(TLDGuardedUnlink(protectedPath.c_str())==0 && access(protectedPath.c_str(),F_OK)==0,"original dead control mode protects forced death with positive HP");
  TLDClearSaveGuard();check(unlink(protectedPath.c_str())==0 && rmdir(directory)==0,"dead-mode fixture cleanup");
- puts("PASS: engine-thread guard, typed reference/null writes, primitive ABI, value-list rejection and exact-path death-save protection/release. No game launched.");return 0;
+ puts("PASS: exact Steam/Epic image tuples and mismatch rejection, engine-thread guard, typed reference/null writes, primitive ABI, value-list rejection and exact-path death-save protection/release. No game launched.");return 0;
 }

@@ -30,6 +30,30 @@ static NSDictionary *chunk(NSString *relative,NSData *data,NSUInteger offset,NSU
     NSMutableString *hash=[NSMutableString new];for(NSUInteger i=0;i<sizeof(digest);i++)[hash appendFormat:@"%02x",digest[i]];
     return @{@"path":relative,@"fileSize":@(data.length),@"offset":@(offset),@"length":@(length),@"sha256":hash};
 }
+static void signedResourceLimit(NSString *directory){
+    NSString *bundle=[directory stringByAppendingPathComponent:@"SignedRange.app"],*exe=@"Contents/MacOS/Fixture",*plist=@"Contents/Info.plist",*resource=@"Contents/Resources/Fixture.data";
+    [NSFileManager.defaultManager createDirectoryAtPath:[bundle stringByAppendingPathComponent:@"Contents/MacOS"] withIntermediateDirectories:YES attributes:nil error:NULL];
+    [NSFileManager.defaultManager createDirectoryAtPath:[bundle stringByAppendingPathComponent:@"Contents/Resources"] withIntermediateDirectories:YES attributes:nil error:NULL];
+    NSData *binary=thin(CPU_TYPE_ARM64),*bytes=[NSMutableData dataWithLength:63];
+    NSData *metadata=[NSPropertyListSerialization dataWithPropertyList:@{@"CFBundleIdentifier":@"local.mht.signed-range",@"CFBundleExecutable":@"Fixture",@"CFBundleShortVersionString":@"1"} format:NSPropertyListXMLFormat_v1_0 options:0 error:NULL];
+    [binary writeToFile:[bundle stringByAppendingPathComponent:exe] atomically:YES];[metadata writeToFile:[bundle stringByAppendingPathComponent:plist] atomically:YES];[bytes writeToFile:[bundle stringByAppendingPathComponent:resource] atomically:YES];
+    NSMutableArray *checks=[NSMutableArray arrayWithObjects:chunk(exe,binary,0,binary.length),chunk(plist,metadata,0,metadata.length),nil];
+    for(NSUInteger i=0;i<62;i++)[checks addObject:chunk(resource,bytes,i,1)];
+    NSMutableDictionary *profile=[@{@"enabled":@YES,@"bundleIdentifier":@"local.mht.signed-range",@"executable":@"Fixture",@"version":@"1",@"uuids":@[@"11111111-2222-3333-8444-555555555555"],@"signatureScope":@"arm64-executable",@"signatureIdentifier":@"local.mht.signed-range",@"signatureCDHash":@"0000000000000000000000000000000000000000",@"fileChecks":checks} mutableCopy];
+    NSError *error=nil;
+    check(!MTInspectGame(bundle,profile,&error) && [error.localizedDescription hasPrefix:@"Originalsignatur nicht bestätigt"],"64 valid signed-profile resource checks still require a genuine original signature");
+    [checks addObject:chunk(resource,bytes,62,1)];
+    check(!MTInspectGame(bundle,profile,&error) && [error.localizedDescription hasPrefix:@"Spielressourcen"],"signed-profile checks remain bounded at 64");
+    [checks removeLastObject];NSMutableDictionary *bad=[checks.lastObject mutableCopy];bad[@"sha256"]=@"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";checks[checks.count-1]=bad;
+    check(!MTInspectGame(bundle,profile,&error) && [error.localizedDescription hasPrefix:@"Spielressourcen"],"resource checks after the old 16-entry boundary are actually verified");
+}
+static void intelIdentity(NSString *directory){
+    NSString *path=[directory stringByAppendingPathComponent:@"IntelFixture"];
+    [thin(CPU_TYPE_X86_64) writeToFile:path atomically:YES];
+    check(!MTReadExecutableIdentity(path),"default arm64 validation never silently accepts Intel");
+    check([MTReadExecutableIdentityForArchitecture(path,@"x86_64")[@"architecture"] isEqual:@"x86_64"],"an explicitly selected Intel build has its own identity");
+    check(!MTReadExecutableIdentityForArchitecture(path,@"arm64") && !MTReadExecutableIdentityForArchitecture(path,@"other"),"wrong and unknown architectures fail closed");
+}
 static void originalIntegrity(NSString *directory){
     NSString *bundle=[directory stringByAppendingPathComponent:@"Fixture.app"];
     NSString *exe=@"Contents/MacOS/Fixture",*plist=@"Contents/Info.plist";
@@ -43,6 +67,12 @@ static void originalIntegrity(NSString *directory){
         @"signatureScope":@"sha256-original",@"integrityApproval":@"user-confirmed-steam-original",@"integrityFiles":@[exe,plist],@"fileChecks":@[last,first,wholeInfo]} mutableCopy];
     check([MTInspectGame(bundle,profile,nil)[@"integrityMode"] isEqual:@"sha256-original"],"approved original with complete unordered chunks accepted");
     NSDictionary *valid=[profile copy];
+    NSMutableArray *many=[NSMutableArray arrayWithObject:chunk(exe,binary,0,binary.length)];
+    for(NSUInteger i=0;i<77;i++){NSUInteger begin=metadata.length*i/77,end=metadata.length*(i+1)/77;[many addObject:chunk(plist,metadata,begin,end-begin)];}
+    profile[@"fileChecks"]=many;check(MTInspectGame(bundle,profile,nil)!=nil,"78 complete original chunks accepted for large original executables");
+    NSMutableDictionary *badChunk=[many.lastObject mutableCopy];badChunk[@"sha256"]=@"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
+    many[many.count-1]=badChunk;check(!MTInspectGame(bundle,profile,nil),"changed bytes beyond original 64-chunk boundary rejected");
+    [profile setDictionary:valid];
     profile[@"fileChecks"]=@[first,wholeInfo];check(!MTInspectGame(bundle,profile,nil),"partial file rejected");
     profile[@"fileChecks"]=@[first,last,last,wholeInfo];check(!MTInspectGame(bundle,profile,nil),"overlap rejected");
     profile[@"fileChecks"]=@[first,last];check(!MTInspectGame(bundle,profile,nil),"missing Info.plist hash rejected");
@@ -98,6 +128,7 @@ int main(void){@autoreleasepool {
         }
         [[NSData dataWithBytes:"bad" length:3] writeToFile:path atomically:YES];check(!MTReadExecutableIdentity(path),"truncated file is rejected");
         originalIntegrity(directory);
+        signedResourceLimit(directory);intelIdentity(directory);
         wrapperIntegrity(directory);
     }@finally {[NSFileManager.defaultManager removeItemAtPath:directory error:NULL];}
     puts("PASS: thin/universal arm64 UUIDs, 32/64-bit fat tables, Intel rejection, truncation, overlap, duplicate slices and overflow.");

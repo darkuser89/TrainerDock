@@ -67,6 +67,7 @@ static BOOL number(id v){return [v isKindOfClass:NSNumber.class] && isfinite([v 
             for(id profile in m[@"profiles"]){
                 if(![profile isKindOfClass:NSDictionary.class]){valid=NO;continue;}
                 if(!text(profile[@"store"]) || !text(profile[@"version"]))valid=NO;
+                if(profile[@"compatibilityNote"] && (!text(profile[@"compatibilityNote"]) || [profile[@"compatibilityNote"] length]>120))valid=NO;
                 for(NSString *key in @[@"epicAppName",@"epicNamespace"])
                     if(profile[key] && (!token(profile[key]) || [profile[key] length]>256))valid=NO;
                 if(profile[@"epicNamespace"] && !profile[@"epicAppName"])valid=NO;

@@ -3,24 +3,41 @@
 #import <Foundation/Foundation.h>
 #import <dlfcn.h>
 #import <mach-o/loader.h>
+#import <mach-o/dyld.h>
 #include <cstring>
 #include <cmath>
 #include <limits>
 #include <algorithm>
 namespace tld {
 API api={};
-bool knownImage(const void *symbol,const uint8_t uuid[16]) {
-    Dl_info info={};if(!symbol || !dladdr(symbol,&info))return false;
-    auto h=(const mach_header_64 *)info.dli_fbase;
-    if(!h || h->magic!=MH_MAGIC_64 || h->cputype!=CPU_TYPE_ARM64 || h->sizeofcmds>1048576)return false;
+namespace {
+bool imageUUID(const mach_header_64 *h,uint8_t uuid[16]) {
+    if(!h || !uuid || h->magic!=MH_MAGIC_64 || h->cputype!=CPU_TYPE_ARM64 || h->sizeofcmds>1048576 || h->ncmds>65536)return false;
     auto p=(const uint8_t *)(h+1);size_t remaining=h->sizeofcmds;bool matched=false;
     for(uint32_t i=0;i<h->ncmds;i++){
         if(remaining<8)return false;auto c=(const load_command *)p;
         if(c->cmdsize<8 || c->cmdsize>remaining)return false;
-        if(c->cmd==LC_UUID){if(matched || c->cmdsize!=sizeof(uuid_command) || memcmp(((const uuid_command *)c)->uuid,uuid,16))return false;matched=true;}
+        if(c->cmd==LC_UUID){if(matched || c->cmdsize!=sizeof(uuid_command))return false;memcpy(uuid,((const uuid_command *)c)->uuid,16);matched=true;}
         p+=c->cmdsize;remaining-=c->cmdsize;
     }
     return matched && !remaining;
+}
+}
+bool knownImage(const void *symbol,const uint8_t uuid[16]) {
+    Dl_info info={};uint8_t actual[16]={};
+    return symbol && uuid && dladdr(symbol,&info) && imageUUID((const mach_header_64 *)info.dli_fbase,actual) && !memcmp(actual,uuid,16);
+}
+bool runtimeImagesMatch(const char *profile,const uint8_t main[16],const uint8_t game[16],const uint8_t unity[16]) {
+    if(!profile || !main || !game || !unity)return false;
+    const uint8_t mainUUID[16]={0x96,0xb7,0x49,0xec,0x0f,0xb3,0x33,0x2f,0x96,0xf9,0x18,0x59,0x53,0x9d,0xe5,0x2c};
+    const uint8_t unityUUID[16]={0xb6,0x0c,0x3f,0x2b,0x6c,0x55,0x31,0x5a,0xbd,0x77,0x17,0x86,0x70,0xdd,0x56,0x9e};
+    const uint8_t steamUUID[16]={0xd7,0x42,0x2e,0x51,0xb2,0x24,0x34,0xf4,0x94,0x19,0x34,0xd0,0xb0,0x16,0xc7,0xc1};
+    const uint8_t epicUUID[16]={0x6e,0x53,0x07,0x67,0x66,0x33,0x35,0x8d,0xb9,0xe9,0x10,0x40,0xeb,0x15,0xd4,0xb9};
+    const uint8_t *expected=!strcmp(profile,"steam-arm64-2.60") ? steamUUID : !strcmp(profile,"epic-arm64-2.55") ? epicUUID : nullptr;
+    return expected && !memcmp(main,mainUUID,16) && !memcmp(unity,unityUUID,16) && !memcmp(game,expected,16);
+}
+bool runtimeMainImageMatches(uint32_t fileType,const char *loadedPath,const char *targetPath) {
+    return fileType==MH_EXECUTE && loadedPath && targetPath && loadedPath[0]=='/' && targetPath[0]=='/' && !strcmp(loadedPath,targetPath);
 }
 bool bindAPI() {
     if(api.invoke)return true;
@@ -49,8 +66,26 @@ bool bindAPI() {
     LOAD(elementClass,"il2cpp_class_get_element_class");LOAD(stringNew,"il2cpp_string_new");
     LOAD(stringLength,"il2cpp_string_length");LOAD(stringChars,"il2cpp_string_chars");
 #undef LOAD
-    const uint8_t uuid[16]={0xd7,0x42,0x2e,0x51,0xb2,0x24,0x34,0xf4,0x94,0x19,0x34,0xd0,0xb0,0x16,0xc7,0xc1};
-    valid=valid && knownImage((const void *)next.domainGet,uuid);
+    // Store variants share their launcher UUID, but not their IL2CPP image.
+    // Bind the complete original image tuple to the selected profile.
+    uint8_t mainUUID[16]={},gameUUID[16]={},unityUUID[16]={};Dl_info info={};
+    bool mainOK=false;unsigned executableCount=0;
+    NSString *targetPath=NSBundle.mainBundle.executablePath.stringByStandardizingPath;
+    bool gameOK=next.domainGet && dladdr((const void *)next.domainGet,&info) && imageUUID((const mach_header_64 *)info.dli_fbase,gameUUID),unityOK=false;
+    NSString *unityPath=[[NSBundle.mainBundle.bundlePath stringByAppendingPathComponent:@"Contents/Frameworks/UnityPlayer.dylib"] stringByStandardizingPath];
+    for(uint32_t i=0;i<_dyld_image_count();i++){
+        const char *name=_dyld_get_image_name(i);
+        const mach_header *header=_dyld_get_image_header(i);
+        if(header && header->filetype==MH_EXECUTE){
+            executableCount++;
+            mainOK=runtimeMainImageMatches(header->filetype,name ? [@(name) stringByStandardizingPath].fileSystemRepresentation : nullptr,targetPath.fileSystemRepresentation) && imageUUID((const mach_header_64 *)header,mainUUID);
+        }
+        if(name && [[@(name) stringByStandardizingPath] isEqual:unityPath]){
+            if(unityOK){unityOK=false;break;}
+            unityOK=imageUUID((const mach_header_64 *)_dyld_get_image_header(i),unityUUID);
+        }
+    }
+    valid=valid && executableCount==1 && mainOK && gameOK && unityOK && runtimeImagesMatch(NSProcessInfo.processInfo.environment[@"MHT_PROFILE"].UTF8String,mainUUID,gameUUID,unityUUID);
     dlclose(library);if(valid)api=next;return valid;
 }
 Class klass(const char *assembly,const char *space,const char *name) {

@@ -42,6 +42,8 @@ struct API {
 extern API api;
 bool bindAPI();
 bool knownImage(const void *,const uint8_t[16]);
+bool runtimeImagesMatch(const char *profile,const uint8_t main[16],const uint8_t game[16],const uint8_t unity[16]);
+bool runtimeMainImageMatches(uint32_t fileType,const char *loadedPath,const char *targetPath);
 Class klass(const char *assembly,const char *space,const char *name);
 Method method(Class,const char *name,int count);
 Field field(Class,const char *name);

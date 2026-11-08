@@ -537,6 +537,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/balatro.mhtmodule";
@@ -554,6 +556,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/balatro.mhtmodule";
@@ -809,6 +813,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/control.mhtmodule";
@@ -826,6 +832,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/control.mhtmodule";
@@ -1027,6 +1035,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/crimson-desert.mhtmodule";
@@ -1044,6 +1054,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/crimson-desert.mhtmodule";
@@ -1275,6 +1287,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/cyberpunk-2077.mhtmodule";
@@ -1292,6 +1306,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/cyberpunk-2077.mhtmodule";
@@ -1487,6 +1503,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/dead-island-2.mhtmodule";
@@ -1504,6 +1522,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/dead-island-2.mhtmodule";
@@ -1719,6 +1739,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/death-stranding.mhtmodule";
@@ -1736,6 +1758,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/death-stranding.mhtmodule";
@@ -1941,6 +1965,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/dome-keeper.mhtmodule";
@@ -1958,6 +1984,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/dome-keeper.mhtmodule";
@@ -2175,6 +2203,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/escape-from-duckov.mhtmodule";
@@ -2192,6 +2222,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/escape-from-duckov.mhtmodule";
@@ -2507,6 +2539,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/frostpunk-2.mhtmodule";
@@ -2524,6 +2558,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/frostpunk-2.mhtmodule";
@@ -2549,6 +2585,282 @@
 			"name" = "Trainer-frostpunk-2";
 			"productName" = "Trainer";
 			"productReference" = "9CBC248AE6CBF096D8AAD3DD";
+			"productType" = "com.apple.product-type.library.dynamic";
+		};
+		"ECACE2C13FC70BCCB51DE722" = {
+			"isa" = "PBXShellScriptBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/inzoi/Module.json", "$(SRCROOT)/Modules/inzoi/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/InZOI/LuaSymbols.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"name" = "Catalog, bridge, native and HiDPI checks";
+			"shellPath" = "/bin/bash";
+			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module inzoi\n";
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"04A83E2C641C70BF57ECA692" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/inzoi/Sources/TrainerFeatures.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"A740DBD6DF357E49CF0EEAD8" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "04A83E2C641C70BF57ECA692";
+		};
+		"EB4E1AAC02DEF867DCF321F4" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/inzoi/Sources/GameAdapter.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"7D5AFBB761474640C5EEFCC8" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "EB4E1AAC02DEF867DCF321F4";
+		};
+		"7979C8BDCD5502DDD12CC338" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/inzoi/Sources/NativeAdapter.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"4CC0F143FE76B33C75F7B9B8" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "7979C8BDCD5502DDD12CC338";
+		};
+		"1FDAC332DE68100642EE46FA" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/inzoi/Sources/GameBridge.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"9B9F4A2162AE17BCB0BE26C8" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "1FDAC332DE68100642EE46FA";
+		};
+		"FFE3436467AC8F305573FC9E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/inzoi/Sources/SelectionSettings.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"9F73884093F44DDD7BD8D625" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "FFE3436467AC8F305573FC9E";
+		};
+		"B07A73F1650F8D7E5BB1537F" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/inzoi/Sources/GameProfile.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"469BA1378BBA46860363F755" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "B07A73F1650F8D7E5BB1537F";
+		};
+		"ABB12025BF779F7A71851352" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/inzoi/Sources/MemoryAccess.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"C2212C4DD467BDFECE16CA38" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "ABB12025BF779F7A71851352";
+		};
+		"18EAC21BF6FA3BDCEF481B12" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/inzoi/Sources/TrainerMaterial.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"B7AE0E8606108ED92364EA15" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "18EAC21BF6FA3BDCEF481B12";
+		};
+		"4B426A1B4649BA385091934F" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/inzoi/Sources/Overlay.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"9DF4228C3A14F296F520FFB1" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "4B426A1B4649BA385091934F";
+		};
+		"22384A432346D6641AA1434D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/inzoi/Sources/OverlaySettings.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"6324D8F182D585767694D727" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "22384A432346D6641AA1434D";
+		};
+		"D04AD67E2FAE1A1B55A5EDB4" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/inzoi/Sources/OverlayShortcuts.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"11C23044F055FAC5B127FA72" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "D04AD67E2FAE1A1B55A5EDB4";
+		};
+		"A9BDA940A86BA9FAA5515F28" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/inzoi/Sources/Runtime.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"1292C4865EA6D2992AD15DD3" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "A9BDA940A86BA9FAA5515F28";
+		};
+		"50623D2127FA6BCFA2192C7C" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/inzoi/Sources/LuaEngine.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"81098283B232022BC65D5F8E" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "50623D2127FA6BCFA2192C7C";
+		};
+		"ECE011549BDE238E99DCD686" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/inzoi/Sources/OverlayCursor.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"DF09B4CC935DD51740F2141E" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "ECE011549BDE238E99DCD686";
+		};
+		"C7B864003214EA6B7A25AC07" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/inzoi/Sources/GameInput.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"D6965E98A9CFD38F1F556DB7" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "C7B864003214EA6B7A25AC07";
+		};
+		"CFB1CF33CEB60D2624A9CE69" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/inzoi/Sources/RuntimeMod.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"86FF35032F1A080605F120C6" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "CFB1CF33CEB60D2624A9CE69";
+		};
+		"E717072BBDE11FACACB8DBE9" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/inzoi/Sources/Movement.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"0F5F8844CC2E356BEC7B757F" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "E717072BBDE11FACACB8DBE9";
+		};
+		"D87FAD9ED7063DD5E67D4E0F" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/inzoi/Sources/MissionData.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"0442367CC29E036AD2DC44A5" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "D87FAD9ED7063DD5E67D4E0F";
+		};
+		"57B3F1011BF2F5A16C0DDE44" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "22F60203652AD2078DD0A34C";
+		};
+		"32D55A6FE5EFE73DD3CD1B14" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "A0AEEDF4F51BB81D82826C2B";
+		};
+		"A03AF270E50D41247EEC777E" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "71A295E05EF3AAF22670B173";
+		};
+		"F7F56F9B3B6B580DEEEB9634" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ("A740DBD6DF357E49CF0EEAD8", "7D5AFBB761474640C5EEFCC8", "4CC0F143FE76B33C75F7B9B8", "9B9F4A2162AE17BCB0BE26C8", "9F73884093F44DDD7BD8D625", "469BA1378BBA46860363F755", "C2212C4DD467BDFECE16CA38", "B7AE0E8606108ED92364EA15", "9DF4228C3A14F296F520FFB1", "6324D8F182D585767694D727", "11C23044F055FAC5B127FA72", "1292C4865EA6D2992AD15DD3", "81098283B232022BC65D5F8E", "DF09B4CC935DD51740F2141E", "D6965E98A9CFD38F1F556DB7", "86FF35032F1A080605F120C6", "0F5F8844CC2E356BEC7B757F", "0442367CC29E036AD2DC44A5", "57B3F1011BF2F5A16C0DDE44", "32D55A6FE5EFE73DD3CD1B14", "A03AF270E50D41247EEC777E");
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"C9D28E3D2B7C240180F27E06" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"90B2896427AD88F06AEE44DA" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "compiled.mach-o.dylib";
+			"path" = "Trainer.dylib";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"D91BDFE8F4EAE7373D354B62" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "F4DEF456225CDD06E427CB99";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "Trainer";
+				"EXECUTABLE_PREFIX" = "";
+				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
+				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
+				"SKIP_INSTALL" = "YES";
+				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/inzoi.mhtmodule";
+				"HEADER_SEARCH_PATHS" = ("$(SRCROOT)/Modules/inzoi/Sources", "$(SRCROOT)/ModuleSDK", "$(DERIVED_FILE_DIR)");
+				"GCC_PREPROCESSOR_DEFINITIONS" = ("$(inherited)");
+				"OTHER_LDFLAGS" = ("$(inherited)", "-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++", "-Wl,-U,_lua_pcallk", "-Wl,-U,_lua_close");
+				"ENABLE_HARDENED_RUNTIME" = "NO";
+			};
+			"name" = "Debug";
+		};
+		"668FA7942C6E0C34B7063305" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "F4DEF456225CDD06E427CB99";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "Trainer";
+				"EXECUTABLE_PREFIX" = "";
+				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
+				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
+				"SKIP_INSTALL" = "YES";
+				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/inzoi.mhtmodule";
+				"HEADER_SEARCH_PATHS" = ("$(SRCROOT)/Modules/inzoi/Sources", "$(SRCROOT)/ModuleSDK", "$(DERIVED_FILE_DIR)");
+				"GCC_PREPROCESSOR_DEFINITIONS" = ("$(inherited)");
+				"OTHER_LDFLAGS" = ("$(inherited)", "-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++", "-Wl,-U,_lua_pcallk", "-Wl,-U,_lua_close");
+				"ENABLE_HARDENED_RUNTIME" = "NO";
+			};
+			"name" = "Release";
+		};
+		"3F3420BEFE79218951331AC5" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = ("D91BDFE8F4EAE7373D354B62", "668FA7942C6E0C34B7063305");
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Debug";
+		};
+		"730DB787C419314C2E3C8E0F" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = "3F3420BEFE79218951331AC5";
+			"buildPhases" = ("F7F56F9B3B6B580DEEEB9634", "C9D28E3D2B7C240180F27E06", "ECACE2C13FC70BCCB51DE722");
+			"buildRules" = ();
+			"dependencies" = ();
+			"name" = "Trainer-inzoi";
+			"productName" = "Trainer";
+			"productReference" = "90B2896427AD88F06AEE44DA";
 			"productType" = "com.apple.product-type.library.dynamic";
 		};
 		"383369642C5FF1B13D7CB053" = {
@@ -2725,6 +3037,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/lies-of-p.mhtmodule";
@@ -2742,6 +3056,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/lies-of-p.mhtmodule";
@@ -2947,6 +3263,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/no-mans-sky.mhtmodule";
@@ -2964,6 +3282,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/no-mans-sky.mhtmodule";
@@ -3305,6 +3625,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-2.mhtmodule";
@@ -3322,6 +3644,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-2.mhtmodule";
@@ -3501,6 +3825,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-3.mhtmodule";
@@ -3518,6 +3844,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-3.mhtmodule";
@@ -3697,6 +4025,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-4.mhtmodule";
@@ -3714,6 +4044,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-4.mhtmodule";
@@ -3893,6 +4225,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-7.mhtmodule";
@@ -3910,6 +4244,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-7.mhtmodule";
@@ -4089,6 +4425,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-village.mhtmodule";
@@ -4106,6 +4444,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-village.mhtmodule";
@@ -4297,6 +4637,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/robocop.mhtmodule";
@@ -4314,6 +4656,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/robocop.mhtmodule";
@@ -4529,6 +4873,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/terraria.mhtmodule";
@@ -4546,6 +4892,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/terraria.mhtmodule";
@@ -4781,6 +5129,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/the-long-dark.mhtmodule";
@@ -4798,6 +5148,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/the-long-dark.mhtmodule";
@@ -4823,6 +5175,498 @@
 			"name" = "Trainer-the-long-dark";
 			"productName" = "Trainer";
 			"productReference" = "72ECF1D380F962AA039CB4A1";
+			"productType" = "com.apple.product-type.library.dynamic";
+		};
+		"F90A42BFB4D612FFB69F145C" = {
+			"isa" = "PBXShellScriptBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/turok/Module.json", "$(SRCROOT)/Modules/turok/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/Kex/SDLFixture.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Kex/NativeContractTests.m", "$(SRCROOT)/Tests/Kex/FogRendererTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"name" = "Catalog, bridge, native and HiDPI checks";
+			"shellPath" = "/bin/bash";
+			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module turok\n";
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"7EAAB08266389D06E457762E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok/Sources/TrainerFeatures.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"29AFB0BD3ED402D18BEB56BB" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "7EAAB08266389D06E457762E";
+		};
+		"02E59E462EDEE764F3988968" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok/Sources/GameAdapter.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"564102C760883722DC89B9EE" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "02E59E462EDEE764F3988968";
+		};
+		"EFBBEBF6B919083ABAA2B1BD" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok/Sources/NativeAdapter.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"5B0E33311409A228C856C779" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "EFBBEBF6B919083ABAA2B1BD";
+		};
+		"5A5A079135575943BF8D549A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok/Sources/GameBridge.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"EF5B18B7EC5E11F94B419FFD" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "5A5A079135575943BF8D549A";
+		};
+		"1377E5A835945340AFC3A5A4" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok/Sources/SelectionSettings.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"AF7968D7CD2FE78C00ECF618" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "1377E5A835945340AFC3A5A4";
+		};
+		"82F5C3CC43EDCB9911931295" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok/Sources/GameProfile.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"0B037070C0CF0D548B89C8D8" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "82F5C3CC43EDCB9911931295";
+		};
+		"6D57AEF98FDCD44B66B81104" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok/Sources/MemoryAccess.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"B4BEB0320672C61F3E6F13E8" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "6D57AEF98FDCD44B66B81104";
+		};
+		"0D34C30548DE2FE39FF208FD" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok/Sources/TrainerMaterial.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"A9F26E2D511ACB6F5C758563" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "0D34C30548DE2FE39FF208FD";
+		};
+		"643CEFA0B7B29B79EAFC492E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok/Sources/Overlay.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"A68F3CDFFA29A4AF12210E13" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "643CEFA0B7B29B79EAFC492E";
+		};
+		"77681CF0C6FD525EB42B93D3" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok/Sources/OverlaySettings.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"FC07D36397FAB52D9876D2B9" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "77681CF0C6FD525EB42B93D3";
+		};
+		"6DFF7584247B854E285D8FC2" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok/Sources/OverlayShortcuts.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"2B9EBBFB382A12F31EECF216" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "6DFF7584247B854E285D8FC2";
+		};
+		"83DAB58C2266A845EF9FAB1F" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok/Sources/Runtime.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"36F04EA4BC67A79BB6D0B7E3" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "83DAB58C2266A845EF9FAB1F";
+		};
+		"6EFD56010D56B5D7D426F019" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok/Sources/KexEngine.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"839E22A524AE9F30FCF9B7B8" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "6EFD56010D56B5D7D426F019";
+		};
+		"C14F3B8869978B09F1772CFE" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok/Sources/OverlayCursor.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"3CB96078085D5AB65815C999" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "C14F3B8869978B09F1772CFE";
+		};
+		"F928A728ED5818B9285E0E0A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok/Sources/KexFog.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"0038FD9D7904A9DD1ECD97C1" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "F928A728ED5818B9285E0E0A";
+		};
+		"C3E3FC6B7EF0BF1C8A7BBCD4" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "22F60203652AD2078DD0A34C";
+		};
+		"6DC296F5C816501BA86CD15D" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "A0AEEDF4F51BB81D82826C2B";
+		};
+		"92E9973AAB51D487CC547A87" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "71A295E05EF3AAF22670B173";
+		};
+		"4F2A34678E5D768F6C85B6FF" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ("29AFB0BD3ED402D18BEB56BB", "564102C760883722DC89B9EE", "5B0E33311409A228C856C779", "EF5B18B7EC5E11F94B419FFD", "AF7968D7CD2FE78C00ECF618", "0B037070C0CF0D548B89C8D8", "B4BEB0320672C61F3E6F13E8", "A9F26E2D511ACB6F5C758563", "A68F3CDFFA29A4AF12210E13", "FC07D36397FAB52D9876D2B9", "2B9EBBFB382A12F31EECF216", "36F04EA4BC67A79BB6D0B7E3", "839E22A524AE9F30FCF9B7B8", "3CB96078085D5AB65815C999", "0038FD9D7904A9DD1ECD97C1", "C3E3FC6B7EF0BF1C8A7BBCD4", "6DC296F5C816501BA86CD15D", "92E9973AAB51D487CC547A87");
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"BFE62E89DEB0BA31D8D4DC27" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"454B0AF300D7EB5DCFEB0A57" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "compiled.mach-o.dylib";
+			"path" = "Trainer.dylib";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"7D0E624716F8C5A3F3BA734E" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "F4DEF456225CDD06E427CB99";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "Trainer";
+				"EXECUTABLE_PREFIX" = "";
+				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "x86_64";
+				"ONLY_ACTIVE_ARCH" = "NO";
+				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
+				"SKIP_INSTALL" = "YES";
+				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/turok.mhtmodule";
+				"HEADER_SEARCH_PATHS" = ("$(SRCROOT)/Modules/turok/Sources", "$(SRCROOT)/ModuleSDK", "$(DERIVED_FILE_DIR)");
+				"GCC_PREPROCESSOR_DEFINITIONS" = ("$(inherited)", "KEX_TUROK2=0");
+				"OTHER_LDFLAGS" = ("$(inherited)", "-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++", "-framework", "OpenGL", "-Wl,-U,_SDL_GL_SwapWindow", "-Wl,-U,_SDL_SetRelativeMouseMode", "-Wl,-U,_SDL_ShowCursor", "-Wl,-U,_SDL_SetWindowGrab", "-Wl,-U,_SDL_WarpMouseInWindow", "-Wl,-U,_SDL_GetRelativeMouseMode", "-Wl,-U,_SDL_GetWindowGrab", "-Wl,-U,_SDL_GL_GetProcAddress");
+				"ENABLE_HARDENED_RUNTIME" = "NO";
+			};
+			"name" = "Debug";
+		};
+		"9B9BF22BD3D88801BAB36DBB" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "F4DEF456225CDD06E427CB99";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "Trainer";
+				"EXECUTABLE_PREFIX" = "";
+				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "x86_64";
+				"ONLY_ACTIVE_ARCH" = "NO";
+				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
+				"SKIP_INSTALL" = "YES";
+				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/turok.mhtmodule";
+				"HEADER_SEARCH_PATHS" = ("$(SRCROOT)/Modules/turok/Sources", "$(SRCROOT)/ModuleSDK", "$(DERIVED_FILE_DIR)");
+				"GCC_PREPROCESSOR_DEFINITIONS" = ("$(inherited)", "KEX_TUROK2=0");
+				"OTHER_LDFLAGS" = ("$(inherited)", "-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++", "-framework", "OpenGL", "-Wl,-U,_SDL_GL_SwapWindow", "-Wl,-U,_SDL_SetRelativeMouseMode", "-Wl,-U,_SDL_ShowCursor", "-Wl,-U,_SDL_SetWindowGrab", "-Wl,-U,_SDL_WarpMouseInWindow", "-Wl,-U,_SDL_GetRelativeMouseMode", "-Wl,-U,_SDL_GetWindowGrab", "-Wl,-U,_SDL_GL_GetProcAddress");
+				"ENABLE_HARDENED_RUNTIME" = "NO";
+			};
+			"name" = "Release";
+		};
+		"46DB308514C1356D0B33B989" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = ("7D0E624716F8C5A3F3BA734E", "9B9BF22BD3D88801BAB36DBB");
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Debug";
+		};
+		"AE17FDFF55D04DE26EC32CB4" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = "46DB308514C1356D0B33B989";
+			"buildPhases" = ("4F2A34678E5D768F6C85B6FF", "BFE62E89DEB0BA31D8D4DC27", "F90A42BFB4D612FFB69F145C");
+			"buildRules" = ();
+			"dependencies" = ();
+			"name" = "Trainer-turok";
+			"productName" = "Trainer";
+			"productReference" = "454B0AF300D7EB5DCFEB0A57";
+			"productType" = "com.apple.product-type.library.dynamic";
+		};
+		"D65EEBF5CE6D6F7522BA3C7D" = {
+			"isa" = "PBXShellScriptBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/turok-2/Module.json", "$(SRCROOT)/Modules/turok-2/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/Kex/SDLFixture.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Kex/NativeContractTests.m", "$(SRCROOT)/Tests/Kex/FogRendererTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"name" = "Catalog, bridge, native and HiDPI checks";
+			"shellPath" = "/bin/bash";
+			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module turok-2\n";
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"949A018DB3F6111D3646BB03" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok-2/Sources/TrainerFeatures.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"C727414EF64A0BAD8457128D" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "949A018DB3F6111D3646BB03";
+		};
+		"AD67B826ADF218598BA699CD" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok-2/Sources/GameAdapter.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"D072239C9F8C7C2F81AC1E35" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "AD67B826ADF218598BA699CD";
+		};
+		"37B78C3409D5FE6F64EA6C50" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok-2/Sources/NativeAdapter.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"B87E36AC78ADD4D8B486C05D" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "37B78C3409D5FE6F64EA6C50";
+		};
+		"EC8928E4195EBA66C5D9B296" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok-2/Sources/GameBridge.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"123D04A452AC108A358AE376" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "EC8928E4195EBA66C5D9B296";
+		};
+		"2AEA771806553599EFF83DD6" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok-2/Sources/SelectionSettings.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"AABEDED973E2825E11DACFEB" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "2AEA771806553599EFF83DD6";
+		};
+		"4E21E6B98C6E50FE68739EF5" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok-2/Sources/GameProfile.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"32D5AB951F9F8B102AE36587" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "4E21E6B98C6E50FE68739EF5";
+		};
+		"6D0190CA5BCE662017B1BB11" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok-2/Sources/MemoryAccess.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"45C937A032E299C8B9B1F0B7" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "6D0190CA5BCE662017B1BB11";
+		};
+		"D62F807F92252DD43A314445" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok-2/Sources/TrainerMaterial.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"0686B22F8A6C1AE68FEC8EA5" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "D62F807F92252DD43A314445";
+		};
+		"5DB7CED41FC933752616DC70" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok-2/Sources/Overlay.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"53FFD186EC319AFC2AAA8D5A" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "5DB7CED41FC933752616DC70";
+		};
+		"765F2100DFBBC17B9ACB6162" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok-2/Sources/OverlaySettings.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"1876AAF5EEE7CDD6E6D83D66" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "765F2100DFBBC17B9ACB6162";
+		};
+		"CC82562B969886D54EEBB57E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok-2/Sources/OverlayShortcuts.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"ED4C90D28ECB5280E604290C" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "CC82562B969886D54EEBB57E";
+		};
+		"1CB91F043A064482374D3440" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok-2/Sources/Runtime.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"55982E535E4D0F82C9C30DF4" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "1CB91F043A064482374D3440";
+		};
+		"106DD19D4AD1F2616D7A8806" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok-2/Sources/KexEngine.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"386F1643497B072CFCC3243E" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "106DD19D4AD1F2616D7A8806";
+		};
+		"4389B2F65AAB9EB250D86F42" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok-2/Sources/OverlayCursor.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"A25646BD0F683D90AEE6C403" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "4389B2F65AAB9EB250D86F42";
+		};
+		"7F44EA8187C4EE6E9C5D412F" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/turok-2/Sources/KexFog.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"24A707A5251A1B898D5A3622" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "7F44EA8187C4EE6E9C5D412F";
+		};
+		"95E1F87BCD240DB75A68A578" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "22F60203652AD2078DD0A34C";
+		};
+		"C382CFCE7216F1CE513DF73F" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "A0AEEDF4F51BB81D82826C2B";
+		};
+		"25EACF2C3AD70F0E0A4F7C81" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "71A295E05EF3AAF22670B173";
+		};
+		"A09C718689EB892DBE653961" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ("C727414EF64A0BAD8457128D", "D072239C9F8C7C2F81AC1E35", "B87E36AC78ADD4D8B486C05D", "123D04A452AC108A358AE376", "AABEDED973E2825E11DACFEB", "32D5AB951F9F8B102AE36587", "45C937A032E299C8B9B1F0B7", "0686B22F8A6C1AE68FEC8EA5", "53FFD186EC319AFC2AAA8D5A", "1876AAF5EEE7CDD6E6D83D66", "ED4C90D28ECB5280E604290C", "55982E535E4D0F82C9C30DF4", "386F1643497B072CFCC3243E", "A25646BD0F683D90AEE6C403", "24A707A5251A1B898D5A3622", "95E1F87BCD240DB75A68A578", "C382CFCE7216F1CE513DF73F", "25EACF2C3AD70F0E0A4F7C81");
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"B150297349931D66215F0A8D" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"D13E33385F8F44CE6DBF726C" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "compiled.mach-o.dylib";
+			"path" = "Trainer.dylib";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"7DBE378F3C6E8B4F3579182A" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "F4DEF456225CDD06E427CB99";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "Trainer";
+				"EXECUTABLE_PREFIX" = "";
+				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "x86_64";
+				"ONLY_ACTIVE_ARCH" = "NO";
+				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
+				"SKIP_INSTALL" = "YES";
+				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/turok-2.mhtmodule";
+				"HEADER_SEARCH_PATHS" = ("$(SRCROOT)/Modules/turok-2/Sources", "$(SRCROOT)/ModuleSDK", "$(DERIVED_FILE_DIR)");
+				"GCC_PREPROCESSOR_DEFINITIONS" = ("$(inherited)", "KEX_TUROK2=1");
+				"OTHER_LDFLAGS" = ("$(inherited)", "-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++", "-framework", "OpenGL", "-Wl,-U,_SDL_GL_SwapWindow", "-Wl,-U,_SDL_SetRelativeMouseMode", "-Wl,-U,_SDL_ShowCursor", "-Wl,-U,_SDL_SetWindowGrab", "-Wl,-U,_SDL_WarpMouseInWindow", "-Wl,-U,_SDL_GetRelativeMouseMode", "-Wl,-U,_SDL_GetWindowGrab", "-Wl,-U,_SDL_GL_GetProcAddress");
+				"ENABLE_HARDENED_RUNTIME" = "NO";
+			};
+			"name" = "Debug";
+		};
+		"8186181899ADCBC3331E46BB" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "F4DEF456225CDD06E427CB99";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "Trainer";
+				"EXECUTABLE_PREFIX" = "";
+				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "x86_64";
+				"ONLY_ACTIVE_ARCH" = "NO";
+				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
+				"SKIP_INSTALL" = "YES";
+				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/turok-2.mhtmodule";
+				"HEADER_SEARCH_PATHS" = ("$(SRCROOT)/Modules/turok-2/Sources", "$(SRCROOT)/ModuleSDK", "$(DERIVED_FILE_DIR)");
+				"GCC_PREPROCESSOR_DEFINITIONS" = ("$(inherited)", "KEX_TUROK2=1");
+				"OTHER_LDFLAGS" = ("$(inherited)", "-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++", "-framework", "OpenGL", "-Wl,-U,_SDL_GL_SwapWindow", "-Wl,-U,_SDL_SetRelativeMouseMode", "-Wl,-U,_SDL_ShowCursor", "-Wl,-U,_SDL_SetWindowGrab", "-Wl,-U,_SDL_WarpMouseInWindow", "-Wl,-U,_SDL_GetRelativeMouseMode", "-Wl,-U,_SDL_GetWindowGrab", "-Wl,-U,_SDL_GL_GetProcAddress");
+				"ENABLE_HARDENED_RUNTIME" = "NO";
+			};
+			"name" = "Release";
+		};
+		"CD9DA1534D0246CB257827E5" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = ("7DBE378F3C6E8B4F3579182A", "8186181899ADCBC3331E46BB");
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Debug";
+		};
+		"762A8D915C4EDF302A25639A" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = "CD9DA1534D0246CB257827E5";
+			"buildPhases" = ("A09C718689EB892DBE653961", "B150297349931D66215F0A8D", "D65EEBF5CE6D6F7522BA3C7D");
+			"buildRules" = ();
+			"dependencies" = ();
+			"name" = "Trainer-turok-2";
+			"productName" = "Trainer";
+			"productReference" = "D13E33385F8F44CE6DBF726C";
 			"productType" = "com.apple.product-type.library.dynamic";
 		};
 		"A4D4074ADEB1482D652FCEBD" = {
@@ -5023,6 +5867,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-crawlers.mhtmodule";
@@ -5040,6 +5886,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-crawlers.mhtmodule";
@@ -5257,6 +6105,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-survivors.mhtmodule";
@@ -5274,6 +6124,8 @@
 				"PRODUCT_NAME" = "Trainer";
 				"EXECUTABLE_PREFIX" = "";
 				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
 				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
 				"SKIP_INSTALL" = "YES";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-survivors.mhtmodule";
@@ -5341,6 +6193,10 @@
 			"isa" = "PBXTargetDependency";
 			"target" = "F568D9165AED75AB55C883D5";
 		};
+		"106D4641E71DA6C778CF4CBF" = {
+			"isa" = "PBXTargetDependency";
+			"target" = "730DB787C419314C2E3C8E0F";
+		};
 		"6561344919C7BF6BE1F42743" = {
 			"isa" = "PBXTargetDependency";
 			"target" = "C13F7F8275A3CCFB57EEE43D";
@@ -5381,6 +6237,14 @@
 			"isa" = "PBXTargetDependency";
 			"target" = "544C2AD9AD77B34E7C6D7F06";
 		};
+		"864915CAAE5596B03686F391" = {
+			"isa" = "PBXTargetDependency";
+			"target" = "AE17FDFF55D04DE26EC32CB4";
+		};
+		"6C9EB4A8984D09AEA39A42C2" = {
+			"isa" = "PBXTargetDependency";
+			"target" = "762A8D915C4EDF302A25639A";
+		};
 		"1D62A35B9498B42A1E93A9B5" = {
 			"isa" = "PBXTargetDependency";
 			"target" = "AB37692E9208AD9A947631C4";
@@ -5393,7 +6257,7 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDockEpicBroker", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/UpdaterTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/Tests/EpicLaunch/MHTEpicLaunchTests.m", "$(SRCROOT)/Core/MHTEpicLaunch.m", "$(SRCROOT)/Core/MHTEpicLaunch.h", "$(SRCROOT)/script/xcode_project.py", "$(TRAINERDOCK_BUILD_ROOT)/Modules/balatro.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/control.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/crimson-desert.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/cyberpunk-2077.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dead-island-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/death-stranding.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dome-keeper.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/escape-from-duckov.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/frostpunk-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/lies-of-p.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/no-mans-sky.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-3.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-4.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-7.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-village.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/robocop.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/terraria.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/the-long-dark.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-crawlers.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-survivors.mhtmodule/Module.json");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDockEpicBroker", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/UpdaterTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/Tests/EpicLaunch/MHTEpicLaunchTests.m", "$(SRCROOT)/Core/MHTEpicLaunch.m", "$(SRCROOT)/Core/MHTEpicLaunch.h", "$(SRCROOT)/script/xcode_project.py", "$(TRAINERDOCK_BUILD_ROOT)/Modules/balatro.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/control.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/crimson-desert.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/cyberpunk-2077.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dead-island-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/death-stranding.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dome-keeper.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/escape-from-duckov.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/frostpunk-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/inzoi.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/lies-of-p.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/no-mans-sky.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-3.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-4.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-7.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-village.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/robocop.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/terraria.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/the-long-dark.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/turok.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/turok-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-crawlers.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-survivors.mhtmodule/Module.json");
 			"outputPaths" = ("$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Verify launcher, module signatures and layout";
 			"shellPath" = "/bin/bash";
@@ -5424,7 +6288,7 @@
 			"isa" = "PBXAggregateTarget";
 			"buildConfigurationList" = "E22F6C63F7B2C5E22B06EE00";
 			"buildPhases" = ("0B57929311D45D24D41D5FCE");
-			"dependencies" = ("01D96416F6F93BF1DC10B9D8", "A28C28D74AE9FBAEC53CE198", "36013B31F45A59B7C8CB0888", "A0FDF4B37C707111CB32E1A5", "CF6BE48E68C0E99F81083648", "A7BDF65D7E105531D1DC649D", "B92277F24CD027F727D4514F", "34342D799653556E620628DA", "7449C3F3C34131FD0EB3A421", "C02F4B177F39822F92EA5213", "6561344919C7BF6BE1F42743", "AC1F7B583FE6A11E281B8BDE", "60F380C2074288C6460BFD85", "6DBA4DB370D5F75917CA806D", "995596E49E9F6DA0E42E2708", "336BD94A1A522E8AA5F7397F", "84E408AA69E0E4CB94910C1D", "A9CDD78B45897AE592EEDDB8", "6BA2211DF3C25CAA7F9A92DF", "7DD50E27EA90517EE995A488", "1D62A35B9498B42A1E93A9B5", "07878358E7EDB489DBD1E15B");
+			"dependencies" = ("01D96416F6F93BF1DC10B9D8", "A28C28D74AE9FBAEC53CE198", "36013B31F45A59B7C8CB0888", "A0FDF4B37C707111CB32E1A5", "CF6BE48E68C0E99F81083648", "A7BDF65D7E105531D1DC649D", "B92277F24CD027F727D4514F", "34342D799653556E620628DA", "7449C3F3C34131FD0EB3A421", "C02F4B177F39822F92EA5213", "106D4641E71DA6C778CF4CBF", "6561344919C7BF6BE1F42743", "AC1F7B583FE6A11E281B8BDE", "60F380C2074288C6460BFD85", "6DBA4DB370D5F75917CA806D", "995596E49E9F6DA0E42E2708", "336BD94A1A522E8AA5F7397F", "84E408AA69E0E4CB94910C1D", "A9CDD78B45897AE592EEDDB8", "6BA2211DF3C25CAA7F9A92DF", "7DD50E27EA90517EE995A488", "864915CAAE5596B03686F391", "6C9EB4A8984D09AEA39A42C2", "1D62A35B9498B42A1E93A9B5", "07878358E7EDB489DBD1E15B");
 			"name" = "TrainerDock-Verified";
 			"productName" = "TrainerDock-Verified";
 		};
@@ -5436,7 +6300,7 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDockEpicBroker", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/UpdaterTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/Tests/EpicLaunch/MHTEpicLaunchTests.m", "$(SRCROOT)/Core/MHTEpicLaunch.m", "$(SRCROOT)/Core/MHTEpicLaunch.h", "$(SRCROOT)/script/xcode_project.py", "$(TRAINERDOCK_BUILD_ROOT)/Modules/balatro.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/control.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/crimson-desert.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/cyberpunk-2077.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dead-island-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/death-stranding.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dome-keeper.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/escape-from-duckov.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/frostpunk-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/lies-of-p.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/no-mans-sky.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-3.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-4.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-7.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-village.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/robocop.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/terraria.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/the-long-dark.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-crawlers.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-survivors.mhtmodule/Module.json");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDockEpicBroker", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/UpdaterTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/Tests/EpicLaunch/MHTEpicLaunchTests.m", "$(SRCROOT)/Core/MHTEpicLaunch.m", "$(SRCROOT)/Core/MHTEpicLaunch.h", "$(SRCROOT)/script/xcode_project.py", "$(TRAINERDOCK_BUILD_ROOT)/Modules/balatro.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/control.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/crimson-desert.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/cyberpunk-2077.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dead-island-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/death-stranding.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dome-keeper.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/escape-from-duckov.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/frostpunk-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/inzoi.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/lies-of-p.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/no-mans-sky.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-3.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-4.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-7.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-village.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/robocop.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/terraria.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/the-long-dark.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/turok.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/turok-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-crawlers.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-survivors.mhtmodule/Module.json");
 			"outputPaths" = ("$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Verify launcher, module signatures and layout";
 			"shellPath" = "/bin/bash";
@@ -5607,6 +6471,60 @@
 			"isa" = "PBXGroup";
 			"children" = ("61F98F6C6C81ACC59740C627", "A0AEEDF4F51BB81D82826C2B", "4EDC4948AD2076DDDA81C4FE", "31065535581F61F6E2A0031D", "22F60203652AD2078DD0A34C", "5D18457E06A64BA5FE03D5F1", "71A295E05EF3AAF22670B173", "95165B9623F3D461947C263C");
 			"name" = "ModuleSDK";
+			"sourceTree" = "<group>";
+		};
+		"A4867D85791408DADE4D763B" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/_Shared/Kex/KexAdapter.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"FD43824895EE6DA1E019C952" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/_Shared/Kex/KexBits.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"F73F69B4AF049CAA21E8A1AB" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/_Shared/Kex/KexEngine.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"109D00914EB14077F1863F2B" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/_Shared/Kex/KexEngine.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"5F3AC9004352EBEAE90DE33A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/_Shared/Kex/KexFog.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"A167C31DF5AF5F44F09418E7" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/_Shared/Kex/KexFog.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"20291EAF31809E75244ABC3D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/_Shared/Kex/OverlayCursor.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"4453079D062BB92F8FFF6430" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/_Shared/Kex/OverlayCursor.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"F577290FBEBE66D032A717B7" = {
+			"isa" = "PBXGroup";
+			"children" = ("A4867D85791408DADE4D763B", "FD43824895EE6DA1E019C952", "F73F69B4AF049CAA21E8A1AB", "109D00914EB14077F1863F2B", "5F3AC9004352EBEAE90DE33A", "A167C31DF5AF5F44F09418E7", "20291EAF31809E75244ABC3D", "4453079D062BB92F8FFF6430");
+			"name" = "Kex";
 			"sourceTree" = "<group>";
 		};
 		"F2AC6257F642F6CF3540794E" = {
@@ -5863,7 +6781,7 @@
 		};
 		"F5CD0D66BBAACE9BD02FC0DA" = {
 			"isa" = "PBXGroup";
-			"children" = ("3E9222D68D78AFDC47F9F929");
+			"children" = ("F577290FBEBE66D032A717B7", "3E9222D68D78AFDC47F9F929");
 			"name" = "_Shared";
 			"sourceTree" = "<group>";
 		};
@@ -7091,6 +8009,162 @@
 			"name" = "frostpunk-2";
 			"sourceTree" = "<group>";
 		};
+		"56624990FB4AF3578634B6BF" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/inzoi/Sources/GameAdapter.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"04423732546451E62F2B0472" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/inzoi/Sources/GameBridge.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"D82133F1DB768D2E70B43AAE" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/inzoi/Sources/GameInput.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"20E065901AAD7E6939E80D11" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/inzoi/Sources/GameProfile.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"6EDB46BE035BEF74168B7630" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/inzoi/Sources/LICENSE";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"9DEC71E4DD373DCD4AB71710" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/inzoi/Sources/LuaEngine.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"7C5803F47BB4581C2363BE4C" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/inzoi/Sources/LuaProgram.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"42CB86F2AC07F8A7AE71BF49" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/inzoi/Sources/MemoryAccess.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"07FA70F6C0F58C745155FD5B" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/inzoi/Sources/MissionData.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"6A1A46CD793B0D4221835013" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/inzoi/Sources/Movement.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"83B8DD977EE85E0EBB1BFA3E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/inzoi/Sources/NativeAdapter.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"9EFCD5EF65D4A7F4D456C2DD" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/inzoi/Sources/Overlay.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"F82A4038EE4AF443061A8E93" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/inzoi/Sources/OverlayCursor.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"0F52280E44A0F20C899833EB" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/inzoi/Sources/OverlaySettings.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"BEFBD704233E6DA89C3751A1" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/inzoi/Sources/OverlayShortcuts.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"F31D75B35510BFD2D266DC0B" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/inzoi/Sources/RuntimeMod.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"886E22975CB0598E29D571CA" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/inzoi/Sources/SelectionSettings.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"D408741D073734892BC274D9" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/inzoi/Sources/TrainerFeatures.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"3E2E1BEBAD60C7BD0D88EE1C" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/inzoi/Sources/TrainerMaterial.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"B4583D3BD059B7FD43591755" = {
+			"isa" = "PBXGroup";
+			"children" = ("56624990FB4AF3578634B6BF", "EB4E1AAC02DEF867DCF321F4", "04423732546451E62F2B0472", "1FDAC332DE68100642EE46FA", "D82133F1DB768D2E70B43AAE", "C7B864003214EA6B7A25AC07", "20E065901AAD7E6939E80D11", "B07A73F1650F8D7E5BB1537F", "6EDB46BE035BEF74168B7630", "9DEC71E4DD373DCD4AB71710", "50623D2127FA6BCFA2192C7C", "7C5803F47BB4581C2363BE4C", "42CB86F2AC07F8A7AE71BF49", "ABB12025BF779F7A71851352", "07FA70F6C0F58C745155FD5B", "D87FAD9ED7063DD5E67D4E0F", "6A1A46CD793B0D4221835013", "E717072BBDE11FACACB8DBE9", "83B8DD977EE85E0EBB1BFA3E", "7979C8BDCD5502DDD12CC338", "9EFCD5EF65D4A7F4D456C2DD", "4B426A1B4649BA385091934F", "F82A4038EE4AF443061A8E93", "ECE011549BDE238E99DCD686", "0F52280E44A0F20C899833EB", "22384A432346D6641AA1434D", "BEFBD704233E6DA89C3751A1", "D04AD67E2FAE1A1B55A5EDB4", "A9BDA940A86BA9FAA5515F28", "F31D75B35510BFD2D266DC0B", "CFB1CF33CEB60D2624A9CE69", "886E22975CB0598E29D571CA", "FFE3436467AC8F305573FC9E", "D408741D073734892BC274D9", "04A83E2C641C70BF57ECA692", "3E2E1BEBAD60C7BD0D88EE1C", "18EAC21BF6FA3BDCEF481B12");
+			"name" = "Sources";
+			"sourceTree" = "<group>";
+		};
+		"60BBAD5308826D5F2E1EC8CC" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/inzoi/AGENTS.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"2BD33478020E7EC5BDE319EA" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/inzoi/Build.json";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"9DC2F3A6CA815FF255E594A4" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/inzoi/CHAT_START.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"D5DB259ABD123C9E750D6259" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/inzoi/Module.json";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"D682A142DCE4814B8FAA2F58" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/inzoi/README.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"4EC81F2EB8C383AA17DF6AE5" = {
+			"isa" = "PBXGroup";
+			"children" = ("B4583D3BD059B7FD43591755", "60BBAD5308826D5F2E1EC8CC", "2BD33478020E7EC5BDE319EA", "9DC2F3A6CA815FF255E594A4", "D5DB259ABD123C9E750D6259", "D682A142DCE4814B8FAA2F58");
+			"name" = "inzoi";
+			"sourceTree" = "<group>";
+		};
 		"1C21F5EF41C5B2D368DF3D23" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.h";
@@ -7787,6 +8861,258 @@
 			"name" = "the-long-dark";
 			"sourceTree" = "<group>";
 		};
+		"54BCF8213E97FB8D2A1B9F75" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok/Sources/GameAdapter.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"73D115DD0DBCED8721DA58AC" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok/Sources/GameBridge.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"881833D50EC807C46579608F" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok/Sources/GameProfile.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"1CB13FBFA6325ABD04EF56C9" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok/Sources/KexEngine.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"EC7535E59B152ACFC535741D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/turok/Sources/LICENSE";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"54587D7CB72FB9EEF248BA04" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok/Sources/MemoryAccess.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"B3EA983A1BC46A2ADC1BD74A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok/Sources/NativeAdapter.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"DE9E6349E44C9E75A51AE891" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok/Sources/Overlay.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"EC29D5699A052B4C7AD0152D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok/Sources/OverlayCursor.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"47BA54B1CF2EC8448F389375" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok/Sources/OverlaySettings.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"32F8D4B068FEA413F6AB574E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok/Sources/OverlayShortcuts.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"4AA258D73F3EB87607CCB3DB" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok/Sources/SelectionSettings.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"87C818AC62FB87969CBB94E9" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok/Sources/TrainerFeatures.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"F01BBB9D39A2818C8286C51A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok/Sources/TrainerMaterial.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"7F8E1CF6BF6C57CF87DAC41E" = {
+			"isa" = "PBXGroup";
+			"children" = ("54BCF8213E97FB8D2A1B9F75", "02E59E462EDEE764F3988968", "73D115DD0DBCED8721DA58AC", "5A5A079135575943BF8D549A", "881833D50EC807C46579608F", "82F5C3CC43EDCB9911931295", "1CB13FBFA6325ABD04EF56C9", "6EFD56010D56B5D7D426F019", "F928A728ED5818B9285E0E0A", "EC7535E59B152ACFC535741D", "54587D7CB72FB9EEF248BA04", "6D57AEF98FDCD44B66B81104", "B3EA983A1BC46A2ADC1BD74A", "EFBBEBF6B919083ABAA2B1BD", "DE9E6349E44C9E75A51AE891", "643CEFA0B7B29B79EAFC492E", "EC29D5699A052B4C7AD0152D", "C14F3B8869978B09F1772CFE", "47BA54B1CF2EC8448F389375", "77681CF0C6FD525EB42B93D3", "32F8D4B068FEA413F6AB574E", "6DFF7584247B854E285D8FC2", "83DAB58C2266A845EF9FAB1F", "4AA258D73F3EB87607CCB3DB", "1377E5A835945340AFC3A5A4", "87C818AC62FB87969CBB94E9", "7EAAB08266389D06E457762E", "F01BBB9D39A2818C8286C51A", "0D34C30548DE2FE39FF208FD");
+			"name" = "Sources";
+			"sourceTree" = "<group>";
+		};
+		"5439431A3FD285BC559B7C3D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/turok/AGENTS.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"4D0390266E1EEA0850F3CE9A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/turok/Build.json";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"689A40ACBCA73A0BB9DC892B" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/turok/CHAT_START.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"C8048853A817E065EF8C7D89" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/turok/Module.json";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"B201E5EBA8684D090CFFEA05" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/turok/README.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"610AA1E9AF73168D94F702C1" = {
+			"isa" = "PBXGroup";
+			"children" = ("7F8E1CF6BF6C57CF87DAC41E", "5439431A3FD285BC559B7C3D", "4D0390266E1EEA0850F3CE9A", "689A40ACBCA73A0BB9DC892B", "C8048853A817E065EF8C7D89", "B201E5EBA8684D090CFFEA05");
+			"name" = "turok";
+			"sourceTree" = "<group>";
+		};
+		"5D01E2EEAECC6191D6C95867" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok-2/Sources/GameAdapter.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"794EF2CCBD4E4094484164C7" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok-2/Sources/GameBridge.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"9976D565CE14819EF651E7D8" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok-2/Sources/GameProfile.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"B554BE3097C8B9A7F67FE784" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok-2/Sources/KexEngine.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"2244C5B7D0DBB6C6DC0A2C96" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/turok-2/Sources/LICENSE";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"65C1831F94C25FFB05072213" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok-2/Sources/MemoryAccess.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"C5CFD122770633511E1CDF5A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok-2/Sources/NativeAdapter.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"2AF4C1D2D5BD8EAF0B71448C" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok-2/Sources/Overlay.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"F8CEAC3AFA3B1E8EE6156A70" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok-2/Sources/OverlayCursor.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"AB25C3A7F159C553E5A21251" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok-2/Sources/OverlaySettings.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"629102A937B49A1A64E67A6A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok-2/Sources/OverlayShortcuts.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"148BC39DE3FD7BF7AF87C061" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok-2/Sources/SelectionSettings.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"ABB98C49D52B431C46E438EA" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok-2/Sources/TrainerFeatures.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"8DC96A0328EC6BF28AF2D21E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/turok-2/Sources/TrainerMaterial.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"C6C36FADF1AA50903D01FB95" = {
+			"isa" = "PBXGroup";
+			"children" = ("5D01E2EEAECC6191D6C95867", "AD67B826ADF218598BA699CD", "794EF2CCBD4E4094484164C7", "EC8928E4195EBA66C5D9B296", "9976D565CE14819EF651E7D8", "4E21E6B98C6E50FE68739EF5", "B554BE3097C8B9A7F67FE784", "106DD19D4AD1F2616D7A8806", "7F44EA8187C4EE6E9C5D412F", "2244C5B7D0DBB6C6DC0A2C96", "65C1831F94C25FFB05072213", "6D0190CA5BCE662017B1BB11", "C5CFD122770633511E1CDF5A", "37B78C3409D5FE6F64EA6C50", "2AF4C1D2D5BD8EAF0B71448C", "5DB7CED41FC933752616DC70", "F8CEAC3AFA3B1E8EE6156A70", "4389B2F65AAB9EB250D86F42", "AB25C3A7F159C553E5A21251", "765F2100DFBBC17B9ACB6162", "629102A937B49A1A64E67A6A", "CC82562B969886D54EEBB57E", "1CB91F043A064482374D3440", "148BC39DE3FD7BF7AF87C061", "2AEA771806553599EFF83DD6", "ABB98C49D52B431C46E438EA", "949A018DB3F6111D3646BB03", "8DC96A0328EC6BF28AF2D21E", "D62F807F92252DD43A314445");
+			"name" = "Sources";
+			"sourceTree" = "<group>";
+		};
+		"38DCF65C22CF6C42B39A5990" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/turok-2/AGENTS.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"90A0B3FE0FC08F27AE69289D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/turok-2/Build.json";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"32D17592818492FBC297AFC3" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/turok-2/CHAT_START.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"A7B98C238561C5EBBC6E75CF" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/turok-2/Module.json";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"DF3B7C2D443C6BDFED162E83" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/turok-2/README.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"3577637F891C0A404F721F5C" = {
+			"isa" = "PBXGroup";
+			"children" = ("C6C36FADF1AA50903D01FB95", "38DCF65C22CF6C42B39A5990", "90A0B3FE0FC08F27AE69289D", "32D17592818492FBC297AFC3", "A7B98C238561C5EBBC6E75CF", "DF3B7C2D443C6BDFED162E83");
+			"name" = "turok-2";
+			"sourceTree" = "<group>";
+		};
 		"92EF6DC532357E793F6CC0C4" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.h";
@@ -8059,7 +9385,7 @@
 		};
 		"3797E64238CADC23F937DE2E" = {
 			"isa" = "PBXGroup";
-			"children" = ("F5CD0D66BBAACE9BD02FC0DA", "062F91E27C907B63C78F7073", "F29A61C506744D62FFB58934", "1F9595D298B0BD4FF2FF13AE", "FDFA05E8490CAC3E37AE63AF", "898B94E7AC7DB70258FD2A01", "68C7961B65B1794F4BF28196", "50E4DE60874E10233AA7AFC8", "98439BD32F5C169B43BE76B6", "0AF43817911FFDCB111070D9", "027A2B1713B83CD8FE2CBA30", "D0394ED0C36569BFD589E21B", "660D1D64EB32477DA11A088A", "4F86B9E2458B5BE159E75394", "173345CF9A59DE6320E20C81", "3838914CEA3D824168E88C24", "378A4E09183E2A1D8A7D4C55", "5808CBF31DC8F0ED68AE438C", "5D681153DFF38506792EA780", "7B5AAD514B418ABABE7D686E", "430F7067714B7904EBD099D9", "D77FA87A6E6576CD5A0AE202");
+			"children" = ("F5CD0D66BBAACE9BD02FC0DA", "062F91E27C907B63C78F7073", "F29A61C506744D62FFB58934", "1F9595D298B0BD4FF2FF13AE", "FDFA05E8490CAC3E37AE63AF", "898B94E7AC7DB70258FD2A01", "68C7961B65B1794F4BF28196", "50E4DE60874E10233AA7AFC8", "98439BD32F5C169B43BE76B6", "0AF43817911FFDCB111070D9", "4EC81F2EB8C383AA17DF6AE5", "027A2B1713B83CD8FE2CBA30", "D0394ED0C36569BFD589E21B", "660D1D64EB32477DA11A088A", "4F86B9E2458B5BE159E75394", "173345CF9A59DE6320E20C81", "3838914CEA3D824168E88C24", "378A4E09183E2A1D8A7D4C55", "5808CBF31DC8F0ED68AE438C", "5D681153DFF38506792EA780", "7B5AAD514B418ABABE7D686E", "610AA1E9AF73168D94F702C1", "3577637F891C0A404F721F5C", "430F7067714B7904EBD099D9", "D77FA87A6E6576CD5A0AE202");
 			"name" = "Modules";
 			"sourceTree" = "<group>";
 		};
@@ -8615,6 +9941,144 @@
 			"name" = "Frostpunk2";
 			"sourceTree" = "<group>";
 		};
+		"AD6CBE97D13E873C22517561" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/InZOI/BuildCandidate.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"4945E115FAA69753174FBDFA" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/InZOI/BuildProbe.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"1738D0A0F412E24A87A85DEC" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/InZOI/CLI.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"64A7D1CE23529B18BDE2121B" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/InZOI/Control.swift";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"E855AC9C2E4A7678A38C4337" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/InZOI/CursorTests.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"1D10210EE7C2D676D5C04F6F" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/InZOI/Evaluate.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"E5C335261E532EC806013EBF" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/InZOI/Inspect.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"0AD75CD62CC8A053617D1099" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/InZOI/Launch.swift";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"C9F3863296DB652859375038" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/InZOI/LuaProbe.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"5713C6142B921B6060A36D8E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/InZOI/LuaSymbols.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"A65F41C7DD14F1E14C493C4D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/InZOI/MissionDataTests.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"4C8AF7F4FFC69B93111A7C1F" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/InZOI/MovementTests.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"0431F38A96BBF82FA15BBFD9" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/InZOI/Probe.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"F523AD2EA33DCA66C037E60D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/InZOI/Query.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"D462BEEFAEB93437D38C2C9F" = {
+			"isa" = "PBXGroup";
+			"children" = ("AD6CBE97D13E873C22517561", "4945E115FAA69753174FBDFA", "1738D0A0F412E24A87A85DEC", "64A7D1CE23529B18BDE2121B", "E855AC9C2E4A7678A38C4337", "1D10210EE7C2D676D5C04F6F", "E5C335261E532EC806013EBF", "0AD75CD62CC8A053617D1099", "C9F3863296DB652859375038", "5713C6142B921B6060A36D8E", "A65F41C7DD14F1E14C493C4D", "4C8AF7F4FFC69B93111A7C1F", "0431F38A96BBF82FA15BBFD9", "F523AD2EA33DCA66C037E60D");
+			"name" = "InZOI";
+			"sourceTree" = "<group>";
+		};
+		"B326EB23257CADEBF64820F4" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Kex/Control.swift";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"1ABE8659407DC57F7D0A4FD1" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/Kex/FogRendererTests.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"77BDD2A172DFCC5670CD8159" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Kex/Launch.swift";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"B849F12D902436E393837A7E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/Kex/NativeContractTests.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"5F96A68CAE461E8816B51687" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/Kex/Probe.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"681377F6CA22F9B1AFCB4B85" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Kex/Query.swift";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"7CFE9F9BC012899477CC8A1D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/Kex/SDLFixture.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"47F172D0BD1D471CF0388A64" = {
+			"isa" = "PBXGroup";
+			"children" = ("B326EB23257CADEBF64820F4", "1ABE8659407DC57F7D0A4FD1", "77BDD2A172DFCC5670CD8159", "B849F12D902436E393837A7E", "5F96A68CAE461E8816B51687", "681377F6CA22F9B1AFCB4B85", "7CFE9F9BC012899477CC8A1D");
+			"name" = "Kex";
+			"sourceTree" = "<group>";
+		};
 		"127528AD9787CF0891AED4F7" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.objc";
@@ -8795,9 +10259,15 @@
 			"path" = "Tests/TheLongDark/Query.swift";
 			"sourceTree" = "SOURCE_ROOT";
 		};
+		"B7AA26E8B890026D5703ECA5" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/TheLongDark/StoreContracts.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
 		"66C06B56AC0DB42568B2CB8C" = {
 			"isa" = "PBXGroup";
-			"children" = ("10EE681AA842DBACE84477B0", "CA45F85EBFFA29630882DDC7", "8D711399345D7AA2AC546A5A", "A8E0A77578A7AB735DD55B26", "B3C06B4B13040A4B8FED8992", "36F1E5BFADD18FA04A4DBC00", "30DE89535AC55E8A0082A264", "0BEF2DE55A823513E0450925", "339CD85CF54648867CE90930", "161FE3303A6B4FBF37F218AE", "22CDE40908108C1F8E52D450");
+			"children" = ("10EE681AA842DBACE84477B0", "CA45F85EBFFA29630882DDC7", "8D711399345D7AA2AC546A5A", "A8E0A77578A7AB735DD55B26", "B3C06B4B13040A4B8FED8992", "36F1E5BFADD18FA04A4DBC00", "30DE89535AC55E8A0082A264", "0BEF2DE55A823513E0450925", "339CD85CF54648867CE90930", "161FE3303A6B4FBF37F218AE", "22CDE40908108C1F8E52D450", "B7AA26E8B890026D5703ECA5");
 			"name" = "TheLongDark";
 			"sourceTree" = "<group>";
 		};
@@ -8971,7 +10441,7 @@
 		};
 		"6DC4FAD667A85B8567F612FB" = {
 			"isa" = "PBXGroup";
-			"children" = ("95B85911D95C09F76077731D", "C558322C90F7C824EA333596", "9681BA565B80261048F375D6", "578887ED95FE266FE7E3C8CC", "774BF8DD634424BA7BD916BA", "3C9AA7F0D72E39A723213356", "9ABCB2D9903EA261D4B7675F", "5AF284A3CC275F9661B07490", "AAA2EB948E4ACFEE43FAC82B", "C8438F0955C23E64B24CBFF4", "C7937F2CF58FBDC42DD73A82", "453BCC9F40C25129A11AFE42", "66C06B56AC0DB42568B2CB8C", "0AB8D325CA82C5A2F0E18B6F", "C3BD1762E47CFABFCD557C0D", "8959DF4A9F4735B4184ED876", "FE179AB05960397A0672CCDC", "272738046A71249570292AA4", "DAB207F704FDB6B20BDD3AA5", "92301B6E4315211EDE150A05", "EE99C02AC506535CD0888494", "46494363C1164468D58AC7DD", "7392DD52806320306589C2A7", "54F9CF01D24044637CF3D68C", "8B873C8801208A32F871EEF6", "C10871D3BA468B9911412563", "3D3477CCF699C841A7E9A36D", "C20FA7C518ADBFC4CFB3FE75");
+			"children" = ("95B85911D95C09F76077731D", "C558322C90F7C824EA333596", "9681BA565B80261048F375D6", "578887ED95FE266FE7E3C8CC", "774BF8DD634424BA7BD916BA", "3C9AA7F0D72E39A723213356", "9ABCB2D9903EA261D4B7675F", "5AF284A3CC275F9661B07490", "AAA2EB948E4ACFEE43FAC82B", "D462BEEFAEB93437D38C2C9F", "47F172D0BD1D471CF0388A64", "C8438F0955C23E64B24CBFF4", "C7937F2CF58FBDC42DD73A82", "453BCC9F40C25129A11AFE42", "66C06B56AC0DB42568B2CB8C", "0AB8D325CA82C5A2F0E18B6F", "C3BD1762E47CFABFCD557C0D", "8959DF4A9F4735B4184ED876", "FE179AB05960397A0672CCDC", "272738046A71249570292AA4", "DAB207F704FDB6B20BDD3AA5", "92301B6E4315211EDE150A05", "EE99C02AC506535CD0888494", "46494363C1164468D58AC7DD", "7392DD52806320306589C2A7", "54F9CF01D24044637CF3D68C", "8B873C8801208A32F871EEF6", "C10871D3BA468B9911412563", "3D3477CCF699C841A7E9A36D", "C20FA7C518ADBFC4CFB3FE75");
 			"name" = "Tests";
 			"sourceTree" = "<group>";
 		};
@@ -9283,7 +10753,7 @@
 		};
 		"0A3E27B8CA818264D75C8D81" = {
 			"isa" = "PBXGroup";
-			"children" = ("18FF5A37EC6215B0C548A632", "A4EA575B674B3360A1567417", "0C54B35A036A6A5F66500870", "8514A5005905E7AC966AA13D", "ABC009279859D95948608A7B", "DAE68E039F16F762988438F5", "B4C2EC0A318F35C0C0F88CC3", "F36F43EECD8C85A9C338A275", "96E0801C832166B4B9D6BAD1", "FBCB12816DDC187D9622F973", "9CBC248AE6CBF096D8AAD3DD", "D662E4D0C40E51E0943D2A8C", "8DD27ED101D41C973ED3B0C2", "01A159395358FF6CA61C1BDC", "FF06EF98D1125FEFFB9F65F4", "D16E45F13555F4C93C52D080", "A6158DD26712C538D5C34682", "F3C7869E35D9A1879E8D484B", "9CB3948BF8BF35F41F0822D4", "A2AF556B254194350707E231", "72ECF1D380F962AA039CB4A1", "F049A51994C694CFB36F118F", "4E14C6621731AC7373885BE2");
+			"children" = ("18FF5A37EC6215B0C548A632", "A4EA575B674B3360A1567417", "0C54B35A036A6A5F66500870", "8514A5005905E7AC966AA13D", "ABC009279859D95948608A7B", "DAE68E039F16F762988438F5", "B4C2EC0A318F35C0C0F88CC3", "F36F43EECD8C85A9C338A275", "96E0801C832166B4B9D6BAD1", "FBCB12816DDC187D9622F973", "9CBC248AE6CBF096D8AAD3DD", "90B2896427AD88F06AEE44DA", "D662E4D0C40E51E0943D2A8C", "8DD27ED101D41C973ED3B0C2", "01A159395358FF6CA61C1BDC", "FF06EF98D1125FEFFB9F65F4", "D16E45F13555F4C93C52D080", "A6158DD26712C538D5C34682", "F3C7869E35D9A1879E8D484B", "9CB3948BF8BF35F41F0822D4", "A2AF556B254194350707E231", "72ECF1D380F962AA039CB4A1", "454B0AF300D7EB5DCFEB0A57", "D13E33385F8F44CE6DBF726C", "F049A51994C694CFB36F118F", "4E14C6621731AC7373885BE2");
 			"name" = "Products";
 			"sourceTree" = "<group>";
 		};
@@ -9327,7 +10797,7 @@
 			"productRefGroup" = "0A3E27B8CA818264D75C8D81";
 			"projectDirPath" = "";
 			"projectRoot" = "";
-			"targets" = ("280950CF6AC5C31930FDD3EB", "9B492FD0BF085E3B7DBB21E0", "6B7CD1EF17007936405E1B6E", "92849A14EE4AD84BE6FBDA13", "1366DF5032A73C177DC2C81B", "6FD9A6562490373088E0BC39", "57169098A783799C3FAC2923", "84C3752285C773770659C886", "0ED9D04802E14338851CEA76", "240D569859218DE346C7B099", "F568D9165AED75AB55C883D5", "C13F7F8275A3CCFB57EEE43D", "EB68ABF763C47B3B66CB5AA9", "1F6B84363E2CB0E012842A18", "C8AF616DA5CACC5B35BBD736", "789CA890B287F8D8E55DECD9", "F5F2131170E5FCF56D851C7A", "8404F0B645EEB966D7E6C7F6", "6B5C6172466F2377029931F4", "002D7C436B072E071D56EBB8", "544C2AD9AD77B34E7C6D7F06", "AB37692E9208AD9A947631C4", "E4E236468DD5CC8D45F3FA82", "5826C760A6B14C431B64B1F3", "E8D25D95B7BEC2D17E3D01C9");
+			"targets" = ("280950CF6AC5C31930FDD3EB", "9B492FD0BF085E3B7DBB21E0", "6B7CD1EF17007936405E1B6E", "92849A14EE4AD84BE6FBDA13", "1366DF5032A73C177DC2C81B", "6FD9A6562490373088E0BC39", "57169098A783799C3FAC2923", "84C3752285C773770659C886", "0ED9D04802E14338851CEA76", "240D569859218DE346C7B099", "F568D9165AED75AB55C883D5", "730DB787C419314C2E3C8E0F", "C13F7F8275A3CCFB57EEE43D", "EB68ABF763C47B3B66CB5AA9", "1F6B84363E2CB0E012842A18", "C8AF616DA5CACC5B35BBD736", "789CA890B287F8D8E55DECD9", "F5F2131170E5FCF56D851C7A", "8404F0B645EEB966D7E6C7F6", "6B5C6172466F2377029931F4", "002D7C436B072E071D56EBB8", "544C2AD9AD77B34E7C6D7F06", "AE17FDFF55D04DE26EC32CB4", "762A8D915C4EDF302A25639A", "AB37692E9208AD9A947631C4", "E4E236468DD5CC8D45F3FA82", "5826C760A6B14C431B64B1F3", "E8D25D95B7BEC2D17E3D01C9");
 		};
 	};
 	"rootObject" = "244210E48437B6556980A702";

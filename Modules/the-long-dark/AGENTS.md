@@ -7,7 +7,11 @@ Keine simulierten Wirkungen oder vorgetäuschten Erfolge. Neue Builds und ungepr
 Funktionen nicht kosmetisch freigeben.
 
 - Vollständige IL2CPP-/Unity-Anbindung und Overlay bleiben hier; keine Spiellogik im Host.
-- Nur exakter Steam-Build 26450964 mit vollständiger Originalprüfung gemäß Profil.
+- Nur exakter Steam-Build 26450964 bzw. Epic-Build Mac_181032_321 gemäß Profil.
+  Epic 2.55 verwendet eine gültige originale arm64-Signatur und vollständige
+  Dateihashes; die Steam-Signaturausnahme nicht übernehmen. Profilkennung und
+  Hauptdatei-/GameAssembly-/UnityPlayer-UUID müssen als Store-Tupel zusammenpassen.
+  Epic-Ingame-Nachweise sind noch offen; der Nutzer übernimmt diese Prüfung.
 - Gameplay nur im bestätigten Original-Unity-Rückruf; lokale Besitzer und Ladezustand prüfen.
 - Typisierte Referenzsetter und Werttypenlisten-Verträge gemäß NativeContractTests erhalten.
 - Unten rechts MHTGlassSlider und persistentes glassIntensity 0…1 erhalten.

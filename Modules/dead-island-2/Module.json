@@ -6,7 +6,8 @@
   "profiles": [
     {
       "id": "mas",
-      "name": "Dead Island 2 · Mac App Store",
+      "name": "Dead Island 2 · Mac App Store · Nur German-Cut-Version",
+      "compatibilityNote": "Nur German-Cut-Version",
       "enabled": true,
       "bundleIdentifier": "com.plaion.DeadIsland2Usk",
       "executable": "DeadIsland2",
@@ -19,7 +20,8 @@
     },
     {
       "id": "steam",
-      "name": "Dead Island 2 · Steam",
+      "name": "Dead Island 2 · Steam · Nur Uncut-Version",
+      "compatibilityNote": "Nur Uncut-Version",
       "enabled": true,
       "bundleIdentifier": "com.plaion.DeadIsland2",
       "executable": "DeadIsland2",

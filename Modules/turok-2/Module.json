@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "id": "turok-2",
+  "name": "Turok 2: Seeds of Evil",
+  "version": "0.1.0",
+  "profiles": [
+    {
+      "id": "steam-x86_64-20961743",
+      "name": "Steam · 2.0 (Rosetta)",
+      "enabled": true,
+      "bundleIdentifier": "com.nightdivestudios.turok2ex",
+      "executable": "Turok 2 EX",
+      "uuids": [
+        "AB442E80-6C9C-3FB0-9653-B349C088C250"
+      ],
+      "architecture": "x86_64",
+      "teamIdentifier": "",
+      "version": "2.0",
+      "store": "Steam",
+      "steamAppId": "405830",
+      "steamBuildId": "20961743",
+      "signatureScope": "sha256-original",
+      "integrityApproval": "user-confirmed-steam-original",
+      "integrityFiles": [
+        "Contents/Info.plist",
+        "Contents/MacOS/Turok 2 EX",
+        "Contents/MacOS/libSDL2-2.0.0.dylib",
+        "Contents/MacOS/libopenal.1.dylib",
+        "Contents/MacOS/libsteam_api.dylib"
+      ],
+      "fileChecks": [
+        {
+          "path": "Contents/Info.plist",
+          "fileSize": 1114,
+          "offset": 0,
+          "length": 1114,
+          "sha256": "bc7dbdfab7d1711f82e4a2e922cef16d80686bff823cf3dd7d19265db9cc4c00"
+        },
+        {
+          "path": "Contents/MacOS/Turok 2 EX",
+          "fileSize": 7847748,
+          "offset": 0,
+          "length": 7847748,
+          "sha256": "14081559dd7e573a99bcb9cc8416576f72ec65b556ce9f58108a3b6f30afb7f4"
+        },
+        {
+          "path": "Contents/MacOS/libSDL2-2.0.0.dylib",
+          "fileSize": 2517768,
+          "offset": 0,
+          "length": 2517768,
+          "sha256": "855f8c922278c520039ce74952082f220bcb342b04b35e8996d4e9665b21c9b3"
+        },
+        {
+          "path": "Contents/MacOS/libopenal.1.dylib",
+          "fileSize": 658468,
+          "offset": 0,
+          "length": 658468,
+          "sha256": "1e57b3426b95b2d1fbde2cc21def9236ff78a1afb86494e4ffde47d7eddd4429"
+        },
+        {
+          "path": "Contents/MacOS/libsteam_api.dylib",
+          "fileSize": 601264,
+          "offset": 0,
+          "length": 601264,
+          "sha256": "bbf06bad9a5df00e1d065da0638b4c9f1cd320ffdcb9a39ad9c6da2be1d26ba1"
+        }
+      ],
+      "launchEnvironment": {
+        "SteamAppId": "405830",
+        "SteamGameId": "405830"
+      }
+    }
+  ],
+  "groups": [
+    {
+      "id": "player",
+      "title": "Spieler",
+      "symbol": "person",
+      "features": [
+        0
+      ]
+    },
+    {
+      "id": "weapons",
+      "title": "Waffen",
+      "symbol": "scope",
+      "features": [
+        1
+      ]
+    },
+    {
+      "id": "graphics",
+      "title": "Grafik",
+      "symbol": "cloud.fog",
+      "features": [
+        2
+      ]
+    }
+  ]
+}

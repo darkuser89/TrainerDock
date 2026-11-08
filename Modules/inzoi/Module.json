@@ -1,0 +1,640 @@
+{
+  "schemaVersion": 1,
+  "id": "inzoi",
+  "name": "inZOI",
+  "version": "0.1.0",
+  "profiles": [
+    {
+      "id": "steam-arm64-26264076",
+      "name": "Steam · Build 26264076",
+      "enabled": true,
+      "bundleIdentifier": "com.krafton.inzoi",
+      "executable": "inZOI",
+      "uuids": [
+        "B1AA1CC2-C72B-3D8A-AC90-1E8C9155E519"
+      ],
+      "teamIdentifier": "ETLKTHSMRZ",
+      "version": "5.4.95",
+      "store": "Steam",
+      "steamAppId": "2456740",
+      "steamBuildId": "26264076",
+      "integrityFiles": [
+        "Contents/Info.plist",
+        "Contents/MacOS/inZOI",
+        "Contents/MacOS/libsteam_api.dylib",
+        "Contents/MacOS/libLua.dylib"
+      ],
+      "fileChecks": [
+        {
+          "path": "Contents/Info.plist",
+          "fileSize": 2303,
+          "offset": 0,
+          "length": 2303,
+          "sha256": "6a2720cd163269f4a482c4a2998481a9e431fe56a8067debe5bf07032edb234c"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "a6b4e7d020de1c18213bf2ff6b35e28ac81106b51713794d14e01b8d45d96316"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 8388608,
+          "length": 8388608,
+          "sha256": "47c0dd41959568f337a9a8ddc9c7e187c8e290c26199f0ec93ab133491f0c967"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 16777216,
+          "length": 8388608,
+          "sha256": "bd6aa0f654d0cffdf1e2fc03716d796d3bddcf49d8676cd0df4eeb5adae80809"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 25165824,
+          "length": 8388608,
+          "sha256": "a0acc74a66dd6e914e8135721918be96ee361796571645b674eaf8eb27188247"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 33554432,
+          "length": 8388608,
+          "sha256": "9acfa9c4db9666acc05e4be57db2ecb29fdcc3193864635045101904a6a34a87"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 41943040,
+          "length": 8388608,
+          "sha256": "0bf2a76fea2d4734f4b72edaf9597d45ff99b72e1373707ca566c0b022503a85"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 50331648,
+          "length": 8388608,
+          "sha256": "3b1b382d66e4129528900522a637f74c7e291dee65b9a1846d8b708508b38441"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 58720256,
+          "length": 8388608,
+          "sha256": "902f946332c5a8025c76972bcdf8d05d72b01c8c5762050cb95af7841df3afc8"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 67108864,
+          "length": 8388608,
+          "sha256": "2cc9255fd1ffd689526ac7d34119918157429020018c07dcf265a5c3a57f955e"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 75497472,
+          "length": 8388608,
+          "sha256": "255fd31575e73838fb94b093792fbde634228563bf1edc72e00dc97565bbf765"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 83886080,
+          "length": 8388608,
+          "sha256": "f824d3de0d5ae7fb44d14e1981f6c87f068a6f77f0d9423841554827408fdfcb"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 92274688,
+          "length": 8388608,
+          "sha256": "5d886df7801a43a92a0f89b6e5b6ab8b1d2780b059e5f9f6c6e9bfe005698462"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 100663296,
+          "length": 8388608,
+          "sha256": "4ee5296d96c54b978ff1b32eaa35156ac4432944745024c1938a071fe7429e35"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 109051904,
+          "length": 8388608,
+          "sha256": "caf1f9c449f6caafccd7021cb1e5ffd8f306ade3d2171d0a0d146ded18063669"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 117440512,
+          "length": 8388608,
+          "sha256": "a307f6edd5f51c2069833e5ebd627f41a05238eed0ef267776cf09bbb6ceb7a1"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 125829120,
+          "length": 8388608,
+          "sha256": "fe35bb131d13c63c5fddaf8cf6a52172c2c8aaec393eea3c267cb6de52208478"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 134217728,
+          "length": 8388608,
+          "sha256": "f5db4c9f531fc9951a91de7154ff4a8690cf2322cf98e135d6523fcd787a1366"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 142606336,
+          "length": 8388608,
+          "sha256": "11cb65afd2c7d0286c9eaf931efd7ab8f6419afa0226a65cf5d8a6fcbb56e727"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 150994944,
+          "length": 8388608,
+          "sha256": "7f2790f890e35c94a9680fb0ba7ff48f2d67bb1c5025ebd526794b2efffcd116"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 159383552,
+          "length": 8388608,
+          "sha256": "82c5d0304647de745900cd575c32ea10a1cb299865f8b68c52b6eedc096e6193"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 167772160,
+          "length": 8388608,
+          "sha256": "deb029deaee2512e326a0df52bf6d0c67b09040807af3ee91cae1c60fcf12ad5"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 176160768,
+          "length": 8388608,
+          "sha256": "776dd321eea6656544cd20453f682346c23df6d2a3b514072f406acc14a2cbac"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 184549376,
+          "length": 8388608,
+          "sha256": "6ccb763f2e7bea581295409413d306383bff84fb2e159256166c313b87ad8266"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 192937984,
+          "length": 8388608,
+          "sha256": "cd50098075e5954cb0d0a30d9e76103389168588fe224835352ea2ef886e1117"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 201326592,
+          "length": 8388608,
+          "sha256": "3d4dbda7c0803d7b401400e5be8ddb8de4d56d8605f387e2ce2f991ca9e65fda"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 209715200,
+          "length": 8388608,
+          "sha256": "9107ddbd18d838c667b6a04fa417885a2bd3c28a4b5ef45a625fabcd62f148ad"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 218103808,
+          "length": 8388608,
+          "sha256": "1748160ae961b1f472f21d81491be14ae0a93f12dd8ab8c74b765df8594bf6eb"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 226492416,
+          "length": 8388608,
+          "sha256": "f7946fae30725868b40aca64bdb7d30efedf2ce96a7c3c265683702fae96f007"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 234881024,
+          "length": 8388608,
+          "sha256": "12860968d4bc61431e229a597e43e2b19966c5900d5dc51a9e345d10f78fbf04"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 243269632,
+          "length": 8388608,
+          "sha256": "acb742fb04015b32cf70f2f9f00d5830eea46cc8e179db0bde16e426b9078575"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 251658240,
+          "length": 8388608,
+          "sha256": "8cd976ea0120dc36037b698b243ac52899abaf1f08bb2683e13cedaf68ead197"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 260046848,
+          "length": 8388608,
+          "sha256": "e513f14576e805b0190ce473f0245c265c9e91c8deea026f6b99e57084440205"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 268435456,
+          "length": 8388608,
+          "sha256": "54c9736208dd54b0d28115dce0fccaa1ba7c0f7a22ac2cac80f3a4b4f9789807"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 276824064,
+          "length": 8388608,
+          "sha256": "0e1d3bf25f3753dcbcbbe4c4ad33c9e33cfaa0a377cd0efe0455cf4477d20a1d"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 285212672,
+          "length": 8388608,
+          "sha256": "ba589d8479f70f2ecef75afb12df8292501d32651ce4618e0e1ea092358d73f8"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 293601280,
+          "length": 8388608,
+          "sha256": "c58e4f06d2c9e6b0dceefa471cf5b4804371161175dfa730089dd6e886e5c3f7"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 301989888,
+          "length": 8388608,
+          "sha256": "dfe853a049b97aae2d683d67671ac899aae9d8305633d3f1d36a877e41c44db2"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 310378496,
+          "length": 8388608,
+          "sha256": "744d0a4da61d549f708cded2b1d2d5bc89a282dfd1180e3b9fa15d15853d6975"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 318767104,
+          "length": 8388608,
+          "sha256": "d61608ae5ae7c99153dad02f7e869c527adc48c8d91a7ee6bf84f26c9f7b96a9"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 327155712,
+          "length": 8388608,
+          "sha256": "53569afac5dff575d9cec02d0eb9efe832a1fcb56055bb6ba3f67d4840e1f5c6"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 335544320,
+          "length": 8388608,
+          "sha256": "d349185be9781b40946e81987f028ec35a52e1aa8e47dd0e194eecf5b8316e33"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 343932928,
+          "length": 8388608,
+          "sha256": "3c557b4f05c513851e580b741d828d79df549742b52c4f21ff1c5c877a980bad"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 352321536,
+          "length": 8388608,
+          "sha256": "8dcd2c7c196200c5f4e0b9d956daae93b63a104ddb21759a6b83580d12d8e778"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 360710144,
+          "length": 8388608,
+          "sha256": "4a27c1ef1d0ef5d6ae6bbbae4f11337e807c6d5679dc8194f9f3a0732c28e0fa"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 369098752,
+          "length": 8388608,
+          "sha256": "69f050f4161773478d73cd56ea0bae99b70b3c0d96c3ea8e2342f16f2c5df39b"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 377487360,
+          "length": 8388608,
+          "sha256": "74faaae2547a5cc3b16c68ff4a8f782fcee0de3a455a99272692274a622e6446"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 385875968,
+          "length": 8388608,
+          "sha256": "e9b7ab7a8c13bece44d00f34bfa49e7cbd970c7f7f50823e721fba64e9e7500b"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 394264576,
+          "length": 8388608,
+          "sha256": "d2d5c03becddd8b0f88ef4513b21e5d55cace8e23400f340b85b3b8e9e0b3e2e"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 402653184,
+          "length": 8388608,
+          "sha256": "ca02d3b4c6258cefe67fb7a757e817948824564118ee9e89d474f91536072f98"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 411041792,
+          "length": 8388608,
+          "sha256": "6f725751633c695737387fbcee14ccbfd29a185d2423c464440b7a21846c1774"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 419430400,
+          "length": 8388608,
+          "sha256": "7b6fb5a170fa2259777cf1a823e1b1bb56a88a53a295cede6cbf0676893af5f6"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 427819008,
+          "length": 8388608,
+          "sha256": "e187781608e44243611f5c9365149cd6cf910c811eedc3a2ea730942347b7530"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 436207616,
+          "length": 8388608,
+          "sha256": "c89ce660dd20ab5d8ef8e534ceaec930f2ce62a2532e9e6aaf502a51221912db"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 444596224,
+          "length": 8388608,
+          "sha256": "167b514acde270184b7f08bc19015c19fc552be30382c3e02d26680e781aa2b2"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 452984832,
+          "length": 8388608,
+          "sha256": "4e3edb3c52dd0f36d01d4f48d1d9e719002d6b206a987ee4f25d0d484e1dd75d"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 461373440,
+          "length": 8388608,
+          "sha256": "dbf94dfdb4184455634a5d0a2fe5a5f06979518c8a1faf780fb1501a57e85ff4"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 469762048,
+          "length": 8388608,
+          "sha256": "95031ba6e7ca47941c631856ae047748e0dbcd0c38d062f0376d6d596a9bcbd7"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 478150656,
+          "length": 8388608,
+          "sha256": "16498fc71edb264d3c25daefe12dece02b1cf9f724da4b24ae607433d63c465c"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 486539264,
+          "length": 8388608,
+          "sha256": "8c53f6dfa5749f3326d9313a64eaf19477295e6faac7cac03126f7228a00f78e"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 494927872,
+          "length": 8388608,
+          "sha256": "34e3996cd5f205fb571e28bf7a06b1aa35ac68d6711c8bf3575f9f6937620f10"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 503316480,
+          "length": 8388608,
+          "sha256": "a5a4036c9baa5756c68c9c6da17a38cfc4a5a3e462c9c9682eedc0595f7289b1"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 511705088,
+          "length": 8388608,
+          "sha256": "ec0532de18174e9d430adacdb29f1bd3f4353fa84a9217cc91ad11461846a99b"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 520093696,
+          "length": 8388608,
+          "sha256": "1156125fb04f3cede9b0a3e16089bde10097d4f6dcf79da6e5dbf366dd55def5"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 528482304,
+          "length": 8388608,
+          "sha256": "b75f9de99090992765b0cd7e8101784211428363b5c0662e1f22c0b97810ff6b"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 536870912,
+          "length": 8388608,
+          "sha256": "d587157a3f224dcc9d01abcc74618ad8a7546e790db8d957d0e8971f5368a597"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 545259520,
+          "length": 8388608,
+          "sha256": "648f94bd1e7d21add9494753fcbdd19121254fc6e2150777727a7989bd501d38"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 553648128,
+          "length": 8388608,
+          "sha256": "092583f84f82b4ae28c80103fd8de39a4f3e55dc615ee5d30bb7b61c23ba5369"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 562036736,
+          "length": 8388608,
+          "sha256": "dac55a50d8cb354f7c91d2461f196327aec62b58768aa99007fd1df0bf2c246f"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 570425344,
+          "length": 8388608,
+          "sha256": "78fd238777cb7a2d5d647dca28349ecaaaa55c9a2e085cc5e30d8a7d3da6e0b1"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 578813952,
+          "length": 8388608,
+          "sha256": "27cd74b2d8117d77cf05d322e44a7ea1de2bd7eeb06f57487f3559356d4b33ac"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 587202560,
+          "length": 8388608,
+          "sha256": "9b092ce0c2b381eb6952d6de6e9d32734473f5cebc04c0069ef1652bd9f06f38"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 595591168,
+          "length": 8388608,
+          "sha256": "f1a532bad7be32b5eba9df5e589c042ca4ada6be90cbbfed2ca85e103a15cf95"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 603979776,
+          "length": 8388608,
+          "sha256": "b5cf08f1b661069c3fcb00022ad86a535b348245d1f97d1b643a0af498bff903"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 612368384,
+          "length": 8388608,
+          "sha256": "d556f9fea275631f00fe5dbacb4ea2c44d707c9177398d64788d8ffff396e414"
+        },
+        {
+          "path": "Contents/MacOS/inZOI",
+          "fileSize": 628862976,
+          "offset": 620756992,
+          "length": 8105984,
+          "sha256": "bbc05b2d165768cd45fe3ce8691bb75933e49d03c35a8c81476a9377f22f7d5e"
+        },
+        {
+          "path": "Contents/MacOS/libsteam_api.dylib",
+          "fileSize": 426896,
+          "offset": 0,
+          "length": 426896,
+          "sha256": "cc58fea2dba5f9220680064efcfaf0176fe324e728e3bc8b1d487bdb2456a2b9"
+        },
+        {
+          "path": "Contents/MacOS/libLua.dylib",
+          "fileSize": 391344,
+          "offset": 0,
+          "length": 391344,
+          "sha256": "d7f0ef10c68599da079c03e9fe4b39f50a4e69341364e1ed767cc30d8fca78e3"
+        }
+      ],
+      "launchEnvironment": {
+        "SteamAppId": "2456740",
+        "SteamGameId": "2456740"
+      },
+      "signatureScope": "sha256-original",
+      "integrityApproval": "user-confirmed-steam-original"
+    }
+  ],
+  "groups": [
+    {
+      "id": "needs",
+      "title": "Bedürfnisse",
+      "symbol": "person",
+      "features": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ]
+    },
+    {
+      "id": "progress",
+      "title": "Karma & Ambitionen",
+      "symbol": "star",
+      "features": [
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "id": "currency",
+      "title": "Geld & Meow-Münzen",
+      "symbol": "banknote",
+      "features": [
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "id": "skills",
+      "title": "Fähigkeiten",
+      "symbol": "chart.bar",
+      "features": [
+        16,
+        17
+      ]
+    },
+    {
+      "id": "game",
+      "title": "Geschwindigkeit",
+      "symbol": "speedometer",
+      "features": [
+        18,
+        19
+      ]
+    }
+  ]
+}

@@ -12,6 +12,11 @@ Im Build entsteht eine eigenständige `.mhtmodule` mit `Trainer.dylib`, Manifest
 Profildatei und Lizenz. Sie benötigt kein anderes Modul und keine zentral abgelegte
 Trainerbibliothek. Die generische SDK-Anbindung wird in das Modul kompiliert.
 
+Profile können mit `compatibilityNote` einen kurzen deutschen Editionshinweis
+(höchstens 120 Zeichen) angeben. Der Launcher zeigt ihn in Rot bei der gewählten
+Storeversion, im Profilmenü und in den Pfadeinstellungen. Er verändert keine
+Storekennung oder technische Buildprüfung.
+
 Profile können mit `gameVersion` die sichtbare Spielversion getrennt von der
 geprüften Bundle-`version` angeben. Standardmäßig werden die vollständige
 Bundlesignatur und die Team-ID geprüft. Für Originalinstallationen mit ausschließlich
@@ -245,3 +250,18 @@ Die konkrete Freigabe betrifft nur Vampire Crawlers Steam 1.6.1 (11), Build-ID
 25304267, mit den erfassten Hashes. Weitere Builds erfordern einen neuen Auftrag.
 Andere Profile behalten ihre Originalsignaturprüfung. Diese Prüfung verändert
 keine Originaldatei und keine Sicherheitsfunktion des Betriebssystems.
+
+## Explizite Intelprofile für Rosetta
+
+App und Mindestziel bleiben arm64/macOS 27+. Ein vollständig identifiziertes
+Intelspiel kann ein eigenes Profil mit `architecture: "x86_64"` und einen passenden
+Modulbuild mit demselben `architecture`-Feld in `Build.json` verwenden. Ohne Feld
+bleiben Originalprüfung, Produkt und Tests arm64. Intelprofile benötigen eine
+explizite, buildspezifisch vom Nutzer freigegebene `sha256-original`-Prüfung.
+Keine fremde Architektur stillschweigend akzeptieren.
+
+Der Xcode-Modultarget und seine synthetischen Prüfprogramme verwenden dieselbe
+Architektur. `testSupportSources` darf ausschließlich Dateien unter `Tests/`
+enthalten; diese werden nur an Prüfprogramme gelinkt, niemals an Trainer.dylib.
+Rosetta ist zum Ausführen von Intelspielen und dieser Intelprüfprogramme nötig.
+Der komplette native Trainer und das Ingame-Overlay bleiben im eigenen Modul.

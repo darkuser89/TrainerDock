@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "sourceRoot": "Sources",
+  "family": "Kex",
+  "developmentOnly": false,
+  "sources": [
+    "TrainerFeatures.m",
+    "GameAdapter.m",
+    "NativeAdapter.m",
+    "GameBridge.m",
+    "SelectionSettings.m",
+    "GameProfile.m",
+    "MemoryAccess.m",
+    "TrainerMaterial.m",
+    "Overlay.m",
+    "OverlaySettings.m",
+    "OverlayShortcuts.m",
+    "Runtime.m",
+    "KexEngine.m",
+    "OverlayCursor.m",
+    "KexFog.m"
+  ],
+  "defines": [
+    "KEX_TUROK2=0"
+  ],
+  "catalogSources": [
+    "TrainerFeatures.m"
+  ],
+  "sdkSources": [
+    "MHTOverlayHost.m",
+    "MHTGlassIntensity.m"
+  ],
+  "architecture": "x86_64",
+  "undefinedSymbols": [
+    "_SDL_GL_SwapWindow",
+    "_SDL_SetRelativeMouseMode",
+    "_SDL_ShowCursor",
+    "_SDL_SetWindowGrab",
+    "_SDL_WarpMouseInWindow",
+    "_SDL_GetRelativeMouseMode",
+    "_SDL_GetWindowGrab",
+    "_SDL_GL_GetProcAddress"
+  ],
+  "nativeContractTests": "Tests/Kex/NativeContractTests.m",
+  "testSupportSources": [
+    "Tests/Kex/SDLFixture.m"
+  ],
+  "testSuite": "mt",
+  "frameworks": [
+    "OpenGL"
+  ],
+  "rendererTests": "Tests/Kex/FogRendererTests.m"
+}

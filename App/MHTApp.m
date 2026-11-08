@@ -54,7 +54,7 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
 @property(nonatomic) NSMutableArray<MHTFeatureGroup *> *groups;
 @property(nonatomic) NSButton *allModules,*start,*restore,*showOverlay,*allOff,*pathButton;
 @property(nonatomic) NSPopUpButton *profiles;
-@property(nonatomic) NSTextField *titleLabel,*subtitle,*status;
+@property(nonatomic) NSTextField *titleLabel,*subtitle,*compatibilityNoteLabel,*status;
 @property(nonatomic) NSStackView *detail,*featureList;
 @property(nonatomic) NSMutableArray<MHTRow *> *rows;
 @property(nonatomic) NSMutableDictionary<NSString *,MHTSession *> *sessions;
@@ -172,9 +172,11 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
     }
     self.titleLabel=MHTLabel(self.selected.name,28,NSFontWeightBold);self.titleLabel.toolTip=self.selected.name;
     self.subtitle=MHTLabel(@"",12,NSFontWeightRegular);self.subtitle.textColor=NSColor.secondaryLabelColor;
-    NSStackView *titles=MHTStack(@[self.titleLabel,self.subtitle],YES,8);
+    self.compatibilityNoteLabel=MHTLabel(@"",12,NSFontWeightSemibold);self.compatibilityNoteLabel.textColor=NSColor.systemRedColor;self.compatibilityNoteLabel.hidden=YES;
+    NSStackView *titles=MHTStack(@[self.titleLabel,self.subtitle,self.compatibilityNoteLabel],YES,8);
     [titles setContentHuggingPriority:249 forOrientation:NSLayoutConstraintOrientationHorizontal];[titles setContentCompressionResistancePriority:249 forOrientation:NSLayoutConstraintOrientationHorizontal];
     [self.titleLabel.widthAnchor constraintEqualToAnchor:titles.widthAnchor].active=YES;[self.subtitle.widthAnchor constraintEqualToAnchor:titles.widthAnchor].active=YES;
+    [self.compatibilityNoteLabel.widthAnchor constraintEqualToAnchor:titles.widthAnchor].active=YES;
     self.gameIcon=MHTIconView(MHTGameIcon(self.selected,nil),76,self.selected.name);
     self.start=button(@"Spielen",self,@selector(startGame:));self.start.bezelStyle=NSBezelStyleGlass;self.start.borderShape=NSControlBorderShapeCapsule;self.start.controlSize=NSControlSizeLarge;self.start.font=[NSFont systemFontOfSize:16 weight:NSFontWeightSemibold];self.start.bezelColor=NSColor.systemCyanColor;self.start.image=[NSImage imageWithSystemSymbolName:@"play.fill" accessibilityDescription:nil];self.start.imagePosition=NSImageLeading;self.start.accessibilityLabel=@"Spiel mit Trainer starten";self.start.toolTip=@"Das ausgewählte Spiel mit seinem Trainer starten";
     [self.start.widthAnchor constraintEqualToConstant:164].active=YES;[self.start.heightAnchor constraintEqualToConstant:46].active=YES;
@@ -184,7 +186,13 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
     [self.profiles.widthAnchor constraintEqualToConstant:210].active=YES;
     NSInteger selectedIndex=0;NSString *saved=[NSUserDefaults.standardUserDefaults stringForKey:[@"MHT.profile." stringByAppendingString:self.selected.identifier]];
     for(NSUInteger i=0;i<self.selected.profiles.count;i++){
-        NSDictionary *profile=self.selected.profiles[i];[self.profiles addItemWithTitle:[NSString stringWithFormat:@"%@ · Version %@",profile[@"store"],profile[@"gameVersion"] ?: profile[@"version"]]];
+        NSDictionary *profile=self.selected.profiles[i];
+        NSString *note=profile[@"compatibilityNote"],*caption=[NSString stringWithFormat:@"%@ · Version %@",profile[@"store"],profile[@"gameVersion"] ?: profile[@"version"]];
+        [self.profiles addItemWithTitle:note.length ? [caption stringByAppendingFormat:@" · %@",note] : caption];
+        if(note.length){
+            NSMenuItem *item=self.profiles.lastItem;NSMutableAttributedString *title=[[NSMutableAttributedString alloc]initWithString:item.title];
+            [title addAttribute:NSForegroundColorAttributeName value:NSColor.systemRedColor range:NSMakeRange(title.length-note.length,note.length)];item.attributedTitle=title;item.toolTip=item.title;
+        }
         if([profile[@"id"] isEqual:saved] || (!saved && MHTIsInstalled(self.selected,profile)))selectedIndex=(NSInteger)i;
     }
     [self.profiles selectItemAtIndex:selectedIndex];
@@ -276,6 +284,8 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
     MHTModule *module=self.selected;NSDictionary *profile=self.profile;NSString *path=[module pathForProfile:profile];
     self.gameIcon.image=MHTIconAtSize(MHTGameIcon(module,profile),76);
     self.subtitle.stringValue=[NSString stringWithFormat:@"%@ · %@",profile[@"store"],MHTIsInstalled(module,profile) ? @"Installiert" : @"Nicht installiert"];
+    NSString *note=profile[@"compatibilityNote"];
+    self.compatibilityNoteLabel.stringValue=note ?: @"";self.compatibilityNoteLabel.hidden=!note.length;self.compatibilityNoteLabel.toolTip=note;
     self.pathButton.toolTip=path ?: @"Spiele-App wählen";
     BOOL running=self.session.running || [NSRunningApplication runningApplicationsWithBundleIdentifier:profile[@"bundleIdentifier"]].count>0;
     self.start.enabled=NO;self.profiles.enabled=!self.session.launching && !self.session.running;

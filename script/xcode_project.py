@@ -136,6 +136,8 @@ def generate():
     checks = ["$(SRCROOT)/script/" + p for p in ("build.py", "managed.py", "xcode_support.py")]
     for module in released_modules():
         config_data = json.loads((module / "Build.json").read_text())
+        architecture=config_data.get("architecture","arm64")
+        if architecture not in ("arm64","x86_64"):raise ValueError("Unbekannte Trainerarchitektur.")
         name = "Trainer-" + module.name
         source = (module / config_data.get("sourceRoot", "Sources")).resolve()
         sources = [str((source / p).relative_to(ROOT)) for p in config_data["sources"]]
@@ -144,7 +146,7 @@ def generate():
             raise ValueError(f"{name}: duplicate object filenames must be disambiguated before generation.")
         module_path = str(module.relative_to(ROOT))
         inputs = checks + ["$(SRCROOT)/" + module_path + "/" + p for p in ("Module.json", "Build.json")]
-        test_sources = ["Tests/HiDPITests.m"]
+        test_sources = ["Tests/HiDPITests.m", *config_data.get("testSupportSources",[])]
         family = config_data.get("family", module.name)
         if family == "ResidentEvil":
             test_sources.append("Tests/ResidentEvilBridgeTests.m")
@@ -156,6 +158,7 @@ def generate():
         contract = config_data.get("nativeContractTests", "Tests/DomeKeeper/NativeContractTests.m" if family == "DomeKeeper" else None)
         if contract:
             test_sources.append(contract)
+        if config_data.get("rendererTests"):test_sources.append(config_data["rendererTests"])
         inputs += ["$(SRCROOT)/" + p for p in test_sources]
         before = []
         if config_data.get("managed"):
@@ -167,12 +170,15 @@ def generate():
                       ["$(TARGET_BUILD_DIR)/" + p for p in ("Module.json", "TrainerConfig.json", "LICENSE")]
                       + ["$(TARGET_TEMP_DIR)/verified.stamp"])
         extra_links = list(links)
+        for framework in config_data.get("frameworks",[]):
+            if not __import__("re").fullmatch(r"[A-Za-z][A-Za-z0-9]*",framework):raise ValueError("Ungültiges Modulframework.")
+            extra_links += ["-framework",framework]
         for symbol in config_data.get("undefinedSymbols", []):
             if not __import__("re").fullmatch(r"_[A-Za-z][A-Za-z0-9_]*", symbol):
                 raise ValueError("Invalid original runtime symbol.")
             extra_links.append("-Wl,-U," + symbol)
         target = native(name, sources, dict(
-            PRODUCT_NAME="Trainer", EXECUTABLE_PREFIX="", MACH_O_TYPE="mh_dylib",
+            PRODUCT_NAME="Trainer", EXECUTABLE_PREFIX="", MACH_O_TYPE="mh_dylib", ARCHS=architecture, ONLY_ACTIVE_ARCH="NO",
             LD_DYLIB_INSTALL_NAME="@rpath/Trainer.dylib", SKIP_INSTALL="YES",
             CONFIGURATION_BUILD_DIR="$(TRAINERDOCK_BUILD_ROOT)/Modules/" + module.name + ".mhtmodule",
             HEADER_SEARCH_PATHS=["$(SRCROOT)/" + str(source.relative_to(ROOT)), "$(SRCROOT)/ModuleSDK", "$(DERIVED_FILE_DIR)"],

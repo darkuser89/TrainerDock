@@ -35,6 +35,7 @@ NSDictionary *MTLoadConfiguration(NSString *path,NSError **error) {
     for(id p in root[@"profiles"]){
         if(![p isKindOfClass:NSDictionary.class] || !string(p[@"id"]) || !string(p[@"name"]) || ![p[@"enabled"] isKindOfClass:NSNumber.class] || [ids containsObject:p[@"id"]])return fail(error,@"Profilkennung fehlt oder ist doppelt.");
         [ids addObject:p[@"id"]];
+        if(p[@"architecture"] && ![@[@"arm64",@"x86_64"] containsObject:p[@"architecture"]])return fail(error,@"Unbekannte Profilarchitektur.");
         if([p[@"enabled"] boolValue]){
             if(!string(p[@"bundleIdentifier"]) || !string(p[@"executable"]) || ![p[@"uuids"] isKindOfClass:NSArray.class] || ![p[@"uuids"] count])return fail(error,@"Aktive Profile benötigen Bundle-ID, Executable und geprüfte UUIDs.");
             if([p[@"executable"] containsString:@"/"])return fail(error,@"Executable muss ein Dateiname sein.");
@@ -55,7 +56,8 @@ static NSString *uuidInCommands(const uint8_t *bytes,NSUInteger size,uint32_t co
         offset+=c.cmdsize;
     }return offset==size ? result : nil;
 }
-NSDictionary *MTReadExecutableIdentity(NSString *path) {
+NSDictionary *MTReadExecutableIdentityForArchitecture(NSString *path,NSString *architecture) {
+    cpu_type_t expected=[architecture isEqual:@"arm64"] ? CPU_TYPE_ARM64 : [architecture isEqual:@"x86_64"] ? CPU_TYPE_X86_64 : 0;if(!expected)return nil;
     NSFileHandle *file=[NSFileHandle fileHandleForReadingFromURL:[NSURL fileURLWithPath:path] error:NULL];if(!file)return nil;
     NSDictionary *result=nil;
     @try {
@@ -77,24 +79,25 @@ NSDictionary *MTReadExecutableIdentity(NSString *path) {
                 if(offset<8+count*stride || length<32 || offset>(uint64_t)attributes.st_size || length>(uint64_t)attributes.st_size-offset)@throw [NSException exceptionWithName:@"InvalidFatSlice" reason:nil userInfo:nil];
                 for(NSArray *range in ranges)if(offset<[range[0] unsignedLongLongValue]+[range[1] unsignedLongLongValue] && [range[0] unsignedLongLongValue]<offset+length)@throw [NSException exceptionWithName:@"OverlappingFatSlices" reason:nil userInfo:nil];
                 [ranges addObject:@[@(offset),@(length)]];
-                if(OSReadBigInt32(entry,0)==CPU_TYPE_ARM64){if(found)@throw [NSException exceptionWithName:@"AmbiguousArmSlice" reason:nil userInfo:nil];found=YES;sliceOffset=offset;sliceSize=length;}
+                if(OSReadBigInt32(entry,0)==(uint32_t)expected){if(found)@throw [NSException exceptionWithName:@"AmbiguousArmSlice" reason:nil userInfo:nil];found=YES;sliceOffset=offset;sliceSize=length;}
             }
             if(!found)@throw [NSException exceptionWithName:@"MissingArmSlice" reason:nil userInfo:nil];
             [file seekToOffset:sliceOffset error:NULL];data=[file readDataUpToLength:sizeof(h) error:NULL];
         }
         if(data.length==sizeof(h))memcpy(&h,data.bytes,sizeof(h));
-        if(h.magic==MH_MAGIC_64 && h.cputype==CPU_TYPE_ARM64 && h.filetype==MH_EXECUTE && h.sizeofcmds<=1024*1024 && h.ncmds<=4096 && h.sizeofcmds<=sliceSize-sizeof(h)){
+        if(h.magic==MH_MAGIC_64 && h.cputype==expected && h.filetype==MH_EXECUTE && h.sizeofcmds<=1024*1024 && h.ncmds<=4096 && h.sizeofcmds<=sliceSize-sizeof(h)){
             NSData *commands=[file readDataUpToLength:h.sizeofcmds error:NULL];
             NSString *uuid=commands.length==h.sizeofcmds ? uuidInCommands(commands.bytes,commands.length,h.ncmds) : nil;
-            if(uuid)result=@{@"uuid":uuid,@"architecture":@"arm64"};
+            if(uuid)result=@{@"uuid":uuid,@"architecture":architecture};
         }
     } @catch(NSException *exception){(void)exception;}
     [file closeAndReturnError:NULL];return result;
 }
+NSDictionary *MTReadExecutableIdentity(NSString *path){return MTReadExecutableIdentityForArchitecture(path,@"arm64");}
 static BOOL checkResources(NSString *bundle,NSDictionary *profile) {
     if(!profile[@"fileChecks"])return YES;
     BOOL exact=[profile[@"signatureScope"] isEqual:@"sha256-original"];
-    if(![profile[@"fileChecks"] isKindOfClass:NSArray.class] || [profile[@"fileChecks"] count]>(exact ? 64 : 16))return NO;
+    if(![profile[@"fileChecks"] isKindOfClass:NSArray.class] || [profile[@"fileChecks"] count]>(exact ? 128 : 64))return NO;
     NSMutableDictionary<NSString *,NSMutableArray<NSDictionary *> *> *coverage=[NSMutableDictionary new];
     for(id check in profile[@"fileChecks"]){
         if(![check isKindOfClass:NSDictionary.class])return NO;
@@ -156,10 +159,12 @@ NSDictionary *MTInspectGame(NSString *path,NSDictionary *profile,NSError **error
         launch[key]=directory;
     }
     NSString *executable=[canonical stringByAppendingPathComponent:[@"Contents/MacOS" stringByAppendingPathComponent:profile[@"executable"]]];
-    NSDictionary *identity=MTReadExecutableIdentity(executable);
-    if(!identity || ![profile[@"uuids"] containsObject:identity[@"uuid"]])return fail(error,@"Spiel-Build/Architektur nicht freigegeben. Keine passende arm64-Identität.");
+    NSString *architecture=profile[@"architecture"] ?: @"arm64";
+    NSDictionary *identity=MTReadExecutableIdentityForArchitecture(executable,architecture);
+    if(!identity || ![profile[@"uuids"] containsObject:identity[@"uuid"]])return fail(error,@"Spiel-Build/Architektur nicht freigegeben. Keine passende freigegebene Architektur.");
     if(!checkResources(canonical,profile))return fail(error,@"Spielressourcen weichen vom freigegebenen Build ab.");
     if([profile[@"version"] length] && ![info[@"CFBundleShortVersionString"] isEqual:profile[@"version"]])return fail(error,@"Spielversion weicht vom Profil ab.");
+    if([architecture isEqual:@"x86_64"] && ![profile[@"signatureScope"] isEqual:@"sha256-original"])return fail(error,@"Intel-Profile benötigen eine ausdrücklich freigegebene vollständige Originalprüfung.");
     BOOL sliceSignature=[profile[@"signatureScope"] isEqual:@"arm64-executable"];
     BOOL exactOriginal=[profile[@"signatureScope"] isEqual:@"sha256-original"];
     if(profile[@"signatureScope"] && !sliceSignature && !exactOriginal)return fail(error,@"Unbekannte Signaturprüfung im Profil.");
@@ -197,7 +202,7 @@ BOOL MTCurrentProcessMatches(NSDictionary *profile,NSString *target) {
     for(uint32_t i=0;i<_dyld_image_count();i++){
         const struct mach_header_64 *h=(const void *)_dyld_get_image_header(i);
         if(h && h->filetype==MH_EXECUTE){
-            if(h->magic!=MH_MAGIC_64 || h->cputype!=CPU_TYPE_ARM64 || h->sizeofcmds>1024*1024 || h->ncmds>4096)return NO;
+            if(h->magic!=MH_MAGIC_64 || h->cputype!=([profile[@"architecture"] isEqual:@"x86_64"] ? CPU_TYPE_X86_64 : CPU_TYPE_ARM64) || h->sizeofcmds>1024*1024 || h->ncmds>4096)return NO;
             NSString *uuid=uuidInCommands((const uint8_t *)(h+1),h->sizeofcmds,h->ncmds);
             return uuid && [profile[@"uuids"] containsObject:uuid];
         }

@@ -3,6 +3,7 @@
 NSDictionary *MTLoadConfiguration(NSString *path,NSError **error);
 NSDictionary *MTFindProfile(NSDictionary *configuration,NSString *identifier);
 NSDictionary *MTReadExecutableIdentity(NSString *path);
+NSDictionary *MTReadExecutableIdentityForArchitecture(NSString *path,NSString *architecture);
 NSDictionary *MTInspectGame(NSString *path,NSDictionary *profile,NSError **error);
 BOOL MTCurrentProcessMatches(NSDictionary *profile,NSString *target);
 BOOL MTExecutableIsRunning(NSString *path);

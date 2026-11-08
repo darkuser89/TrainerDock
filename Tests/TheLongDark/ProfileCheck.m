@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-only
 #import <Foundation/Foundation.h>
 #import "GameProfile.h"
-int main(void){@autoreleasepool{
- NSError *error=nil;NSDictionary *c=MTLoadConfiguration(@"/private/tmp/trainerdock-the-long-dark/ProbeConfig.json",&error);
- NSDictionary *p=MTFindProfile(c,@"steam-arm64-2.60");
- NSDictionary *r=MTInspectGame(@"/Volumes/Mac Games/SteamLibrary/steamapps/common/TheLongDark/tld.app",p,&error);
+int main(int argc,const char *argv[]){@autoreleasepool{
+ if(argc!=4){fprintf(stderr,"Aufruf: ProfileCheck Konfiguration Profilkennung Spiele-App\n");return 2;}
+ NSError *error=nil;NSDictionary *c=MTLoadConfiguration(@(argv[1]),&error);
+ NSDictionary *p=MTFindProfile(c,@(argv[2]));
+ NSDictionary *r=MTInspectGame(@(argv[3]),p,&error);
  if(!r){fprintf(stderr,"%s\n",error.localizedDescription.UTF8String);return 1;}
- printf("Exact Steam original verified: %s\n",[r[@"uuid"] UTF8String]);return 0;
+ printf("Originalprofil geprüft: %s · %s. Kein Spiel gestartet.\n",argv[2],[r[@"uuid"] UTF8String]);return 0;
 }}

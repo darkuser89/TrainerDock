@@ -1,12 +1,16 @@
 # The Long Dark – natives TrainerDock-Modul
 
-Eigenständiger Trainer für Steam **2.60 (0), Build 26450964**, arm64, macOS 27+.
+Eigenständiger Trainer für Steam **2.60 (0), Build 26450964** und Epic Games Store
+**2.55 (0), Mac_181032_321**, arm64, macOS 27+.
 Der Launcher lädt nur Metadaten; IL2CPP-Anbindung, GameThread-Zustellung,
 Auswahlverwaltung, vollständiges Ingame-Overlay und Glasregler gehören ins Modul.
 
-Alle 44 angefragten Funktionen sind nativ angebunden und freigegeben. Version 0.2.0
+Alle 44 angefragten Funktionen sind nativ angebunden. Version 0.2.0
 ergänzt Schadensmultiplikator, Gegenstandsnutzungen, sofortiges Herstellen,
 Schnellspeichern, Todesschutz für den Spielstand, Waffen, Munition und Schusswaffenschaden.
+Version 0.3.0 ergänzt die eigene Epic-Buildbindung. Die bisherigen Ingame-Nachweise
+gelten für Steam. Epic wird dem Nutzer zur eigenen Ingame-Prüfung bereitgestellt;
+Spielstart, Anmeldung, Wirkungen und Overlaybedienung wurden für Epic nicht ausgeführt.
 Die unten genannten Prüfgrenzen bleiben maßgeblich.
 
 ## Native Bindung
@@ -16,6 +20,17 @@ Der Nutzer hat diese Ausnahme ausschließlich für Build 26450964 nach fehlerfre
 Steam-Dateiprüfung genehmigt. Keine Spieldateien oder Signaturen werden verändert;
 neue Builds bleiben gesperrt. Zusätzlich sind die arm64-UUIDs von Hauptdatei,
 GameAssembly und UnityPlayer gebunden.
+
+Epic verwendet die gültige originale arm64-Codeversiegelung und 47 SHA-256-
+Prüfabschnitte, die sieben Originaldateien vollständig erfassen. Die Steam-Ausnahme
+wird nicht übernommen. Das eigene Profil bindet zusätzlich die drei Image-UUIDs;
+ein gemischtes Store-Tupel oder ein unbekannter Build wird abgelehnt. IL2CPP-Typen,
+Methoden und Werttypenverträge werden am jeweiligen Original reflektiert.
+UnityPlayer ist zwischen diesen beiden Builds bytegleich.
+
+Für Epic muss der Epic Games Launcher vor dem Start regulär geschlossen sein.
+TrainerDock startet das Spiel über dessen ursprünglichen Epic-Startweg. Kein direkter
+Ersatzstart, keine Steam-Umgebung und keine Änderung an der Spiele-App.
 
 `UnityLoop.mm` ergänzt den originalen Unity-PlayerLoop um einen einzelnen Rückruf.
 Gameplayzugriffe laufen ausschließlich darin. IL2CPP löst Typen, Methoden und
@@ -70,7 +85,7 @@ und `m_InPlayerInventory` ermittelt. Die Grenztests sichern diese ABI-Verträge 
 
 ## Prüfungen und Weiterentwicklung
 
-Im lokalen geladenen Überlebenslauf wurden Originalwerte und Aktions-Rücklesungen
+Im lokalen geladenen Steam-Überlebenslauf wurden Originalwerte und Aktions-Rücklesungen
 bestätigt. Die letzten acht Funktionen wurden wie folgt geprüft:
 
 - Waffen und Munitionsstapel im echten Inventar, Revolver sichtbar ausgerüstet.
@@ -94,6 +109,19 @@ bestätigt. Die letzten acht Funktionen wurden wie folgt geprüft:
 Das belegt nicht sämtliche denkbaren Spielsituationen. Mauszeiger, auseinanderliegende
 Schalter, Schließen und Glasregler wurden im Overlay bedient. Bridge-, ABI-,
 Todesschutz-Grenztests und HiDPI-Prüfungen laufen zusätzlich ohne Spielstart.
+
+Für Epic wurden die vollständigen Originalprüfungen mit Host- und Runtime-Prüfer
+bestanden. Der Offline-Vergleich prüft 190 konkrete Feld-/Methodenverträge aller
+44 Funktionspfade, 53 IL2CPP-Exports je Original und den bytegleichen UnityPlayer.
+Das Profil heißt bis zur Ingame-Bestätigung „Epic Games Store · 2.55 (zum Testen)“.
+Diese statischen Prüfungen bestätigen keine tatsächliche Epic-Spielwirkung.
+
+Der Vergleich benötigt beide unveränderten Originalinstallationen; fehlende oder
+unbekannte Originale führen ausdrücklich zu einem Fehler:
+
+```sh
+python3 -B Tests/TheLongDark/StoreContracts.py --steam /pfad/steam/tld.app --epic /pfad/epic/tld.app
+```
 
 ```sh
 python3 -B script/build.py --module the-long-dark

@@ -280,3 +280,33 @@ Mono-Spielzugriffe benötigen den tatsächlich beobachteten originalen Update-R�
 GC-Handles und typisierte Metadaten. Enum-Untertypen und FNA-TimeSpan prüfen.
 Terrarias verzögerte App-Registrierung und getrennte SDL-/Systemcursor sind unter
 `docs/OVERLAY_INPUT.md` beschrieben; UI-Auswahl darf keinen zweiten Start erzeugen.
+
+## Turok und Turok 2: Intel-Originale unter Rosetta
+
+Der Nutzer hat ausschließlich Turok Steam-Build **18198095** (x86_64-UUID
+`73B01170-3775-359F-B17C-867D13F2FB26`) und Turok 2 Steam-Build **20961743**
+(x86_64-UUID `AB442E80-6C9C-3FB0-9653-B349C088C250`) ausdrücklich für
+`sha256-original` freigegeben. Jeweils alle fünf im Profil genannten Originaldateien
+lückenlos prüfen; keine stillen Hashupdates oder Freigaben weiterer Builds.
+Die Originalprogramme sind unsigniert und bleiben unverändert.
+
+Der Launcher bleibt arm64 und benötigt weiterhin macOS 27+. Nur ausdrücklich mit
+`architecture: "x86_64"` gebundene Intelprofile verwenden eine entsprechend gebaute
+Trainerbibliothek unter Rosetta. Ohne Architekturangabe gilt weiterhin arm64;
+keine automatische Architekturauswahl oder Übernahme fremder UUIDs. Synthetische
+SDL-Hilfen unter `Tests/Kex` dürfen niemals Produktquellen werden.
+
+## inZOI: eng begrenzte Originalfreigabe
+
+Nach fehlerfreier Steam-Dateiprüfung hat der Nutzer ausschließlich Steam-Build
+**26264076**, Bundle-Version **5.4.95 (0.0.46)**, arm64-UUID
+`B1AA1CC2-C72B-3D8A-AC90-1E8C9155E519` für `sha256-original` freigegeben.
+Hauptprogramm, Info.plist, Steam- und Lua-Bibliothek müssen vollständig den
+78 Prüfabschnitten des Profils entsprechen. Keine stillen Hashupdates,
+Signaturänderungen oder Freigaben weiterer Builds.
+
+inZOI verwendet getrennte B1-/B2-Lua-VMs auf ihren jeweiligen Originalthreads.
+Die originale `LuaPrint`-Diagnose hat einen Stackschutz-Abbruch verursacht;
+eigene Runtime-Skripte dürfen diesen Ausgabepfad nicht nutzen. Native
+Strukturpuffer über `GetRef` statt Strukturkopien verändern und originale
+Missionsdefinitionen auf B1 laden. Einzelheiten: `Modules/inzoi/AGENTS.md`.

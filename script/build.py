@@ -25,8 +25,9 @@ def external_build_path(raw):
         raise ValueError("Buildordner darf kein Audit-Ordner sein.")
     return path
 
-def compile_object(source, output, includes, defines=()):
-    flags = ["-arch", "arm64", "-mmacosx-version-min=27.0", "-fobjc-arc", "-O1", "-Wall", "-Wextra", "-Werror", f"-ffile-prefix-map={ROOT}=."]
+def compile_object(source, output, includes, defines=(), architecture="arm64"):
+    if architecture not in ("arm64", "x86_64"):raise ValueError("Unbekannte Trainerarchitektur.")
+    flags = ["-arch", architecture, "-mmacosx-version-min=27.0", "-fobjc-arc", "-O1", "-Wall", "-Wextra", "-Werror", f"-ffile-prefix-map={ROOT}=."]
     flags += [f"-I{x}" for x in includes] + [f"-D{x}" for x in defines]
     if source.suffix == ".mm":
         compiler = "clang++"
@@ -37,8 +38,9 @@ def compile_object(source, output, includes, defines=()):
 
 FRAMEWORKS = ["-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++"]
 
-def link(objects, output, dynamic=False, undefined_symbols=(), extra_flags=()):
-    flags = ["-arch", "arm64", "-mmacosx-version-min=27.0"]
+def link(objects, output, dynamic=False, undefined_symbols=(), extra_flags=(), architecture="arm64"):
+    if architecture not in ("arm64", "x86_64"):raise ValueError("Unbekannte Trainerarchitektur.")
+    flags = ["-arch", architecture, "-mmacosx-version-min=27.0"]
     if dynamic:
         flags += ["-dynamiclib", "-install_name", f"@rpath/{output.name}"]
     for symbol in undefined_symbols:
@@ -87,6 +89,19 @@ def trainer(module_dir, modules_dir, stage, common, native_objects=None):
     if config.get("developmentOnly"):
         raise ValueError(f"{manifest['id']}: Entwicklungs-Vorlage, kein fertiger Trainer. Native Anbindung zuerst implementieren.")
     family=config.get("family",module_dir.name)
+    architecture=config.get("architecture","arm64")
+    def compile_arch(*args,**kwargs):return compile_object(*args,**kwargs,architecture=architecture)
+    module_links=[]
+    for framework in config.get("frameworks",[]):
+        if not re.fullmatch(r"[A-Za-z][A-Za-z0-9]*",framework):raise ValueError("Ungültiges Modulframework.")
+        module_links += ["-framework",framework]
+    support=[]
+    def link_arch(objects,output,dynamic=False,undefined_symbols=(),extra_flags=()):
+        return link(objects if dynamic else objects+support,output,dynamic,undefined_symbols,[*module_links,*extra_flags],architecture=architecture)
+    for name in config.get("testSupportSources",[]):
+        path=(ROOT/name).resolve()
+        if ROOT/"Tests" not in path.parents:raise ValueError("Testhilfen müssen unter Tests liegen.")
+        obj=stage/("Support-"+path.stem+".o");compile_arch(path,obj,[ROOT/"ModuleSDK",module_dir/config.get("sourceRoot","Sources")]);support.append(obj)
     source=(module_dir/config.get("sourceRoot","Sources")).resolve()
     if ROOT/"Modules" not in source.parents:raise ValueError("Trainerquellen müssen im Modules-Ordner liegen.")
     print(f"Trainer module: {manifest['name']}",flush=True)
@@ -94,18 +109,18 @@ def trainer(module_dir, modules_dir, stage, common, native_objects=None):
     objects=dict(native_objects or {});tag=module_dir.name
     for name in ([] if native_objects is not None else config["sources"]):
         obj=stage/f"{tag}-{name}.o"
-        compile_object(source/name,obj,[source,ROOT/"ModuleSDK",stage],config.get("defines",[]));objects[name]=obj
+        compile_arch(source/name,obj,[source,ROOT/"ModuleSDK",stage],config.get("defines",[]));objects[name]=obj
     for name in ([] if native_objects is not None else config.get("sdkSources",[])):
         obj=stage/f"{tag}-SDK-{name}.o"
-        compile_object(ROOT/"ModuleSDK"/name,obj,[source,ROOT/"ModuleSDK"],config.get("defines",[]));objects[name]=obj
+        compile_arch(ROOT/"ModuleSDK"/name,obj,[source,ROOT/"ModuleSDK"],config.get("defines",[]));objects[name]=obj
     dest=modules_dir/(manifest["id"]+".mhtmodule");dest.mkdir(exist_ok=True)
     runtime=dest/"Trainer.dylib"
     if native_objects is None:
-        link([*objects.values(),common],runtime,True,config.get("undefinedSymbols",[]))
+        link_arch([*objects.values(),common],runtime,True,config.get("undefinedSymbols",[]))
         run(["codesign","--force","--sign","-","--timestamp=none",runtime],stdout=subprocess.DEVNULL)
     dump=stage/(tag+"-Catalog.m");dump.write_text(catalog_source(family,config))
-    obj=stage/(tag+"-Catalog.o");compile_object(dump,obj,[source])
-    exporter=stage/(tag+"-catalog");link([obj,*[objects[x] for x in config["catalogSources"]]],exporter)
+    obj=stage/(tag+"-Catalog.o");compile_arch(dump,obj,[source])
+    exporter=stage/(tag+"-catalog");link_arch([obj,*[objects[x] for x in config["catalogSources"]]],exporter)
     args=[str(config["catalogGame"])] if "catalogGame" in config else []
     manifest["features"]=json.loads(subprocess.check_output([str(exporter),*args]))
     (dest/"Module.json").write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+"\n")
@@ -118,43 +133,53 @@ def trainer(module_dir, modules_dir, stage, common, native_objects=None):
     test_env["MHT_SELECTION"]=json.dumps({"features":{"0":{"wanted":True,"value":0}}})
     if family in ("Cyberpunk2077","CrimsonDesert","RoboCop","LiesOfP") or config.get("testSuite")=="mt":
         test_obj=stage/(tag+"-BridgeTests.o")
-        compile_object(ROOT/"Tests/BridgeTests.m",test_obj,[source,ROOT/"ModuleSDK"],config.get("defines",[])+(["TEST_CRIMSON=1"] if family=="CrimsonDesert" else []))
+        compile_arch(ROOT/"Tests/BridgeTests.m",test_obj,[source,ROOT/"ModuleSDK"],config.get("defines",[])+(["TEST_CRIMSON=1"] if family=="CrimsonDesert" else []))
         test_exe=stage/(tag+"-BridgeTests")
-        link([test_obj,common,*[objects[x] for x in ("GameBridge.m","TrainerFeatures.m","SelectionSettings.m","OverlaySettings.m","TrainerMaterial.m")]],test_exe);run([test_exe],env=test_env)
+        link_arch([test_obj,common,*[objects[x] for x in ("GameBridge.m","TrainerFeatures.m","SelectionSettings.m","OverlaySettings.m","TrainerMaterial.m")]],test_exe);run([test_exe],env=test_env)
     elif family=="ResidentEvil":
-        test_obj=stage/(tag+"-BridgeTests.o");compile_object(ROOT/"Tests/ResidentEvilBridgeTests.m",test_obj,[source,ROOT/"ModuleSDK"],config.get("defines",[]))
+        test_obj=stage/(tag+"-BridgeTests.o");compile_arch(ROOT/"Tests/ResidentEvilBridgeTests.m",test_obj,[source,ROOT/"ModuleSDK"],config.get("defines",[]))
         test_contents=stage/(tag+"-tests.app")/"Contents";(test_contents/"MacOS").mkdir(parents=True)
         (test_contents/"Info.plist").write_bytes(plistlib.dumps(dict(CFBundleIdentifier=manifest["profiles"][0]["bundleIdentifier"],CFBundleExecutable="TestBridge",CFBundlePackageType="APPL")))
         test_exe=test_contents/"MacOS/TestBridge"
         names=["GameBridge.m","TrainerFeatures.m","RE4Features.m","RE7Features.m","RE8Features.m","CheatPreferences.m","OverlaySettings.m","TrainerMaterial.m"]
-        link([test_obj,common,*[objects[x] for x in names]],test_exe);run([test_exe],env=test_env)
+        link_arch([test_obj,common,*[objects[x] for x in names]],test_exe);run([test_exe],env=test_env)
     elif family=="DeadIsland2":
         test_objects=[]
         for test_source in sorted((ROOT/"Tests/DeadIsland2").glob("*.m")):
-            obj=stage/("DI2-Test-"+test_source.stem+".o");compile_object(test_source,obj,[source]);test_objects.append(obj)
-        bridge_obj=stage/"DI2-TestingBridge.o";compile_object(source/"GameBridge.m",bridge_obj,[source],["DI2_TRAINER_TESTING=1"])
+            obj=stage/("DI2-Test-"+test_source.stem+".o");compile_arch(test_source,obj,[source]);test_objects.append(obj)
+        bridge_obj=stage/"DI2-TestingBridge.o";compile_arch(source/"GameBridge.m",bridge_obj,[source],["DI2_TRAINER_TESTING=1"])
         names=["GameAccess.m","GameEdition.m","TrainerFeatures.m","SelectionSettings.m","ExtraFeatures.m","OverlayInput.m"]
-        test_exe=stage/"DeadIsland2-BridgeTests";link([*test_objects,bridge_obj,*[objects[x] for x in names]],test_exe);run([test_exe])
+        test_exe=stage/"DeadIsland2-BridgeTests";link_arch([*test_objects,bridge_obj,*[objects[x] for x in names]],test_exe);run([test_exe])
         host_obj=stage/"DeadIsland2-OverlayHostTests.o"
-        compile_object(ROOT/"Tests/DeadIsland2OverlayHostTests.m",host_obj,[source,ROOT/"ModuleSDK"])
+        compile_arch(ROOT/"Tests/DeadIsland2OverlayHostTests.m",host_obj,[source,ROOT/"ModuleSDK"])
         host_exe=stage/"DeadIsland2-OverlayHostTests"
-        link([host_obj,*[obj for name,obj in objects.items() if name!="Runtime.m"]],host_exe);run([host_exe])
+        link_arch([host_obj,*[obj for name,obj in objects.items() if name!="Runtime.m"]],host_exe);run([host_exe])
     native_test=config.get("nativeContractTests", "Tests/DomeKeeper/NativeContractTests.m" if family=="DomeKeeper" else None)
     if native_test:
         native_obj=stage/(tag+"-NativeContractTests.o")
-        compile_object(ROOT/native_test,native_obj,[source,ROOT/"ModuleSDK"])
+        compile_arch(ROOT/native_test,native_obj,[source,ROOT/"ModuleSDK"],config.get("defines",[]))
         native_exe=stage/(tag+"-NativeContractTests")
-        link([native_obj,common,*[obj for name,obj in objects.items() if name!="Runtime.m"]],native_exe);run([native_exe])
+        link_arch([native_obj,common,*[obj for name,obj in objects.items() if name!="Runtime.m"]],native_exe);run([native_exe])
     dpi_obj=stage/(tag+"-HiDPITests.o")
-    compile_object(ROOT/"Tests/HiDPITests.m",dpi_obj,[source,ROOT/"ModuleSDK"],config.get("defines",[])+(["TEST_CRIMSON=1"] if family=="CrimsonDesert" else []))
+    compile_arch(ROOT/"Tests/HiDPITests.m",dpi_obj,[source,ROOT/"ModuleSDK"],config.get("defines",[])+(["TEST_CRIMSON=1"] if family=="CrimsonDesert" else []))
     dpi_exe=stage/(tag+"-HiDPITests")
     if family=="ResidentEvil":
         # Shared overlays select their game's catalog using the host bundle ID.
         dpi_contents=stage/(tag+"-hidpi.app")/"Contents";(dpi_contents/"MacOS").mkdir(parents=True)
         (dpi_contents/"Info.plist").write_bytes(plistlib.dumps(dict(CFBundleIdentifier=manifest["profiles"][0]["bundleIdentifier"],CFBundleExecutable="HiDPITests",CFBundlePackageType="APPL",NSHighResolutionCapable=True)))
         dpi_exe=dpi_contents/"MacOS/HiDPITests"
-    link([dpi_obj,common,*[obj for name,obj in objects.items() if name!="Runtime.m"]],dpi_exe)
+    link_arch([dpi_obj,common,*[obj for name,obj in objects.items() if name!="Runtime.m"]],dpi_exe)
     run([dpi_exe],env=test_env)
+    renderer_test=config.get("rendererTests")
+    if renderer_test:
+        path=(ROOT/renderer_test).resolve()
+        if ROOT/"Tests" not in path.parents or not support:raise ValueError("Rendererprüfung benötigt eigene Testhilfen unter Tests.")
+        fixture=stage/"RendererFixture.dylib";link_arch(support,fixture,True)
+        obj=stage/"RendererTests.o";compile_arch(path,obj,[source,ROOT/"ModuleSDK"])
+        executable=stage/"RendererTests";link_arch([obj],executable)
+        environment={k:v for k,v in os.environ.items() if not k.startswith("MHT_")}
+        environment["DYLD_INSERT_LIBRARIES"]=str(runtime)+":"+str(fixture)
+        run([executable],env=environment)
     if native_objects is None:run(["codesign","--verify","--strict",runtime])
     return dest
 
@@ -185,13 +210,15 @@ def build(build_dir, module_id=None, launcher_only=False, configuration="Debug",
     if os.environ.get("TRAINERDOCK_TEST_LUA_LIBRARY"):
         settings.append("TRAINERDOCK_TEST_LUA_LIBRARY="+os.environ["TRAINERDOCK_TEST_LUA_LIBRARY"])
     run(["xcodebuild","-project",ROOT/"TrainerDock.xcodeproj","-scheme",scheme,
-         "-configuration",configuration,"-destination","platform=macOS,arch=arm64","-derivedDataPath",build_dir/"Xcode",
+         "-configuration",configuration,"-destination","generic/platform=macOS","-derivedDataPath",build_dir/"Xcode",
          "-jobs",str(min(os.cpu_count() or 2,8)),"-quiet",
          "TRAINERDOCK_BUILD_ROOT="+str(build_dir),*settings,"build"],env=dict(os.environ,PYTHONDONTWRITEBYTECODE="1"))
     from xcode_support import verify_products
     if module_id and (build_dir/"TrainerDock.app/Contents/Resources/Modules").is_dir():
         from xcode_support import bundle_modules
-        bundle_modules(build_dir)
+        complete=all((build_dir/"Modules"/(p.name+".mhtmodule")/"TrainerConfig.json").is_file() for p in released_modules())
+        if complete:bundle_modules(build_dir)
+        else:print("Modul geprüft; App-Ressourcen werden nach dem Bau aller neuen Module gemeinsam aktualisiert.")
     verify_products(build_dir,module_id)
     product=build_dir/"Modules"/(module_id+".mhtmodule") if module_id else build_dir/"TrainerDock.app"
     print(f"Xcode-Build und Prüfungen erfolgreich: {product}")

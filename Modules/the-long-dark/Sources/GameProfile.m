@@ -80,7 +80,7 @@ NSDictionary *MTReadExecutableIdentity(NSString *path) {
 static BOOL checkResources(NSString *bundle,NSDictionary *profile) {
     if(!profile[@"fileChecks"])return YES;
     BOOL exact=[profile[@"signatureScope"] isEqual:@"sha256-original"];
-    if(![profile[@"fileChecks"] isKindOfClass:NSArray.class] || [profile[@"fileChecks"] count]>(exact ? 64 : 16))return NO;
+    if(![profile[@"fileChecks"] isKindOfClass:NSArray.class] || [profile[@"fileChecks"] count]>64)return NO;
     NSMutableDictionary<NSString *,NSMutableArray<NSDictionary *> *> *coverage=[NSMutableDictionary new];
     for(id check in profile[@"fileChecks"]){
         if(![check isKindOfClass:NSDictionary.class])return NO;

@@ -106,7 +106,7 @@ def bundle_modules(root):
 def package_module(module_id):
     root = build_root()
     _, _, config = module_data(module_id)
-    folder = environment_path("OBJECT_FILE_DIR_normal") / "arm64"
+    folder = environment_path("OBJECT_FILE_DIR_normal") / config.get("architecture", "arm64")
     names = config["sources"] + config.get("sdkSources", [])
     objects = {name: object_file(folder, name) for name in names}
     common = object_file(folder, "MHTProtocol.m")
@@ -174,6 +174,13 @@ def verify_products(root, module_id=None):
         binary = module / "Trainer.dylib"
         build.run(["codesign", "--verify", "--strict", binary])
         verify_minimum(binary)
+        source=ROOT/"Modules"/module.name.removesuffix(".mhtmodule")
+        config=json.loads((source/"Build.json").read_text());expected=config.get("architecture","arm64")
+        if subprocess.check_output(["xcrun","lipo","-archs",binary],text=True).strip()!=expected:
+            raise ValueError(f"Trainerarchitektur passt nicht zum Modulvertrag: {binary}")
+        manifest=json.loads((module/"Module.json").read_text())
+        if any(profile.get("architecture","arm64")!=expected for profile in manifest["profiles"]):
+            raise ValueError(f"Profilarchitektur passt nicht zur Trainerbibliothek: {module}")
     if module_id is None:
         app = root / "TrainerDock.app"
         info = plistlib.loads((app / "Contents/Info.plist").read_bytes())
