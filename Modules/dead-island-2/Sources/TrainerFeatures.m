@@ -12,22 +12,22 @@ static const DI2FeatureInfo catalog[DI2FeatureCount] = {
  {@"Spieltempo", @"⇧F4", @"Globaler Zeitfaktor der aktuellen Einzelspieler-Welt. Ursprünglichen Faktor beim Ausschalten wiederherstellen.",YES,YES,NO,1.5,0.25,3,0.25,118,1},
  {@"Super-Kraftschaden", @"⇧F9", @"Sehr hohe Kraft der gehaltenen Nahkampfwaffe. Entspricht Stabilitäts-/Taumelschaden, nicht Gesundheitsschaden.",YES,NO,NO,0,0,0,0,101,1},
  {@"Kraftschaden ×", @"⇧F8", @"Multiplikator des Kraft-Attributs der gehaltenen Nahkampfwaffe.",YES,YES,NO,2,1,100,1,100,1},
- {@"One-Hit (Nahkampf)", @"⇧F7", @"Sehr hoher Nahkampf-Grundschaden. Keine Garantie gegen Skript-Unverwundbarkeit.",YES,NO,NO,0,0,0,0,98,1},
+ {@"Ein Treffer tötet (Nahkampf)", @"⇧F7", @"Sehr hoher Nahkampf-Grundschaden. Keine Garantie gegen Skript-Unverwundbarkeit.",YES,NO,NO,0,0,0,0,98,1},
  {@"Schaden × (Nahkampf)", @"⇧F6", @"Multiplikator des Schadens-Attributs der gehaltenen Nahkampfwaffe. Originalwert bei Waffenwechsel wiederherstellen.",YES,YES,NO,2,1,100,1,97,1},
  {@"Verteidigung ×", @"⇧F5", @"Reduziert eingehenden Schaden des lokalen Spielers um den gewählten Faktor.",YES,YES,NO,2,1,100,1,96,1},
- {@"Geld setzen", @"⇧F1", @"Einmaliger Zielbetrag. Wert anklicken, Zahl eingeben, Enter; dann GO. F4/F5 geben weiterhin +1.000/+10.000. Geld wird gespeichert.",YES,YES,YES,99999999,0,999999999,1000,122,1},
+ {@"Geld setzen", @"⇧F1", @"Einmaliger Zielbetrag. Wert anklicken, Zahl eingeben, mit der Eingabetaste bestätigen und Los wählen. F4/F5 geben weiterhin +1.000/+10.000. Geld wird gespeichert.",YES,YES,YES,99999999,0,999999999,1000,122,1},
  {@"Verbrauch & Materialien", @"⌥F2", @"Hält erkannte Material-/Verbrauchsstapel alle 0,25 Sekunden auf ihrem bisherigen Höchststand. Keine Questobjekte oder Waffen; Ergänzungen werden gespeichert.",YES,NO,NO,0,0,0,0,120,2},
  {@"Stapel behalten", @"⌥F3", @"Hält normale Material-, Verbrauchs- und Munitionsstapel auf ihrem Höchststand. Questobjekte, Schlüssel, Geld und Waffen sind ausgenommen. Auch Verkauf/Ablegen kann nachgefüllt werden.",YES,NO,NO,0,0,0,0,99,2},
- {@"Crafting ohne Kosten", @"⌥F4", @"Setzt Material- und Geldkosten geladener unterstützter Rezepte nur im Speicher auf null. Rezept-, DLC- und andere Freischaltungen bleiben erforderlich.",YES,NO,NO,0,0,0,0,118,2},
+ {@"Herstellen ohne Kosten", @"⌥F4", @"Setzt Material- und Geldkosten geladener unterstützter Rezepte nur im Speicher auf null. Rezept-, DLC- und andere Freischaltungen bleiben erforderlich.",YES,NO,NO,0,0,0,0,118,2},
  {@"Munitionsreserve", @"F3", @"Unendliche Reserve der gehaltenen Schusswaffe; Magazinverbrauch separat über Kein Nachladen.",YES,NO,NO,0,0,0,0,99,0},
  {@"Kein Nachladen", @"F8", @"Unendliches Magazin und Auffüllen der gehaltenen Schusswaffe.",YES,NO,NO,0,0,0,0,100,0},
  {@"Präzision", @"⇧F10", @"Setzt die beiden Streuungs-Proxys des Standard-Spread-Handlers auf null. Ursprüngliche Proxy-Werte wiederherstellen.",YES,NO,NO,0,0,0,0,109,1},
  {@"Kein Rückstoß", @"⇧F11", @"Setzt die vier Rückstoß-Amplituden-Proxys des Standard-Handlers auf null; kein Eingriff in Kameracode.",YES,NO,NO,0,0,0,0,103,1},
  {@"Curveball sofort bereit", @"F11", @"Setzt lokale Quick-Throw-Abklingzeiten regelmäßig zurück. Wurfgegenstände müssen vorhanden sein.",YES,NO,NO,0,0,0,0,103,0},
  {@"Wut auffüllen", @"F9", @"Einmal bis zum aktuellen Maximum auffüllen. Erst nach Freischaltung der Wut verfügbar.",YES,NO,YES,0,0,0,0,101,0},
- {@"Wut ohne Zeitlimit", @"F10", @"Nativer Infinite-Fury-Schalter; Originalzustand beim Ausschalten wiederherstellen.",YES,NO,NO,0,0,0,0,109,0},
- {@"XP bis Maximallevel", @"⌥F1", @"Einmal XP bis zur regulären Maximallevel-Schwelle geben; normale Levelprüfung und Belohnungen. Dauerhafte Save-Änderung.",YES,NO,YES,0,0,0,0,122,2},
- {@"XP-Multiplikator", @"⇧F12", @"Ergänzt beobachtete positive XP-Zuwächse um den gewählten Faktor. Keine rekursive Multiplikation eigener Gaben. Wird gespeichert.",YES,YES,NO,2,1,100,1,111,1}
+ {@"Wut ohne Zeitlimit", @"F10", @"Nativer Schalter für unbegrenzte Wut; Originalzustand beim Ausschalten wiederherstellen.",YES,NO,NO,0,0,0,0,109,0},
+ {@"EP bis zur Höchststufe", @"⌥F1", @"Einmalig EP bis zur regulären Höchststufe vergeben; normale Stufenprüfung und Belohnungen. Wird im Spielstand gespeichert.",YES,NO,YES,0,0,0,0,122,2},
+ {@"EP-Multiplikator", @"⇧F12", @"Ergänzt beobachtete positive EP-Zuwächse um den gewählten Faktor. Keine rekursive Multiplikation eigener Gaben. Wird gespeichert.",YES,YES,NO,2,1,100,1,111,1}
 };
 const DI2FeatureInfo *DI2FeatureInfoAt(DI2Feature feature) {
     return feature >= 0 && feature < DI2FeatureCount ? &catalog[feature] : NULL;

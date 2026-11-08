@@ -29,7 +29,7 @@ static_assert(sizeof(Array)==16 && offsetof(Array,count)==8 && offsetof(Array,ca
 void requireThread(){if(!isBound()||!isGameThread())reject("Community resolution requires the original GameThread");}
 void verifyBindings(){
     requireThread();
-    uintptr_t anchor=binding("processEvent");if(!anchor)reject("Original reflection binding unavailable");
+    uintptr_t anchor=binding("processEvent");if(!anchor)reject("Die ursprüngliche Metadatenanbindung ist nicht verfügbar.");
     intptr_t slide=(intptr_t)anchor-(intptr_t)0x100be2e78ULL;
     for(const auto &b:bindings){uint8_t actual[16];if(!read(b.address+slide,actual,16)||memcmp(actual,b.bytes,16))reject("Original community metadata binding differs");}
 }
@@ -77,7 +77,7 @@ std::vector<Object> listLocalCommunities(const Context &c){
         reject("Community array element class differs");
     // FFieldVariant owner for an inner property is the containing FArrayProperty,
     // without the UObject tag. This prevents using an unrelated inner descriptor.
-    if(read<uintptr_t>(inner+FP2FieldOwnerOffset)!=p.address)reject("Array inner descriptor has a different owner");
+    if(read<uintptr_t>(inner+FP2FieldOwnerOffset)!=p.address)reject("Der Elementtyp der Liste gehört zu einem anderen Besitzer.");
     Array before=read<Array>(holder.address+p.offset);
     if(before.count<0 || before.capacity<before.count || before.capacity>4096 || before.count>256 || (before.count&&(!before.data||(before.data&7))))
         reject("Original community array exceeds bounds");
@@ -92,7 +92,7 @@ std::vector<Object> listLocalCommunities(const Context &c){
         Object type=communityType(o);
         id size=invoke(o,@"GetCommunitySize",@{});
         if(![size isKindOfClass:NSNumber.class] || [size longLongValue]<0 || [size longLongValue]>INT32_MAX)
-            reject("Original community size invalid");
+            reject("Ungültige ursprüngliche Bevölkerungsgröße.");
         if(enabled(o)&&[size intValue]>0){if(!types.insert(type.address).second)reject("Ambiguous active community type in city");result.push_back(o);}
     }
     Array after=read<Array>(holder.address+p.offset);
@@ -130,7 +130,7 @@ Object selectedCommunity(const Context &c){
             input=p.name;
         }
     }
-    if(!input || !hasReturn)reject("Original faction-card getter parameters unavailable");
+    if(!input || !hasReturn)reject("Die geprüften Parameter der Fraktionskartenauswahl sind nicht verfügbar.");
     Weak utilityLease(utils),functionLease(fn);
     NSDictionary *arguments=@{input:argument(c.controller)};
     Object selected=decode(invoke(utils,@"GetCurrentCommunity",arguments));

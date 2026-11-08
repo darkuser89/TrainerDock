@@ -43,9 +43,11 @@ Escape from Duckov und Vampire Survivors benötigen beim C#-Kompilieren Referenz
 aus den originalen Spielinstallationen. Diese Spieldateien gehören weder ins
 Repository noch auf einen GitHub-Runner oder in einen Download.
 
-Deshalb stellt das Entwickler-Prerelease `managed-inputs-v1` ausschließlich unsere
-beiden eigenen kompilierten Trainer-Assemblies bereit. Der Nutzer hat deren
-öffentliche Veröffentlichung ausdrücklich genehmigt. Die übrigen nativen Quellen
+Deshalb stellt das Entwickler-Prerelease `managed-inputs-v2` ausschließlich unsere
+beiden eigenen kompilierten Trainer-Assemblies bereit. Der Nutzer hat dieses
+Paket ausdrücklich öffentlich freigegeben: aktualisierter Vampire-Survivors-Code
+mit getrennten Steam-/Epic-Buildtupeln und unveränderter Duckov-Code. Das erste
+Paket `managed-inputs-v1` bleibt für ältere Quellstände erhalten. Die übrigen nativen Quellen
 einschließlich Loader, Bridges und Overlays werden in jedem Cloud-Build mit Xcode
 kompiliert. Auch die C#-Policy-Tests werden jedes Mal aus ihren Quellen kompiliert
 und ausgeführt. Der Cloud-Build kompiliert diese beiden Trainer-C#-Payloads selbst
@@ -61,14 +63,14 @@ Nach einer bewussten C#- oder Originalbindungsänderung:
 1. Die richtigen Originalinstallationen in TrainerDock einrichten; weiterhin alle
    Buildidentitäten und Datei-Hashes prüfen lassen.
 2. `TRAINERDOCK_MANAGED_IMAGES` entfernen. Mit
-   `python3 -B script/managed_inputs.py --release managed-inputs-v2` die eigenen
+   `python3 -B script/managed_inputs.py --release managed-inputs-v3` die eigenen
    Bausteine lokal neu kompilieren. Sie liegen extern unter
    `~/Library/Developer/TrainerDock/ManagedInputs`; nur die JSON-Builddefinition
    gehört ins Git-Repository.
 3. Den vollständigen Build und erforderliche genehmigte Ingame-Prüfungen durchführen.
    Nur die eigenen zwei `*.Managed.dll` als neue Entwickler-Release-Assets publizieren,
-   keine Originalreferenzen. Die ursprüngliche Freigabe gilt konkret für die zwei
-   eigenen Bausteine des ersten Entwickler-Releases; zusätzliche Veröffentlichungen
+   keine Originalreferenzen. Die bisherigen Freigaben gelten konkret für die
+   eigenen Bausteine der Entwickler-Releases v1 und v2; zusätzliche Veröffentlichungen
    benötigen einen passenden Nutzerauftrag.
 4. Quellen und Lockdatei zusammen committen. Der Cloud-Build muss die neuen
    veröffentlichten Bytes erfolgreich prüfen.

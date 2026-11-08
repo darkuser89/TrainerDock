@@ -46,14 +46,14 @@ Object managerFor(Object controller){
     if(!manager)return {};
     real(manager);
     if(!managerType(manager) || !isA(manager,field.objectClass))
-        fail("Controller manager has an unexpected native class");
+        fail("Die Verwaltung der Spielsteuerung hat einen unerwarteten Objekttyp.");
     if(read<uintptr_t>(manager.address+FP2ObjectOuterOffset)!=controller.address)
-        fail("Native cheat manager is owned by a different controller");
+        fail("Die native Trainerverwaltung gehört zu einer anderen Spielsteuerung.");
     return manager;
 }
 uintptr_t relocation(){
     uintptr_t pe=binding("processEvent");
-    if(pe<UINT64_C(0x100be2e78))fail("Original executable relocation unavailable");
+    if(pe<UINT64_C(0x100be2e78))fail("Die ursprüngliche Programmadressierung ist nicht verfügbar.");
     return pe-UINT64_C(0x100be2e78);
 }
 void signature(uintptr_t address,const uint8_t (&expected)[16]){
@@ -64,7 +64,7 @@ void signature(uintptr_t address,const uint8_t (&expected)[16]){
 Object checked(uintptr_t address){
     if(!address)return {};
     Object o=object(read<int32_t>(address+FP2ObjectInternalIndexOffset));
-    if(o.address!=address)fail("Original object pointer is stale");
+    if(o.address!=address)fail("Die ursprüngliche Objektreferenz ist nicht mehr gültig.");
     return o;
 }
 Object engineUtility(NSString *type){
@@ -81,10 +81,10 @@ Object engineUtility(NSString *type){
         if(![className(o) isEqual:type] || ![name(o) isEqual:wanted] || !(read<uint32_t>(o.address+8)&0x10))continue;
         Object c=objectClass(o),package=checked(read<uintptr_t>(c.address+FP2ObjectOuterOffset));
         if(![className(c) isEqual:@"Class"] || ![name(c) isEqual:type] || !package || ![name(package) isEqual:@"/Script/Engine"])continue;
-        if(selected)fail("Ambiguous original engine utility CDO");
+        if(selected)fail("Das ursprüngliche Hilfsobjekt der Engine ist nicht eindeutig.");
         selected=o;
     }
-    if(!selected)fail("Original engine utility CDO unavailable");
+    if(!selected)fail("Das ursprüngliche Hilfsobjekt der Engine ist nicht verfügbar.");
     cached.emplace(key,Weak(selected));return selected;
 }
 struct Parameter { NSString *name,*type;int32_t offset,size;bool result; };
@@ -93,7 +93,7 @@ Object typedMethod(Object cdo,NSString *name,uintptr_t originalExec,
     Object f=function(cdo,name);
     uint32_t flags=read<uint32_t>(f.address+FP2FunctionFlagsOffset);
     if((flags&0x2400)!=0x2400 || !(read<uint32_t>(cdo.address+8)&0x10))
-        fail("Object factory/property setter must be an original static native method");
+        fail("Objekterstellung und Feldänderung benötigen eine ursprüngliche statische native Methode.");
     if(read<uint16_t>(f.address+FP2FunctionParameterSizeOffset)!=24)
         fail("Original object factory/property setter parameter size differs");
     auto ps=properties(f);
@@ -134,14 +134,14 @@ Object nativeManagerClass(Object controller){
     if(configured){
         NSString *type=className(configured);
         if(![type isEqual:@"Class"] && ![type isEqual:@"BlueprintGeneratedClass"])
-            fail("Configured CheatClass is not an original UClass");
+            fail("Die konfigurierte Trainerklasse ist keine ursprüngliche Spielklasse.");
         Object c=configured;std::set<uintptr_t> seen;
         for(unsigned n=0;c && n<64;n++){
             if(!seen.insert(c.address).second)fail("Cyclic configured manager class hierarchy");
             if(c==native)return configured;
             c=checked(read<uintptr_t>(c.address+FP2StructSuperOffset));
         }
-        fail("Controller CheatClass is outside the original PXCheatManager hierarchy");
+        fail("Die Trainerklasse gehört nicht zur geprüften ursprünglichen Klassenhierarchie.");
     }
     return native;
 }
@@ -189,21 +189,21 @@ Object createAndAttach(Object controller){
         fail("Original object factory returned a different manager class/owner");
     if(pcWeak.get()!=controller || classWeak.get()!=klass || spawnWeak.get()!=spawn ||
        setWeak.get()!=set || gameplayWeak.get()!=gameplay || systemWeak.get()!=system)
-        fail("Original owner or method expired during manager creation");
+        fail("Der ursprüngliche Besitzer oder die Methode ist während der Erstellung ungültig geworden.");
     controllerCheck(controller);
     if(managerFor(controller))fail("Controller acquired another manager during creation");
     Property fresh=property(controller,@"CheatManager");
     if(fresh.address!=field.address || fresh.offset!=field.offset || fresh.objectClass!=field.objectClass)
-        fail("Controller manager property changed during creation");
+        fail("Das Verwaltungsfeld der Spielsteuerung wurde während der Erstellung verändert.");
     alignas(16) SetParameters assignment{controller.address,fieldName[0],fieldName[1],manager.address};
     process((void *)system.address,(void *)set.address,&assignment);
     if(pcWeak.get()!=controller || managerWeak.get()!=manager || managerFor(controller)!=manager)
-        fail("Original reflected manager assignment did not read back");
+        fail("Die Zuweisung der nativen Verwaltung konnte nicht zurückgelesen werden.");
     // The original native getter independently confirms its controller outer.
     id owning=invoke(manager,@"GetPlayerController",@{});
     if(![owning isKindOfClass:NSDictionary.class] || ![owning[@"object"] isKindOfClass:NSNumber.class] ||
        object([owning[@"object"] intValue])!=controller)
-        fail("Original manager/controller getter did not read back");
+        fail("Die native Verwaltung oder Spielsteuerung konnte nicht zurückgelesen werden.");
     return manager;
 }
 }
@@ -227,7 +227,7 @@ ManagerResult ensureCheatManager(Object controller){
             fail("Native manager owner changed after initialization");
         result.manager=manager;result.managerWeak=Weak(manager);result.ready=true;
     }catch(const std::exception &e){
-        result.reason=[NSString stringWithUTF8String:e.what()] ?: @"Native cheat manager unavailable";
+        result.reason=[NSString stringWithUTF8String:e.what()] ?: @"Die native Trainerverwaltung ist nicht verfügbar.";
     }
     return result;
 }

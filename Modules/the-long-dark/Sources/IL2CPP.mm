@@ -66,7 +66,7 @@ Method method(Class type,const char *name,int count) {
     for(unsigned depth=0;type && depth<32;depth++,type=api.parent(type)){
         void *iterator=nullptr;Method result=nullptr;
         while(Method m=api.methods(type,&iterator))if(!strcmp(api.methodName(m),name) && (int)api.parameterCount(m)==count){
-            if(result)throw std::runtime_error(std::string("Ambiguous original method: ")+name);
+            if(result)throw std::runtime_error(std::string("Ursprüngliche Methode nicht eindeutig: ")+name);
             result=m;
         }
         if(result)return result;
@@ -84,52 +84,52 @@ Object reference(Object object,const char *name){
     if(!member || api.valueType(member))return nullptr;
     Object value=nullptr;api.fieldRead(object,f,&value);return value;
 }
-bool boolean(Object object,const char *name){Field f=object ? field(api.objectClass(object),name) : nullptr;if(!f || api.typeKind(api.fieldType(f))!=2)throw std::runtime_error("Original Boolean field unavailable");bool value=false;api.fieldRead(object,f,&value);return value;}
-void boolean(Object object,const char *name,bool value){Field f=object ? field(api.objectClass(object),name) : nullptr;if(!f || api.typeKind(api.fieldType(f))!=2)throw std::runtime_error("Original Boolean field unavailable");api.fieldWrite(object,f,&value);}
+bool boolean(Object object,const char *name){Field f=object ? field(api.objectClass(object),name) : nullptr;if(!f || api.typeKind(api.fieldType(f))!=2)throw std::runtime_error("Das ursprüngliche Wahrheitswertfeld ist nicht verfügbar.");bool value=false;api.fieldRead(object,f,&value);return value;}
+void boolean(Object object,const char *name,bool value){Field f=object ? field(api.objectClass(object),name) : nullptr;if(!f || api.typeKind(api.fieldType(f))!=2)throw std::runtime_error("Das ursprüngliche Wahrheitswertfeld ist nicht verfügbar.");api.fieldWrite(object,f,&value);}
 Object call(Method m,Object target,const std::vector<Object>& args){
-    if(!m || api.parameterCount(m)!=args.size())throw std::runtime_error("Original method/argument contract unavailable");
+    if(!m || api.parameterCount(m)!=args.size())throw std::runtime_error("Die ursprüngliche Methoden- oder Argumentanbindung ist nicht verfügbar.");
     std::vector<Root> roots;roots.reserve(args.size()+1);if(target)roots.emplace_back(target);
     for(Object object:args)if(object)roots.emplace_back(object);
     Object exception=nullptr;Object result=api.invoke(m,target,const_cast<Object *>(args.data()),(int)args.size(),&exception);
-    if(exception)throw std::runtime_error("Original managed method rejected the call");return result;
+    if(exception)throw std::runtime_error("Die ursprüngliche verwaltete Methode hat den Aufruf abgelehnt.");return result;
 }
 template<class T> double decode(const void *p){T value={};memcpy(&value,p,sizeof(value));return (double)value;}
 double number(Object object){
-    if(!object)throw std::runtime_error("Native numeric result missing");
+    if(!object)throw std::runtime_error("Der native Zahlenrückgabewert fehlt.");
     Class k=api.objectClass(object);const void *type=api.enumType(k) ? api.enumBase(k) : api.classType(k);void *p=api.unbox(object);
     switch(api.typeKind(type)){
         case 2:return decode<uint8_t>(p);case 4:return decode<int8_t>(p);case 5:return decode<uint8_t>(p);
         case 6:return decode<int16_t>(p);case 7:return decode<uint16_t>(p);case 8:return decode<int32_t>(p);case 9:return decode<uint32_t>(p);
         case 10:return decode<int64_t>(p);case 11:return decode<uint64_t>(p);case 12:return decode<float>(p);case 13:return decode<double>(p);
-        default:throw std::runtime_error("Unexpected native numeric type: "+typeName(type));
+        default:throw std::runtime_error("Unerwarteter nativer Zahlentyp: "+typeName(type));
     }
 }
 template<class T> Object boxAs(Class type,double value){
     if(!std::isfinite(value) || value<(double)std::numeric_limits<T>::lowest() || value>(double)std::numeric_limits<T>::max()
-       || (std::numeric_limits<T>::is_integer && std::floor(value)!=value))throw std::runtime_error("Numeric argument outside native range");
+       || (std::numeric_limits<T>::is_integer && std::floor(value)!=value))throw std::runtime_error("Das Zahlenargument liegt außerhalb des nativen Wertebereichs.");
     T native=(T)value;return api.box(type,&native);
 }
 Object boxNumber(const void *type,double value){
     Class k=api.typeClass(type);std::string name=typeName(type);
-    if(!k)throw std::runtime_error("Original parameter class missing");
+    if(!k)throw std::runtime_error("Die ursprüngliche Parameterklasse fehlt.");
     // Reflection conversion accepts the boxed underlying value for Nullable<T>.
-    if(name.find("System.Nullable")!=std::string::npos){Field underlying=field(k,"value");if(!underlying)underlying=field(k,"value_");if(!underlying)throw std::runtime_error("Nullable layout unavailable");type=api.fieldType(underlying);k=api.typeClass(type);}
+    if(name.find("System.Nullable")!=std::string::npos){Field underlying=field(k,"value");if(!underlying)underlying=field(k,"value_");if(!underlying)throw std::runtime_error("Die Datenanordnung des optionalen Werts ist nicht verfügbar.");type=api.fieldType(underlying);k=api.typeClass(type);}
     int kind=api.typeKind(api.enumType(k) ? api.enumBase(k) : type);
     switch(kind){
-        case 2:{if(value!=0 && value!=1)throw std::runtime_error("Invalid Boolean argument");bool v=value!=0;return api.box(k,&v);}
+        case 2:{if(value!=0 && value!=1)throw std::runtime_error("Ungültiges Wahrheitswertargument.");bool v=value!=0;return api.box(k,&v);}
         case 8:return boxAs<int32_t>(k,value);case 9:return boxAs<uint32_t>(k,value);
         case 10:return boxAs<int64_t>(k,value);case 11:return boxAs<uint64_t>(k,value);
         case 12:return boxAs<float>(k,value);case 13:return boxAs<double>(k,value);
-        default:throw std::runtime_error("Unsupported original parameter type: "+name);
+        default:throw std::runtime_error("Nicht unterstützter ursprünglicher Parametertyp: "+name);
     }
 }
 Object numericCall(Method m,Object target,const std::vector<double>& values){
-    if(!m || api.parameterCount(m)!=values.size())throw std::runtime_error("Original numeric method unavailable");
+    if(!m || api.parameterCount(m)!=values.size())throw std::runtime_error("Die ursprüngliche Zahlenwertmethode ist nicht verfügbar.");
     std::vector<Root> roots;std::vector<Object> args;roots.reserve(values.size());args.reserve(values.size());
     for(size_t i=0;i<values.size();i++){roots.emplace_back(boxNumber(api.parameterType(m,(uint32_t)i),values[i]));args.push_back(roots.back().get());}
     return call(m,target,args);
 }
-double getNumber(Object object,const char *getter){if(!object)throw std::runtime_error("Missing owner for "+std::string(getter));Method m=method(api.objectClass(object),getter,0);if(!m)throw std::runtime_error("Original getter missing: "+std::string(getter)+" on "+typeName(api.classType(api.objectClass(object))));return number(call(m,object));}
+double getNumber(Object object,const char *getter){if(!object)throw std::runtime_error("Besitzer fehlt für "+std::string(getter));Method m=method(api.objectClass(object),getter,0);if(!m)throw std::runtime_error("Ursprüngliche Abfrage fehlt: "+std::string(getter)+" on "+typeName(api.classType(api.objectClass(object))));return number(call(m,object));}
 void invokeNumber(Object object,const char *name,double value,bool notify){numericCall(method(api.objectClass(object),name,2),object,{value,notify ? 1.0 : 0.0});}
 bool alive(Object object){
     if(!object)return false;Field cached=field(api.objectClass(object),"m_CachedPtr");if(!cached)return true;

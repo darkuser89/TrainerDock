@@ -21,6 +21,25 @@ die tatsächlich ermittelten `signatureIdentifier`, `signatureCDHash` und zusät
 `fileSize`, `offset`, `length` und `sha256` für den geprüften Bereich. Keine
 Signaturen erzeugen oder Schutzmechanismen verändern, um ein Profil passend zu machen.
 
+Epic-Profile können `epicAppName` und optional `epicNamespace` zur lesenden
+Installationserkennung aus Epics `.item`-Manifesten angeben. Sie sind Storekennungen,
+keine Anmeldedaten und keine Buildfreigabe. Die ursprüngliche Spielidentität wird
+weiterhin vollständig geprüft. Kandidaten werden pro Modul und Profil gespeichert;
+eine gemeinsame Bundle-ID darf Steam und Epic nicht denselben Pfad zuordnen.
+Explizit gewählte Pfade bleiben erhalten. Mehrdeutige Epic-Installationen benötigen
+eine manuelle Pfadwahl. Die Erkennung führt weder Launcher noch Spiele aus.
+Ein funktionierender authentifizierter Start muss vor der Freigabe separat belegt
+werden; allein die Erkennung macht ein Epic-Profil noch nicht startfähig.
+
+`launchMode: "epic"` verwendet den generischen Epic-Startdienst. Der Epic-Client
+muss zuvor regulär beendet sein; TrainerDock beendet ihn nicht selbst. Ein eigener
+kurzlebiger Helfer neben der Spiele-App reicht die vom Originalclient gelieferten
+Argumente unverändert an das geprüfte Originalprogramm weiter. Nur die Trainer-
+Umgebung wird ergänzt. Epics temporäre Startzuordnung wird durch ein privates
+Transaktionsjournal gesichert und anschließend exakt zurückgenommen; fremde
+Änderungen bleiben erhalten. Keine Authargumente lesen, speichern oder loggen.
+Fehler und Timeouts lösen weder Direktstarts noch automatische Wiederholungen aus.
+
 `launchMode: "executable"` startet das validierte Originalprogramm direkt, wenn
 dessen ursprünglicher Installationsordner nicht als `.app` registriert ist.
 Ohne dieses Feld verwendet TrainerDock den normalen macOS-Appstart. Beide Wege übergeben

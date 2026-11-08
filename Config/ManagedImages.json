@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "release": "managed-inputs-v1",
+  "release": "managed-inputs-v2",
   "modules": {
     "escape-from-duckov": {
       "file": "escape-from-duckov.Managed.dll",
@@ -9,8 +9,8 @@
     },
     "vampire-survivors": {
       "file": "vampire-survivors.Managed.dll",
-      "sha256": "c0ecc888782025e6dbff4d8b8f1f58f911fea9f247026c66f4445ebd14a9d126",
-      "sourceSha256": "3de9b1fa9c924a9408b2e7f1e764e11cc1a6e976d18f105198b351c31401874f"
+      "sha256": "0e24c3b9fb07aa0548032a9882d24f02459935434ae8d8644d1f6a4b5a8a0d94",
+      "sourceSha256": "cb411f3c5d4d2f946bd697cc854e036b8f734c84bb5fd81ee8994ee070bb7131"
     }
   }
 }

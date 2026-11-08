@@ -27,10 +27,10 @@ namespace MHTVampireSurvivors {
   static bool MainThread {get{return PlayerLoopHelper.IsMainThread;}}
   public static bool Bootstrap(){lock(gate){
    if(instance||scheduled)return true;
-   if(typeof(CC).Module.ModuleVersionId.ToString()!="a0f710ef-5749-41d3-acf9-dffec2421678"||
-      typeof(CC).BaseType.Module.ModuleVersionId.ToString()!="93b42865-e14c-4ce5-8022-591e2f7dff4d"||
-      typeof(PlayerLoopHelper).Module.ModuleVersionId.ToString()!="6b0d9df4-3659-4035-852e-1d51528841f6"||
-      typeof(MonoBehaviour).Module.ModuleVersionId.ToString()!="1b3ea231-962b-4662-b0df-c5487b245a2e")return false;
+   if(!Policy.SupportedBuild(typeof(CC).Module.ModuleVersionId,
+      typeof(CC).BaseType.Module.ModuleVersionId,
+      typeof(PlayerLoopHelper).Module.ModuleVersionId,
+      typeof(MonoBehaviour).Module.ModuleVersionId))return false;
    if(PlayerLoopHelper.MainThreadId==0||PlayerLoopHelper.UnitySynchronizationContext==null)return false;
    scheduled=true;try{PlayerLoopHelper.AddContinuation(PlayerLoopTiming.Update,()=>{try{
     if(!MainThread)throw new InvalidOperationException("Kein Unity-GameThread.");

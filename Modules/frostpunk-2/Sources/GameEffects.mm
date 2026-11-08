@@ -36,7 +36,7 @@ void asset(Object o,const char *nativeClass){
 Object library(NSString *nativeClass){
     Object result=utility(nativeClass);
     if(![className(result) isEqual:nativeClass] || !isDefault(result))
-        reject("Native function library CDO is unavailable");
+        reject("Das ursprüngliche Objekt der Funktionsbibliothek ist nicht verfügbar.");
     return result;
 }
 Object method(Object owner,NSString *functionName,bool mustBeStatic){
@@ -49,9 +49,9 @@ Object method(Object owner,NSString *functionName,bool mustBeStatic){
     const FPGameBinding *expected=nullptr;
     NSString *key=[@"exec." stringByAppendingString:functionName];
     for(const auto &b:FPGameBindings)if([key isEqual:@(b.name)]){expected=&b;break;}
-    if(!expected)reject("Original native exec binding is absent");
+    if(!expected)reject("Die ursprüngliche native Aufrufanbindung fehlt.");
     uintptr_t processEvent=binding("processEvent");
-    if(processEvent<UINT64_C(0x100be2e78))reject("Original image relocation unavailable");
+    if(processEvent<UINT64_C(0x100be2e78))reject("Die ursprüngliche Programmadressierung ist nicht verfügbar.");
     uintptr_t slide=processEvent-UINT64_C(0x100be2e78);
     uintptr_t exec=read<uintptr_t>(f.address+FP2FunctionNativeExecOffset);
     uint8_t bytes[16];
@@ -69,7 +69,7 @@ NSDictionary *originalArguments(Object f,NSDictionary *arguments){
                 if(matched)reject("Ambiguous native argument spelling");
                 matched=key;
             }
-        if(!matched)reject("Original native argument is missing");
+        if(!matched)reject("Ein erforderliches natives Argument fehlt.");
         result[p.name]=arguments[matched];
     }
     if(result.count!=arguments.count)reject("Unexpected native argument");
@@ -83,7 +83,7 @@ double number(id value,bool integral){
     if(![value isKindOfClass:NSNumber.class])reject("Native scalar return required");
     double n=[value doubleValue];
     if(!std::isfinite(n) || (integral && (std::floor(n)!=n || n<INT32_MIN || n>INT32_MAX)))
-        reject("Original scalar return is outside its native type");
+        reject("Der Zahlenrückgabewert liegt außerhalb seines nativen Wertebereichs.");
     return n;
 }
 double stockpile(Object lib,Object city,Object resource){
@@ -102,7 +102,7 @@ void unchanged(const Weak &context,const Weak &city,const Weak &target,
 }
 ScalarResult failure(ScalarResult result,const std::exception &e){
     result.available=false;result.writeReadbackConfirmed=false;
-    result.reason=[NSString stringWithUTF8String:e.what()] ?: @"Native effect failed";
+    result.reason=[NSString stringWithUTF8String:e.what()] ?: @"Die native Wirkung ist fehlgeschlagen.";
     return result;
 }
 }
@@ -133,7 +133,7 @@ ScalarResult setStockpileAbsolute(Object context,Object city,Object resource,int
               @"Resource":objectArgument(resource),@"Amount":@(delta)});
         result.invoked=true;
         id accepted=invoke(lib,@"TryChangeCityStockpile",arguments);
-        if(![accepted isKindOfClass:NSNumber.class])reject("Native stockpile result is not bool");
+        if(![accepted isKindOfClass:NSNumber.class])reject("Die Vorratsabfrage lieferte keinen Wahrheitswert.");
         unchanged(contextWeak,cityWeak,resourceWeak,context,city,resource);
         result.value=stockpile(lib,city,resource);
         result.writeReadbackConfirmed=[accepted boolValue] && result.value==double(value);

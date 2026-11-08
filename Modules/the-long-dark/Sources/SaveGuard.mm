@@ -44,8 +44,8 @@ bool preserve(const char *path){
 int TLDGuardedUnlink(const char *path){return preserve(path)?0:unlink(path);}
 void TLDProtectSaves(const std::vector<std::string>& paths,uintptr_t healthAddress,uintptr_t modeAddress,int deadMode){
  std::vector<std::string> safe;
- for(auto &path:paths){auto file=canonical(path.c_str());if(file.empty() || file=="/" || file.size()<8)throw std::runtime_error("Invalid original save path");if(std::find(safe.begin(),safe.end(),file)==safe.end())safe.push_back(file);}
- if(safe.empty() || safe.size()>32 || !healthAddress)throw std::runtime_error("Original save guard scope missing");
+ for(auto &path:paths){auto file=canonical(path.c_str());if(file.empty() || file=="/" || file.size()<8)throw std::runtime_error("Ungültiger ursprünglicher Spielstandpfad.");if(std::find(safe.begin(),safe.end(),file)==safe.end())safe.push_back(file);}
+ if(safe.empty() || safe.size()>32 || !healthAddress)throw std::runtime_error("Der ursprüngliche Bereich des Spielstandschutzes fehlt.");
  std::lock_guard<std::mutex> lock(mutex());auto &p=protection();
  if(p.paths!=safe || p.health!=healthAddress){p={std::move(safe),healthAddress,modeAddress,deadMode,false,0};}
 }

@@ -4,7 +4,7 @@
 _Static_assert(MTFeatureCount>0 && MTFeatureCount<=30,"Overlay supports 1 through 30 catalog entries.");
 static const MTFeatureInfo catalog[MTFeatureCount]={
  {@"Kein Gesundheitsschaden",@"F1",@"TakeNoDamage: nativer Schalter. Kein Schutzversprechen gegen alle Todesursachen; Wirkung ungeprüft.",YES,NO,NO,NO,0,0,0,0,122,0},
- {@"Unbegrenzte Ausdauer",@"F2",@"InfiniteStamina: nativer Schalter; Wirkung im Spiel noch ungeprüft.",YES,NO,NO,NO,0,0,0,0,120,0},
+ {@"Unbegrenzte Ausdauer",@"F2",@"Nativer Ausdauerschalter; Wirkung im Spiel noch ungeprüft.",YES,NO,NO,NO,0,0,0,0,120,0},
  {@"Lebenserhaltung ohne Verbrauch",@"F3",@"UseEnergy deaktivieren; Originalwert wird beim Ausschalten zurückgegeben.",YES,NO,NO,NO,0,0,0,0,99,0},
  {@"Sprintfaktor",@"F4",@"Nativer SprintMultiplier. Zahlenwert ist der absolute Faktor, keine Spielgeschwindigkeit.",YES,YES,NO,NO,2,0.25,4,0.25,118,0},
  {@"Units hinzufügen",@"F5",@"Einmal AwardUnits mit Rückleseprüfung. Diese Gabe kann im Spielstand gespeichert werden.",YES,YES,YES,YES,1000,0,999999999,1000,96,0},
@@ -18,7 +18,7 @@ static const MTFeatureInfo catalog[MTFeatureCount]={
  {@"Kein Nachladen",@"⌥F4",@"Magazin der aktuell geführten Waffe mit nativer SetAmmo-Funktion auffüllen.",YES,NO,NO,NO,0,0,0,0,118,2},
  {@"Unbegrenzte Granaten",@"⌥F5",@"Vorhandene Granaten-Technologien nativ aufladen; keine Ausrüstung erzeugen.",YES,NO,NO,NO,0,0,0,0,96,2},
  {@"Unbegrenzte Gegenstände",@"⌥F6",@"Vorhandene Ressourcen und Produkte bis zur zulässigen Stapelgröße auffüllen. Kann gespeichert werden.",YES,NO,NO,NO,0,0,0,0,97,2},
- {@"Herstellen ohne Material",@"⌥F7",@"Native CraftingIsFree-Freigabe. Bekannte Rezepte bleiben erforderlich.",YES,NO,NO,NO,0,0,0,0,98,2},
+ {@"Herstellen ohne Material",@"⌥F7",@"Native Freigabe zum kostenlosen Herstellen. Bekannte Rezepte bleiben erforderlich.",YES,NO,NO,NO,0,0,0,0,98,2},
  {@"Extremer Schaden",@"⌥F8",@"Nativer Schalter SuperKillGuns; genaue Wirkung noch ungeprüft.",YES,NO,NO,NO,0,0,0,0,100,2},
  {@"Raumschiff: Gesundheit",@"⌥F9",@"Gesundheit des aktuellen eigenen Schiffs auf das native Maximum auffüllen.",YES,NO,NO,NO,0,0,0,0,101,2},
  {@"Raumschiff: Schild",@"⌥F10",@"Vorhandenen Schild des eigenen Schiffs über native Inventar-Handles auffüllen.",YES,NO,NO,NO,0,0,0,0,109,2},

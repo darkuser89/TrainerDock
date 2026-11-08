@@ -2,6 +2,7 @@
 #import "MHTApp.h"
 #import "MHTModule.h"
 #import "MHTDiscovery.h"
+#import "MHTEpicLaunch.h"
 #import "MHTProtocol.h"
 #import "GameIdentity.h"
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
@@ -62,6 +63,7 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
 @property(nonatomic) NSOperationQueue *inspectionQueue,*discoveryQueue;
 @property(nonatomic) NSUInteger inspectionGeneration;
 @property(nonatomic) MHTUpdater *updater;
+@property(nonatomic) MHTEpicLaunchService *epicLauncher;
 @end
 @implementation MHTApp
 - (NSDictionary *)profile {return self.profiles.indexOfSelectedItem>=0 && self.profiles.indexOfSelectedItem<(NSInteger)self.selected.profiles.count ? self.selected.profiles[self.profiles.indexOfSelectedItem] : self.selected.profiles.firstObject;}
@@ -69,6 +71,8 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
 - (BOOL)live:(MHTSession *)s{return s.running && s.receivedAt>0 && NSDate.date.timeIntervalSince1970-s.receivedAt<2.5;}
 - (void)applicationDidFinishLaunching:(NSNotification *)notification {
     (void)notification;MHTInstallMenus(self);self.sessions=[NSMutableDictionary new];NSMutableArray *errors=[NSMutableArray new];
+    self.epicLauncher=[[MHTEpicLaunchService alloc]initWithBrokerURL:[NSBundle.mainBundle.executableURL.URLByDeletingLastPathComponent URLByAppendingPathComponent:@"TrainerDockEpicBroker"]];
+    if(!self.smokeTest){NSError *recoveryError=nil;if(![self.epicLauncher recoverPendingTransactions:&recoveryError] && recoveryError)[errors addObject:recoveryError.localizedDescription];}
     self.modules=[MHTModule availableModules:errors];
     if(!self.smokeTest){
         __weak MHTApp *weakApp=self;
@@ -212,7 +216,7 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
             row.value=[[NSTextField alloc]initWithFrame:NSZeroRect];row.value.font=[NSFont monospacedDigitSystemFontOfSize:12 weight:NSFontWeightMedium];row.value.alignment=NSTextAlignmentRight;row.value.tag=i;row.value.target=self;row.value.action=@selector(valueChanged:);row.value.controlSize=NSControlSizeSmall;row.value.bezelStyle=NSTextFieldRoundedBezel;
             NSNumberFormatter *formatter=[NSNumberFormatter new];formatter.numberStyle=NSNumberFormatterDecimalStyle;formatter.locale=NSLocale.currentLocale;formatter.maximumFractionDigits=[f[@"integer"] boolValue] ? 0 : 6;formatter.allowsFloats=![f[@"integer"] boolValue];formatter.lenient=NO;row.value.formatter=formatter;
             row.value.doubleValue=[selection[[f[@"id"] stringValue]][@"value"] doubleValue];row.value.accessibilityLabel=[f[@"title"] stringByAppendingString:@" – Wert"];
-            row.value.toolTip=[NSString stringWithFormat:@"%@ bis %@ · Enter übernimmt",f[@"minimum"],f[@"maximum"]];
+            row.value.toolTip=[NSString stringWithFormat:@"%@ bis %@ · Eingabe übernimmt",f[@"minimum"],f[@"maximum"]];
             row.stepper=[NSStepper new];row.stepper.minValue=[f[@"minimum"] doubleValue];row.stepper.maxValue=[f[@"maximum"] doubleValue];row.stepper.increment=MAX(0.000001,[f[@"step"] doubleValue]);row.stepper.doubleValue=row.value.doubleValue;row.stepper.valueWraps=NO;row.stepper.controlSize=NSControlSizeSmall;row.stepper.tag=i;row.stepper.target=self;row.stepper.action=@selector(stepValue:);row.stepper.accessibilityLabel=[f[@"title"] stringByAppendingString:@" – Wert ändern"];
             NSStackView *editor=MHTStack(@[row.value,row.stepper],NO,5);MHTFill(editor,valueSlot,0);
         }
@@ -235,7 +239,7 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
         [self.featureList addArrangedSubview:section];[section.widthAnchor constraintEqualToAnchor:self.featureList.widthAnchor].active=YES;[self.groups addObject:section];
     }
     self.status=MHTLabel(@"",11,NSFontWeightRegular);self.status.textColor=NSColor.secondaryLabelColor;
-    self.showOverlay=button(@"Overlay öffnen",self,@selector(showOverlay:));self.showOverlay.controlSize=NSControlSizeSmall;self.showOverlay.image=[NSImage imageWithSystemSymbolName:@"rectangle.on.rectangle" accessibilityDescription:nil];self.showOverlay.imagePosition=NSImageLeading;
+    self.showOverlay=button(@"Trainer öffnen",self,@selector(showOverlay:));self.showOverlay.controlSize=NSControlSizeSmall;self.showOverlay.image=[NSImage imageWithSystemSymbolName:@"rectangle.on.rectangle" accessibilityDescription:nil];self.showOverlay.imagePosition=NSImageLeading;
     self.allOff=button(@"Alles aus",self,@selector(disableAll:));self.allOff.controlSize=NSControlSizeSmall;
     NSStackView *footer=MHTStack(@[self.status,MHTSpacer(),self.showOverlay,self.allOff],NO,12);[self.detail addArrangedSubview:footer];[footer.widthAnchor constraintEqualToAnchor:self.detail.widthAnchor].active=YES;[self.status setContentCompressionResistancePriority:249 forOrientation:NSLayoutConstraintOrientationHorizontal];
     [self refreshInstallation];[self updateRows];
@@ -291,7 +295,7 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
             if(!app || work.cancelled || generation!=app.inspectionGeneration || app.selected!=module || ![app.profile isEqual:profile])return;
             BOOL nowRunning=app.session.running || app.session.launching || [NSRunningApplication runningApplicationsWithBundleIdentifier:profile[@"bundleIdentifier"]].count>0;
             app.start.enabled=game && !nowRunning;
-            app.status.stringValue=nowRunning ? @"Spiel läuft. Warte auf die Trainerverbindung …" : game ? @"Bereit · geprüfter Spiel-Build. ⌘ ^ öffnet das Overlay im Spiel." : error.localizedDescription ?: @"Bitte Spielpfad wählen.";
+            app.status.stringValue=nowRunning ? @"Spiel läuft. Warte auf die Trainerverbindung …" : game ? @"Bereit · geprüfter Spiel-Build. ⌘ ^ öffnet den Trainer im Spiel." : error.localizedDescription ?: @"Bitte Spielpfad wählen.";
         });
     }}];[self.inspectionQueue addOperation:operation];
 }
@@ -323,6 +327,16 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
     if(![NSFileManager.defaultManager isReadableFileAtPath:module.runtimePath]){self.status.stringValue=@"Die Trainerbibliothek fehlt. Bitte TrainerDock neu bauen.";return;}
     MHTSession *session=[MHTSession new];session.token=NSUUID.UUID.UUIDString;session.profile=profile;session.launching=YES;session.startedAt=NSDate.date.timeIntervalSince1970;
     NSMutableDictionary *options=[module.settings mutableCopy];options[@"visible"]=@NO;session.options=options;self.sessions[module.identifier]=session;
+    if([profile[@"launchMode"] isEqual:@"epic"]){
+        [self refreshInstallation];
+        [self.epicLauncher launchGame:game profile:profile environment:[module environmentForGame:game profile:profile session:session.token] completion:^(NSRunningApplication *app,NSError *failure){
+            if(self.sessions[module.identifier]!=session)return;
+            session.launching=NO;session.app=app;session.startedAt=NSDate.date.timeIntervalSince1970;
+            if(!app){[self.sessions removeObjectForKey:module.identifier];if(self.selected==module){[self refreshInstallation];self.status.stringValue=failure.localizedDescription ?: @"Epic-Spielstart fehlgeschlagen.";}}
+            else if(self.selected==module){[self refreshInstallation];if(failure)self.status.stringValue=failure.localizedDescription;}
+        }];
+        return;
+    }
     if([profile[@"launchMode"] isEqual:@"executable"]){
         NSTask *task=[NSTask new];task.executableURL=[NSURL fileURLWithPath:game[@"executable"]];task.currentDirectoryURL=[NSURL fileURLWithPath:game[@"workingDirectory"] ?: game[@"path"]];
         NSMutableDictionary *environment=[NSProcessInfo.processInfo.environment mutableCopy];[environment addEntriesFromDictionary:[module environmentForGame:game profile:profile session:session.token]];task.environment=environment;
@@ -448,5 +462,5 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
     return YES;
 }
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)application hasVisibleWindows:(BOOL)visible{(void)application;if(!visible)[self.window makeKeyAndOrderFront:nil];return YES;}
-- (void)applicationWillTerminate:(NSNotification *)notification{(void)notification;[self.timer invalidate];[self.inspectionQueue cancelAllOperations];[self.discoveryQueue cancelAllOperations];if(self.stateObserver)[NSDistributedNotificationCenter.defaultCenter removeObserver:self.stateObserver];}
+- (void)applicationWillTerminate:(NSNotification *)notification{(void)notification;[self.epicLauncher cancelPendingLaunch];[self.timer invalidate];[self.inspectionQueue cancelAllOperations];[self.discoveryQueue cancelAllOperations];if(self.stateObserver)[NSDistributedNotificationCenter.defaultCenter removeObserver:self.stateObserver];}
 @end

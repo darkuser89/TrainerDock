@@ -328,7 +328,7 @@ static NSNumber *CPInteger(NSData *data){int32_t value=0;if(data.length!=4)retur
             NSDictionary *give=[self binding:@"gameTransactionSystem" method:@"GiveItemByTDBID" params:@[@"handle:gameObject",@"TweakDBID",@"Int32"] result:@"Bool" script:NO];
             NSDictionary *remove=[self binding:@"gameTransactionSystem" method:@"RemoveItem" params:@[@"handle:gameObject",@"gameItemID",@"Int32"] result:@"Bool" script:NO];
             if(!CPPointer(system) || !CPPointer(player) || !from || !quantity || !give || !remove)return @"Native Geldbindung fehlt.";
-            uint64_t id=CPTweakID(@"Items.money");NSData *item=[self call:from context:0 args:@[CPValue(&id,8)] size:16];if(item.length!=16)return @"Geld-ItemID nicht bestätigt.";
+            uint64_t id=CPTweakID(@"Items.money");NSData *item=[self call:from context:0 args:@[CPValue(&id,8)] size:16];if(item.length!=16)return @"Geldgegenstandskennung nicht bestätigt.";
             NSNumber *before=CPInteger([self call:quantity context:CPPointer(system) args:@[player,item] size:4]);if(!before || before.intValue<0)return @"Geldmenge nicht lesbar.";
             int32_t target=(int32_t)llround(value),delta=abs(target-before.intValue);
             if(delta){
@@ -419,7 +419,7 @@ static NSNumber *CPInteger(NSData *data){int32_t value=0;if(data.length!=4)retur
                 } @finally {[_native destroyValue:itemData type:@"handle:gameItemData"];}
             }
         }
-        if(!baseline.count){state.available=YES;state.note=@"Warte auf vorhandene verbrauchbare Items.";return state;}
+        if(!baseline.count){state.available=YES;state.note=@"Warte auf vorhandene verbrauchbare Gegenstände.";return state;}
         BOOL confirmed=YES;NSUInteger refills=0;
         for(NSDictionary *entry in baseline.allValues){
             NSNumber *current=CPInteger([self call:qty context:CPPointer(system) args:@[player,entry[@"item"]] size:4]);
@@ -536,17 +536,17 @@ static NSNumber *CPInteger(NSData *data){int32_t value=0;if(data.length!=4)retur
 - (MTFeatureState *)progressionFeature:(MTFeature)feature wanted:(BOOL)wanted value:(double)value {
     MTFeatureState *state=[MTFeatureState new];state.wanted=wanted;state.value=value;
     if(wanted)_progressOptions[@(feature)]=@(MTFeatureInfoAt(feature)->numeric ? value : 1);else {[_progressOptions removeObjectForKey:@(feature)];[_progressReadback removeObjectForKey:@(feature)];}
-    if(!_progressOptions.count){[_native clearProgression];state.available=YES;state.note=@"Eigene XP-Regeln aus.";return state;}
+    if(!_progressOptions.count){[_native clearProgression];state.available=YES;state.note=@"Eigene EP-Regeln aus.";return state;}
     NSData *development=[self development];
     @try {
         NSDictionary *binding=[self binding:@"PlayerDevelopmentData" method:@"AddExperience" params:@[@"Int32",@"gamedataProficiencyType",@"telemetryLevelGainReason",@"Bool"] result:@"Void" script:YES];
-        if(!CPPointer(development) || !binding || ![_native configureProgressionOwner:development binding:binding settings:[self progressionSettings]]){state.note=@"Lokale XP-Zustellung nicht bestätigt.";return state;}
-        state.available=YES;if(!wanted){state.note=@"Eigene XP-Regel aus.";return state;}
+        if(!CPPointer(development) || !binding || ![_native configureProgressionOwner:development binding:binding settings:[self progressionSettings]]){state.note=@"Lokale EP-Zustellung nicht bestätigt.";return state;}
+        state.available=YES;if(!wanted){state.note=@"Eigene EP-Regel aus.";return state;}
         int group=feature==MTFeatureStreetCred || feature==MTFeatureStreetCredMultiplier ? 1 : feature==MTFeatureSkillXP || feature==MTFeatureSkillXPMultiplier ? 2 : 0;
         NSDictionary *observation=[_native progressionObservation];
         BOOL maximum=feature==MTFeatureXP || feature==MTFeatureStreetCred || feature==MTFeatureSkillXP;
         state.active=[observation[@"counts"][group] unsignedLongLongValue]>0 && (maximum ? [observation[@"maximum"][group] boolValue] : [observation[@"verified"][group] boolValue]);
-        state.note=state.active ? [NSString stringWithFormat:@"XP nativ bestätigt: %@ → %@; eigene Regel.",observation[@"before"][group],observation[@"after"][group]] : @"Eigene Regel gebunden; wartet auf eine bestätigte XP-Vergabe.";return state;
+        state.note=state.active ? [NSString stringWithFormat:@"EP nativ bestätigt: %@ → %@; eigene Regel.",observation[@"before"][group],observation[@"after"][group]] : @"Eigene Regel gebunden; wartet auf eine bestätigte EP-Vergabe.";return state;
     } @finally {[_native destroyValue:development type:@"handle:PlayerDevelopmentData"];}
 }
 

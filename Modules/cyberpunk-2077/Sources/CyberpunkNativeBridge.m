@@ -111,32 +111,32 @@ static void observeInvocation25(void *context,void *frame,void *result,void *typ
 - (BOOL)install:(NSError **)error {
     if(_attached){
         if(atomic_load((_Atomic(uintptr_t) *)_slot)==_replacement)return YES;
-        fail(error,@"Native observer was replaced; refusing to overwrite another owner.");return NO;
+        fail(error,@"Der native Beobachter wurde ersetzt; ein fremder Besitzer wird nicht überschrieben.");return NO;
     }
-    if(installed && installed!=self){fail(error,@"A native observer already owns this process.");return NO;}
+    if(installed && installed!=self){fail(error,@"Ein nativer Beobachter ist bereits für diesen Prozess zuständig.");return NO;}
     for(uint32_t i=0;i<_dyld_image_count();i++){
         const struct mach_header_64 *h=(const void *)_dyld_get_image_header(i);
         if(h && h->magic==MH_MAGIC_64 && h->filetype==MH_EXECUTE)_image=h;
     }
     NSDictionary *identity=MTReadExecutableIdentity(NSBundle.mainBundle.executablePath);
     if(![NSBundle.mainBundle.bundleIdentifier isEqual:@"com.cdprojektred.cyberpunk.steam"]
-       || ![identity[@"uuid"] isEqual:@"7D7382D0-EADD-36F0-BA1C-CEBEC1D5BEBC"]){fail(error,@"Exact Cyberpunk process required.");return NO;}
+       || ![identity[@"uuid"] isEqual:@"7D7382D0-EADD-36F0-BA1C-CEBEC1D5BEBC"]){fail(error,@"Der exakt geprüfte Cyberpunk-Spielprozess ist erforderlich.");return NO;}
     NSDictionary *binding=[self resolveClass:@"PlayerPuppet" method:@"GetGame" parameters:@[] result:@"ScriptGameInstance"];
     if(!binding || [binding[@"registrationIndex"] unsignedIntValue]!=1396
-       || ![binding[@"nativeHandlerOffset"] isEqual:@"0x16ec9c0"]){fail(error,@"GetGame binding differs from the inspected build.");return NO;}
+       || ![binding[@"nativeHandlerOffset"] isEqual:@"0x16ec9c0"]){fail(error,@"Die Spielanbindung weicht vom geprüften Build ab.");return NO;}
     _dispatchPlayerSystem=[self resolveClass:@"ScriptGameInstance" method:@"GetPlayerSystem" parameters:@[@"ScriptGameInstance"] result:@"handle:cpPlayerSystem"];
     _dispatchLocalPlayer=[self resolveClass:@"cpPlayerSystem" method:@"GetLocalPlayerControlledGameObject" parameters:@[] result:@"handle:gameObject"];
-    if(!_dispatchPlayerSystem || !_dispatchLocalPlayer){fail(error,@"Authoritative local-player dispatch getters unavailable.");return NO;}
+    if(!_dispatchPlayerSystem || !_dispatchLocalPlayer){fail(error,@"Die geprüfte Anbindung des lokalen Spielers ist nicht verfügbar.");return NO;}
     // Independently inspected native dispatcher: two 64-bit words per member
     // function entry. No executable page or protection flag is changed.
     uint32_t words[3]={0};const uint32_t expected[]={0xf0044a08,0x91250108,0x8b205108};
-    if(!readable((uintptr_t)_image+0x1099c8c,words,sizeof(words)) || memcmp(words,expected,sizeof(words))){fail(error,@"Native dispatcher changed.");return NO;}
+    if(!readable((uintptr_t)_image+0x1099c8c,words,sizeof(words)) || memcmp(words,expected,sizeof(words))){fail(error,@"Die native Aufrufanbindung wurde verändert.");return NO;}
     _slot=[binding[@"slot"] unsignedLongLongValue];_replacement=(uintptr_t)observeGetGame;
-    if((_slot&15) || !writableData(_slot,16)){fail(error,@"Native slot is not writable data.");return NO;}
+    if((_slot&15) || !writableData(_slot,16)){fail(error,@"Der native Datenbereich ist nicht beschreibbar.");return NO;}
     uintptr_t expectedHandler=[binding[@"handler"] unsignedLongLongValue];
     atomic_store(&original,(CPHandler)expectedHandler);installed=self;
     if(!atomic_compare_exchange_strong((_Atomic(uintptr_t) *)_slot,&expectedHandler,_replacement)){
-        fail(error,@"Native slot changed concurrently; no observer installed.");return NO;
+        fail(error,@"Die native Anbindung wurde gleichzeitig verändert; kein Beobachter eingerichtet.");return NO;
     }
     _attached=YES;return YES;
 }
@@ -206,11 +206,11 @@ static void prepareFrame(uint8_t *frame,uintptr_t image,uintptr_t context,void *
 - (NSData *)invokeScript:(NSDictionary *)binding context:(uintptr_t)context arguments:(NSArray<NSData *> *)arguments resultSize:(NSUInteger)size error:(NSError **)error {
     if(scope!=self || !_attached || !binding[@"function"] || [binding[@"native"] boolValue]
        || arguments.count>8 || [binding[@"properties"] count]!=arguments.count || size!=valueSize(binding[@"returnType"]))
-        return fail(error,@"Script call requires a validated engine scope and typed signature.");
+        return fail(error,@"Der Skriptaufruf benötigt einen bestätigten Engine-Kontext und passende Parametertypen.");
     uintptr_t opcode=0;uint32_t fingerprint[3]={0};const uint32_t expected[]={0xd101c3ff,0xa9016ffc,0xa90267fa};
     if(!readable((uintptr_t)_image+0x9a5c940+0x24*8,&opcode,8) || (opcode!=(uintptr_t)_image+0x12011e4 && opcode!=(uintptr_t)observeInvocation24)
        || !readable((uintptr_t)_image+0x12011e4,fingerprint,sizeof(fingerprint)) || memcmp(fingerprint,expected,sizeof(fingerprint)))
-        return fail(error,@"Exact native script dispatcher fingerprint required.");
+        return fail(error,@"Die exakte native Skriptanbindung muss bestätigt sein.");
     uint8_t locals[8*32]={0},properties[8][0x30]={0},code[14+8*9+1]={0},frame[0xa8]={0};
     uintptr_t function=[binding[@"function"] unsignedLongLongValue];memcpy(code+4,&function,8);
     uint16_t flags=0; // Local arguments are lvalues; the VM must not steal their handles.
@@ -219,7 +219,7 @@ static void prepareFrame(uint8_t *frame,uintptr_t image,uintptr_t context,void *
         NSData *value=arguments[i];uintptr_t type=0;
         if(value.length!=valueSize(binding[@"parameterTypes"][i]) || value.length>32
            || !readable([binding[@"properties"][i] unsignedLongLongValue],&type,8) || !type)
-            return fail(error,@"Unsupported script argument shape.");
+            return fail(error,@"Nicht unterstütztes Format eines Skriptarguments.");
         memcpy(locals+i*32,value.bytes,value.length);memcpy(properties[i],&type,8);
         uint32_t offset=(uint32_t)i*32;memcpy(properties[i]+0x20,&offset,4);
         code[cursor++]=0x18;uintptr_t property=(uintptr_t)properties[i];memcpy(code+cursor,&property,8);cursor+=8;
@@ -232,7 +232,7 @@ static void prepareFrame(uint8_t *frame,uintptr_t image,uintptr_t context,void *
     return output;
 }
 - (NSData *)createInstance:(NSString *)className error:(NSError **)error {
-    if(scope!=self || !_attached)return fail(error,@"Instance creation requires the active engine callback.");
+    if(scope!=self || !_attached)return fail(error,@"Die Objekterstellung benötigt den aktiven Engine-Rückruf.");
     NSDictionary *schema=CPReadTypeSchema(_image,className);uint32_t flags=[schema[@"flags"] unsignedIntValue];
     uintptr_t cls=CPFindNativeType(_image,className),opcode=0;uint32_t words[3]={0};
     const uint32_t expected[]={0xd10183ff,0xa90357f6,0xa9044ff4};
@@ -241,13 +241,13 @@ static void prepareFrame(uint8_t *frame,uintptr_t image,uintptr_t context,void *
        || !CPNativeClassIsA(_image,className,@"IScriptable") || ![self supportsHandleClass:@"IScriptable" weak:NO]
        || !readable((uintptr_t)_image+0x9a5c940+0x30*8,&opcode,8) || opcode!=(uintptr_t)_image+0x1202fdc
        || !readable(opcode,words,sizeof(words)) || memcmp(words,expected,sizeof(words)))
-        return fail(error,@"Native constructible class/dispatcher validation failed.");
+        return fail(error,@"Prüfung der nativen Klasse oder Aufrufanbindung fehlgeschlagen.");
     uint8_t frame[0xa8]={0};prepareFrame(frame,(uintptr_t)_image,callbackContext,&cls,NULL);
     NSMutableData *result=[NSMutableData dataWithLength:16];
     @try {((CPHandler)opcode)((void *)callbackContext,frame,result.mutableBytes,NULL);}
     @finally {((void (*)(void *))((uintptr_t)_image+0x11ab310))(frame);}
     uintptr_t instance=0;memcpy(&instance,result.bytes,8);
-    return instance ? result : fail(error,@"Native instance allocation returned no handle.");
+    return instance ? result : fail(error,@"Die native Objekterstellung lieferte keine gültige Referenz.");
 }
 - (BOOL)writeScalarProperty:(NSString *)property className:(NSString *)className object:(NSData *)object type:(NSString *)typeName value:(NSData *)value {
     if(scope!=self || object.length!=16 || value.length!=valueSize(typeName) || value.length>8)return NO;
@@ -264,12 +264,12 @@ static void prepareFrame(uint8_t *frame,uintptr_t image,uintptr_t context,void *
     }return NO;
 }
 - (NSData *)invoke:(NSDictionary *)binding context:(uintptr_t)context arguments:(NSArray<NSData *> *)arguments resultSize:(NSUInteger)resultSize error:(NSError **)error {
-    if(scope!=self || !_attached)return fail(error,@"Native calls require the active engine callback.");
+    if(scope!=self || !_attached)return fail(error,@"Native Aufrufe benötigen den aktiven Engine-Rückruf.");
     NSArray *properties=binding[@"properties"];
     if(![binding[@"native"] boolValue] || properties.count!=arguments.count || arguments.count>8 || !resultSize || resultSize!=valueSize(binding[@"returnType"]))
-        return fail(error,@"Invalid native call shape.");
+        return fail(error,@"Ungültiges Format des nativen Aufrufs.");
     uintptr_t handler=[binding[@"handler"] unsignedLongLongValue];
-    if(handler<(uintptr_t)_image || handler>=(uintptr_t)_image+0x7758000)return fail(error,@"Foreign native handler rejected.");
+    if(handler<(uintptr_t)_image || handler>=(uintptr_t)_image+0x7758000)return fail(error,@"Ein fremder nativer Aufruf wurde abgelehnt.");
     // ScriptGameInstance is 24 bytes in this build; 128-byte argument slots keep
     // it intact. Never use the 16-byte generic result buffer seen in older tools.
     uint8_t locals[8*128]={0},props[8][0x30]={0},code[8*9+1]={0},frame[0xa8]={0};
@@ -277,9 +277,9 @@ static void prepareFrame(uint8_t *frame,uintptr_t image,uintptr_t context,void *
     for(NSUInteger i=0;i<arguments.count;i++){
         NSData *argument=arguments[i];uintptr_t type=0;
         if(![argument isKindOfClass:NSData.class] || !argument.length || argument.length!=valueSize(binding[@"parameterTypes"][i])
-           || argument.length>128 || !readable([properties[i] unsignedLongLongValue],&type,8) || !type)return fail(error,@"Invalid typed argument.");
+           || argument.length>128 || !readable([properties[i] unsignedLongLongValue],&type,8) || !type)return fail(error,@"Ungültiges typisiertes Argument.");
         uint64_t flags=0;
-        if(!readable([properties[i] unsignedLongLongValue]+0x28,&flags,8) || ((flags&(1ull<<9)) && ![argument isKindOfClass:NSMutableData.class]))return fail(error,@"Out parameter requires owned mutable typed storage.");
+        if(!readable([properties[i] unsignedLongLongValue]+0x28,&flags,8) || ((flags&(1ull<<9)) && ![argument isKindOfClass:NSMutableData.class]))return fail(error,@"Der Ausgabeparameter benötigt eigenen beschreibbaren typisierten Speicher.");
         memcpy(locals+i*128,argument.bytes,argument.length);memcpy(props[i],&type,8);
         uint32_t offset=(uint32_t)i*128;memcpy(props[i]+0x20,&offset,4);
         code[cursor++]=0x18;uintptr_t property=(uintptr_t)props[i];memcpy(code+cursor,&property,8);cursor+=8;

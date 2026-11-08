@@ -28,21 +28,21 @@ const Binding bindings[]={
 };
 [[noreturn]]void fail(const char *message){throw std::runtime_error(message);}
 void thread(){if(!isBound() || !isGameThread())fail("Original GameThread required for native relation lease");}
-uintptr_t slide(){uintptr_t p=binding("processEvent");if(p<UINT64_C(0x100be2e78))fail("Original image relocation unavailable");return p-UINT64_C(0x100be2e78);}
+uintptr_t slide(){uintptr_t p=binding("processEvent");if(p<UINT64_C(0x100be2e78))fail("Die ursprüngliche Programmadressierung ist nicht verfügbar.");return p-UINT64_C(0x100be2e78);}
 void verifyBindings(){thread();uintptr_t s=slide();for(const auto &b:bindings){uint8_t bytes[16];if(!read(b.address+s,bytes,16)||memcmp(bytes,b.bytes,16))fail("Original trust config/getter instructions differ");}}
 Object checked(uintptr_t p){if(!p)return {};Object o=object(read<int32_t>(p+FP2ObjectInternalIndexOffset));if(o.address!=p)fail("Stale original trust pointer");return o;}
 void real(Object o){Weak w(o);if(!o || w.get()!=o || (read<uint32_t>(o.address+8)&0x18030))fail("Live original trust owner required");}
 void context(const Context &c){
     if(!c.ready || c.playerWeak.get()!=c.localPlayer || c.controllerWeak.get()!=c.controller ||
        c.worldWeak.get()!=c.world || c.cityWeak.get()!=c.city || c.nationWeak.get()!=c.nation)
-        fail("Current local trust context expired");
-    if(linkedObject(c.city,@"Nation")!=c.nation)fail("Selected city's nation changed");
+        fail("Der aktuelle lokale Vertrauenskontext ist nicht mehr gültig.");
+    if(linkedObject(c.city,@"Nation")!=c.nation)fail("Die Nation der ausgewählten Stadt hat gewechselt.");
 }
 Object decode(id v){if(![v isKindOfClass:NSDictionary.class] || ![v[@"object"] isKindOfClass:NSNumber.class])fail("Original trust getter returned no object");return object([v[@"object"] intValue]);}
 NSDictionary *arg(Object o){real(o);return @{@"object":@(read<int32_t>(o.address+FP2ObjectInternalIndexOffset))};}
 Object method(Object cdo,NSString *name,uintptr_t expectedExec,const uint8_t *bytes){
     Object f=function(cdo,name);uint32_t flags=read<uint32_t>(f.address+FP2FunctionFlagsOffset);
-    if((flags&0x2400)!=0x2400)fail("Trust utility is not an original static native function");
+    if((flags&0x2400)!=0x2400)fail("Die Vertrauensfunktion ist keine ursprüngliche statische native Funktion.");
     uintptr_t exec=read<uintptr_t>(f.address+FP2FunctionNativeExecOffset);uint8_t actual[16];
     if(exec!=expectedExec+slide() || !read(exec,actual,16) || memcmp(actual,bytes,16))
         fail("Original static trust getter exec differs");
@@ -52,7 +52,7 @@ Object config(){
     Object cdo=utility(@"PXGameplayUtils");
     method(cdo,@"GetTrustConfig",bindings[0].address,bindings[0].bytes);
     Object result=decode(invoke(cdo,@"GetTrustConfig",@{}));real(result);
-    if(![className(result) isEqual:@"PXTrustConfig"])fail("Original trust config has an unexpected native class");
+    if(![className(result) isEqual:@"PXTrustConfig"])fail("Die ursprüngliche Vertrauenskonfiguration hat einen unerwarteten Objekttyp.");
     return result;
 }
 Property floatProperty(Object o,NSString *name,int32_t offset){
@@ -63,7 +63,7 @@ Property floatProperty(Object o,NSString *name,int32_t offset){
 }
 float value(Object o,const Property &p){
     id result=readValue(o,p);
-    if(![result isKindOfClass:NSNumber.class] || !std::isfinite([result doubleValue]))fail("Original trust bound is not finite");
+    if(![result isKindOfClass:NSNumber.class] || !std::isfinite([result doubleValue]))fail("Die ursprüngliche Vertrauensgrenze ist kein endlicher Zahlenwert.");
     return [result floatValue];
 }
 uint32_t bits(float value){uint32_t result;memcpy(&result,&value,4);return result;}
@@ -74,7 +74,7 @@ Object trustSubsystem(const Context &c){
         fail("Original trust subsystem class differs");
     Object owner=checked((uintptr_t)((Lookup)(UINT64_C(0x103ddc2b4)+slide()))((void *)(c.world.address+0x880),(void *)cls.address));real(owner);
     if(objectClass(owner)!=cls || checked(read<uintptr_t>(owner.address+FP2ObjectOuterOffset))!=c.world)
-        fail("Trust subsystem is outside the current World's collection");
+        fail("Die Vertrauensverwaltung gehört nicht zur aktuellen Spielwelt.");
     return owner;
 }
 float standing(const Context &c,Object community){
@@ -85,11 +85,11 @@ float standing(const Context &c,Object community){
     NSDictionary *input=@{@"worldcontextobject":arg(c.controller),@"nation":arg(c.nation),@"community":arg(community)};
     NSMutableDictionary *arguments=[NSMutableDictionary new];
     for(const Property &p:properties(fn))if(!(p.flags&0x400)){
-        id v=input[p.name.lowercaseString];if(!v)fail("Unexpected native standing argument");arguments[p.name]=v;
+        id v=input[p.name.lowercaseString];if(!v)fail("Unerwartetes natives Beziehungsargument.");arguments[p.name]=v;
     }
     if(arguments.count!=3)fail("Original standing argument count differs");
     id result=invoke(cdo,@"GetCommunityStanding",arguments);
-    if(![result isKindOfClass:NSNumber.class] || !std::isfinite([result doubleValue]))fail("Native standing getter returned no finite scalar");
+    if(![result isKindOfClass:NSNumber.class] || !std::isfinite([result doubleValue]))fail("Die Beziehungsabfrage lieferte keinen gültigen endlichen Zahlenwert.");
     return [result floatValue];
 }
 struct BoundLease {
@@ -99,14 +99,14 @@ struct BoundLease {
         if(!attached)return true;
         Object c=configWeak.get();if(!c){attached=false;owned=false;return true;}
         Property fresh=floatProperty(c,@"MinimumCommunityTrust",0x88);
-        if(fresh.address!=minimum.address || fresh.ownerClass!=minimum.ownerClass)fail("Leased trust bound metadata changed");
+        if(fresh.address!=minimum.address || fresh.ownerClass!=minimum.ownerClass)fail("Die Metadaten der eigenen Vertrauensgrenze wurden verändert.");
         // The config is shared beyond a World lifetime. It must still be
         // restored if its old World has expired, provided this is still our
         // exact write. External bit patterns (including NaN) are left untouched.
         uint32_t current=read<uint32_t>(c.address+fresh.offset);
         if(owned && current==bits(written)){
             if(!writeValue(c,fresh,@(original)) || read<uint32_t>(c.address+fresh.offset)!=bits(original))
-                fail("Original trust bound restoration did not read back");
+                fail("Die Wiederherstellung der ursprünglichen Vertrauensgrenze wurde nicht bestätigt.");
         }
         attached=false;owned=false;return true;
     }
@@ -119,7 +119,7 @@ struct BoundLease {
         if(bits(current)!=bits(target)){
             if(!owned)original=current;
             owned=true;written=target;
-            if(!writeValue(c,p,@(target)) || bits(value(c,p))!=bits(target))fail("Original trust floor write did not read back");
+            if(!writeValue(c,p,@(target)) || bits(value(c,p))!=bits(target))fail("Die Änderung der Vertrauensuntergrenze wurde nicht bestätigt.");
         }
     }
 } lease;
@@ -134,14 +134,14 @@ Result apply(const Context &c,bool wanted){
     try{
         verifyBindings();
         if(![identity isEqual:c.identity ?: @""]){if(!releaseOwnEffects())fail("Previous global relation floor awaits safe restoration");identity=[c.identity copy] ?: @"";}
-        if(!wanted){if(!releaseOwnEffects())fail("Owned global relation floor could not yet be restored");result.available=c.ready;result.note=@"Eigene globale Beziehungsgrenze freigegeben.";return result;}
+        if(!wanted){if(!releaseOwnEffects())fail("Die eigene globale Beziehungsuntergrenze konnte noch nicht zurückgenommen werden.");result.available=c.ready;result.note=@"Eigene globale Beziehungsgrenze freigegeben.";return result;}
         context(c);Object cfg=config(),subsystem=trustSubsystem(c);Weak cfgWeak(cfg),subsystemWeak(subsystem);
         Property maximum=floatProperty(cfg,@"MaximumCommunityTrust",0x84),minimum=floatProperty(cfg,@"MinimumCommunityTrust",0x88);
         float target=value(cfg,maximum),low=value(cfg,minimum);
         bool ourFloor=lease.attached && lease.configWeak.get()==cfg && lease.owned && bits(low)==bits(lease.written);
-        if(low>target && !ourFloor)fail("Original community trust bounds are inconsistent");
+        if(low>target && !ourFloor)fail("Die ursprünglichen Vertrauensgrenzen der Gemeinschaft widersprechen sich.");
         auto communities=listLocalCommunities(c);
-        if(communities.empty())fail("No existing local community can confirm the global relation floor");
+        if(communities.empty())fail("Keine vorhandene lokale Gemeinschaft kann die globale Beziehungsuntergrenze bestätigen.");
         std::vector<Weak> members;for(Object member:communities)members.emplace_back(member);
         try{
             lease.acquire(cfg,c.world,target);

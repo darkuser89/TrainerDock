@@ -136,7 +136,7 @@ void setHand(Object object,double value){
     }
     vc::invokeNumber(object,"SetMin",low);vc::invokeNumber(object,"SetMax",high);
     vc::boolean(object,"_uncapped",uncapped);vc::invokeNumber(object,"SetValue",before);
-    throw std::runtime_error("Original hand stat rejected the requested value");
+    throw std::runtime_error("Der ursprüngliche Handgrößenwert hat die gewünschte Änderung abgelehnt.");
 }
 bool leaseValid(const BooleanLease& lease){Object object=lease.object.get();return vc::alive(object) && stamp(object)==lease.stamp;}
 void releaseGod(){
@@ -160,7 +160,7 @@ double health(const EnemyLease& lease){Object enemy=lease.object.get();return le
 double armor(const EnemyLease& lease){Object enemy=lease.object.get();return lease.guardian ? vc::getNumber(enemy,"get_CurrentArmor") : vc::getNumber(enemy,"get_Armor");}
 void setEnemy(EnemyLease& lease,bool hitpoints,double value){
     Object enemy=lease.object.get();
-    if(lease.guardian){Object variable=vc::reference(enemy,hitpoints ? "_currentHealth" : "_currentArmor");if(!variable)throw std::runtime_error("Guardian variable missing");vc::invokeNumber(variable,"SetValue",value);}
+    if(lease.guardian){Object variable=vc::reference(enemy,hitpoints ? "_currentHealth" : "_currentArmor");if(!variable)throw std::runtime_error("Die Schutzvariable fehlt.");vc::invokeNumber(variable,"SetValue",value);}
     else vc::numericCall(vc::method(vc::api.objectClass(enemy),hitpoints ? "SetHealth" : "SetArmor",1),enemy,{value});
 }
 void releaseEnemies(){
@@ -183,7 +183,7 @@ Targets targets(){
         if(enabled(encounter) && vc::boolean(encounter,"_isActiveEncounter"))owners.push_back(encounter);
     for(Object guardian:vc::findObjects(gameClass("Nosebleed.Pancake.Models","GuardianEncounterModel")))
         if(enabled(guardian) && vc::boolean(guardian,"_isActiveEncounter"))result.guardians.push_back(guardian);
-    if(owners.size()+result.guardians.size()>1)throw std::runtime_error("Ambiguous active encounter; no enemy changes");
+    if(owners.size()+result.guardians.size()>1)throw std::runtime_error("Der aktive Kampf ist nicht eindeutig; keine Gegneränderungen ausgeführt.");
     if(!owners.empty()){
         Object owner=owners.front();result.identity=stamp(owner);
         result.enemies=vc::list(vc::reference(owner,"_aliveEnemies"));
@@ -247,7 +247,7 @@ void oneHit(){
             std::string id=stamp(object);
             auto found=std::find_if(b.enemies.begin(),b.enemies.end(),[&](const EnemyLease& lease){return lease.object.get()==object && lease.stamp==id;});
             if(found==b.enemies.end()){
-                if(b.enemies.size()>=1024)throw std::runtime_error("Enemy lease limit reached");
+                if(b.enemies.size()>=1024)throw std::runtime_error("Die Grenze für eigene Gegneränderungen ist erreicht.");
                 EnemyLease lease;lease.object.reset(object,true);lease.stamp=id;lease.guardian=guardian;
                 lease.health=health(lease);lease.armor=armor(lease);if(lease.health<=0)continue;
                 b.enemies.push_back(std::move(lease));found=std::prev(b.enemies.end());
@@ -264,12 +264,12 @@ void experience(){
     Backend& b=backend();Object player=b.context.player;
     if(!b.wanted[3] || !player){b.xpKnown=false;b.active[3]=false;return;}
     double current=vc::getNumber(player,"get_TotalXp");
-    if(!std::isfinite(current) || current<0)throw std::runtime_error("Invalid native XP counter");
+    if(!std::isfinite(current) || current<0)throw std::runtime_error("Ungültiger nativer Erfahrungszähler.");
     if(!b.xpKnown || current<b.xpBaseline){b.xpBaseline=current;b.xpKnown=true;return;}
     double gained=current-b.xpBaseline;b.xpBaseline=current;
     if(!gained || b.values[3]==1)return;
     double extra=std::floor(gained*(b.values[3]-1));
-    if(extra<0 || current+extra>std::numeric_limits<int32_t>::max())throw std::runtime_error("XP multiplier would exceed native range");
+    if(extra<0 || current+extra>std::numeric_limits<int32_t>::max())throw std::runtime_error("Der Erfahrungsfaktor würde den nativen Wertebereich überschreiten.");
     vc::numericCall(vc::method(vc::api.objectClass(player),"AddXp",2),player,{extra,0});
     double actual=vc::getNumber(player,"get_TotalXp");b.active[3]=actual==current+extra;b.xpBaseline=actual;
 }

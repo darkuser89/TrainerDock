@@ -20,7 +20,7 @@ static const MTFeatureInfo catalog[MTFeatureCount]={
     {@"Gewählten Stapel setzen",@"⌘F3",@"Eigenen Stapel im Inventar auswählen. Native Stapelgrenze gilt; explizite Einmalaktion.",YES,YES,YES,YES,99,1,99999,1,kVK_F3,NSEventModifierFlagCommand},
     {@"Unbegrenzte Haltbarkeit",@"⌘F4",@"Füllt die Haltbarkeit eigener Ausrüstung ohne deren Verschleißgrenze zu verändern.",YES,NO,NO,NO,0,0,0,0,kVK_F4,NSEventModifierFlagCommand},
     {@"Sofort durchsuchen",@"⌘F5",@"Schließt die laufende native Untersuchung in der geöffneten Beutekiste ab.",YES,NO,NO,NO,0,0,0,0,kVK_F5,NSEventModifierFlagCommand},
-    {@"Keine Herstellungs-/Forschungskosten",@"⌘F6",@"Entfernt Kosten und Forschungslevelbedingungen im laufenden Prozess. Schaltet keine Rezepte oder Perks frei.",YES,NO,NO,NO,0,0,0,0,kVK_F6,NSEventModifierFlagCommand},
+    {@"Keine Herstellungs-/Forschungskosten",@"⌘F6",@"Entfernt Kosten und Forschungslevelbedingungen im laufenden Prozess. Schaltet keine Rezepte oder Vorteile frei.",YES,NO,NO,NO,0,0,0,0,kVK_F6,NSEventModifierFlagCommand},
     {@"Sofort forschen",@"⌘F7",@"Native Forschungsdauer 0. Forschung weiterhin selbst starten und bestätigen.",YES,NO,NO,NO,0,0,0,0,kVK_F7,NSEventModifierFlagCommand},
     {@"Nebel aus",@"⌘F8",@"Entfernt die native Nebeldarstellung und aktiviert Rundumsicht (50 m). Deckt keine Kartenfortschritte auf.",YES,NO,NO,NO,0,0,0,0,kVK_F8,NSEventModifierFlagCommand},
     {@"EP setzen",@"⌥F1",@"Explizite native Einmalaktion; kann normal vom Spiel gespeichert werden.",YES,YES,YES,YES,999999,0,1000000000.0,1000,kVK_F1,NSEventModifierFlagOption},

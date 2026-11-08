@@ -136,11 +136,11 @@ NSDictionary *CPReadClassMetadata(uintptr_t map,NSString *name,NSArray<NSString 
     return inspectClass(map,name,methods,@{},0,NO);
 }
 NSDictionary *CPReadCyberpunkTargets(const struct mach_header_64 *image,NSDictionary<NSString *,NSArray<NSString *> *> *targets){
-    if(![targets isKindOfClass:NSDictionary.class] || targets.count>16)return @{@"error":@"Invalid metadata request"};
+    if(![targets isKindOfClass:NSDictionary.class] || targets.count>16)return @{@"error":@"Ungültige Metadatenanfrage."};
     for(id key in targets){
         id value=targets[key];
-        if(![key isKindOfClass:NSString.class] || ![key length] || [key length]>128 || ![value isKindOfClass:NSArray.class] || [value count]>32)return @{@"error":@"Invalid metadata request"};
-        for(id method in value)if(![method isKindOfClass:NSString.class] || ![method length] || [method length]>128)return @{@"error":@"Invalid metadata request"};
+        if(![key isKindOfClass:NSString.class] || ![key length] || [key length]>128 || ![value isKindOfClass:NSArray.class] || [value count]>32)return @{@"error":@"Ungültige Metadatenanfrage."};
+        for(id method in value)if(![method isKindOfClass:NSString.class] || ![method length] || [method length]>128)return @{@"error":@"Ungültige Metadatenanfrage."};
     }
     // Exact 2.5.0 getter bytes independently checked against the local executable.
     // The accessor is NEVER called: decode its ADRP/ADD return address instead.

@@ -81,7 +81,7 @@ static CGFloat rowHeight(const RE2FeatureInfo *info) {
     [(self.state.active ? green() : self.state.wanted ? orange() : [NSColor colorWithWhite:0.22 alpha:1]) setFill];
     [[NSBezierPath bezierPathWithRoundedRect:pill xRadius:6.5 yRadius:6.5] fill];
     if (!info->implemented) label(@"—",NSMakeRect(toggle+7,center+2,15,15),10,NSColor.grayColor,YES,NO);
-    else if (info->oneShot) label(@"GO",NSMakeRect(toggle+4,center+4,21,12),8,self.ready && self.state.available ? NSColor.whiteColor : NSColor.grayColor,YES,NO);
+    else if (info->oneShot) label(@"Los",NSMakeRect(toggle+4,center+4,21,12),8,self.ready && self.state.available ? NSColor.whiteColor : NSColor.grayColor,YES,NO);
     else {
         [NSColor.whiteColor setFill];
         NSRect knob=NSMakeRect(toggle+(self.state.wanted ? 14 : 2),center+6,9,9);
@@ -173,9 +173,9 @@ static CGFloat rowHeight(const RE2FeatureInfo *info) {
     self.identifier=@"RE2TrainerOverlay"; self.autoresizingMask=NSViewWidthSizable|NSViewHeightSizable;
     self.wantsLayer=YES; self.layer.backgroundColor=NSColor.clearColor.CGColor; self.layer.zPosition=100000;
     self.accessibilityElement=YES; self.accessibilityRole=NSAccessibilityGroupRole;
-    self.accessibilityLabel=@"Mac Trainer. Befehl und Zirkumflex: Overlay. ⇧F9: alle Schalter aus.";
+    self.accessibilityLabel=@"TrainerDock. Befehl und Zirkumflex: Trainerfenster. ⇧F9: alle Schalter aus.";
     _panel=[[RE2OverlaySurface alloc] initWithFrame:NSZeroRect]; _panel.owner=self; _panel.wantsLayer=YES;
-    _panel.toolTip=@"Titelleiste ziehen: Overlay verschieben. ⌘ ^: verbergen/anzeigen; Cheats bleiben aktiv.";
+    _panel.toolTip=@"Titelleiste ziehen: Trainerfenster verschieben. ⌘ ^: verbergen/anzeigen; Funktionen bleiben aktiv.";
     _material=[[MTTrainerMaterial alloc]initWithContentView:_panel cornerRadius:14];
     _material.appearance=[NSAppearance appearanceNamed:NSAppearanceNameDarkAqua];[self addSubview:_material];
     NSMutableArray *rows=[NSMutableArray new];
@@ -240,7 +240,7 @@ static CGFloat rowHeight(const RE2FeatureInfo *info) {
     if (_folded) return;
     [[NSColor colorWithWhite:1 alpha:0.1] setFill]; NSRectFillUsingOperation(MHTOnePixelVerticalRect(NSMakeRect(270,47,0.5,_rowsHeight)),NSCompositingOperationSourceOver);
     if (_editingFeature>=0) {
-        label([NSString stringWithFormat:@"%@ = %@▏  · Enter übernehmen · Esc abbrechen",RE2FeatureInfoAt(_editingFeature)->title,_editText],NSMakeRect(10,54+_rowsHeight,520,42),10,orange(),YES,YES);
+        label([NSString stringWithFormat:@"%@ = %@▏  · Eingabe übernehmen · Esc abbrechen",RE2FeatureInfoAt(_editingFeature)->title,_editText],NSMakeRect(10,54+_rowsHeight,520,42),10,orange(),YES,YES);
     } else {
         NSString *detail=_hover>=0 ? [NSString stringWithFormat:@"%@: %@",RE2FeatureInfoAt(_hover)->title,RE2FeatureInfoAt(_hover)->detail] : _state.message;
         label(detail ?: @"",NSMakeRect(10,54+_rowsHeight,520,42),9.5,[NSColor colorWithWhite:0.79 alpha:1],NO,YES);

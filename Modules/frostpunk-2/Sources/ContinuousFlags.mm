@@ -29,8 +29,8 @@ const Spec exploration={"PXTerritoryExplorationSubsystem","explorationClass",Sco
 const Spec laws={"PXParliamentSubsystem","parliamentClass",Scope::World,0x4f0,@"SetAlwaysPassPolicyCheat"};
 [[noreturn]]void fail(const char *message){throw std::runtime_error(message);}
 void thread(){if(!isBound() || !isGameThread())fail("Original GameThread required for continuous effects");}
-uintptr_t slide(){uintptr_t p=binding("processEvent");if(p<UINT64_C(0x100be2e78))fail("Original image relocation unavailable");return p-UINT64_C(0x100be2e78);}
-const FPContinuousBinding &anchor(const char *name){for(const auto &b:FPContinuousBindings)if(!strcmp(name,b.name))return b;fail("Original continuous-effect anchor unavailable");}
+uintptr_t slide(){uintptr_t p=binding("processEvent");if(p<UINT64_C(0x100be2e78))fail("Die ursprüngliche Programmadressierung ist nicht verfügbar.");return p-UINT64_C(0x100be2e78);}
+const FPContinuousBinding &anchor(const char *name){for(const auto &b:FPContinuousBindings)if(!strcmp(name,b.name))return b;fail("Die ursprüngliche Anbindung der Dauerwirkung ist nicht verfügbar.");}
 void validateAnchors(){
     uintptr_t relocation=slide();
     for(const auto &b:FPContinuousBindings){uint8_t bytes[16];
@@ -62,13 +62,13 @@ Object member(Object scope,const Spec &s){
 }
 Object scopeFor(const Context &c,const Spec &s){
     if(!c.ready || c.worldWeak.get()!=c.world || c.controllerWeak.get()!=c.controller ||
-       c.cityWeak.get()!=c.city || c.nationWeak.get()!=c.nation)fail("Current local World/city identity is unavailable");
+       c.cityWeak.get()!=c.city || c.nationWeak.get()!=c.nation)fail("Die aktuelle lokale Spielwelt oder Stadt ist nicht eindeutig verfügbar.");
     if(s.scope==Scope::World){real(c.world);return c.world;}
     Object engine=checked(read<uintptr_t>(FPEngineObjectSlot+slide()));real(engine);
-    if(!derives(engine,@"Engine"))fail("Original engine slot has an unexpected class");
+    if(!derives(engine,@"Engine"))fail("Der ursprüngliche Enginebereich hat einen unerwarteten Objekttyp.");
     Object instance=linkedObject(c.world,@"OwningGameInstance");real(instance);
     if(!derives(instance,@"GameInstance") || outer(instance)!=engine)
-        fail("Current World GameInstance is outside the original engine");
+        fail("Die aktuelle Spielinstanz liegt außerhalb der ursprünglichen Spielanbindung.");
     return engine;
 }
 void setter(Object manager,Object scope,const Spec &s,bool value){
@@ -103,12 +103,12 @@ struct WeakScalarLease {
     }
     uint8_t value() const {
         Object o=validate();if(!o)fail("Native leased subsystem owner expired");
-        uint8_t v=read<uint8_t>(o.address+spec->offset);if(v>1)fail("Native subsystem flag is not a byte bool");return v;
+        uint8_t v=read<uint8_t>(o.address+spec->offset);if(v>1)fail("Der native Schalter hat nicht das erwartete Wahrheitswertformat.");return v;
     }
     void store(uint8_t v){
-        Object o=validate(),p=scope.get();if(!o || !p)fail("Native flag owner expired before write");
-        if(spec->setter){Object m=manager.get();if(!m)fail("Native flag manager expired before setter");setter(m,p,*spec,v!=0);}
-        else if(!MTWriteByte((void *)o.address,spec->offset,v))fail("Native data flag write failed");
+        Object o=validate(),p=scope.get();if(!o || !p)fail("Der Besitzer des nativen Schalters ist vor der Änderung ungültig geworden.");
+        if(spec->setter){Object m=manager.get();if(!m)fail("Die Verwaltung des nativen Schalters ist vor der Änderung ungültig geworden.");setter(m,p,*spec,v!=0);}
+        else if(!MTWriteByte((void *)o.address,spec->offset,v))fail("Der native Datenschalter konnte nicht gesetzt werden.");
         if(value()!=v)fail("Native continuous flag readback differs");
     }
     bool release(){
@@ -137,7 +137,7 @@ std::vector<const Spec *> specs(MTFeature f){
         case MTFeatureResearch:return {&research};
         case MTFeatureExpedition:return {&exploration};
         case MTFeatureLaws:return {&laws};
-        default:fail("Unknown continuous flag feature");
+        default:fail("Unbekannte Dauerschalterfunktion.");
     }
 }
 bool releaseFeature(MTFeature f){
@@ -166,7 +166,7 @@ Result apply(const Context &c,MTFeature feature,bool wanted){
         }
         if(!wanted){
             failedManagerRequests.erase(feature);
-            if(!releaseFeature(feature))fail("Owned native flag could not yet be restored");
+            if(!releaseFeature(feature))fail("Der eigene native Schalter konnte noch nicht zurückgenommen werden.");
             result.available=c.ready;result.note=@"Eigene Wirkung freigegeben; fremde Zustände bleiben erhalten.";
             return result;
         }
@@ -177,9 +177,9 @@ Result apply(const Context &c,MTFeature feature,bool wanted){
             // on request, a new owner, or an externally installed manager retries.
             auto failed=failedManagerRequests.find(feature);
             if(failed!=failedManagerRequests.end() && !linkedObject(c.controller,@"CheatManager"))
-                fail(failed->second.UTF8String ?: "Native manager creation has not succeeded");
+                fail(failed->second.UTF8String ?: "Die native Verwaltung wurde noch nicht erfolgreich erstellt.");
             auto native=ensureCheatManager(c.controller);
-            if(!native.ready){failedManagerRequests[feature]=native.reason ?: @"Native manager unavailable";fail(native.reason.UTF8String ?: "Native manager unavailable");}
+            if(!native.ready){failedManagerRequests[feature]=native.reason ?: @"Die native Verwaltung ist nicht verfügbar.";fail(native.reason.UTF8String ?: "Die native Verwaltung ist nicht verfügbar.");}
             manager=native.manager;failedManagerRequests.erase(feature);
         }
         auto &group=leases[feature];
@@ -190,7 +190,7 @@ Result apply(const Context &c,MTFeature feature,bool wanted){
                 Object scope=scopeFor(c,*flags[i]),owner=member(scope,*flags[i]);
                 group[i].acquire(*flags[i],scope,owner,manager);
             }
-            for(const auto &lease:group)if(lease.value()!=1)fail("Native continuous flag is not active");
+            for(const auto &lease:group)if(lease.value()!=1)fail("Der native Dauerschalter ist nicht aktiv.");
         }catch(const std::exception &){releaseFeature(feature);throw;}
         result.available=true;result.active=true;result.note=@"Originale Laufzeitflags gesetzt und zurückgelesen.";
     }catch(const std::exception &e){

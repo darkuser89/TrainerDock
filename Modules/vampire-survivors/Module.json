@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "vampire-survivors",
   "name": "Vampire Survivors",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "profiles": [
     {
       "id": "steam-arm64",
@@ -139,6 +139,142 @@
           "sha256": "8513f34a3f884c4bd03208cd6df9e095dc065bf9fdd297b20c752e27f60abf21"
         }
       ]
+    },
+    {
+      "id": "epic-arm64",
+      "name": "Vampire Survivors · Epic Games Store",
+      "enabled": true,
+      "bundleIdentifier": "com.poncle.VampireSurvivors",
+      "executable": "Vampire Survivors",
+      "version": "1.16.111",
+      "gameVersion": "1.16.111",
+      "teamIdentifier": "",
+      "uuids": [
+        "81CD688D-8CAF-3FD5-8203-95FCBB1E6F82"
+      ],
+      "store": "Epic Games Store",
+      "signatureScope": "arm64-executable",
+      "signatureIdentifier": "com.poncle.VampireSurvivors",
+      "signatureCDHash": "5e1d2ced508524e369a844e7821cc50fa7aed409",
+      "launchEnvironment": {},
+      "fileChecks": [
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 60363072,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "0bf1af14c062dc0cf75eb606515300a4b75e2904e73225e4e000cdf3d767aa15"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 60363072,
+          "offset": 8388608,
+          "length": 8388608,
+          "sha256": "30c1cecf36daf86ef980ad791beb0df1cb6cd7e941e47f120a51c52734af45d9"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 60363072,
+          "offset": 16777216,
+          "length": 8388608,
+          "sha256": "c3aee83ac21f2ca81597586ecd0c601daa307d4eaf4e9200e58ce195279d9f6e"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 60363072,
+          "offset": 25165824,
+          "length": 8388608,
+          "sha256": "f183a3207216a6e9bdcc8d44a44ca9ad9419930b6515449f8a7a3083e709c1bb"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 60363072,
+          "offset": 33554432,
+          "length": 8388608,
+          "sha256": "4e8f92f7e59c3e94a11aa36073639c9bbff2bf322b3d127a03acc2a850b28da1"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 60363072,
+          "offset": 41943040,
+          "length": 8388608,
+          "sha256": "8856fcfac28c54e8f5aeaa389402608810e36869837b9c7f7562fda96b99ec92"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 60363072,
+          "offset": 50331648,
+          "length": 8388608,
+          "sha256": "c0426acb9da6b6abe0a34521ccdb55131deb605d27269d500d32a80ca4e63d99"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 60363072,
+          "offset": 58720256,
+          "length": 1642816,
+          "sha256": "a0dfb28dc74317eff6fa5d1114370e82742ce629a4a615c875bbe375d35736d4"
+        },
+        {
+          "path": "Contents/Frameworks/libmonobdwgc-2.0.dylib",
+          "fileSize": 7018832,
+          "offset": 0,
+          "length": 7018832,
+          "sha256": "13ad96c731e2f6d7489aa29c5da15a773824346d3e2c45f2f8b5410af9a94779"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/VampireSurvivors.Runtime.dll",
+          "fileSize": 10544128,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "25e24828913e4629162f73b9d7d03d258ff909e1eb0d303ea64a07fa78913e36"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/VampireSurvivors.Runtime.dll",
+          "fileSize": 10544128,
+          "offset": 8388608,
+          "length": 2155520,
+          "sha256": "6231b758700861e0743210d02c84d3c8e6e821f21de8f629a8c1703057d88d4c"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/Assembly-CSharp.dll",
+          "fileSize": 10864128,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "651f9ec8154ad539819d3482736d9b4bb51433caa24b85134f17e9a1910573ca"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/Assembly-CSharp.dll",
+          "fileSize": 10864128,
+          "offset": 8388608,
+          "length": 2475520,
+          "sha256": "7cc14d71f6c1da1a5bc3b32969a265dc80050aaef1ef09bfcce18ce7f7cf3520"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/PhaserPort.dll",
+          "fileSize": 118272,
+          "offset": 0,
+          "length": 118272,
+          "sha256": "762fdb7a8f37231c730b654570be98c16d0729989ebd4e29a80d791f416fa613"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/UniTask.dll",
+          "fileSize": 568320,
+          "offset": 0,
+          "length": 568320,
+          "sha256": "1d3d6abcfed6f7795d2836385873be90f82c9f7b0ddd8c585820265374bdfa4a"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/UnityEngine.CoreModule.dll",
+          "fileSize": 1785344,
+          "offset": 0,
+          "length": 1785344,
+          "sha256": "8513f34a3f884c4bd03208cd6df9e095dc065bf9fdd297b20c752e27f60abf21"
+        }
+      ],
+      "epicAppName": "1136763135c0482cbbb4b2d45e978156",
+      "epicNamespace": "a4e77bc04aa440a096962c14b63a41e8",
+      "epicBuildVersion": "EGS_MAC-Release-BaseGame-1.16.111-64959298",
+      "launchMode": "epic"
     }
   ],
   "groups": [

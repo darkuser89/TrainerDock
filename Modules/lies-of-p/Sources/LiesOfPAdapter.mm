@@ -443,7 +443,7 @@ static uint8_t editStat(MTFeature f) {
 }
 - (NSDictionary *)runReversibleChecks {
     NSDictionary *before=self.diagnosticSnapshot;
-    if([before[@"kind"] integerValue]!=MTSessionSolo)return @{@"skipped":@"No solo context"};
+    if([before[@"kind"] integerValue]!=MTSessionSolo)return @{@"skipped":@"Kein gültiger Einzelspielerkontext."};
     NSMutableDictionary *checks=[NSMutableDictionary new];
     for(NSNumber *number in @[@(MTFeatureHealth),@(MTFeatureStamina),@(MTFeatureLegion),@(MTFeatureOneHit),@(MTFeatureItemUsage),@(MTFeatureFreezeTime),@(MTFeaturePlayerMultiplier),@(MTFeatureMovementMultiplier),@(MTFeatureErgoMultiplier),@(MTFeatureAIMultiplier),@(MTFeatureStealth)]){
         MTFeature f=(MTFeature)number.integerValue;

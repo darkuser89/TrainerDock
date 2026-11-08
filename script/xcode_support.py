@@ -122,10 +122,18 @@ def check_launcher():
     folder = environment_path("PROJECT_TEMP_DIR") / os.environ["CONFIGURATION"] / "TrainerDock.build/Objects-normal/arm64"
     common = object_file(folder, "MHTProtocol.m")
     core = [object_file(folder, p.name) for p in sorted((ROOT / "Core").glob("*.m"))]
-    app = [object_file(folder, p.name) for p in sorted((ROOT / "App").glob("*.m")) if p.name != "main.m"]
+    app = [object_file(folder, p.name) for p in sorted((ROOT / "App").glob("*.m"))
+           if p.name not in ("main.m", "MHTEpicBroker.m")]
     includes = [ROOT / p for p in ("App", "Core", "ModuleSDK")] + [Path(os.environ.get("TRAINERDOCK_ARCHIVE_INCLUDE", "/opt/homebrew/opt/libarchive/include"))]
     with tempfile.TemporaryDirectory(prefix="checks-", dir=environment_path("TARGET_TEMP_DIR")) as temp:
         stage = Path(temp)
+        # This test imports the exact product implementation to exercise private
+        # transaction helpers. Do not link the separate Core object a second time.
+        epic_obj = stage / "MHTEpicLaunchTests.o"
+        build.compile_object(ROOT / "Tests/EpicLaunch/MHTEpicLaunchTests.m", epic_obj, includes)
+        epic_test = stage / "MHTEpicLaunchTests"
+        build.link([epic_obj], epic_test)
+        build.run([epic_test, root / "TrainerDock.app/Contents/MacOS/TrainerDockEpicBroker"])
         for name in ("GameIdentityTests", "MHTTests"):
             obj = stage / (name + ".o")
             build.compile_object(ROOT / "Tests" / (name + ".m"), obj, includes)
@@ -175,6 +183,13 @@ def verify_products(root, module_id=None):
             raise ValueError("Das TrainerDock-App-Icon fehlt.")
         build.run(["codesign", "--verify", "--deep", "--strict", app])
         verify_minimum(app / "Contents/MacOS/TrainerDock")
+        broker = app / "Contents/MacOS/TrainerDockEpicBroker"
+        if not broker.is_file() or not os.access(broker, os.X_OK):
+            raise ValueError("Der native Epic-Starthelfer fehlt.")
+        build.run(["codesign", "--verify", "--strict", broker])
+        verify_minimum(broker)
+        if subprocess.check_output(["xcrun", "lipo", "-archs", str(broker)], text=True).strip() != "arm64":
+            raise ValueError("Der Epic-Starthelfer muss ausschließlich arm64 enthalten.")
         build.run([app / "Contents/MacOS/TrainerDock", "--check"])
 
 

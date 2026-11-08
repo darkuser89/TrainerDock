@@ -36,9 +36,9 @@ bool executable(const void *pointer){
     return result==KERN_SUCCESS && address<=(uintptr_t)pointer && (info.protection&VM_PROT_EXECUTE);
 }
 size_t offset(tld::Class k,const char *name,size_t size){
-    tld::Field f=tld::field(k,name);if(!f)throw std::runtime_error("Original PlayerLoop field missing");
+    tld::Field f=tld::field(k,name);if(!f)throw std::runtime_error("Das ursprüngliche Aktualisierungsfeld fehlt.");
     size_t raw=tld::api.fieldOffset(f),header=tld::api.objectHeader();
-    if(raw<header || raw-header>=size)throw std::runtime_error("Original PlayerLoop field outside value layout");
+    if(raw<header || raw-header>=size)throw std::runtime_error("Das ursprüngliche Aktualisierungsfeld liegt außerhalb der Datenstruktur.");
     return raw-header;
 }
 template<class T> T value(const uint8_t *data,size_t at){T v={};memcpy(&v,data+at,sizeof(v));return v;}
@@ -84,25 +84,25 @@ BOOL TLDEnsureLoop(){
         Method get=method(loop,"GetCurrentPlayerLoopInternal",0),set=method(loop,"SetPlayerLoopInternal",1);
         if(!get || !set || !entry)return NO;
         uint32_t alignment=0;int size=api.valueSize(entry,&alignment);
-        if(size<36 || size>64 || alignment>16 || api.objectHeader()!=16 || api.arrayHeader()!=32)throw std::runtime_error("Original Unity layout differs");
+        if(size<36 || size>64 || alignment>16 || api.objectHeader()!=16 || api.arrayHeader()!=32)throw std::runtime_error("Die ursprüngliche Unity-Datenanordnung weicht ab.");
         size_t type=offset(entry,"type",size),delegate=offset(entry,"updateDelegate",size);
         size_t function=offset(entry,"updateFunction",size),condition=offset(entry,"loopConditionFunction",size),children=offset(entry,"numSubSystems",size);
-        if(type+8>(size_t)size || delegate+8>(size_t)size || function+8>(size_t)size || condition+8>(size_t)size || children+4>(size_t)size)throw std::runtime_error("PlayerLoop field bounds differ");
+        if(type+8>(size_t)size || delegate+8>(size_t)size || function+8>(size_t)size || condition+8>(size_t)size || children+4>(size_t)size)throw std::runtime_error("Die Grenzen des Aktualisierungsfelds stimmen nicht überein.");
         Root original(call(get,nullptr));if(!original.get())return NO;
         size_t count=api.arrayLength(original.get());if(count<16 || count>2048)return NO;
         const uint8_t *data=(const uint8_t *)original.get()+api.arrayHeader();
-        if(value<int32_t>(data,children)!=(int32_t)count-1)throw std::runtime_error("Original Unity hierarchy differs");
+        if(value<int32_t>(data,children)!=(int32_t)count-1)throw std::runtime_error("Die ursprüngliche Unity-Hierarchie weicht ab.");
         unsigned direct=0,cells=0;
         for(size_t i=0;i<count;i++){
             auto p=data+i*size;void *fn=value<void *>(p,function);
             if(fn==(void *)&callbackCell || fn==(void *)tick){installed=true;return YES;}
             int32_t n=value<int32_t>(p,children);
-            if(n<0 || (size_t)n>=count-i)throw std::runtime_error("Invalid original Unity hierarchy");
+            if(n<0 || (size_t)n>=count-i)throw std::runtime_error("Ungültige ursprüngliche Unity-Hierarchie.");
             if(!fn)continue;
             if(executable(fn))direct++;
             else{void *target=nullptr;if(readable(fn,&target,8) && executable(target))cells++;}
         }
-        if((direct<3 && cells<3) || (direct && cells))throw std::runtime_error("Native Unity callback representation unconfirmed");
+        if((direct<3 && cells<3) || (direct && cells))throw std::runtime_error("Die native Unity-Rückrufanbindung ist nicht bestätigt.");
         cellStyle=cells>=3;
         Root next(api.arrayNew(entry,count+1));if(!next.get())return NO;
         auto destination=(uint8_t *)next.get()+api.arrayHeader();memcpy(destination,data,count*size);memset(destination+count*size,0,size);

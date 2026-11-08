@@ -33,6 +33,11 @@ der bisherige MHT-Ordner wird weiterhin gelesen.
   Nicht implementierte oder nicht belegte Funktionen deaktiviert lassen und klar
   kennzeichnen. Synthetische Fixtures sind ausschließlich unter `Tests/` erlaubt und
   dürfen nicht in Launcher oder Trainermodule eingebunden werden.
+- Alle sichtbaren Trainertexte auf Deutsch halten: Funktionsnamen, Beschreibungen,
+  Gruppen, Schaltflächen, Bedienhilfen sowie Status- und Fehlermeldungen. Spielnamen
+  und Marken beibehalten; interne Feature-IDs, Protokollschlüssel, native Typ-/Methodennamen
+  und Tastenzuordnungen bei Übersetzungen nicht verändern. Der native Katalog ist
+  die gemeinsame Textquelle für Launcher und Ingame-Trainer.
 - Code, Builds, App und Audit getrennt halten. Der stabile Buildordner ist
   `~/Library/Developer/TrainerDock`, außerhalb dieses Repositories. Genau eine aktuelle
   geprüfte `TrainerDock.app`; kurzlebige Austauschdaten werden automatisch entfernt.
@@ -98,11 +103,20 @@ Releases entstehen erst nach erfolgreichem Build. `script/release.py`
 verpackt ausschließlich die App, alle echten Module und Lizenz-/Versionsangaben.
 Kein Spielstart und keine Veröffentlichung von Spieldateien gehören zum CI-Build.
 Duckov und Vampire Survivors beziehen nur eigene kompilierte C#-Bausteine aus dem
-vom Nutzer ausdrücklich genehmigten Entwickler-Release `managed-inputs-v1`.
+vom Nutzer ausdrücklich genehmigten Entwickler-Release `managed-inputs-v2`.
 `Config/ManagedImages.json` bindet deren Bytes, Quellen und Originalprofile;
 bei Änderungen lokal neu kompilieren und die Bausteine bewusst aktualisieren.
 Kein stiller Hashwechsel und keine Ersatz- oder Testassembly. Details:
 `docs/RELEASING.md`. Ad-hoc-Signierung ist keine Notarisierung.
+
+Epic-Profile verwenden getrennte Storekennungen und Installationspfade, auch bei
+gleicher Bundle-ID wie Steam. `launchMode: "epic"` nutzt `Core/MHTEpicLaunch` und
+den eigenen `TrainerDockEpicBroker`; keine Spiellogik im Host ergänzen. Der Epic-
+Client muss zuvor regulär beendet sein, weil sein Cache Startmetadaten überschreibt.
+TrainerDock beendet ihn nicht automatisch. Der kurzlebige Helfer liegt außerhalb
+des Spiele-Bundles; ausschließlich Epics Startzuordnung wird journalgesichert
+geändert und bytegenau zurückgenommen. Authargumente nur unverändert weiterreichen,
+niemals auswerten, speichern oder loggen. Kein Ersatzstart ohne Trainer.
 
 ## Bei neuen Modulen
 

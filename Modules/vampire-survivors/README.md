@@ -1,8 +1,27 @@
 # Vampire Survivors – eigenständiger TrainerDock-Trainer
 
 Native arm64-Steamversion **1.16.111**, Steam-Build **25984009**. Mindestziel des
-Trainers: macOS 27. Der Launcher bleibt unverändert; native Mono-Anbindung,
+Trainers: macOS 27. Der Launcher enthält keine Spielbindung; native Mono-Anbindung,
 eigener C#-Trainer, Katalog, Bridge, Eingabe und Liquid-Glass-Overlay liegen im Modul.
+
+Das zusätzliche Epic-Profil **1.16.111 (64959298)** besitzt eine eigene Storebindung.
+Seine originale arm64-Signatur und 16 vollständige Dateichecks sind separat gebunden.
+Der eigene Trainer akzeptiert ausschließlich das vollständige Steam- oder Epic-MVID-
+Tupel. Die automatische Installationserkennung trennt beide Stores trotz gleicher
+Bundle-ID. Ein direkter Online-Start ohne die Anmeldung des Epic-Launchers scheitert.
+Der authentifizierte Start über den originalen Epic-Client wurde mit der echten
+Trainerverbindung und einem geladenen lokalen Lauf bestätigt. Alle neun
+Dauereffekte wurden im Epic-Lauf nativ als aktiv zurückgelesen; der Nutzer bediente
+den Trainer selbst. Die zehn Editoren wurden in dieser Storevariante nicht
+zusätzlich einzeln verändert; ihre originalen Verbraucher und die gemeinsame
+Managed-ABI wurden gegen beide Storeversionen abgeglichen.
+
+Vor einem Epic-Trainerstart den **Epic Games Launcher regulär beenden**. TrainerDock
+öffnet ihn für die echte Anmeldung und startet genau das ausgewählte Originalspiel.
+Ein laufender Epic-Client wird nicht automatisch beendet, weil sein Cache die
+temporäre Startzuordnung überschreibt. Der allgemeine Startdienst legt dafür
+kurz einen eigenen Helfer neben der Spiele-App ab und nimmt die Startzuordnung
+anschließend bytegenau zurück. Die Spiel-App und ihre Signaturen bleiben unverändert.
 
 ## Funktionen
 

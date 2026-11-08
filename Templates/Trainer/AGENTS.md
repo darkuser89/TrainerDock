@@ -4,6 +4,10 @@ Lies zuerst `README.md` und `CHAT_START.md` in diesem Ordner sowie die `AGENTS.m
 im TrainerDock-Projekt. Für neue Module `script/new_module.py` verwenden; diese Vorlage
 selbst nur bei einem Auftrag zur Verbesserung der Vorlage verändern.
 
+- Alle sichtbaren Texte auf Deutsch schreiben, einschließlich Funktionsnamen,
+  Erklärungen, Bedienhilfen und Status-/Fehlermeldungen. Spielnamen und Marken
+  erhalten. Interne IDs, native Anbindungen und Protokollschlüssel nicht übersetzen.
+
 - Nur echte Trainer. Keine simulierten Cheatwirkungen, Dummy-Spielobjekte oder
   Demo-Adapter ins Produkt einbauen. Synthetische Fixtures gehören ausschließlich
   in `Tests/` und dürfen nicht als Ingame-Nachweis gelten.

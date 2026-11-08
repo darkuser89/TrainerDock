@@ -3,9 +3,21 @@
 Die projektweite AGENTS.md und `$trainer-template` gelten. Dieses Modul enthält
 den vollständigen eigenen Unity/Mono-Trainer; keine Spielklassen in App oder Core.
 
-- Nur das erfasste Steamprofil 1.16.111 (Build 25984009) freigeben. UUID, originale
+- Das erfasste Steamprofil 1.16.111 (Build 25984009) erhalten. UUID, originale
   arm64-Signatur/CDHash, vollständige Dateichecks und Managed-MVIDs erhalten.
   Neue Builds benötigen eigene Analyse und Wirkungstests. Spieldateien unverändert lassen.
+- Das erfasste Epic-Profil 1.16.111 (64959298) verwendet `launchMode: "epic"`.
+  Es hat dieselbe Hauptdatei-UUID wie Steam,
+  aber einen eigenen CDHash und eigene Managed-MVIDs. Nur vollständige Store-Tupel
+  akzeptieren, niemals einzeln gemischte Assemblies. Epic-Pfade über das passende
+  Launcher-Manifest ermitteln; die gemeinsame Bundle-ID trennt die Stores nicht.
+  Keine Steam-Umgebungsvariablen an Epic weitergeben. Online benötigt das Original
+  den offiziellen Epic-Launcher-Login; Direktstart ohne dessen Argumente scheitert.
+  Keine Anmeldung oder Netzwerkprüfung umgehen und keine Authargumente protokollieren.
+  Der Epic-Launcher muss vor dem Trainerstart regulär beendet sein: sein laufender
+  Cache überschreibt die temporäre Startzuordnung. Nicht automatisch beenden oder
+  nach einem Fehler ohne Trainer starten. Den allgemeinen Startdienst verwenden;
+  die eigene Spielanbindung bleibt vollständig in diesem Modul.
 - Mono ausschließlich aus der bereits geladenen originalen Laufzeit binden.
   Bootstrap stellt nur einen Auftrag an UniTask; Gameplay läuft ausschließlich
   innerhalb des beobachteten eigenen Unity-Update-Rückrufs.

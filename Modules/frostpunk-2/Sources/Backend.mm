@@ -28,11 +28,11 @@ void retryPendingRestore(){
  if(pendingOperationRestore)pendingOperationRestore=!operations::release();
 }
 Object asset(int i){
- if(i<0 || i>=15)throw std::runtime_error("Unknown build-bound asset");
+ if(i<0 || i>=15)throw std::runtime_error("Unbekannte Ressource für diesen Spielbuild.");
  std::string key=FPGameAssets[i].objectPath;auto cached=assets.find(key);if(cached!=assets.end()){Object o=cached->second.get();if(o)return o;assets.erase(cached);}
  double now=std::chrono::duration<double>(std::chrono::steady_clock::now().time_since_epoch()).count();
  if(now-assetScan>2){assetScan=now;for(NSString *type in @[@"PXResource",@"PXStatistic"]){for(Object o:find(type,@"DA_",1024)){if(![className(o) isEqual:type])continue;NSString *n=name(o);uintptr_t outer=read<uintptr_t>(o.address+0x20);if(!outer)continue;NSString *package=name(Object{outer});for(const auto &spec:FPGameAssets){NSString *path=@(spec.objectPath);if([n isEqual:path.pathExtension] && [package isEqual:path.stringByDeletingPathExtension] && [type isEqual:@(spec.nativeClass)])assets[spec.objectPath]=Weak(o);}}}}
- auto found=assets.find(key);if(found==assets.end() || !found->second.get())throw std::runtime_error("Original resource/statistic asset not loaded");return found->second.get();
+ auto found=assets.find(key);if(found==assets.end() || !found->second.get())throw std::runtime_error("Die ursprünglichen Ressourcen- oder Statistikdaten sind noch nicht geladen.");return found->second.get();
 }
 int assetIndex(MTFeature f){if(f<=MTFeatureScraps)return (int)f;if(f>=MTFeatureTension && f<=MTFeatureCrime)return 9+(int)f-(int)MTFeatureTension;return -1;}
 effects::ScalarResult readFeature(MTFeature f){int i=assetIndex(f);Object a=asset(i);return i<9?effects::getStockpile(current.controller,current.city,a):effects::getStatistic(current.controller,current.city,a);}

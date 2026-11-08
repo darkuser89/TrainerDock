@@ -60,11 +60,11 @@ class Parameters {
 public:
     NativeParameters value; // Original placement constructor initializes every field.
     explicit Parameters(const API &native):api(native) {
-        ops=api.factory();if(!ops)throw std::runtime_error("Original struct ops allocation failed");
+        ops=api.factory();if(!ops)throw std::runtime_error("Die ursprüngliche Datenstrukturanbindung konnte nicht erstellt werden.");
         uintptr_t table=0;uint32_t size=0,alignment=0;
         if(!fp::read((uintptr_t)ops,&table,8) || !fp::read((uintptr_t)ops+8,&size,4)
             || !fp::read((uintptr_t)ops+12,&alignment,4) || table!=0x10bc2b260ULL+api.slide || size!=72 || alignment!=8) {
-            api.destroyOps(ops);ops=nullptr;throw std::runtime_error("Original population ops differ");
+            api.destroyOps(ops);ops=nullptr;throw std::runtime_error("Die ursprüngliche Bevölkerungsanbindung weicht ab.");
         }
         api.construct(ops,&value);constructed=true;
     }

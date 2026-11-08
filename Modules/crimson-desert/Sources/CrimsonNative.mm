@@ -199,14 +199,14 @@ NSDictionary *CDReadPlayer(void) {
     @synchronized(NSProcessInfo.processInfo){if(serverObservation)result[@"server"]=serverObservation;if(quantityObservation)result[@"quantityResult"]=quantityObservation;}
     if(!supported) return result;
     // Reject gameplay access unless the native callback is on GameThread.
-    if(strcmp(threadName,"GameThread")) {result[@"error"]=@"Native callback is not on GameThread";return result;}
+    if(strcmp(threadName,"GameThread")) {result[@"error"]=@"Nativer Rückruf läuft nicht auf dem Spielthread.";return result;}
     void *ctx=context(0x8f72700);
     if(loading(ctx)) {result[@"loading"]=@YES;return result;}
     void *manager=ctx ? read<void *>(ctx,0x30) : nullptr;
     if(!manager) {result[@"loading"]=@YES;return result;}
     ActorScope scope=native<ActorScope(*)(void *)>(0x3fd062c)(manager);
     if(!scope.valid || !scope.actor) {result[@"loading"]=@YES;return result;}
-    if(!native<bool(*)(void *,void *)>(0x3fd338c)(manager,scope.actor)) {result[@"error"]=@"Focus actor is not locally owned";return result;}
+    if(!native<bool(*)(void *,void *)>(0x3fd338c)(manager,scope.actor)) {result[@"error"]=@"Die ausgewählte Figur gehört nicht zum lokalen Spieler.";return result;}
     result[@"actorKey"]=@(read<uint32_t>(scope.actor,0x100));
     result[@"fieldIndex"]=@(native<uint16_t(*)(void *)>(0xf3fa2c)(scope.actor));
     void *moduleInfo=read<void *>(ctx,8);

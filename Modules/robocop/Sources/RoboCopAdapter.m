@@ -297,18 +297,18 @@ typedef struct {
     if(!p || !world || _api.getProgression(world)!=p)return @"Fortschrittsbesitzer gewechselt; Aktion verworfen.";
     if(feature==MTFeatureSkillPoints && isfinite(value) && value>=0 && value<=999999999 && floor(value)==value){
         _api.setSkillPoints(p,(int)value);
-        return integer(p,0xc8)==(int)value ? [NSString stringWithFormat:@"Skillpunkte auf %.0f gesetzt und zurückgelesen.",value] : @"Skillpunkte nicht bestätigt.";
+        return integer(p,0xc8)==(int)value ? [NSString stringWithFormat:@"Fähigkeitspunkte auf %.0f gesetzt und zurückgelesen.",value] : @"Fähigkeitspunkte nicht bestätigt.";
     }
     if(feature==MTFeatureInfiniteXP){
         if(_api.atMaxLevel(p))return @"Maximallevel bereits nativ bestätigt.";
         int count=integer(p,0xd8),level=integer(p,0xc4),xp=integer(p,0xc0);void *thresholds=pointer(p,0xd0);
-        if(!thresholds || count<1 || count>1000 || level<1 || level>count || xp<0)return @"XP-Grenzen dieses Besitzers nicht bestätigt; keine Änderung.";
-        int64_t remaining=-xp;for(int i=level-1;i<count;i++){int threshold=integer(thresholds,i*4);if(threshold<0 || threshold>100000000)return @"Ungültige XP-Tabelle; keine Änderung.";remaining+=threshold;}
+        if(!thresholds || count<1 || count>1000 || level<1 || level>count || xp<0)return @"EP-Grenzen dieses Besitzers nicht bestätigt; keine Änderung.";
+        int64_t remaining=-xp;for(int i=level-1;i<count;i++){int threshold=integer(thresholds,i*4);if(threshold<0 || threshold>100000000)return @"Ungültige EP-Tabelle; keine Änderung.";remaining+=threshold;}
         void *attributes=[self resolve:_attributes];float bonus=attributes ? scalar(attributes,0x1dc) : 0;
-        if(!isfinite(bonus) || bonus<=-1 || remaining<0 || remaining>1000000000)return @"XP-Ziel nicht sicher berechenbar; keine Änderung.";
-        int grant=(int)ceil((double)remaining/(1+bonus));if(grant<=0)return @"Keine XP fehlen.";
+        if(!isfinite(bonus) || bonus<=-1 || remaining<0 || remaining>1000000000)return @"EP-Ziel nicht sicher berechenbar; keine Änderung.";
+        int grant=(int)ceil((double)remaining/(1+bonus));if(grant<=0)return @"Es fehlen keine EP.";
         _api.addXP(p,grant,0,false);
-        return _api.atMaxLevel(p) ? @"Maximallevel durch native XP-Vergabe erreicht und zurückgelesen." : @"Maximallevel nicht bestätigt; keine automatische Wiederholung.";
+        return _api.atMaxLevel(p) ? @"Maximallevel durch native EP-Vergabe erreicht und zurückgelesen." : @"Maximallevel nicht bestätigt; keine automatische Wiederholung.";
     }return @"Aktion nicht unterstützt.";
 }
 - (void)releaseCursor {

@@ -5,8 +5,67 @@
 #import "MHTBranding.h"
 #include <math.h>
 static void check(BOOL condition,NSString *message){if(!condition){fprintf(stderr,"FAIL: %s\n",message.UTF8String);exit(1);}}
+static NSString *fixtureBundle(NSString *root,NSString *name,NSString *bundleID){
+    NSString *bundle=[root stringByAppendingPathComponent:name],*contents=[bundle stringByAppendingPathComponent:@"Contents"];
+    NSString *macOS=[contents stringByAppendingPathComponent:@"MacOS"];
+    [NSFileManager.defaultManager createDirectoryAtPath:macOS withIntermediateDirectories:YES attributes:nil error:NULL];
+    [@{@"CFBundleIdentifier":bundleID,@"CFBundlePackageType":@"APPL",@"CFBundleExecutable":@"Fixture"} writeToFile:[contents stringByAppendingPathComponent:@"Info.plist"] atomically:YES];
+    [@"test fixture, never executable" writeToFile:[macOS stringByAppendingPathComponent:@"Fixture"] atomically:YES encoding:NSUTF8StringEncoding error:NULL];
+    return bundle;
+}
+static void writeItem(NSString *folder,NSString *name,NSDictionary *item){
+    [[NSJSONSerialization dataWithJSONObject:item options:0 error:NULL] writeToFile:[folder stringByAppendingPathComponent:name] atomically:YES];
+}
+static void epicDiscoveryTests(void){
+    NSString *root=[NSTemporaryDirectory() stringByAppendingPathComponent:[@"MHT-Epic-" stringByAppendingString:NSUUID.UUID.UUIDString]];
+    NSString *items=[root stringByAppendingPathComponent:@"manifests"],*install=[root stringByAppendingPathComponent:@"epic"],*bundleID=@"local.mht.same-bundle-fixture";
+    [NSFileManager.defaultManager createDirectoryAtPath:items withIntermediateDirectories:YES attributes:nil error:NULL];
+    NSString *epic=fixtureBundle(install,@"Epic.app",bundleID),*steam=fixtureBundle([root stringByAppendingPathComponent:@"steam"],@"Steam.app",bundleID);
+    NSDictionary *steamProfile=@{@"id":@"steam",@"store":@"Steam",@"bundleIdentifier":bundleID,@"executable":@"Fixture",@"launchEnvironment":@{@"SteamAppId":@"1",@"SteamGameId":@"1"}};
+    NSDictionary *epicProfile=@{@"id":@"epic",@"store":@"Epic Games Store",@"bundleIdentifier":bundleID,@"executable":@"Fixture",@"epicAppName":@"fixture-app",@"epicNamespace":@"fixture-namespace"};
+    MHTModule *module=[MHTModule new];module.directory=root;module.manifest=@{@"id":[@"epic-fixture-" stringByAppendingString:NSUUID.UUID.UUIDString],@"profiles":@[steamProfile,epicProfile],@"features":@[]};
+    NSDictionary *item=@{@"AppName":@"fixture-app",@"CatalogNamespace":@"fixture-namespace",@"InstallLocation":install,@"LaunchExecutable":@"Epic.app/Contents/MacOS/Fixture",@"LaunchCommand":@"ignored; never used as arguments"};
+    @try {
+        writeItem(items,@"valid.item",item);
+        NSDictionary *found=MHTFindEpicInstallations(@[module],items,nil);
+        check(found.count==1 && [found[MHTInstallationKey(module,epicProfile)] isEqual:epic],@"Epic manifest resolves its exact app and namespace to a confined bundle");
+        check(!found[MHTInstallationKey(module,steamProfile)],@"Shared bundle identifier cannot route Epic candidate to Steam");
+        check(!MHTApplyInstallations(@[module],@{bundleID:epic}),@"Legacy bundle-only discovery cannot cross stores");
+        check(MHTApplyInstallations(@[module],found) && [[module pathForProfile:epicProfile] isEqual:epic] && ![module pathForProfile:steamProfile],@"Applying Epic candidate preserves separate profile paths");
+        [module setPath:steam forProfile:steamProfile];
+        NSDictionary *replacement=@{MHTInstallationKey(module,epicProfile):@"/private/tmp/stale.app",MHTInstallationKey(module,steamProfile):@"/private/tmp/also-stale.app"};
+        check(!MHTApplyInstallations(@[module],replacement) && [[module pathForProfile:steamProfile] isEqual:steam] && [[module pathForProfile:epicProfile] isEqual:epic],@"Late worker result never overwrites either explicit store path");
+        NSDictionary *steamEnv=[module environmentForGame:@{@"executable":@"/test/Steam"} profile:steamProfile session:@"test"],*epicEnv=[module environmentForGame:@{@"executable":@"/test/Epic"} profile:epicProfile session:@"test"];
+        check([steamEnv[@"SteamAppId"] isEqual:@"1"] && !epicEnv[@"SteamAppId"] && !epicEnv[@"SteamGameId"],@"Epic environment does not inherit Steam identifiers");
+        [module setPath:nil forProfile:epicProfile];[module setPath:nil forProfile:steamProfile];
+        for(NSString *key in @[@"AppName",@"CatalogNamespace",@"LaunchExecutable"]){
+            NSMutableDictionary *bad=[item mutableCopy];bad[key]=@"wrong";writeItem(items,@"valid.item",bad);
+            check(!MHTFindEpicInstallations(@[module],items,nil).count,@"Wrong Epic identity or executable is not discovered");
+        }
+        for(NSString *relative in @[@"../steam/Steam.app/Contents/MacOS/Fixture",@"/absolute/Epic.app/Contents/MacOS/Fixture"]){
+            NSMutableDictionary *bad=[item mutableCopy];bad[@"LaunchExecutable"]=relative;writeItem(items,@"valid.item",bad);
+            check(!MHTFindEpicInstallations(@[module],items,nil).count,@"Escaping or absolute manifest launch paths rejected");
+        }
+        [NSFileManager.defaultManager createSymbolicLinkAtPath:[install stringByAppendingPathComponent:@"Escape.app"] withDestinationPath:steam error:NULL];
+        NSMutableDictionary *escaped=[item mutableCopy];escaped[@"LaunchExecutable"]=@"Escape.app/Contents/MacOS/Fixture";writeItem(items,@"valid.item",escaped);
+        check(!MHTFindEpicInstallations(@[module],items,nil).count,@"Manifest launch symlink cannot escape installation root");
+        writeItem(items,@"valid.item",item);NSString *other=fixtureBundle(install,@"Other.app",bundleID);(void)other;
+        NSMutableDictionary *duplicate=[item mutableCopy];duplicate[@"LaunchExecutable"]=@"Other.app/Contents/MacOS/Fixture";writeItem(items,@"duplicate.item",duplicate);
+        check(!MHTFindEpicInstallations(@[module],items,nil).count,@"Ambiguous matching Epic installations require explicit choice");
+        [NSFileManager.defaultManager removeItemAtPath:[items stringByAppendingPathComponent:@"duplicate.item"] error:NULL];
+        NSMutableData *oversized=[NSMutableData dataWithLength:1024*1024+1];[oversized writeToFile:[items stringByAppendingPathComponent:@"valid.item"] atomically:YES];
+        check(!MHTFindEpicInstallations(@[module],items,nil).count,@"Oversized Epic JSON rejected");
+        writeItem(items,@"valid.item",item);check(!MHTFindEpicInstallations(@[module],items,^BOOL{return YES;}).count,@"Epic scan honors cancellation");
+        MHTModule *ambiguous=[MHTModule new];ambiguous.manifest=@{@"id":@"launchservices-store-fixture",@"profiles":@[@{@"id":@"s",@"store":@"Steam",@"bundleIdentifier":@"com.apple.finder"},@{@"id":@"e",@"store":@"Epic Games Store",@"bundleIdentifier":@"com.apple.finder"}]};
+        check(![ambiguous pathForProfile:ambiguous.profiles.firstObject] && ![ambiguous pathForProfile:ambiguous.profiles.lastObject],@"Shared store identity never uses LaunchServices arbitrary bundle fallback");
+    } @finally {
+        [module setPath:nil forProfile:epicProfile];[module setPath:nil forProfile:steamProfile];
+        [NSFileManager.defaultManager removeItemAtPath:root error:NULL];
+    }
+}
 int main(int argc,const char *argv[]) {@autoreleasepool {
     check(argc==2,@"Module directory argument");
+    epicDiscoveryTests();
     NSDictionary *legacy=@{@"MHT.balatro.path.steam-arm64":@"/Games/Balatro.app",@"MHT.balatro.settings":@{@"glassIntensity":@0.73},@"MHT.profile.balatro":@"steam-arm64",@"MHT.balatro.selection":@{@"0":@{@"wanted":@YES}},@"Unrelated":@42};
     NSDictionary *current=@{@"MHT.balatro.settings":@{@"glassIntensity":@0.9},@"TrainerDock.custom":@YES};
     NSDictionary *merged=MHTMergedLegacyPreferences(legacy,current);
@@ -69,6 +128,22 @@ int main(int argc,const char *argv[]) {@autoreleasepool {
     m[@"deadline"]=@(NAN);check(!MHTAcceptCommand(m,@"test",session,42,seen,100),@"NaN rejected");
     NSMutableArray *errors=[NSMutableArray new];NSArray<MHTModule *> *modules=[MHTModule loadModules:[NSString stringWithUTF8String:argv[1]] errors:errors];
     check(!errors.count && modules.count>0,[NSString stringWithFormat:@"Independent modules load: %@",errors]);
+    // Metadata-only fixtures: no trainer library is loaded or copied.
+    NSString *modeRoot=[NSTemporaryDirectory() stringByAppendingPathComponent:[@"MHT-StartMode-" stringByAppendingString:NSUUID.UUID.UUIDString]];
+    NSString *fixture=[modeRoot stringByAppendingPathComponent:@"fixture.mhtmodule"];
+    [NSFileManager.defaultManager createDirectoryAtPath:fixture withIntermediateDirectories:YES attributes:nil error:NULL];
+    [[NSData data] writeToFile:[fixture stringByAppendingPathComponent:@"Trainer.dylib"] atomically:YES];
+    @try {
+        NSArray *cases=@[@{@"launchMode":@"app"},@{@"launchMode":@"executable"},@{@"launchMode":@"epic",@"epicAppName":@"fixture-app",@"epicNamespace":@"fixture-namespace"},@{@"launchMode":@"unknown"},@{@"launchMode":@"epic"},@{@"launchMode":@"epic",@"epicAppName":@"bad/value",@"epicNamespace":@"fixture-namespace"}];
+        for(NSUInteger i=0;i<cases.count;i++){
+            NSMutableDictionary *profile=[modules.firstObject.profiles.firstObject mutableCopy];[profile addEntriesFromDictionary:cases[i]];
+            NSMutableDictionary *manifest=[modules.firstObject.manifest mutableCopy];manifest[@"profiles"]=@[profile];
+            NSDictionary *configuration=@{@"schemaVersion":@1,@"app":@{@"name":@"Fixture",@"bundleIdentifier":@"local.mht.fixture",@"version":@"1.0",@"build":@"1"},@"profiles":@[profile]};
+            writeItem(fixture,@"Module.json",manifest);writeItem(fixture,@"TrainerConfig.json",configuration);
+            NSMutableArray *failures=[NSMutableArray new];NSArray *loaded=[MHTModule loadModules:modeRoot errors:failures];
+            check(i<3 ? loaded.count==1 && !failures.count : !loaded.count && failures.count==1,@"Only explicit valid start transports accepted; malformed Epic metadata cannot fall back to direct launch");
+        }
+    } @finally {[NSFileManager.defaultManager removeItemAtPath:modeRoot error:NULL];}
     NSDictionary *group=@{@"id":@"player",@"title":@"Spieler",@"symbol":@"person",@"features":@[@0,@1]};
     check([MHTModule validFeatureGroups:nil featureCount:2] && [MHTModule validFeatureGroups:@[group] featureCount:2],@"Optional groups preserve old modules and cover native IDs");
     for(id ids in @[@[@0,@0],@[@0],@[@0,@2],@[@0,@1.5],@[@0,@(-1)],@[@0,@"1"]]){

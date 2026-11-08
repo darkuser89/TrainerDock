@@ -5,6 +5,10 @@ Ingame-Overlay mit Liquid Glass und Ersatzdarstellung, Shortcuts, Auswahlverwalt
 serialisierte Bridge, Profilprüfung, Speicherhilfen und Runtime-Anbindung an den
 universellen Launcher. Die spielabhängige native Anbindung muss entwickelt werden.
 
+Alle sichtbaren Funktionsnamen, Erklärungen, Bedienhilfen und Statusmeldungen sind
+auf Deutsch zu verfassen. Spielnamen und Marken sowie interne Kennungen bleiben
+erhalten. Die Texte des nativen Katalogs werden im Launcher und im Spiel angezeigt.
+
 **Die Vorlage ist kein fertiger Trainer.** Es gibt keine simulierten Wirkungen,
 Spieladressen, erfundenen UUIDs oder vorgetäuschten Erfolge. Der einzige
 Katalogeintrag ist als nicht implementiert markiert. Der Standardadapter meldet

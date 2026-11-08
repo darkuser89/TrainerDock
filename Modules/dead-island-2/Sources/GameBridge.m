@@ -377,7 +377,7 @@ static const size_t recoilOffsets[]={0xc8,0xe0,0xf8,0x110};
             int64_t delta=(int64_t)target-before;
             if (delta>0 && delta<=(int64_t)INT_MAX-before) { [self ensureReason]; _api.addXP(progression,(int32_t)delta,_reason); }
         }
-        _lastMessage=[NSString stringWithFormat:@"XP: %d → %d · Level %d · dauerhaft",before,_api.getXP(progression),_api.getLevel(progression)];
+        _lastMessage=[NSString stringWithFormat:@"EP: %d → %d · Stufe %d · dauerhaft",before,_api.getXP(progression),_api.getLevel(progression)];
     }
     BOOL active[DI2FeatureCount]={0};
     active[DI2FeatureGod]=[self effect:DI2FeatureGod object:health wanted:_wanted[DI2FeatureGod] factor:1];

@@ -61,7 +61,7 @@
     state.selectionPending=_pendingRestore!=nil;
     state.overlayMouseActive=[_adapter setOverlayInteraction:_mouse];
     state.ready=(_mode==RE2SessionSolo || _mode==RE2SessionNetwork) && !_readOnly;
-    state.status=_readOnly ? @"Prüfmodus · Cheats gesperrt" : _mode==RE2SessionSolo ? @"Einzelspieler" : _mode==RE2SessionNetwork ? @"Netzwerk" : _mode==RE2SessionLoading ? @"Ladepause" : @"Nicht unterstützt";
+    state.status=_readOnly ? @"Prüfmodus · Funktionen gesperrt" : _mode==RE2SessionSolo ? @"Einzelspieler" : _mode==RE2SessionNetwork ? @"Netzwerk" : _mode==RE2SessionLoading ? @"Ladepause" : @"Nicht unterstützt";
     NSInteger feature=command>=100 && command<100+RE2ActiveFeatureCount() ? command-100 : -1;
     if(state.ready && command>=200 && command<200+RE2ActiveFeatureCount() && value){
         NSInteger i=command-200;const RE2FeatureInfo *info=RE2FeatureInfoAt(i);double n=value.doubleValue;
@@ -79,11 +79,11 @@
     for(NSInteger i=0;i<RE2ActiveFeatureCount();i++){
         RE2FeatureState *f=state.features[i];f.value=_values[i];f.wanted=_wanted[i];
         if(state.ready){RE2FeatureState *actual=[_adapter applyFeature:i wanted:_wanted[i] value:_values[i]];f.available=actual.available;f.active=_wanted[i] && actual.active;f.note=actual.note ?: context.note;}
-        else f.note=_readOnly ? @"Sichtprüfung der echten Spielanbindung. Cheats sind gesperrt." : _mode==RE2SessionLoading ? @"Auswahl bleibt erhalten; wartet auf gültigen Einzelspieler." : context.note;
+        else f.note=_readOnly ? @"Sichtprüfung der echten Spielanbindung. Funktionen sind gesperrt." : _mode==RE2SessionLoading ? @"Auswahl bleibt erhalten; wartet auf gültigen Einzelspieler." : context.note;
     }
     state.updatedAt=NSDate.date.timeIntervalSince1970;
     state.diagnostics=[_adapter respondsToSelector:@selector(diagnostics)] ? [_adapter diagnostics] : @{};
-    state.message=_readOnly ? [@"Prüfmodus: keine Cheats. " stringByAppendingString:context.note ?: @""] : state.ready ? _message : context.note;return state;
+    state.message=_readOnly ? [@"Prüfmodus: keine Trainerfunktionen. " stringByAppendingString:context.note ?: @""] : state.ready ? _message : context.note;return state;
 }
 - (void)finishCancelled:(NSIndexSet *)indexes {
     for(NSDictionary *r in [_queue objectsAtIndexes:indexes]){void (^reply)(RE2TrainerState *,NSString *)=r[@"reply"];if(reply)reply(nil,@"Command cancelled by state change or disable-all.");}
@@ -99,7 +99,7 @@
             NSIndexSet *old=[_queue indexesOfObjectsPassingTest:^BOOL(NSDictionary *entry,NSUInteger index,BOOL *stop){(void)index;(void)stop;NSInteger n=[entry[@"command"] integerValue];return command==RE2TrainerDisableAll ? n!=50 : n==50;}];
             [self finishCancelled:old];[_queue insertObject:request atIndex:0];
         }else if((command!=RE2TrainerPoll || completion) && _queue.count<16)[_queue addObject:request];
-        else if(completion)completion(nil,@"Trainer command queue is busy.");
+        else if(completion)completion(nil,@"Die Befehlswarteschlange des Trainers ist ausgelastet.");
         return;
     }
     [self dispatch:request];
@@ -125,19 +125,19 @@
     else if([action isEqual:@"disable_all"])command=RE2TrainerDisableAll;
     else {
         NSNumber *index=request[@"feature"];double n=[index isKindOfClass:NSNumber.class] ? index.doubleValue : NAN;
-        if(!isfinite(n) || floor(n)!=n || n<0 || n>=RE2ActiveFeatureCount()){completion(nil,@"Invalid feature index.");return;}
+        if(!isfinite(n) || floor(n)!=n || n<0 || n>=RE2ActiveFeatureCount()){completion(nil,@"Ungültige Funktionsnummer.");return;}
         NSInteger i=(NSInteger)n;const RE2FeatureInfo *f=RE2FeatureInfoAt(i);
-        if(!f->implemented){completion(nil,@"Feature not implemented.");return;}
+        if(!f->implemented){completion(nil,@"Diese Funktion ist nicht implementiert.");return;}
         if([action isEqual:@"set"] && !f->oneShot){
-            value=request[@"wanted"];if(![value isKindOfClass:NSNumber.class] || (value.doubleValue!=0 && value.doubleValue!=1)){completion(nil,@"wanted must be true or false.");return;}command=300+i;
+            value=request[@"wanted"];if(![value isKindOfClass:NSNumber.class] || (value.doubleValue!=0 && value.doubleValue!=1)){completion(nil,@"Der Schaltwert muss ein Wahrheitswert sein.");return;}command=300+i;
         }else if([action isEqual:@"value"] && f->numeric){
             value=request[@"value"];double v=[value isKindOfClass:NSNumber.class] ? value.doubleValue : NAN;
-            if(!isfinite(v) || v<f->minimum || v>f->maximum || (f->integer && floor(v)!=v)){completion(nil,@"Numeric value outside feature bounds.");return;}command=200+i;
+            if(!isfinite(v) || v<f->minimum || v>f->maximum || (f->integer && floor(v)!=v)){completion(nil,@"Der Zahlenwert liegt außerhalb des Funktionsbereichs.");return;}command=200+i;
         }else if([action isEqual:@"run"] && f->oneShot)command=100+i;
     }
-    if(command<0){completion(nil,@"Unsupported action or feature type. One-shots require run.");return;}
+    if(command<0){completion(nil,@"Aktion oder Funktionstyp nicht unterstützt. Einmalaktionen müssen ausdrücklich ausgeführt werden.");return;}
     double deadline=[request[@"deadline"] isKindOfClass:NSNumber.class] ? [request[@"deadline"] doubleValue] : NSDate.date.timeIntervalSince1970+4;
-    if(!isfinite(deadline) || deadline>NSDate.date.timeIntervalSince1970+10){completion(nil,@"Invalid command deadline.");return;}
+    if(!isfinite(deadline) || deadline>NSDate.date.timeIntervalSince1970+10){completion(nil,@"Ungültige Gültigkeitsdauer des Befehls.");return;}
     [self submit:command value:value deadline:deadline completion:completion];
 }
 - (void)poll {[self submit:RE2TrainerPoll value:nil];}

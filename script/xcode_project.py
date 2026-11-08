@@ -86,7 +86,7 @@ def generate():
     products = []
     targets = []
 
-    def native(name, sources, settings, phases_before=(), phases_after=(), app=False):
+    def native(name, sources, settings, phases_before=(), phases_after=(), app=False, tool=False):
         files = [add(name + ":compile:" + p, "PBXBuildFile", fileRef=ref(p)) for p in sources]
         phase = add(name + ":sources", "PBXSourcesBuildPhase", buildActionMask=2147483647,
                     files=files, runOnlyForDeploymentPostprocessing=0)
@@ -100,27 +100,38 @@ def generate():
             phases.append(shell("app:icon", "Build macOS app icon", "icon",
                                 ["$(SRCROOT)/App/Resources/TrainerDock.png", "$(SRCROOT)/script/xcode_support.py"],
                                 ["$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/TrainerDock.icns"]))
-        product = add(name + ":product", "PBXFileReference", explicitFileType="wrapper.application" if app else "compiled.mach-o.dylib",
-                      path="TrainerDock.app" if app else "Trainer.dylib", sourceTree="BUILT_PRODUCTS_DIR")
+        product = add(name + ":product", "PBXFileReference", explicitFileType="wrapper.application" if app else "compiled.mach-o.executable" if tool else "compiled.mach-o.dylib",
+                      path="TrainerDock.app" if app else name if tool else "Trainer.dylib", sourceTree="BUILT_PRODUCTS_DIR")
         products.append(product)
         target = add("target:" + name, "PBXNativeTarget", buildConfigurationList=configurations(name, settings),
                      buildPhases=phases + list(phases_after), buildRules=[], dependencies=[], name=name,
-                     productName="TrainerDock" if app else "Trainer", productReference=product,
-                     productType="com.apple.product-type.application" if app else "com.apple.product-type.library.dynamic")
+                     productName="TrainerDock" if app else name if tool else "Trainer", productReference=product,
+                     productType="com.apple.product-type.application" if app else "com.apple.product-type.tool" if tool else "com.apple.product-type.library.dynamic")
         targets.append(target)
         return target
 
     links = ["$(inherited)", "-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore",
              "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++"]
     sdk_source = "ModuleSDK/MHTProtocol.m"
+    broker = native("TrainerDockEpicBroker", ["App/MHTEpicBroker.m", "Core/MHTEpicLaunch.m"], dict(
+        PRODUCT_NAME="TrainerDockEpicBroker", MACH_O_TYPE="mh_execute", SKIP_INSTALL="YES",
+        CONFIGURATION_BUILD_DIR="$(TRAINERDOCK_BUILD_ROOT)/Xcode/Build/Products/$(CONFIGURATION)/Helpers",
+        HEADER_SEARCH_PATHS=["$(SRCROOT)/Core"],
+        OTHER_LDFLAGS=["$(inherited)", "-framework", "AppKit", "-framework", "Foundation"]), tool=True)
+    broker_file = add("app:broker", "PBXBuildFile", fileRef=objects[broker]["productReference"],
+                      settings=dict(ATTRIBUTES=["CodeSignOnCopy"]))
+    embed_broker = add("app:embed-broker", "PBXCopyFilesBuildPhase", buildActionMask=2147483647,
+                      files=[broker_file], dstPath="", dstSubfolderSpec=6,
+                      name="Embed Epic launch broker", runOnlyForDeploymentPostprocessing=0)
     app_sources = [str(p.relative_to(ROOT)) for folder in ("App", "Core")
-                   for p in sorted((ROOT / folder).glob("*.m"))] + [sdk_source]
+                   for p in sorted((ROOT / folder).glob("*.m")) if p.name != "MHTEpicBroker.m"] + [sdk_source]
     app = native("TrainerDock", app_sources, dict(
         PRODUCT_NAME="TrainerDock", PRODUCT_BUNDLE_IDENTIFIER="local.trainerdock.launcher",
         INFOPLIST_FILE="Config/Info.plist",
         GENERATE_INFOPLIST_FILE="NO", CONFIGURATION_BUILD_DIR="$(TRAINERDOCK_BUILD_ROOT)",
         HEADER_SEARCH_PATHS=["$(SRCROOT)/App", "$(SRCROOT)/Core", "$(SRCROOT)/ModuleSDK", "$(TRAINERDOCK_ARCHIVE_INCLUDE)"],
-        OTHER_LDFLAGS=links+["-larchive.2"]), app=True)
+        OTHER_LDFLAGS=links+["-larchive.2"]), phases_after=[embed_broker], app=True)
+    objects[app]["dependencies"].append(add("app:depends:broker", "PBXTargetDependency", target=broker))
     module_targets = []
     checks = ["$(SRCROOT)/script/" + p for p in ("build.py", "managed.py", "xcode_support.py")]
     for module in released_modules():
@@ -171,8 +182,11 @@ def generate():
 
     def aggregate(name, dependencies):
         deps = [add(name + ":depends:" + target, "PBXTargetDependency", target=target) for target in dependencies]
-        inputs = checks + ["$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock"]
+        inputs = checks + ["$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/" + p
+                           for p in ("TrainerDock", "TrainerDockEpicBroker")]
         inputs += ["$(SRCROOT)/Tests/" + p for p in ("MHTTests.m", "GameIdentityTests.m", "LauncherLayoutTests.m", "UpdaterTests.m", "test_xcode_project.py")]
+        inputs += ["$(SRCROOT)/" + p for p in ("Tests/EpicLaunch/MHTEpicLaunchTests.m",
+                                               "Core/MHTEpicLaunch.m", "Core/MHTEpicLaunch.h")]
         inputs.append("$(SRCROOT)/script/xcode_project.py")
         inputs += ["$(TRAINERDOCK_BUILD_ROOT)/Modules/" + p.name + ".mhtmodule/Module.json" for p in released_modules()]
         phase = shell(name + ":checks", "Verify launcher, module signatures and layout", "launcher", inputs,

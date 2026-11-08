@@ -71,7 +71,7 @@ static NSString *number(double value, BOOL integer) { return integer ? [NSString
     [(self.state.active ? green() : self.state.wanted ? orange() : [NSColor colorWithWhite:0.22 alpha:1]) setFill];
     [[NSBezierPath bezierPathWithRoundedRect:pill xRadius:6.5 yRadius:6.5] fill];
     if (!info->implemented) label(@"—",NSMakeRect(toggle+7,2,15,15),10,NSColor.grayColor,YES,NO);
-    else if (info->oneShot) label(@"GO",NSMakeRect(toggle+4,4,21,12),8,self.ready && self.state.available ? NSColor.whiteColor : NSColor.grayColor,YES,NO);
+    else if (info->oneShot) label(@"Los",NSMakeRect(toggle+4,4,21,12),8,self.ready && self.state.available ? NSColor.whiteColor : NSColor.grayColor,YES,NO);
     else {
         [NSColor.whiteColor setFill];
         NSRect knob=NSMakeRect(toggle+(self.state.wanted ? 14 : 2),6,9,9);
@@ -162,9 +162,9 @@ static NSString *number(double value, BOOL integer) { return integer ? [NSString
     self.identifier=@"MTTrainerOverlay"; self.autoresizingMask=NSViewWidthSizable|NSViewHeightSizable;
     self.wantsLayer=YES; self.layer.backgroundColor=NSColor.clearColor.CGColor; self.layer.zPosition=100000;
     self.accessibilityElement=YES; self.accessibilityRole=NSAccessibilityGroupRole;
-    self.accessibilityLabel=@"Mac Trainer. Befehl und Zirkumflex: Overlay und Maus. Umschalt und F9: alle Schalter aus.";
+    self.accessibilityLabel=@"TrainerDock. Befehl und Zirkumflex: Trainerfenster und Maus. Umschalt und F9: alle Schalter aus.";
     _panel=[[MTOverlaySurface alloc] initWithFrame:NSZeroRect]; _panel.owner=self; _panel.wantsLayer=YES;
-    _panel.toolTip=@"Titelleiste ziehen: Overlay verschieben. ⌘ + ^: verbergen/anzeigen; Cheats bleiben aktiv.";
+    _panel.toolTip=@"Titelleiste ziehen: Trainerfenster verschieben. ⌘ + ^: verbergen/anzeigen; Funktionen bleiben aktiv.";
     _material=[[MTTrainerMaterial alloc]initWithContentView:_panel cornerRadius:14];
     _material.appearance=[NSAppearance appearanceNamed:NSAppearanceNameDarkAqua];[self addSubview:_material];
     _perColumn=(NSInteger)ceil(MTFeatureCount/2.0);_rowsHeight=_perColumn*21;
@@ -223,13 +223,13 @@ static NSString *number(double value, BOOL integer) { return integer ? [NSString
     if (_folded) return;
     [[NSColor colorWithWhite:1 alpha:0.1] setFill]; NSRectFillUsingOperation(MHTOnePixelVerticalRect(NSMakeRect(270,47,0.5,_rowsHeight)),NSCompositingOperationSourceOver);
     if (_editingFeature>=0) {
-        label([NSString stringWithFormat:@"%@ = %@▏  · Enter übernehmen · Esc abbrechen",MTFeatureInfoAt(_editingFeature)->title,_editText],NSMakeRect(10,54+_rowsHeight,520,31),10,orange(),YES,YES);
+        label([NSString stringWithFormat:@"%@ = %@▏  · Eingabe übernehmen · Esc abbrechen",MTFeatureInfoAt(_editingFeature)->title,_editText],NSMakeRect(10,54+_rowsHeight,520,31),10,orange(),YES,YES);
     } else {
         NSString *detail=_hover>=0 ? _state.features[_hover].note : _state.message;
         label(detail ?: @"",NSMakeRect(10,54+_rowsHeight,520,27),9.5,[NSColor colorWithWhite:0.79 alpha:1],NO,YES);
     }
     NSString *mouseState=!self.wantsMouseInteraction ? @"Spiel" : _state.overlayMouseActive ? @"frei" : @"wartet";
-    label([NSString stringWithFormat:@"⌘ ^ Overlay + Maus %@ · Esc schließen · Titelleiste ziehen",mouseState],NSMakeRect(10,88+_rowsHeight,520,12),8,[NSColor colorWithWhite:0.78 alpha:1],NO,NO);
+    label([NSString stringWithFormat:@"⌘ ^ Trainer + Maus %@ · Esc schließen · Titelleiste ziehen",mouseState],NSMakeRect(10,88+_rowsHeight,520,12),8,[NSColor colorWithWhite:0.78 alpha:1],NO,NO);
 }
 - (void)headerClick:(NSPoint)point {
     if (point.y>25) return;

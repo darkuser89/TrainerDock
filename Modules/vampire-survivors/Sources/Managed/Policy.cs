@@ -3,6 +3,19 @@ using System;
 namespace MHTVampireSurvivors {
  public static class Policy {
   public const int Count=19;
+  // Exact observed build tuples. Do not accept independently mixed assemblies.
+  static readonly Guid SteamRuntime=new Guid("a0f710ef-5749-41d3-acf9-dffec2421678");
+  static readonly Guid SteamPhaser=new Guid("93b42865-e14c-4ce5-8022-591e2f7dff4d");
+  static readonly Guid SteamUniTask=new Guid("6b0d9df4-3659-4035-852e-1d51528841f6");
+  static readonly Guid EpicRuntime=new Guid("7b778702-8647-455b-bbcc-f38442e8cf59");
+  static readonly Guid EpicPhaser=new Guid("e01b784b-6119-42cb-be5d-8b4533ff7fa3");
+  static readonly Guid EpicUniTask=new Guid("795da216-3443-4ac3-89f6-28c5377f97de");
+  static readonly Guid UnityCore=new Guid("1b3ea231-962b-4662-b0df-c5487b245a2e");
+  public static bool SupportedBuild(Guid runtime,Guid phaser,Guid uniTask,Guid unityCore) {
+   if(unityCore!=UnityCore)return false;
+   return (runtime==SteamRuntime&&phaser==SteamPhaser&&uniTask==SteamUniTask)||
+          (runtime==EpicRuntime&&phaser==EpicPhaser&&uniTask==EpicUniTask);
+  }
   public static bool Once(int f) { return f>=9 && f<Count; }
   public static bool Valid(int f,double v) {
    if(f<0||f>=Count||double.IsNaN(v)||double.IsInfinity(v))return false;

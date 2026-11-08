@@ -61,7 +61,7 @@ struct API {
     intptr_t slide=0;
     template<class T>T fn(uintptr_t a)const{return reinterpret_cast<T>(a+slide);}
     void validate(){
-        thread();uintptr_t anchor=binding("gameThreadCall");if(!anchor)reject("Original image relocation unavailable");
+        thread();uintptr_t anchor=binding("gameThreadCall");if(!anchor)reject("Die ursprüngliche Programmadressierung ist nicht verfügbar.");
         slide=(intptr_t)anchor-(intptr_t)0x10087a854ULL;
         for(const auto &b:operationBindings){uint8_t actual[16];if(!read(b.address+slide,actual,16)||memcmp(actual,b.bytes,16))reject("Original operation binding differs");}
     }
@@ -93,14 +93,14 @@ Object owner(Object component){
 void propertyLayout(Object o,NSString *field,NSString *type,int32_t offset,int32_t size){
     Property p=property(o,field);if(![p.type isEqual:type]||p.offset!=offset||p.size!=size||p.count!=1)reject("Original operation property layout differs");
 }
-bool boolean(Object o,NSString *field){id v=readValue(o,property(o,field));if(![v isKindOfClass:NSNumber.class])reject("Native boolean readback unavailable");return [v boolValue];}
+bool boolean(Object o,NSString *field){id v=readValue(o,property(o,field));if(![v isKindOfClass:NSNumber.class])reject("Die native Wahrheitswertrücklesung ist nicht verfügbar.");return [v boolValue];}
 // Original PXOperationSubsystem.OnLogicTick enumerates this TSparseSet: 16-byte
 // entries at +0x290; allocated-element bits inline +0x2a0 or pointer +0x2b0.
 // +0x2e8 is an event delegate, not operation membership.
 std::vector<Object> registered(Object subsystem){
     live(subsystem);uintptr_t elements=read<uintptr_t>(subsystem.address+0x290),external=read<uintptr_t>(subsystem.address+0x2b0);
     int32_t count=read<int32_t>(subsystem.address+0x298),bits=read<int32_t>(subsystem.address+0x2b8);
-    if(count<0||count>65536||bits!=count||(!elements&&count)||(!external&&bits>128))reject("Original component registry is invalid");
+    if(count<0||count>65536||bits!=count||(!elements&&count)||(!external&&bits>128))reject("Die ursprüngliche Komponentenliste ist ungültig.");
     uintptr_t bitmap=external?external:subsystem.address+0x2a0;std::vector<Object> out;
     for(int32_t i=0;i<bits;i++)if(read<uint32_t>(bitmap+4*(uint32_t(i)>>5))&(1u<<(i&31))){
         Object value{read<uintptr_t>(elements+16*size_t(i))};live(value);out.push_back(value);
@@ -240,10 +240,10 @@ Result council(const Context &c){
         context(c);API api;api.validate();Object subsystem=api.subsystem(c,0x105e7b328,@"PXParliamentSubsystem");
         using Get=uintptr_t(*)(const void *);Object parliament{api.fn<Get>(0x1075deb08)((const void *)c.controller.address)};live(parliament);
         if(!nativeClass(parliament,@"PXParliamentComponent")||linkedObject(parliament,@"City")!=c.city||fp::worldOf(parliament)!=c.world
-            ||api.fn<Get>(0x1075e7510)((const void *)subsystem.address)!=parliament.address || !registered(subsystem,parliament))reject("Current parliament is outside the selected local city");
+            ||api.fn<Get>(0x1075e7510)((const void *)subsystem.address)!=parliament.address || !registered(subsystem,parliament))reject("Der aktuelle Rat gehört nicht zur ausgewählten lokalen Stadt.");
         propertyLayout(parliament,@"currentPhase",@"EnumProperty",0x1c0,1);propertyLayout(parliament,@"SessionIndex",@"IntProperty",0x1c4,4);
         uint8_t phase=read<uint8_t>(parliament.address+0x1c0);int32_t session=read<int32_t>(parliament.address+0x1c4);
-        if(phase>4||session<0||session==INT32_MAX)reject("Original council phase/session is invalid");r.available=true;r.value=session;
+        if(phase>4||session<0||session==INT32_MAX)reject("Die ursprüngliche Ratsphase oder Sitzung ist ungültig.");r.available=true;r.value=session;
         if(phase!=4){r.note=@"Keine Ratspause aktiv.";return r;}
         Weak parliamentWeak(parliament),subsystemWeak(subsystem);context(c);r.invoked=true;
         api.fn<void(*)(const void *)>(0x1075df800)((const void *)c.controller.address);

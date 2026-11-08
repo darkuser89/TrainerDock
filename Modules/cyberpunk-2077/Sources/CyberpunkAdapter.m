@@ -70,12 +70,12 @@ static BOOL sameHandle(NSData *a,NSData *b){return a.length==16 && b.length==16 
     NSData *system=[_native lockWeak:_godWeak];
     if(!instance(system)){
         if([[_native weakIsExpired:_godWeak] isEqual:@YES]){_ownsEffect=NO;return YES;}
-        _failure=@"Alte Godmode-Quelle kann noch nicht sicher aufgelöst werden.";return NO;
+        _failure=@"Alte Unverwundbarkeit-Quelle kann noch nicht sicher aufgelöst werden.";return NO;
     }
     @try {
         NSArray *args=@[bytes(&_entityID,8),bytes(&_mode,4),bytes(&_reason,8)];
         if([self truth:[self call:_remove context:instance(system) args:args size:1]]){_ownsEffect=NO;return YES;}
-        _failure=@"Eigene Godmode-Quelle wurde noch nicht zurückgenommen.";return NO;
+        _failure=@"Eigene Unverwundbarkeit-Quelle wurde noch nicht zurückgenommen.";return NO;
     } @finally {[_native destroyValue:system type:@"handle:gameGodModeSystem"];}
 }
 - (MTGameContext *)captureContext {
@@ -138,12 +138,12 @@ static BOOL sameHandle(NSData *a,NSData *b){return a.length==16 && b.length==16 
         if(![self removeOwned]){state.note=_failure;return state;}
         NSData *system=[_native lockWeak:_godWeak];
         @try {
-            if(!instance(system)){state.note=@"Godmode-Rücklese wartet auf gültiges System.";return state;}
+            if(!instance(system)){state.note=@"Unverwundbarkeit-Rücklese wartet auf gültiges System.";return state;}
             NSData *readback=[self call:_has context:instance(system) args:@[bytes(&_entityID,8),bytes(&_mode,4)] size:1];
             state.available=readback.length==1;
-            state.note=!state.available ? @"Godmode-Rücklese fehlgeschlagen." : [self truth:readback]
-                ? @"Eigene Quelle aus; weitere Godmode-Quelle bleibt aktiv."
-                : @"Eigene Quelle aus; nativer Godmode ist aus.";
+            state.note=!state.available ? @"Unverwundbarkeit-Rücklese fehlgeschlagen." : [self truth:readback]
+                ? @"Eigene Quelle aus; weitere Unverwundbarkeit-Quelle bleibt aktiv."
+                : @"Eigene Quelle aus; nativer Unverwundbarkeit ist aus.";
             return state;
         } @finally {[_native destroyValue:system type:@"handle:gameGodModeSystem"];}
     }
@@ -156,7 +156,7 @@ static BOOL sameHandle(NSData *a,NSData *b){return a.length==16 && b.length==16 
         state.available=YES;
         if(!_ownsEffect)_ownsEffect=[self truth:[self call:_add context:instance(system) args:@[bytes(&_entityID,8),bytes(&_mode,4),bytes(&_reason,8)] size:1]];
         state.active=_ownsEffect && [self truth:[self call:_has context:instance(system) args:@[bytes(&_entityID,8),bytes(&_mode,4)] size:1]];
-        state.note=state.active ? @"Nativer Godmode zurückgelesen; eigene Quelle." : @"Godmode nicht bestätigt.";
+        state.note=state.active ? @"Nativer Unverwundbarkeit zurückgelesen; eigene Quelle." : @"Unverwundbarkeit nicht bestätigt.";
         return state;
     } @finally {[_native destroyValue:player type:@"handle:gameObject"];[_native destroyValue:system type:@"handle:gameGodModeSystem"];}
 }

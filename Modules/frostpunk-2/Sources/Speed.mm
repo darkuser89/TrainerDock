@@ -5,15 +5,15 @@ namespace {
 fp::Weak world,utility;
 bool held=false;
 double original=1,last=1;
-fp::Object library(){using namespace fp;Object cached=utility.get();if(cached)return cached;Object found{};for(Object o:find(@"GameplayStatics",@"Default__GameplayStatics",16)){if(![className(o) isEqual:@"GameplayStatics"] || ![name(o) isEqual:@"Default__GameplayStatics"] || !(read<uint32_t>(o.address+8)&0x10))continue;Object c=objectClass(o);uintptr_t outer=read<uintptr_t>(c.address+0x20);if(!outer || ![name(Object{outer}) isEqual:@"/Script/Engine"])continue;if(found)throw std::runtime_error("Ambiguous original GameplayStatics");found=o;}if(!found)throw std::runtime_error("Original GameplayStatics unavailable");utility=Weak(found);return found;}
+fp::Object library(){using namespace fp;Object cached=utility.get();if(cached)return cached;Object found{};for(Object o:find(@"GameplayStatics",@"Default__GameplayStatics",16)){if(![className(o) isEqual:@"GameplayStatics"] || ![name(o) isEqual:@"Default__GameplayStatics"] || !(read<uint32_t>(o.address+8)&0x10))continue;Object c=objectClass(o);uintptr_t outer=read<uintptr_t>(c.address+0x20);if(!outer || ![name(Object{outer}) isEqual:@"/Script/Engine"])continue;if(found)throw std::runtime_error("Die ursprüngliche Spielwelt-Hilfsfunktion ist nicht eindeutig.");found=o;}if(!found)throw std::runtime_error("Die ursprüngliche Spielwelt-Hilfsfunktion ist nicht verfügbar.");utility=Weak(found);return found;}
 NSDictionary *arg(fp::Object w){return @{@"object":@(fp::read<int32_t>(w.address+0xc))};}
-double get(fp::Object w){using namespace fp;Object lib=library(),f=function(lib,@"GetGlobalTimeDilation");if((read<uint32_t>(f.address+0xb0)&0x2400)!=0x2400)throw std::runtime_error("Time getter is not native/static");id result=invoke(lib,@"GetGlobalTimeDilation",@{@"WorldContextObject":arg(w)});if(![result isKindOfClass:NSNumber.class] || !std::isfinite([result doubleValue]))throw std::runtime_error("Original time getter returned invalid value");return [result doubleValue];}
+double get(fp::Object w){using namespace fp;Object lib=library(),f=function(lib,@"GetGlobalTimeDilation");if((read<uint32_t>(f.address+0xb0)&0x2400)!=0x2400)throw std::runtime_error("Die Zeitabfrage ist keine ursprüngliche statische native Funktion.");id result=invoke(lib,@"GetGlobalTimeDilation",@{@"WorldContextObject":arg(w)});if(![result isKindOfClass:NSNumber.class] || !std::isfinite([result doubleValue]))throw std::runtime_error("Die ursprüngliche Zeitabfrage lieferte einen ungültigen Wert.");return [result doubleValue];}
 // Keep a successfully submitted native float owned even if readback then fails.
 bool setOwned(fp::Object w,double value) {
     using namespace fp;
     Object lib=library(),f=function(lib,@"SetGlobalTimeDilation");
     if((read<uint32_t>(f.address+0xb0)&0x2400)!=0x2400)
-        throw std::runtime_error("Time setter is not native/static");
+        throw std::runtime_error("Die Zeitänderung ist keine ursprüngliche statische native Funktion.");
     const double target=static_cast<float>(value);
     invoke(lib,@"SetGlobalTimeDilation",@{@"WorldContextObject":arg(w),@"TimeDilation":@(target)});
     last=target;

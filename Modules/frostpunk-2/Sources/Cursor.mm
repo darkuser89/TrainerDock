@@ -17,7 +17,7 @@ template<class T> bool load(uintptr_t base,size_t offset,T &out) {
 }
 template<class T> T original(const char *name) {
     uintptr_t address=fp::binding(name);
-    if(!address)throw std::runtime_error("Original cursor binding unavailable");
+    if(!address)throw std::runtime_error("Die ursprüngliche Mauszeigeranbindung ist nicht verfügbar.");
     return reinterpret_cast<T>(address);
 }
 struct API {

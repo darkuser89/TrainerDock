@@ -162,9 +162,9 @@ static NSString *number(double value, BOOL integer) { return integer ? [NSString
     self.identifier=@"MTTrainerOverlay"; self.autoresizingMask=NSViewWidthSizable|NSViewHeightSizable;
     self.wantsLayer=YES; self.layer.backgroundColor=NSColor.clearColor.CGColor; self.layer.zPosition=100000;
     self.accessibilityElement=YES; self.accessibilityRole=NSAccessibilityGroupRole;
-    self.accessibilityLabel=@"Mac Trainer. Befehl und Zirkumflex: Overlay. ⌃⇧Rücktaste: alle Schalter aus.";
+    self.accessibilityLabel=@"TrainerDock. Befehl und Zirkumflex: Trainerfenster. ⌃⇧Rücktaste: alle Schalter aus.";
     _panel=[[MTOverlaySurface alloc] initWithFrame:NSZeroRect]; _panel.owner=self; _panel.wantsLayer=YES;
-    _panel.toolTip=@"Titelleiste ziehen: Overlay verschieben. ⌘^: verbergen/anzeigen; Cheats bleiben aktiv.";
+    _panel.toolTip=@"Titelleiste ziehen: Trainerfenster verschieben. ⌘^: verbergen/anzeigen; Funktionen bleiben aktiv.";
     _material=[[MTTrainerMaterial alloc]initWithContentView:_panel cornerRadius:14];
     _material.appearance=[NSAppearance appearanceNamed:NSAppearanceNameDarkAqua];[self addSubview:_material];
     _perColumn=(NSInteger)ceil(MTFeatureCount/2.0);_rowsHeight=_perColumn*21;
@@ -211,7 +211,7 @@ static NSString *number(double value, BOOL integer) { return integer ? [NSString
 }
 - (void)drawPanel:(NSRect)bounds {
     (void)bounds; // Native material owns the background and its edge.
-    label(@"MAC TRAINER",NSMakeRect(10,7,112,18),12,orange(),YES,NO);
+    label(@"TrainerDock",NSMakeRect(10,7,112,18),12,orange(),YES,NO);
     label(@"TRAINER",NSMakeRect(126,9,55,14),9,NSColor.whiteColor,YES,NO);
     label(@"−",NSMakeRect(438,6,18,19),13,NSColor.whiteColor,YES,NO);
     label(@"+",NSMakeRect(468,6,18,19),13,NSColor.whiteColor,YES,NO);
@@ -223,7 +223,7 @@ static NSString *number(double value, BOOL integer) { return integer ? [NSString
     if (_folded) return;
     [[NSColor colorWithWhite:1 alpha:0.1] setFill]; NSRectFillUsingOperation(MHTOnePixelVerticalRect(NSMakeRect(410,47,0.5,_rowsHeight)),NSCompositingOperationSourceOver);
     if (_editingFeature>=0) {
-        label([NSString stringWithFormat:@"%@ = %@▏  · Enter übernehmen · Esc abbrechen",MTFeatureInfoAt(_editingFeature)->title,_editText],NSMakeRect(10,54+_rowsHeight,800,31),10,orange(),YES,YES);
+        label([NSString stringWithFormat:@"%@ = %@▏  · Eingabe übernehmen · Esc abbrechen",MTFeatureInfoAt(_editingFeature)->title,_editText],NSMakeRect(10,54+_rowsHeight,800,31),10,orange(),YES,YES);
     } else {
         NSString *detail=_hover>=0 ? _state.features[_hover].note : _state.message;
         label(detail ?: @"",NSMakeRect(10,54+_rowsHeight,800,27),9.5,[NSColor colorWithWhite:0.79 alpha:1],NO,YES);

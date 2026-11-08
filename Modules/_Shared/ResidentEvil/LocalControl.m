@@ -35,10 +35,10 @@ static BOOL post(NSString *name,NSDictionary *value){
     if([action isEqual:@"discover"]){envelope[@"ok"]=@YES;post(replyName,envelope);return;}
     if(![r[@"session"] isEqual:_metadata[@"session"]] || ![r[@"profile"] isEqual:_metadata[@"profile"]] || ![r[@"pid"] isEqual:_metadata[@"pid"]])return;
     double now=NSDate.date.timeIntervalSince1970;id rawDeadline=r[@"deadline"];double deadline=[rawDeadline isKindOfClass:NSNumber.class] ? [rawDeadline doubleValue] : NAN;
-    if(!isfinite(deadline) || deadline<=now || deadline>now+10){envelope[@"ok"]=@NO;envelope[@"error"]=@"Expired or invalid request deadline.";post(replyName,envelope);return;}
-    if([_seen containsObject:nonce]){envelope[@"ok"]=@NO;envelope[@"error"]=@"Duplicate request rejected; no action repeated.";post(replyName,envelope);return;}
+    if(!isfinite(deadline) || deadline<=now || deadline>now+10){envelope[@"ok"]=@NO;envelope[@"error"]=@"Anfrage abgelaufen oder ungültig.";post(replyName,envelope);return;}
+    if([_seen containsObject:nonce]){envelope[@"ok"]=@NO;envelope[@"error"]=@"Doppelte Anfrage abgelehnt; keine Aktion wiederholt.";post(replyName,envelope);return;}
     [_seen addObject:nonce];if(_seen.count>128)[_seen removeObjectAtIndex:0];
-    _handler(r,^(NSDictionary *response){NSMutableDictionary *out=[envelope mutableCopy];[out addEntriesFromDictionary:response ?: @{@"ok":@NO,@"error":@"No response."}];post(replyName,out);});
+    _handler(r,^(NSDictionary *response){NSMutableDictionary *out=[envelope mutableCopy];[out addEntriesFromDictionary:response ?: @{@"ok":@NO,@"error":@"Keine Antwort."}];post(replyName,out);});
 }
 - (void)stop {if(_observer){[NSDistributedNotificationCenter.defaultCenter removeObserver:_observer];_observer=nil;}}
 - (void)dealloc {[self stop];}
@@ -68,14 +68,14 @@ NSDictionary *MTControlClient(NSString *target,NSDictionary *request){
     [NSDistributedNotificationCenter.defaultCenter removeObserver:observer];
     if([target isEqual:@"list"]){NSMutableArray *games=[NSMutableArray new];for(NSDictionary *m in found.allValues){NSMutableDictionary *v=[m mutableCopy];[v removeObjectsForKeys:@[@"session",@"request"]];[games addObject:v];}return @{@"ok":@YES,@"games":games};}
     NSArray *candidates=[found.allValues filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSDictionary *m,NSDictionary *bindings){(void)bindings;return matches(m,target);}]];
-    if(candidates.count!=1)return @{@"ok":@NO,@"error":candidates.count ? @"Multiple game sessions match; target the game PID." : @"No live control interface found. Start the game with the current trainer build."};
+    if(candidates.count!=1)return @{@"ok":@NO,@"error":candidates.count ? @"Mehrere passende Spielinstanzen gefunden. Bitte die gewünschte Prozesskennung angeben." : @"Keine aktive Trainerverbindung gefunden. Bitte das Spiel mit dem aktuellen Trainer starten."};
     NSDictionary *m=candidates.firstObject;NSString *nonce=NSUUID.UUID.UUIDString;__block NSDictionary *answer=nil;
     observer=[NSDistributedNotificationCenter.defaultCenter addObserverForName:replyName object:nil queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification *n){NSDictionary *r=decode(n.object);if([r[@"request"] isEqual:nonce] && [r[@"session"] isEqual:m[@"session"]] && [r[@"pid"] isEqual:m[@"pid"]] && [r[@"profile"] isEqual:m[@"profile"]])answer=r;}];
     NSMutableDictionary *message=[request mutableCopy] ?: [NSMutableDictionary new];
     [message addEntriesFromDictionary:@{@"version":@1,@"request":nonce,@"session":m[@"session"],@"profile":m[@"profile"],@"pid":m[@"pid"],@"deadline":@(NSDate.date.timeIntervalSince1970+4)}];
     sent=post(requestName,message);if(sent)pumpUntil(^BOOL{return answer!=nil;},7);
     [NSDistributedNotificationCenter.defaultCenter removeObserver:observer];
-    if(!answer)return @{@"ok":@NO,@"error":@"No reply before timeout. Execution outcome is unknown; do not repeat one-shot actions automatically."};
+    if(!answer)return @{@"ok":@NO,@"error":@"Keine Antwort innerhalb der Wartezeit. Ergebnis unbekannt; Einmalaktionen nicht automatisch wiederholen."};
     NSMutableDictionary *out=[answer mutableCopy];[out removeObjectsForKeys:@[@"session",@"request"]];return out;
 }
 int MTControlCLI(int argc,const char *argv[]){

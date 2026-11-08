@@ -65,7 +65,13 @@ static BOOL number(id v){return [v isKindOfClass:NSNumber.class] && isfinite([v 
         if(valid){
             valid=[self validFeatureGroups:m[@"groups"] featureCount:[m[@"features"] count]];
             for(id profile in m[@"profiles"]){
-                if(![profile isKindOfClass:NSDictionary.class] || !text(profile[@"store"]) || !text(profile[@"version"]))valid=NO;
+                if(![profile isKindOfClass:NSDictionary.class]){valid=NO;continue;}
+                if(!text(profile[@"store"]) || !text(profile[@"version"]))valid=NO;
+                for(NSString *key in @[@"epicAppName",@"epicNamespace"])
+                    if(profile[key] && (!token(profile[key]) || [profile[key] length]>256))valid=NO;
+                if(profile[@"epicNamespace"] && !profile[@"epicAppName"])valid=NO;
+                if(profile[@"launchMode"] && ![@[@"app",@"executable",@"epic"] containsObject:profile[@"launchMode"]])valid=NO;
+                if([profile[@"launchMode"] isEqual:@"epic"] && (!token(profile[@"epicAppName"]) || !token(profile[@"epicNamespace"])))valid=NO;
             }
             NSUInteger i=0;
             for(id f in m[@"features"]){
@@ -92,6 +98,13 @@ static BOOL number(id v){return [v isKindOfClass:NSNumber.class] && isfinite([v 
 - (NSString *)pathForProfile:(NSDictionary *)profile {
     NSString *path=[NSUserDefaults.standardUserDefaults stringForKey:[self key:[@"path." stringByAppendingString:profile[@"id"]]]];
     if(path.length)return path;
+    // LaunchServices has one arbitrary answer for a shared bundle identifier.
+    // Epic and Steam installations must instead be discovered per profile.
+    if(text(profile[@"epicAppName"]))return nil;
+    for(NSDictionary *other in self.profiles)
+        if([other[@"bundleIdentifier"] isEqual:profile[@"bundleIdentifier"]]
+           && text(other[@"store"]) && text(profile[@"store"])
+           && ![other[@"store"] isEqual:profile[@"store"]])return nil;
     return [NSWorkspace.sharedWorkspace URLForApplicationWithBundleIdentifier:profile[@"bundleIdentifier"]].path;
 }
 - (void)setPath:(NSString *)path forProfile:(NSDictionary *)profile {
