@@ -203,13 +203,53 @@ static void checkIcons(void) {
 // Catalog fixtures are metadata only. No runtime or fake cheat is ever built.
 @interface MHTLayoutStore : MHTTrainerStore
 @property(nonatomic) NSUInteger downloadRequests;
+@property(nonatomic) NSArray<MHTModule *> *layoutVersions;
 @end
 @implementation MHTLayoutStore
+- (NSArray<MHTModule *> *)installedVersionsForIdentifier:(NSString *)identifier {
+    if(self.layoutVersions && [self.layoutVersions.firstObject.identifier isEqual:identifier])return self.layoutVersions;
+    return [super installedVersionsForIdentifier:identifier];
+}
 - (void)installVersion:(NSDictionary *)version forIdentifier:(NSString *)identifier completion:(void (^)(MHTModule *,NSError *))completion {
     (void)version;(void)identifier;self.downloadRequests++;
     completion(nil,[NSError errorWithDomain:@"MHT.Layout" code:1 userInfo:@{NSLocalizedDescriptionKey:@"Absichtlicher Downloadfehler im UI-Test"}]);
 }
 @end
+@interface MHTInstalledLayoutModule : MHTModule @end
+@implementation MHTInstalledLayoutModule
+- (BOOL)installed{return YES;}
+@end
+static void checkTrainerManagerLayout(MHTTrainerLibrary *manager,MHTLayoutStore *store) {
+    MHTModule *metadata=store.modules.firstObject;
+    MHTModule *legacy=[MHTInstalledLayoutModule new],*download=[MHTInstalledLayoutModule new];
+    legacy.manifest=metadata.manifest;download.manifest=metadata.manifest;
+    legacy.directory=[NSString stringWithFormat:@"/private/tmp/ui-only/%@/legacy-0000000000000001/%@.mhtmodule",metadata.identifier,metadata.identifier];
+    download.directory=[NSString stringWithFormat:@"/private/tmp/ui-only/%@/1.0.0/%@.mhtmodule",metadata.identifier,metadata.identifier];
+    legacy.catalogVersion=metadata.catalogVersion;legacy.updateAvailable=YES;
+    require(legacy.packageMigrationAvailable && !download.packageMigrationAvailable,"same-version legacy conversion is distinct from a trainer version update");
+    NSMutableDictionary *newer=[metadata.catalogVersion mutableCopy];newer[@"version"]=@"1.0.1";legacy.catalogVersion=newer;
+    require(!legacy.packageMigrationAvailable,"a newer trainer version remains a real update");legacy.catalogVersion=metadata.catalogVersion;
+    store.layoutVersions=@[download,legacy];[manager reloadForIdentifier:metadata.identifier];
+    for(NSValue *value in @[[NSValue valueWithSize:NSMakeSize(840,540)],[NSValue valueWithSize:NSMakeSize(1000,680)],[NSValue valueWithSize:NSMakeSize(1160,1000)]]){
+        NSSize size=value.sizeValue;[manager.window setContentSize:size];layout(manager.window);
+        NSView *content=manager.window.contentView,*body=nil,*footer=nil;NSScrollView *list=nil;
+        NSUInteger titles=0;BOOL imported=NO,github=NO;
+        for(NSView *view in descendants(content)){
+            if([view.identifier isEqual:@"MHT.TrainerLibrary.Body"])body=view;
+            if([view.identifier isEqual:@"MHT.TrainerLibrary.Footer"])footer=view;
+            if([view.identifier isEqual:@"MHT.TrainerLibrary.SidebarScroll"])list=(NSScrollView *)view;
+            if([view.identifier isEqual:@"MHT.TrainerVersion.Title"]){NSTextField *title=(NSTextField *)view;titles++;if(NSWidth(title.bounds)<title.intrinsicContentSize.width-1){for(NSView *ancestor=title;ancestor;ancestor=ancestor.superview)fprintf(stderr,"%s %s frame=%s bounds=%s\n",NSStringFromClass(ancestor.class).UTF8String,ancestor.identifier.UTF8String,NSStringFromRect(ancestor.frame).UTF8String,NSStringFromRect(ancestor.bounds).UTF8String);fprintf(stderr,"natural %.1f; manager %.1fx%.1f\n",title.intrinsicContentSize.width,NSWidth(content.bounds),NSHeight(content.bounds));}require(NSWidth(title.bounds)>=title.intrinsicContentSize.width-1,"installed version titles have their full natural text width");}
+            if([view isKindOfClass:NSTextField.class]){NSString *text=((NSTextField *)view).stringValue;imported|=[text isEqual:@"Übernommener Trainer"];github|=[text isEqual:@"GitHub-Paket"];}
+        }
+        require(body && footer && list,"manager exposes both window regions and its game viewport");
+        NSRect bounds=[footer convertRect:footer.bounds toView:content];CGFloat edge=content.isFlipped?NSHeight(content.bounds)-NSMaxY(bounds):NSMinY(bounds);
+        require(fabs(edge-16)<1 && fabs(NSHeight(footer.bounds)-32)<1,"manager footer stays at the actual bottom edge at every height");
+        require(NSHeight(body.bounds)>=NSHeight(content.bounds)-81,"manager body fills the available window instead of ending halfway down");
+        require(NSHeight(list.bounds)>NSHeight(content.bounds)*0.5,"game list viewport grows with tall windows");
+        require(titles==2 && imported && github,"installed cards separate the complete version number from its legacy/GitHub origin");
+    }
+    store.layoutVersions=nil;[manager reloadForIdentifier:metadata.identifier];
+}
 static MHTLayoutStore *fixtureStore(NSString *root) {
     NSMutableArray *modules=[NSMutableArray new];
     for(NSUInteger game=0;game<20;game++){
@@ -247,6 +287,7 @@ static void checkTrainerDistribution(MHTApp *app) {
     NSTableView *table=[manager valueForKey:@"table"];require(table.numberOfRows==20,"manager lists downloads independently of installed games");
     NSSegmentedControl *scope=[manager valueForKey:@"scope"];scope.selectedSegment=1;[scope sendAction:scope.action to:scope.target];require(table.numberOfRows==0,"downloaded filter is empty without installed trainer packages");
     NSSize expected=manager.window.frame.size;scope.selectedSegment=0;[scope sendAction:scope.action to:scope.target];layout(manager.window);require(sameSize(expected,manager.window.frame.size),"trainer filtering preserves user window size");
+    checkTrainerManagerLayout(manager,store);
     NSMutableDictionary *sessions=[app valueForKey:@"sessions"];MHTModule *bound=[app valueForKey:@"selected"];
     id session=[NSClassFromString(@"MHTSession") new];[session setValue:bound forKey:@"module"];[session setValue:@YES forKey:@"launching"];[session setValue:@"/private/tmp/layout-only-bound-runtime" forKey:@"runtimePath"];sessions[bound.identifier]=session;
     [app reloadTrainerModules];require([app valueForKey:@"selected"]==bound,"catalog refresh retains the exact module and feature catalog of an active launch");require([[app protectedRuntimePaths] containsObject:@"/private/tmp/layout-only-bound-runtime"],"running session exposes its exact runtime path to deletion protection");

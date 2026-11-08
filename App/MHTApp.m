@@ -169,7 +169,7 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
     NSTextField *name=MHTLabel(m.name,12,NSFontWeightSemibold);name.toolTip=m.name;
     NSString *caption=installed ? [stores.array componentsJoinedByString:@" / "] : @"Spiel nicht installiert";
     if(!m.installed)caption=[caption stringByAppendingString:@" · Trainer laden"];
-    else if(m.updateAvailable)caption=[caption stringByAppendingString:@" · Trainerupdate"];
+    else if(m.updateAvailable)caption=[caption stringByAppendingString:m.packageMigrationAvailable ? @" · GitHub-Paket" : @" · Trainerupdate"];
     NSTextField *small=MHTLabel(caption,10,NSFontWeightRegular);small.textColor=m.updateAvailable ? NSColor.systemCyanColor : NSColor.secondaryLabelColor;
     NSStackView *texts=MHTStack(@[name,small],YES,4);[texts setContentCompressionResistancePriority:249 forOrientation:NSLayoutConstraintOrientationHorizontal];
     [name.widthAnchor constraintEqualToAnchor:texts.widthAnchor].active=YES;[small.widthAnchor constraintEqualToAnchor:texts.widthAnchor].active=YES;
@@ -308,16 +308,16 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
     NSMutableSet *paths=[NSMutableSet new];for(MHTSession *session in self.sessions.allValues)if((session.launching || session.running) && session.runtimePath.length)[paths addObject:session.runtimePath];return paths;
 }
 - (void)updateTrainerSummary {
-    NSUInteger updates=0;for(MHTModule *module in self.modules)updates+=module.updateAvailable;
-    self.trainerUpdates.title=updates ? [NSString stringWithFormat:@"%lu Trainerupdates verfügbar …",(unsigned long)updates] : @"Trainer laden & verwalten …";
-    self.trainerUpdates.contentTintColor=updates ? NSColor.systemCyanColor : nil;
+    NSUInteger updates=0,migrations=0;for(MHTModule *module in self.modules){migrations+=module.packageMigrationAvailable;updates+=module.updateAvailable && !module.packageMigrationAvailable;}
+    self.trainerUpdates.title=updates ? [NSString stringWithFormat:@"%lu Trainerupdates verfügbar …",(unsigned long)updates] : migrations ? [NSString stringWithFormat:@"%lu GitHub-Pakete verfügbar …",(unsigned long)migrations] : @"Trainer laden & verwalten …";
+    self.trainerUpdates.contentTintColor=updates || migrations ? NSColor.systemCyanColor : nil;
     MHTModule *module=self.selected;if(!module)return;
     BOOL busy=[self.trainerStore.installingIdentifiers containsObject:module.identifier];
     if(busy)[self.trainerProgress startAnimation:nil];else [self.trainerProgress stopAnimation:nil];
-    self.trainerVersionLabel.stringValue=busy ? @"Trainer wird geladen und geprüft …" : !module.installed ? @"Trainer noch nicht geladen" : module.updateAvailable ? [NSString stringWithFormat:@"Trainer %@ · Update %@ verfügbar",module.installationLabel,module.catalogVersion[@"version"]] : [NSString stringWithFormat:@"Trainer %@ · Installiert",module.installationLabel];
+    self.trainerVersionLabel.stringValue=busy ? @"Trainer wird geladen und geprüft …" : !module.installed ? @"Trainer noch nicht geladen" : module.packageMigrationAvailable ? [NSString stringWithFormat:@"Trainer %@ · GitHub-Paket zur Übernahme verfügbar",module.version] : module.updateAvailable ? [NSString stringWithFormat:@"Trainer %@ · Update %@ verfügbar",module.installationLabel,module.catalogVersion[@"version"]] : [NSString stringWithFormat:@"Trainer %@ · Installiert",module.installationLabel];
     self.trainerVersionLabel.toolTip=self.trainerStore.lastError ? [@"Offline · " stringByAppendingString:self.trainerStore.lastError.localizedDescription] : @"Bisherige Trainerversionen bleiben bei Updates erhalten.";
     self.trainerDownload.hidden=module.installed && !module.updateAvailable && !busy;
-    self.trainerDownload.title=busy ? @"Wird geladen …" : module.installed ? @"Update laden" : @"Trainer laden";
+    self.trainerDownload.title=busy ? @"Wird geladen …" : module.packageMigrationAvailable ? @"GitHub-Paket laden" : module.installed ? @"Update laden" : @"Trainer laden";
     self.trainerDownload.enabled=!busy && [module.catalogVersion[@"downloadAvailable"] boolValue];
     if(!module.installed){self.start.title=busy ? @"Wird geladen …" : @"Trainer laden";self.start.accessibilityLabel=@"Nur Trainer herunterladen";self.start.toolTip=@"Lädt den Trainer. Das Spiel wird dabei nicht gestartet.";self.start.image=[NSImage imageWithSystemSymbolName:@"arrow.down.circle" accessibilityDescription:nil];}
 }

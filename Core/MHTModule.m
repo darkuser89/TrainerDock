@@ -16,6 +16,7 @@ static BOOL number(id v){return [v isKindOfClass:NSNumber.class] && isfinite([v 
 - (BOOL)installed{return self.directory.length && [NSFileManager.defaultManager isReadableFileAtPath:self.runtimePath];}
 - (NSString *)installRevision{return self.directory.stringByDeletingLastPathComponent.lastPathComponent;}
 - (NSString *)installationLabel{return [self.installRevision hasPrefix:@"legacy-"] ? [self.version stringByAppendingString:@" · übernommen"] : self.version;}
+- (BOOL)packageMigrationAvailable{return self.installed && self.updateAvailable && ![self.installRevision isEqual:self.version] && [self.version isEqual:self.catalogVersion[@"version"]];}
 - (NSArray *)profiles{return self.manifest[@"profiles"];}
 - (NSArray *)features{return self.manifest[@"features"];}
 - (NSArray *)featureGroups {

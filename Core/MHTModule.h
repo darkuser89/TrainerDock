@@ -12,6 +12,7 @@
 // Metadata only for remote entries; no runtime is loaded into the host.
 @property(nonatomic,copy) NSDictionary *catalogVersion;
 @property(nonatomic) BOOL updateAvailable;
+@property(nonatomic,readonly) BOOL packageMigrationAvailable;
 @property(nonatomic,readonly) NSArray<NSDictionary *> *profiles;
 @property(nonatomic,readonly) NSArray<NSDictionary *> *features;
 // Presentation only; feature IDs and the native catalog remain unchanged.
