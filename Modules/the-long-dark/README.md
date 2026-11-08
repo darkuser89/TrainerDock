@@ -44,8 +44,11 @@ die beim Ausschalten nicht rückgängig gemacht werden.
 Referenzfelder benötigen `il2cpp_field_set_value_object` mit dem Objekt selbst
 als drittem Argument. Primitive Felder verwenden den Rohwertpfad. Die Inventarliste
 enthält inline gespeicherte `GearItemObject`-Strukturen. `IL2CPP.mm` lehnt sie als
-Referenzliste ab; eigene Gegenstände werden stattdessen über originale Ressourcen
-und `m_InPlayerInventory` ermittelt. Die Grenztests sichern diese ABI-Verträge ab.
+Referenzliste ab. `NativeFields.hpp::gearItemList` liest sie stattdessen typisiert
+über die originalen `valueSize`-, `objectHeader`- und `fieldOffset`-Angaben und das
+geprüfte Referenzfeld `m_GearItem`. `m_InPlayerInventory`, GC-Besitzer, Grenzen und
+Listenänderungen werden zusätzlich frisch geprüft; eine globale Ressourcensuche
+für das Inventar entfällt. Die Grenztests sichern diese ABI-Verträge ab.
 
 ## Funktionsgrenzen
 

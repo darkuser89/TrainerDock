@@ -17,7 +17,7 @@ struct OwnedValue {uintptr_t address;std::vector<uint8_t> baseline,last;};
 @interface MHTNativeAdapter () {
  uintptr_t _session,_avatar,_health,_resource,_inventory,_player,_assist,_movement;
  uint64_t _ownerID,_lastMoney;
- BOOL _hadMoney,_healthOwned,_multiplierConfirmed;
+ BOOL _hadMoney,_healthOwned,_multiplierConfirmed,_needsMaintenance;
  double _moneyFraction;
  BOOL _wanted[MTFeatureCount],_active[MTFeatureCount];
  double _values[MTFeatureCount];
@@ -42,7 +42,10 @@ struct OwnedValue {uintptr_t address;std::vector<uint8_t> baseline,last;};
 - (BOOL)patch:(const std::string&)key address:(uintptr_t)p bytes:(const void*)value size:(size_t)n {
  if(!p||!n||n>16)return NO;auto it=_owned.find(key);
  if(it==_owned.end()){OwnedValue initial{p,std::vector<uint8_t>(n),std::vector<uint8_t>(n)};if(!MHTControlRead(p,initial.baseline.data(),n))return NO;_owned.emplace(key,std::move(initial));it=_owned.find(key);}
- auto &owned=it->second;if(owned.address!=p||owned.last.size()!=n||!MHTControlWrite(p,value,n))return NO;memcpy(owned.last.data(),value,n);std::vector<uint8_t> actual(n);return MHTControlRead(p,actual.data(),n)&&memcmp(actual.data(),value,n)==0;
+ auto &owned=it->second;if(owned.address!=p||owned.last.size()!=n)return NO;
+ std::vector<uint8_t> actual(n);if(!MHTControlRead(p,actual.data(),n))return NO;
+ if(memcmp(actual.data(),value,n)!=0&&(!MHTControlWrite(p,value,n)||!MHTControlRead(p,actual.data(),n)))return NO;
+ if(memcmp(actual.data(),value,n))return NO;memcpy(owned.last.data(),value,n);return YES;
 }
 - (BOOL)patchPin:(const std::string&)key address:(uintptr_t)p bytes:(const void*)value size:(size_t)n {
  std::vector<uint8_t> before(n);if(!MHTControlRead(p,before.data(),n))return NO;BOOL ok=[self patch:key address:p bytes:value size:n];if(ok&&memcmp(before.data(),value,n)!=0)notifyPin(p,key=="ammo");return ok;
@@ -85,6 +88,9 @@ struct OwnedValue {uintptr_t address;std::vector<uint8_t> baseline,last;};
 }
 - (MTGameContext *)captureContext {
  MTGameContext *context=[MTGameContext new];BOOL ready=[self refresh];
+ // Keep material availability fresh at the existing poll cadence. Frame upkeep
+ // only scans inventory when an inventory effect is actually requested.
+ if(ready&&!_wanted[MTFeatureMaterials])_itemState=_items->update(_avatar,_inventory,false,_wanted[MTFeatureCrafting]);
  context.kind=!MHTControlEngineIdentity()?MTSessionUnsupported:ready?MTSessionSolo:MTSessionLoading;
  context.identity=[NSString stringWithFormat:@"%llx:%llx:%llx:%llx:%llx",(unsigned long long)_session,(unsigned long long)_avatar,(unsigned long long)_ownerID,(unsigned long long)_inventory,(unsigned long long)_player];
  context.note=ready?[MHTControlBuildLabel() stringByAppendingString:@" · lokale native Anbindung"]:context.kind==MTSessionUnsupported?@"Dieser Control-/Engine-Build ist nicht unterstützt.":@"Warte auf einen geladenen lokalen Spieler.";return context;
@@ -94,11 +100,15 @@ struct OwnedValue {uintptr_t address;std::vector<uint8_t> baseline,last;};
  _items->release();_shields->reset();_combat->reset();_speed->release();_itemState={};_shieldState={};_combatState={};
  MHTControlSetSimulationRate(1);
  if(_healthOwned&&_health&&read<uintptr_t>(_health+0x50)>0x10000){((void(*)(void*,bool,uint32_t))(MHTControlAddress(MHTControlHealthInvulnerable)))((void*)_health,false,0x40000000);_healthOwned=NO;}
- while(!_owned.empty())[self restore:_owned.begin()->first];memset(_active,0,sizeof(_active));memset(_wanted,0,sizeof(_wanted));_hadMoney=NO;_multiplierConfirmed=NO;_moneyFraction=0;
+ while(!_owned.empty())[self restore:_owned.begin()->first];memset(_active,0,sizeof(_active));memset(_wanted,0,sizeof(_wanted));_hadMoney=NO;_multiplierConfirmed=NO;_moneyFraction=0;_needsMaintenance=NO;
 }
 - (void)maintain {
+ BOOL requested=NO;for(NSInteger i=0;i<MTFeatureCount;i++)requested|=_wanted[i];
+ if(!requested&&!_needsMaintenance)return;
  if(![self refresh]){MHTControlSetSimulationRate(1);return;}
- _itemState=_items->update(_avatar,_inventory,_wanted[MTFeatureMaterials],_wanted[MTFeatureCrafting]);
+ _needsMaintenance=NO;
+ if(_wanted[MTFeatureMaterials]||_wanted[MTFeatureCrafting]||_itemState.materialsActive||_itemState.craftActive)
+  _itemState=_items->update(_avatar,_inventory,_wanted[MTFeatureMaterials],_wanted[MTFeatureCrafting],false);
  _active[MTFeatureMaterials]=_itemState.materialsActive;_active[MTFeatureCrafting]=_itemState.craftActive;
  _shieldState=_shields->update(_avatar,_wanted[MTFeatureShield]);_active[MTFeatureShield]=_shieldState.confirmed;
  // This reason bit is added only if it was absent, and removed only when owned.
@@ -123,7 +133,7 @@ struct OwnedValue {uintptr_t address;std::vector<uint8_t> baseline,last;};
  if(info->numeric&&(!std::isfinite(value)||value<info->minimum||value>info->maximum))return state;
  state.available=YES;
  if(feature==MTFeatureMaterials)state.available=_itemState.materialCount>0;
- if(!info->oneShot){if(feature==MTFeatureMoneyMultiplier&&(_values[feature]!=value||!wanted)){_multiplierConfirmed=NO;_moneyFraction=0;}_wanted[feature]=wanted&&state.available;_values[feature]=value;[self maintain];state.active=_wanted[feature]&&_active[feature];}
+ if(!info->oneShot){BOOL nextWanted=wanted&&state.available;BOOL changed=_wanted[feature]!=nextWanted||_values[feature]!=value;if(feature==MTFeatureMoneyMultiplier&&(_values[feature]!=value||!wanted)){_multiplierConfirmed=NO;_moneyFraction=0;}_wanted[feature]=nextWanted;_values[feature]=value;if(changed){_needsMaintenance=YES;[self maintain];}state.active=_wanted[feature]&&_active[feature];}
  state.note=state.active?@"Native Wirkung zurückgelesen.":feature==MTFeatureMoneyMultiplier&&wanted?@"Wartet auf neue Quellenenergie.":feature==MTFeatureMaterials&&!state.available?@"Noch kein eigenes Herstellungsmaterial im Inventar.":feature==MTFeatureShield&&wanted?@"Wartet auf einen Treffer gegen einen feindlichen Schild.":feature==MTFeatureOneHit&&wanted?@"Wartet auf bestätigten Gesundheitsschaden an einem feindlichen Gegner.":info->detail;return state;
 }
 - (NSString *)performOneShot:(MTFeature)feature value:(double)value {

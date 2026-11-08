@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-only
 #import "MHTUpdater.h"
 #import "MHTUpdatePackage.h"
+#import "MHTTrainerStore.h"
 #import <archive.h>
+#include <limits.h>
+#include <stdlib.h>
 #import <archive_entry.h>
 @interface MHTUpdater (Checks)
 - (void)scheduleInstallation;
@@ -43,7 +46,27 @@ int main(int argc,const char *argv[]){@autoreleasepool{
         if(i==0)check([[NSString stringWithContentsOfURL:[extract URLByAppendingPathComponent:names[i]] encoding:NSUTF8StringEncoding error:NULL] isEqual:@"abc"],"extracted exact bytes");
         [NSFileManager.defaultManager removeItemAtURL:extract error:NULL];
     }
-    check(!MHTValidateUpdateApp(root,@"1.1.0",NULL),"reject missing app identity and trainers");
+    check(!MHTValidateUpdateApp(root,@"1.1.0",NULL),"reject missing app identity and catalog");
+    NSURL *previousApp=[root URLByAppendingPathComponent:@"Previous.app"];
+    char resolved[PATH_MAX];check(realpath(root.fileSystemRepresentation,resolved)!=NULL,"canonical private test directory");
+    NSString *storePath=[[NSString stringWithUTF8String:resolved] stringByAppendingPathComponent:@"User/Modules"];
+    check(MHTPreserveBundledTrainers(previousApp,storePath,&error),"lean app update needs no legacy modules");
+    NSURL *broken=[previousApp URLByAppendingPathComponent:@"Contents/Resources/Modules/broken.mhtmodule"];
+    [NSFileManager.defaultManager createDirectoryAtURL:broken withIntermediateDirectories:YES attributes:nil error:NULL];
+    check(!MHTPreserveBundledTrainers(previousApp,storePath,NULL),"unreadable old trainer aborts migration and keeps old app");
+    [NSFileManager.defaultManager removeItemAtURL:broken error:NULL];
+    if(argc==2){
+        NSMutableArray *errors=[NSMutableArray new];NSArray<MHTModule *> *legacy=[MHTModule loadModules:@(argv[1]) errors:errors];
+        check(legacy.count>0&&!errors.count,"real legacy packages available for update migration test");
+        MHTModule *source=legacy.firstObject;NSURL *target=[previousApp URLByAppendingPathComponent:[@"Contents/Resources/Modules/" stringByAppendingString:source.directory.lastPathComponent]];
+        check([NSFileManager.defaultManager copyItemAtURL:[NSURL fileURLWithPath:source.directory] toURL:target error:&error],"copy exact test package");
+        NSData *before=[NSData dataWithContentsOfFile:source.runtimePath];
+        check(MHTPreserveBundledTrainers(previousApp,storePath,&error),error.localizedDescription.UTF8String ?: "preserve old trainers before update");
+        check(MHTPreserveBundledTrainers(previousApp,storePath,&error),"update preservation is idempotent");
+        MHTTrainerStore *store=[[MHTTrainerStore alloc]initWithRootDirectory:storePath catalogURL:nil bundledCatalogURL:nil];
+        NSArray *saved=[store installedVersionsForIdentifier:source.identifier];
+        check(saved.count==1&&[before isEqual:[NSData dataWithContentsOfFile:((MHTModule *)saved[0]).runtimePath]]&&source.installed,"migration retains original source and exact runtime bytes");
+    }
     if(argc==3){
         NSURL *package=[NSURL fileURLWithPath:[NSString stringWithUTF8String:argv[1]]];
         check(MHTExtractUpdate(package,extract,&error),error.localizedDescription.UTF8String ?: "real release extraction");

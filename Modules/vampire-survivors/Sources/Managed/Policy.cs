@@ -31,4 +31,12 @@ namespace MHTVampireSurvivors {
    return (float)v;
   }
  }
+
+ // Reference identity prevents a recycled instance ID or hash collision from
+ // retaining effects. This value snapshot allocates no per-frame owner string.
+ public readonly struct ContextOwner {
+  readonly object a,b,c,d,e,f,g;readonly int number;readonly bool valid;
+  public ContextOwner(object a,object b,object c,object d,object e,object f,object g,int number,bool valid){this.a=a;this.b=b;this.c=c;this.d=d;this.e=e;this.f=f;this.g=g;this.number=number;this.valid=valid;}
+  public bool Same(ContextOwner o){return valid==o.valid&&number==o.number&&object.ReferenceEquals(a,o.a)&&object.ReferenceEquals(b,o.b)&&object.ReferenceEquals(c,o.c)&&object.ReferenceEquals(d,o.d)&&object.ReferenceEquals(e,o.e)&&object.ReferenceEquals(f,o.f)&&object.ReferenceEquals(g,o.g);}
+ }
 }

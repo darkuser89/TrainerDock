@@ -235,13 +235,14 @@ BOOL MHTDSSetCapacity(MHTDSOwner owner,float value,MHTDSCapacityControl *control
     if(!control->owned){*control=(MHTDSCapacityControl){.owner=owner,.previous={bases[0],bases[1]},.owned=YES};}
     else for(unsigned i=0;i<2;i++)if(bases[i]!=control->written[i])control->previous[i]=bases[i];
     float wanted[2]={value,value};
-    if(!MTWriteMemory((void *)(owner.parameters+0xc54),wanted,sizeof(wanted)))return NO;
+    if((bases[0]!=value||bases[1]!=value) && !MTWriteMemory((void *)(owner.parameters+0xc54),wanted,sizeof(wanted)))return NO;
     memcpy(control->written,wanted,sizeof(wanted));return MHTDSReadCapacity(owner,bases,effective) && bases[0]==value && bases[1]==value;
 }
 void MHTDSSetApplicationActive(BOOL active){applicationActive=active;}
 BOOL MHTDSOverlayInteraction(BOOL wanted){
     static uintptr_t ownedMouse;
     static uint8_t beforeVisible,beforeClamped;
+    if(!wanted&&!ownedMouse)return NO;
     if(!bound || !MHTDSIsEngineThread())return NO;
     uintptr_t mouse=pointer(MHTDSAddress(0x10638fc40));uint8_t visible=0,clamped=0;
     if(!mouse || pointer(mouse)!=MHTDSAddress(0x105795270)

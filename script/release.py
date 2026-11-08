@@ -11,13 +11,12 @@ import subprocess
 import tempfile
 
 from build import ROOT, external_build_path
-from xcode_project import released_modules
 from xcode_support import verify_products
 
 
 def package(root):
     root = external_build_path(root)
-    verify_products(root)
+    verify_products(root, modules=False)
     app = root / "TrainerDock.app"
     info = plistlib.loads((app / "Contents/Info.plist").read_bytes())
     destination = root / "Distribution"
@@ -27,18 +26,13 @@ def package(root):
         payload = Path(temporary) / "TrainerDock.app"
         shutil.copytree(app, payload, symlinks=True)
         modules = payload / "Contents/Resources/Modules"
-        inventory = []
-        for source in released_modules():
-            name = source.name + ".mhtmodule"
-            target = modules / name
-            manifest = json.loads((target / "Module.json").read_text())
-            inventory.append({"id": manifest["id"], "version": manifest["version"],
-                              "architecture": json.loads((source/"Build.json").read_text()).get("architecture","arm64"),
-                              "sha256": hashlib.sha256((target / "Trainer.dylib").read_bytes()).hexdigest()})
+        if any(path.suffix in (".mhtmodule", ".dylib") for path in modules.iterdir()):
+            raise ValueError("Launcherpakete enthalten keine Trainerbibliotheken.")
         commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
         (payload / "Contents/Resources/BUILD.json").write_text(json.dumps({"version": info["CFBundleShortVersionString"],
             "build": info["CFBundleVersion"], "commit": commit, "minimumMacOS": "27.0",
-            "architecture": "arm64", "modules": inventory}, indent=2) + "\n")
+            "architecture": "arm64", "modules": [], "moduleABI": 1,
+            "distribution": "downloaded-trainers"}, indent=2) + "\n")
         subprocess.run(["codesign","--force","--sign","-","--timestamp=none",str(payload)],check=True)
         subprocess.run(["codesign","--verify","--deep","--strict",str(payload)],check=True)
         subprocess.run([str(payload/"Contents/MacOS/TrainerDock"),"--check"],check=True)
@@ -49,11 +43,14 @@ def package(root):
     (destination / "SHA256SUMS").write_text(digest + "  " + archive.name + "\n")
     (destination / "RELEASE_NOTES.md").write_text(
         "Apple Silicon · macOS 27 oder neuer.\n\n"
-        f"TrainerDock.app enthält alle {len(inventory)} Trainer. "
+        "Trainer einzeln in der App herunterladen und installierte Versionen verwalten. "
         "Updates über TrainerDock → Nach Updates suchen.\n\n"
         "Ohne Developer-ID-Signierung oder Notarisierung; "
         "keine zusätzlichen Signierschlüssel erforderlich.\n")
-    print(f"Verified release package: {archive} ({len(inventory)} trainers)")
+    (destination / "launcher-record.json").write_text(json.dumps({
+        "version": info["CFBundleShortVersionString"], "sha256": digest,
+        "size": archive.stat().st_size}, indent=2) + "\n")
+    print(f"Verified launcher-only release package: {archive}")
 
 
 if __name__ == "__main__":

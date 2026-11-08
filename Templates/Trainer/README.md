@@ -63,6 +63,12 @@ Endpunkte und Wiederherstellung. Ein Spielstart ist dafür nicht erforderlich.
    aufklappbar dar; Details und Beispiel unter `docs/MODULES.md` im TrainerDock-Projekt.
 4. Die generische Bridge, Lade-/Kontextprüfung, Cursorfreigabe und
    Auswahlverwaltung erhalten. Keine automatischen Einmalaktionen beim Start.
+   Nicht implementierte Katalogeinträge bleiben ohne Adapteraufruf. Ohne aktive
+   Effekte oder eigene Rücknahme darf ein Frame-Rückruf keine Spielsuche starten;
+   unveränderte Aufträge dürfen nicht alle Effekte erneut pflegen. Metadaten nur
+   mit begrenztem Cache und gültiger Domain-/Besitzerprüfung wiederverwenden.
+   Leerlauf, echte Änderungen und Rücknahme mit Aufrufzählern absichern; siehe
+   den Leistungsabschnitt der projektweiten `AGENTS.md` und `docs/ARCHITECTURE.md`.
 5. `Build.json`: benötigte Sources und eigene Tests ergänzen. Für einen kompatiblen
    MT-Adapter kann `testSuite: "mt"` genutzt werden, sobald echte Funktionstypen
    existieren. Native `.mm`-Dateien werden mit C++17 kompiliert.
@@ -100,3 +106,14 @@ umrechnen. Das Spielfenster erhält keine zusätzlichen Trainer-Subviews.
 `host.mouseInteractionEnabled` zusammen mit `root.wantsMouseInteraction` und dem
 aktiven Spielfenster aktualisieren. Das Panel empfängt nur bei geöffneter Bedienung
 eigene Klicks; Tastaturfokus und geschlossene Mausbedienung bleiben beim Spiel.
+
+## Einzelne Downloads und Spielupdates
+
+TrainerDock enthält keine gebündelten Trainerbibliotheken. Das Modul wird als
+unveränderliches Paket `trainer-<id>-v<version>` veröffentlicht und über den
+geprüften Katalog angeboten. Alte Pakete bleiben installiert, auswählbar und
+gezielt löschbar. Unter `Modules/<id>` nur eine gemeinsame Quellbasis pflegen;
+neue Spielbuilds mit eigenen vollständig geprüften Profilen ergänzen. Geänderte
+Quellen und Abhängigkeiten erhalten über CI eine neue Trainerversion. Keine alten
+Releases überschreiben, keine ungeprüften Spielbuilds automatisch freigeben.
+Siehe `docs/MODULES.md` und `docs/RELEASING.md`.

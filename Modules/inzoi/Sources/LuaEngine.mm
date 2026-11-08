@@ -40,6 +40,12 @@ struct API {
 } api{};
 std::atomic<bool> enabled{false};std::mutex pendingMutex;
 std::deque<dispatch_block_t> pending;
+std::atomic<bool> pendingReady{false};
+std::atomic<uint64_t> vmGeneration{1};
+// Only an idle observation may be reused, never a gameplay value or a VM used
+// to execute work. New states/threads and every close require fresh discovery.
+struct IdleObservation {lua_State *state=nullptr;const void *registry=nullptr;uint64_t generation=0;unsigned environment=0;};
+thread_local IdleObservation idleObservation;
 thread_local lua_State *current=nullptr;thread_local bool inside=false;thread_local unsigned protectedDepth=0;
 thread_local unsigned currentEnvironment=0;
 std::atomic<lua_State *> presentation{nullptr};
@@ -101,19 +107,30 @@ void program(lua_State *L){
 static int observePCall(lua_State *L,int nargs,int nresults,int errfunc,intptr_t ctx,LuaContinuation continuation){
  protectedDepth++;int result=lua_pcallk(L,nargs,nresults,errfunc,ctx,continuation);protectedDepth--;
  if(result||protectedDepth||inside||!enabled.load(std::memory_order_acquire))return result;
+ const uint64_t generation=vmGeneration.load(std::memory_order_acquire);
+ // Lua 5.4's registry is shared by a VM's coroutines. Unlike their lua_State
+ // addresses it cannot be recycled into a different live VM without changing.
+ // Closing the root VM additionally changes vmGeneration. This one bounded
+ // non-mutating API read replaces repeated global/closure/upvalue traversal.
+ constexpr int registryIndex=-1001000;
+ const void *registry=api.topointer(L,registryIndex);
+ if(idleObservation.state==L && idleObservation.generation==generation &&
+    registry && idleObservation.registry==registry && idleObservation.environment &&
+    !pendingReady.load(std::memory_order_acquire))return result;
  inside=true;
 #ifdef IZ_PRIVATE_PROBE
  observedCalls++;
 #endif
  @autoreleasepool { @try {try{
   unsigned environment=originalEnvironment(L);
+  idleObservation={L,registry,generation,environment};
   if(environment==1){uint64_t tid=0;pthread_threadid_np(nullptr,&tid);presentationThread.store(tid);presentation.store(L,std::memory_order_release);}
   if(environment==2){
 #ifdef IZ_PRIVATE_PROBE
  observedB2++;
 #endif
    current=L;currentEnvironment=2;
-   std::deque<dispatch_block_t> work;{std::lock_guard<std::mutex> lock(pendingMutex);work.swap(pending);}
+   std::deque<dispatch_block_t> work;{std::lock_guard<std::mutex> lock(pendingMutex);work.swap(pending);pendingReady.store(false,std::memory_order_release);}
    for(auto &block:work)block();
    current=nullptr;currentEnvironment=0;
   }
@@ -122,6 +139,8 @@ static int observePCall(lua_State *L,int nargs,int nresults,int errfunc,intptr_t
 }
 static void observeClose(lua_State *L){
  // No Lua API calls on a VM after close; a reused address starts a fresh lease.
+ vmGeneration.fetch_add(1,std::memory_order_acq_rel);
+ if(idleObservation.state==L)idleObservation={};
  lua_State *expected=L;presentation.compare_exchange_strong(expected,nullptr);
  {std::lock_guard<std::mutex> lock(statesMutex);states.erase(L);}lua_close(L);
 }
@@ -146,7 +165,7 @@ void IZEnableLuaEngine(){
  #undef BIND
  enabled.store(true,std::memory_order_release);IZStartRuntimeMod();
 }
-void IZOnSimulationThread(dispatch_block_t work){if(!work)return;if(current&&currentEnvironment==2){work();return;}std::lock_guard<std::mutex> lock(pendingMutex);if(pending.size()<128)pending.push_back([work copy]);}
+void IZOnSimulationThread(dispatch_block_t work){if(!work)return;if(current&&currentEnvironment==2){work();return;}std::lock_guard<std::mutex> lock(pendingMutex);if(pending.size()<128){pending.push_back([work copy]);pendingReady.store(true,std::memory_order_release);}}
 void IZOnPresentationThread(dispatch_block_t work){
  if(!work)return;
  if(current&&currentEnvironment==1){work();return;}
@@ -156,6 +175,7 @@ void IZOnPresentationThread(dispatch_block_t work){
   uint64_t tid=0;pthread_threadid_np(nullptr,&tid);SEL selector=NSSelectorFromString(@"isGameThread");
   lua_State *L=presentation.load(std::memory_order_acquire);
   bool owns=[NSThread respondsToSelector:selector]&&((BOOL(*)(id,SEL))objc_msgSend)(NSThread.class,selector)&&tid==presentationThread.load();
+  if(owns&&L)owns=originalEnvironment(L)==1;
   current=owns?L:nullptr;currentEnvironment=owns&&L?1:0;inside=true;
   @try{work();}@finally{current=previous;currentEnvironment=previousEnvironment;inside=wasInside;}
  }},false,@[NSDefaultRunLoopMode,NSEventTrackingRunLoopMode,NSModalPanelRunLoopMode]);
@@ -182,6 +202,8 @@ id IZPresentationCommand(NSString *command){
 NSDictionary *IZTestEngineStatus(){NSMutableArray *tags=[NSMutableArray new];{std::lock_guard<std::mutex> lock(diagnosticMutex);for(const auto &tag:observedTags)[tags addObject:@(tag.c_str())];}size_t n=0;{std::lock_guard<std::mutex> lock(pendingMutex);n=pending.size();}return @{@"enabled":@(enabled.load()),@"calls":@(observedCalls.load()),@"b2":@(observedB2.load()),@"tags":tags,@"pending":@(n)};}
 id IZTestEvaluate(NSString *script){require();lua_State *L=current;int top=api.gettop(L);try{NSData *d=[script dataUsingEncoding:NSUTF8StringEncoding];if(!d.length||d.length>524288)reject("Diagnostic script exceeds bound");if(api.loadbuffer(L,(const char *)d.bytes,d.length,"TrainerDock/private-test","t")||lua_pcallk(L,0,1,0,0,nullptr))throw std::runtime_error(errorText(L).UTF8String);id r=take(L);api.settop(L,top);return r;}catch(...){api.settop(L,top);throw;}}
 #endif
+#ifndef IZ_LUA_ENGINE_TESTING
 __attribute__((used,section("__DATA,__interpose")))static const struct {const void *replacement,*original;} luaInterpositions[]={
  {(const void *)observePCall,(const void *)lua_pcallk},{(const void *)observeClose,(const void *)lua_close}
 };
+#endif

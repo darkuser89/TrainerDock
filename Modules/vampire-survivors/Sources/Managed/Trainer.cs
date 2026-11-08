@@ -21,6 +21,7 @@ namespace MHTVampireSurvivors {
   readonly bool[] wanted=new bool[Policy.Count];readonly double[] values=new double[Policy.Count];
   readonly Dictionary<string,EggOwner> eggs=new Dictionary<string,EggOwner>();
   CC player;GameManager core;PlayerModifierStats stats;PlayerOptionsData config;string owner="loading",note="Warte auf einen geladenen Spieler.";
+  ContextOwner ownerSnapshot;
   bool ready,godOwned,cursorOwned,cursorVisible;CursorLockMode cursorLock;
   sealed class EggOwner { public EggFloat target;public float original,last; }
   static string Json(object v){return JsonConvert.SerializeObject(v);}
@@ -42,8 +43,11 @@ namespace MHTVampireSurvivors {
    var c=GM.Core;CC p=null;PlayerModifierStats s=null;PlayerOptionsData data=null;
    if(c){p=c.IsOnlineMultiplayer?c.MyOnlinePlayer:c.Player;if(p){s=p.PlayerStats;data=c.PlayerOptions!=null?c.PlayerOptions.MainGameConfig:null;}}
    bool valid=c&&(c.IsGameRunning||c.IsPaused)&&p&&!p.IsDead&&s!=null&&data!=null;
-   string next=valid?c.GetInstanceID()+":"+p.GetInstanceID()+":"+s.GetHashCode()+":"+data.GetHashCode()+":"+SceneManager.GetActiveScene().handle:"loading";
-   if(owner!=next){ReleaseOwned();Array.Clear(wanted,0,wanted.Length);owner=next;}
+   int scene=valid?SceneManager.GetActiveScene().handle:0;
+   var snapshot=valid?new ContextOwner(c,p,s,data,null,null,null,scene,true):default(ContextOwner);
+   if(!ownerSnapshot.Same(snapshot)){ReleaseOwned();Array.Clear(wanted,0,wanted.Length);ownerSnapshot=snapshot;
+    owner=valid?c.GetInstanceID()+":"+p.GetInstanceID()+":"+s.GetHashCode()+":"+data.GetHashCode()+":"+scene:"loading";
+   }
    core=c;player=p;stats=s;config=data;ready=valid;note=valid?"Vampire Survivors 1.16.111 · native lokale Anbindung.":"Warte auf einen geladenen lebenden Spieler.";return valid;
   }
   void Update(){if(!MainThread)return;try{Refresh();Native.Tick();if(ready)Maintain();}catch(Exception ex){ReleaseOwned();Array.Clear(wanted,0,wanted.Length);note="Native Prüfung: "+ex.GetType().Name;}}
@@ -60,9 +64,12 @@ namespace MHTVampireSurvivors {
    // Operators may replace the wrapper while preserving its values.
    if(v.target!=target){if(Policy.Near(current,v.last))v.target=target;else{ReleaseEgg(key);Scale(key,target,factor);return;}}
    if(!Policy.Near(current,v.last))v.original+=current-v.last;
-   float value=Policy.Contribution(target.GetValue(),v.original,factor);target.SetEggValue(value);v.last=target.GetEggValue();
+   float value=Policy.Contribution(target.GetValue(),v.original,factor);if(!Policy.Near(current,value))target.SetEggValue(value);v.last=target.GetEggValue();
   }
   void Maintain(){
+   bool requested=godOwned||eggs.Count!=0;
+   for(int f=0;!requested&&f<9;f++)requested=wanted[f];
+   if(!requested)return;
    if(wanted[0]){if(!player.PermanentInvulnerability){godOwned=true;player.SetPermanentInvulnerability(true);}if(!player.IsInvul)player.IsInvul=true;}
    else if(godOwned){player.SetPermanentInvulnerability(false);godOwned=false;}
    Scale("move",stats.MoveSpeed,(wanted[1]?3f:1f)*(wanted[7]?(float)values[7]:1f));
@@ -71,7 +78,7 @@ namespace MHTVampireSurvivors {
    Scale("cooldown",stats.Cooldown,wanted[4]?.1f:1f);
    Scale("growth",stats.Growth,(wanted[5]?100f:1f)*(wanted[6]?(float)values[6]:1f));
   }
-  void ReleaseOwned(){foreach(var k in new List<string>(eggs.Keys))ReleaseEgg(k);
+  void ReleaseOwned(){if(eggs.Count!=0)foreach(var k in new List<string>(eggs.Keys))ReleaseEgg(k);
    if(godOwned&&player&&player.PermanentInvulnerability)player.SetPermanentInvulnerability(false);godOwned=false;
   }
   float Natural(string key,EggFloat target){EggOwner e;return target.GetValue()+(eggs.TryGetValue(key,out e)?e.original:target.GetEggValue());}
@@ -92,7 +99,7 @@ namespace MHTVampireSurvivors {
    if(!MainThread||!instance||!Policy.Valid(f,value))return Json(new{available=false,active=false,note="Keine gültige native Anbindung oder ungültiger Wert."});
    var t=instance;if(!t.Refresh())return Json(new{available=false,active=false,note=t.note});
    if(Policy.Once(f))return Json(new{available=true,active=false,note="Einmalaktion · Aktuell "+t.Read(f)+". Kann vom Spiel gespeichert werden."});
-   t.wanted[f]=on;t.values[f]=value;t.Maintain();bool active=t.Confirmed(f);
+   bool changed=t.wanted[f]!=on||t.values[f]!=value;t.wanted[f]=on;t.values[f]=value;if(changed)t.Maintain();bool active=t.Confirmed(f);
    return Json(new{available=true,active=active,note="Nativer Wert: "+t.Read(f)});
   }
   public static string OneShot(int f,double value){

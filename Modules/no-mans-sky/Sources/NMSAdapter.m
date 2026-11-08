@@ -20,13 +20,16 @@ static _Thread_local BOOL onFrame;
 static uintptr_t imageBase;
 static __weak MTNMSAdapter *frameAdapter;
 static __weak MTNMSAdapter *inputAdapter;
+static BOOL frameMaintainedFeature(NSInteger i){return i>=MTFeatureShield&&i<MTFeatureCount&&i!=MTFeatureItems
+    &&i!=MTFeatureInfiniteUnits&&i!=MTFeatureInfiniteNanites&&i!=MTFeatureInfiniteQuicksilver
+    &&i!=MTFeatureCrafting&&i!=MTFeatureAtlasLocks&&i!=MTFeatureDamage&&i!=MTFeatureGameSpeed&&i!=MTFeatureShipHeat;}
 @interface MTNMSAdapter (FrameMaintenance)
 - (void)maintainFrameEffects;
 - (void)maintainOverlayInput;
 @end
 static BOOL readable(uintptr_t p,void *out,size_t size){return MTReadMemory((const void *)p,out,size);}
 static BOOL ptr(uintptr_t p,uintptr_t *out){return readable(p,out,sizeof(*out)) && *out>4096 && !(*out&7);}
-BOOL MTNMSReadOnly(void){return [NSProcessInfo.processInfo.environment[@"NMS_TRAINER_READ_ONLY"] isEqual:@"1"];}
+BOOL MTNMSReadOnly(void){const char *value=getenv("NMS_TRAINER_READ_ONLY");return value&&!strcmp(value,"1");}
 BOOL MTNMSProcessBuildMatches(void){
     for(uint32_t i=0;i<_dyld_image_count();i++){
         const struct mach_header_64 *h=(const void *)_dyld_get_image_header(i);
@@ -72,7 +75,7 @@ MTSessionKind MTNMSSessionKind(BOOL playing,BOOL enabled,const uint32_t sessions
     // Never replace a concurrent change from the game, a menu, or another mod.
     if(_ownsValue && memcmp(current,_last,_size))return NO;
     if(!_ownsValue)memcpy(_original,current,_size);
-    if(![self write:bytes])return NO;
+    if(memcmp(current,bytes,_size) && ![self write:bytes])return NO;
     // Retain ownership even when a readback fails, so restoration is still attempted.
     memcpy(_last,bytes,_size);_ownsValue=YES;
     uint8_t actual[4]={0};return MTReadMemory(_address,actual,_size) && !memcmp(actual,bytes,_size);
@@ -288,6 +291,7 @@ BOOL MTNMSPrepareRecharge(void *bytes,NSUInteger length){
     if(_mouseOwned && onFrame && NSThread.isMainThread && NSApp.isActive)[self setOverlayInteraction:YES];
 }
 - (BOOL)setOverlayInteraction:(BOOL)wanted {
+    if(!wanted&&!_mouseOwned)return NO;
     if(!onFrame || !NSThread.isMainThread)return NO;
     uintptr_t input=0,root=0,parent=0,view=0,vtable=0;
     uintptr_t app=(uintptr_t)dlsym(RTLD_DEFAULT,"gApplication"),window=(uintptr_t)dlsym(RTLD_DEFAULT,"gCurrentWindow");
@@ -590,13 +594,14 @@ BOOL MTNMSPrepareRecharge(void *bytes,NSUInteger length){
 }
 - (void)maintainFrameEffects {
     if(!onFrame || MTNMSReadOnly() || !_bound)return;
-    BOOL any=NO;for(NSInteger i=MTFeatureShield;i<MTFeatureCount;i++)if(_wantedCache[i] && _confirmed[i] && i!=MTFeatureItems && i!=MTFeatureInfiniteUnits && i!=MTFeatureInfiniteNanites && i!=MTFeatureInfiniteQuicksilver)any=YES;
+    // The same eligibility rule drives both the cheap gate and actual upkeep.
+    // Poll-only global/cost/currency options must not cause empty per-frame
+    // player discovery when there is no operation for the frame to perform.
+    BOOL any=NO;for(NSInteger i=MTFeatureShield;i<MTFeatureCount;i++)if(_wantedCache[i]&&_confirmed[i]&&frameMaintainedFeature(i)){any=YES;break;}
     if(!any)return;
     NSString *previous=[_identity copy];MTGameContext *context=[self captureContext];
     if(((context.kind!=MTSessionSolo && context.kind!=MTSessionNetwork)) || ![previous isEqual:context.identity]){[self releaseEffects];return;}
-    for(NSInteger i=MTFeatureShield;i<MTFeatureCount;i++)if(_wantedCache[i] && _confirmed[i] && i!=MTFeatureItems
-        && i!=MTFeatureInfiniteUnits && i!=MTFeatureInfiniteNanites && i!=MTFeatureInfiniteQuicksilver
-        && i!=MTFeatureCrafting && i!=MTFeatureAtlasLocks && i!=MTFeatureDamage && i!=MTFeatureGameSpeed && i!=MTFeatureShipHeat)
+    for(NSInteger i=MTFeatureShield;i<MTFeatureCount;i++)if(_wantedCache[i]&&_confirmed[i]&&frameMaintainedFeature(i))
         _confirmed[i]=[self runExtendedOperation:i];
 }
 

@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "id": "stray",
+  "name": "Stray (WIP)",
+  "version": "0.1.0",
+  "profiles": [
+    {
+      "id": "steam-arm64-12863654",
+      "name": "Steam · WIP · Build 12863654",
+      "enabled": true,
+      "compatibilityNote": "WIP · Unfertiger Trainer – nicht vollständig im Spiel geprüft.",
+      "bundleIdentifier": "com.annapurnainteractive.Stray",
+      "executable": "Stray-Mac-Shipping",
+      "uuids": [
+        "C72D3F73-25F4-333B-9108-83432E09E687"
+      ],
+      "teamIdentifier": "TE4JMK2LRA",
+      "version": "1.5",
+      "bundleVersion": "100",
+      "store": "Steam",
+      "steamAppId": "1332010",
+      "steamBuildId": "12863654",
+      "fileChecks": [
+        {
+          "path": "Contents/UE4/Hk_project/Content/Paks/pakchunk0-MacNoEditor.pak",
+          "fileSize": 1782094209,
+          "offset": 407051483,
+          "length": 4084,
+          "sha256": "952ee7c737f34311ef1513934e6eaf854c9d774dd3bfa9eef71fe80003261123"
+        },
+        {
+          "path": "Contents/UE4/Hk_project/Content/Paks/pakchunk0-MacNoEditor.pak",
+          "fileSize": 1782094209,
+          "offset": 407055567,
+          "length": 1983,
+          "sha256": "a7dad1b99f006826c07371ef866523c275e8763b5b8abaf6d714f03a27d860df"
+        },
+        {
+          "path": "Contents/UE4/Hk_project/Content/Paks/pakchunk0-MacNoEditor.pak",
+          "fileSize": 1782094209,
+          "offset": 407057550,
+          "length": 4048,
+          "sha256": "2873bf5912d93d3e1e7bc73c8886adecf96447e9a21aad923b67ae3a3aa0e727"
+        },
+        {
+          "path": "Contents/UE4/Hk_project/Content/Paks/pakchunk0-MacNoEditor.pak",
+          "fileSize": 1782094209,
+          "offset": 407061598,
+          "length": 2024,
+          "sha256": "4c28a8dd83b27198a8d47380d281e2f0fad52d2956134e03af583f80abdb5fa2"
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "player",
+      "title": "Katze",
+      "symbol": "cat",
+      "features": [
+        0,
+        1,
+        6
+      ]
+    },
+    {
+      "id": "enemies",
+      "title": "Gegner",
+      "symbol": "eye.slash",
+      "features": [
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "id": "equipment",
+      "title": "Ausrüstung",
+      "symbol": "flashlight.on.fill",
+      "features": [
+        5
+      ]
+    },
+    {
+      "id": "game",
+      "title": "Spiel",
+      "symbol": "speedometer",
+      "features": [
+        7
+      ]
+    }
+  ]
+}

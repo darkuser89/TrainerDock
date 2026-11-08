@@ -1,14 +1,21 @@
 // SPDX-License-Identifier: GPL-3.0-only
 #import "MHTModule.h"
+#import "MHTTrainerStore.h"
+#import "MHTTrainerArchive.h"
 #import "GameIdentity.h"
 #import "MHTGlassIntensity.h"
 #include <math.h>
 static BOOL text(id v){return [v isKindOfClass:NSString.class] && [v length]>0;}
 static BOOL token(id v){return text(v) && [v rangeOfCharacterFromSet:[[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_"] invertedSet]].location==NSNotFound;}
+static BOOL profileToken(id v){return text(v) && [v length]<=256 && ![v isEqual:@"."] && ![v isEqual:@".."] && [v rangeOfCharacterFromSet:[[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_."] invertedSet]].location==NSNotFound;}
 static BOOL number(id v){return [v isKindOfClass:NSNumber.class] && isfinite([v doubleValue]);}
 @implementation MHTModule
 - (NSString *)identifier{return self.manifest[@"id"];}
 - (NSString *)name{return self.manifest[@"name"];}
+- (NSString *)version{return self.manifest[@"version"];}
+- (BOOL)installed{return self.directory.length && [NSFileManager.defaultManager isReadableFileAtPath:self.runtimePath];}
+- (NSString *)installRevision{return self.directory.stringByDeletingLastPathComponent.lastPathComponent;}
+- (NSString *)installationLabel{return [self.installRevision hasPrefix:@"legacy-"] ? [self.version stringByAppendingString:@" · übernommen"] : self.version;}
 - (NSArray *)profiles{return self.manifest[@"profiles"];}
 - (NSArray *)features{return self.manifest[@"features"];}
 - (NSArray *)featureGroups {
@@ -40,33 +47,26 @@ static BOOL number(id v){return [v isKindOfClass:NSNumber.class] && isfinite([v 
     return [NSBundle.mainBundle.bundlePath.stringByDeletingLastPathComponent stringByAppendingPathComponent:@"Modules"];
 }
 + (NSArray<MHTModule *> *)availableModules:(NSMutableArray<NSString *> *)errors {
-    NSMutableDictionary *byID=[NSMutableDictionary new];
-    for(MHTModule *module in [self loadModules:self.moduleDirectory errors:errors])byID[module.identifier]=module;
-    // Read the old location first; TrainerDock modules take precedence by ID.
-    for(NSString *folder in @[@"MHT",@"TrainerDock"]) {
-        NSString *user=[NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Library/Application Support/%@/Modules",folder]];
-        for(MHTModule *module in [self loadModules:user errors:errors])byID[module.identifier]=module;
-    }
-    return [byID.allValues sortedArrayUsingComparator:^NSComparisonResult(MHTModule *a,MHTModule *b){return [a.name localizedCaseInsensitiveCompare:b.name];}];
+    return [MHTTrainerStore.sharedStore modulesWithErrors:errors];
 }
-+ (NSArray<MHTModule *> *)loadModules:(NSString *)directory errors:(NSMutableArray<NSString *> *)errors {
-    NSMutableArray *modules=[NSMutableArray new];NSMutableSet *ids=[NSMutableSet new];
-    NSArray *files=[[NSFileManager.defaultManager contentsOfDirectoryAtPath:directory error:NULL] sortedArrayUsingSelector:@selector(compare:)];
-    for(NSString *file in files){
-        if(![file.pathExtension isEqual:@"mhtmodule"])continue;
-        NSString *dir=[directory stringByAppendingPathComponent:file];
-        NSData *data=[NSData dataWithContentsOfFile:[dir stringByAppendingPathComponent:@"Module.json"]];
-        id m=data.length<=1024*1024 ? [NSJSONSerialization JSONObjectWithData:data ?: [NSData data] options:0 error:NULL] : nil;
-        BOOL valid=[m isKindOfClass:NSDictionary.class] && [m[@"schemaVersion"] isEqual:@1] && token(m[@"id"])
++ (BOOL)validManifest:(id)m error:(NSError **)error {
+    BOOL valid=[m isKindOfClass:NSDictionary.class] && [m[@"schemaVersion"] isEqual:@1] && token(m[@"id"])
             && text(m[@"name"]) && text(m[@"version"])
             && (!m[@"selectionVersion"] || (token(m[@"selectionVersion"]) && [m[@"selectionVersion"] length]<=64))
             && [m[@"profiles"] isKindOfClass:NSArray.class] && [m[@"profiles"] count]>0
             && [m[@"features"] isKindOfClass:NSArray.class] && [m[@"features"] count]>0 && [m[@"features"] count]<=128;
         if(valid){
             valid=[self validFeatureGroups:m[@"groups"] featureCount:[m[@"features"] count]];
-            for(id profile in m[@"profiles"]){
+            NSMutableSet *profileIDs=[NSMutableSet new];for(id profile in m[@"profiles"]){
                 if(![profile isKindOfClass:NSDictionary.class]){valid=NO;continue;}
+                if(!profileToken(profile[@"id"]) || [profileIDs containsObject:profile[@"id"]] || !text(profile[@"name"]) || [profile[@"name"] length]>160 || !number(profile[@"enabled"]))valid=NO;
+                if(profileToken(profile[@"id"]))[profileIDs addObject:profile[@"id"]];
                 if(!text(profile[@"store"]) || !text(profile[@"version"]))valid=NO;
+                if(profile[@"architecture"] && ![@[@"arm64",@"x86_64"] containsObject:profile[@"architecture"]])valid=NO;
+                if(number(profile[@"enabled"]) && [profile[@"enabled"] boolValue]){
+                    if(!text(profile[@"bundleIdentifier"]) || !text(profile[@"executable"]) || [profile[@"executable"] containsString:@"/"] || ![profile[@"uuids"] isKindOfClass:NSArray.class] || ![profile[@"uuids"] count])valid=NO;
+                    if([profile[@"uuids"] isKindOfClass:NSArray.class])for(id uuid in profile[@"uuids"])if(!text(uuid)||![[NSUUID alloc]initWithUUIDString:uuid])valid=NO;
+                }
                 if(profile[@"compatibilityNote"] && (!text(profile[@"compatibilityNote"]) || [profile[@"compatibilityNote"] length]>120))valid=NO;
                 for(NSString *key in @[@"epicAppName",@"epicNamespace"])
                     if(profile[key] && (!token(profile[key]) || [profile[key] length]>256))valid=NO;
@@ -77,12 +77,29 @@ static BOOL number(id v){return [v isKindOfClass:NSNumber.class] && isfinite([v 
             NSUInteger i=0;
             for(id f in m[@"features"]){
                 if(![f isKindOfClass:NSDictionary.class] || ![f[@"id"] isEqual:@(i++)] || !text(f[@"title"]) || !text(f[@"binding"])) {valid=NO;break;}
+                for(NSString *key in @[@"shortcut",@"detail"])if(f[key]&&![f[key] isKindOfClass:NSString.class])valid=NO;
                 for(NSString *key in @[@"implemented",@"numeric",@"oneShot",@"integer",@"initial",@"minimum",@"maximum",@"step"])
                     if(!number(f[key]))valid=NO;
-                if([f[@"numeric"] boolValue] && ([f[@"minimum"] doubleValue]>[f[@"maximum"] doubleValue]
+                if(!valid)break;
+                if(number(f[@"numeric"]) && [f[@"numeric"] boolValue] && ([f[@"minimum"] doubleValue]>[f[@"maximum"] doubleValue]
                    || [f[@"initial"] doubleValue]<[f[@"minimum"] doubleValue] || [f[@"initial"] doubleValue]>[f[@"maximum"] doubleValue]))valid=NO;
             }
         }
+    if([m isKindOfClass:NSDictionary.class] && m[@"moduleABI"] && ![m[@"moduleABI"] isEqual:@1])valid=NO;
+    if(!valid && error)*error=[NSError errorWithDomain:@"local.trainerdock.modules" code:1 userInfo:@{NSLocalizedDescriptionKey:@"Ungültige Trainermetadaten oder nicht unterstützte Modulschnittstelle."}];
+    return valid;
+}
++ (NSArray<MHTModule *> *)loadModules:(NSString *)directory errors:(NSMutableArray<NSString *> *)errors {
+    NSMutableArray *modules=[NSMutableArray new];NSMutableSet *ids=[NSMutableSet new];
+    NSArray *files=[[NSFileManager.defaultManager contentsOfDirectoryAtPath:directory error:NULL] sortedArrayUsingSelector:@selector(compare:)];
+    for(NSString *file in files){
+        if(![file.pathExtension isEqual:@"mhtmodule"])continue;
+        NSString *dir=[directory stringByAppendingPathComponent:file];
+        NSString *metadata=[dir stringByAppendingPathComponent:@"Module.json"];
+        NSDictionary *attributes=[NSFileManager.defaultManager attributesOfItemAtPath:metadata error:NULL];
+        NSData *data=[attributes[NSFileType] isEqual:NSFileTypeRegular] && [attributes[NSFileSize] unsignedLongLongValue]<=1024*1024 ? [NSData dataWithContentsOfFile:metadata] : nil;
+        id m=data.length<=1024*1024 ? [NSJSONSerialization JSONObjectWithData:data ?: [NSData data] options:0 error:NULL] : nil;
+        BOOL valid=[self validManifest:m error:NULL];
         MHTModule *module=[MHTModule new];module.directory=dir;module.manifest=m;
         NSError *error=nil;NSDictionary *config=valid ? MTLoadConfiguration(module.configurationPath,&error) : nil;
         if(!valid || [ids containsObject:m[@"id"]] || !config || ![config[@"profiles"] isEqual:m[@"profiles"]]
@@ -119,7 +136,9 @@ static BOOL number(id v){return [v isKindOfClass:NSNumber.class] && isfinite([v 
 }
 - (void)saveSettings:(NSDictionary *)settings {
     NSMutableDictionary *options=[settings mutableCopy];options[@"liquidGlass"]=@YES;options[@"glassIntensity"]=@(MHTGlassIntensity(options[@"glassIntensity"]));
-    [NSUserDefaults.standardUserDefaults setObject:options forKey:[self key:@"settings"]];
+    NSString *key=[self key:@"settings"];
+    if(![[NSUserDefaults.standardUserDefaults dictionaryForKey:key] isEqual:options])
+        [NSUserDefaults.standardUserDefaults setObject:options forKey:key];
 }
 - (NSString *)selectionPreferenceKey {
     NSString *version=self.manifest[@"selectionVersion"];
@@ -135,11 +154,17 @@ static BOOL number(id v){return [v isKindOfClass:NSNumber.class] && isfinite([v 
         rows[key]=@{@"wanted":@(![f[@"oneShot"] boolValue] && [f[@"implemented"] boolValue] && number(s[@"wanted"]) && [s[@"wanted"] boolValue]),@"value":@(value)};
     }return rows;
 }
-- (void)saveSelection:(NSDictionary *)selection{[NSUserDefaults.standardUserDefaults setObject:selection forKey:self.selectionPreferenceKey];}
+- (void)saveSelection:(NSDictionary *)selection {
+    NSString *key=self.selectionPreferenceKey;
+    if(![[NSUserDefaults.standardUserDefaults dictionaryForKey:key] isEqual:selection])
+        [NSUserDefaults.standardUserDefaults setObject:selection forKey:key];
+}
 - (NSDictionary *)inspectPath:(NSString *)path profile:(NSDictionary *)profile error:(NSError **)error {
+    if(self.installed && !MHTTrainerValidatePackage([NSURL fileURLWithPath:self.directory],@{@"version":self.version,@"manifest":self.manifest},self.identifier,error))return nil;
     return MTInspectGame(path,profile,error);
 }
 - (NSDictionary *)environmentForGame:(NSDictionary *)game profile:(NSDictionary *)profile session:(NSString *)session {
+    if(!self.directory.length)return nil;
     NSMutableDictionary *e=[@{@"DYLD_INSERT_LIBRARIES":self.runtimePath,@"MHT_MODULE":self.identifier,@"MHT_SESSION":session,
         @"MHT_TARGET":game[@"executable"],@"MHT_CONFIG":self.configurationPath,@"MHT_PROFILE":profile[@"id"]} mutableCopy];
     if([game[@"libraryDirectory"] isKindOfClass:NSString.class])e[@"DYLD_LIBRARY_PATH"]=game[@"libraryDirectory"];

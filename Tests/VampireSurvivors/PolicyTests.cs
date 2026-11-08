@@ -3,6 +3,7 @@ using System;using MHTVampireSurvivors;
 class PolicyTests {
  static void Check(bool b,string why){if(!b)throw new Exception(why);}
  static void Main(){
+  OwnerChecks();
   var builds=new[]{
    new[]{new Guid("a0f710ef-5749-41d3-acf9-dffec2421678"),new Guid("93b42865-e14c-4ce5-8022-591e2f7dff4d"),new Guid("6b0d9df4-3659-4035-852e-1d51528841f6"),new Guid("1b3ea231-962b-4662-b0df-c5487b245a2e")},
    new[]{new Guid("7b778702-8647-455b-bbcc-f38442e8cf59"),new Guid("e01b784b-6119-42cb-be5d-8b4533ff7fa3"),new Guid("795da216-3443-4ac3-89f6-28c5377f97de"),new Guid("1b3ea231-962b-4662-b0df-c5487b245a2e")}
@@ -28,5 +29,23 @@ class PolicyTests {
   Check(Policy.Contribution(.8f,0,.1f)<0,"Native cooldown supports a negative removable contribution");
   bool threw=false;try{Policy.Contribution(float.MaxValue,0,100);}catch(ArgumentOutOfRangeException){threw=true;}Check(threw,"Overflowing native stats rejected");
   Console.WriteLine("Vampire Survivors exact store-build tuples, mixed/unknown identity rejection, numeric/one-shot/owned-stat checks passed");
+ }
+
+ sealed class CollidingOwner {public override int GetHashCode(){return 1;}}
+ static void OwnerChecks(){
+  object a=new CollidingOwner(),b=new CollidingOwner(),c=new object(),d=new object(),e=new object(),f=new object(),g=new object();
+  var baseline=new ContextOwner(a,b,c,d,e,f,g,7,true);
+  if(!baseline.Same(new ContextOwner(a,b,c,d,e,f,g,7,true)))throw new Exception("Unchanged native owner must remain stable.");
+  if(baseline.Same(new ContextOwner(new CollidingOwner(),b,c,d,e,f,g,7,true)))throw new Exception("A hash/instance collision must not preserve an old owner.");
+  object[] refs={a,b,c,d,e,f,g};
+  for(int i=0;i<refs.Length;i++){var changed=(object[])refs.Clone();changed[i]=new object();if(baseline.Same(new ContextOwner(changed[0],changed[1],changed[2],changed[3],changed[4],changed[5],changed[6],7,true)))throw new Exception("Every owner field participates in invalidation.");}
+  if(baseline.Same(new ContextOwner(a,b,c,d,e,f,g,8,true))||baseline.Same(new ContextOwner(a,b,c,d,e,f,g,7,false)))throw new Exception("Scene/slot and valid/loading transitions invalidate the owner.");
+  // Warm the generic/runtime paths before measuring the steady frame loop.
+  for(int i=0;i<1000;i++)baseline.Same(new ContextOwner(a,b,c,d,e,f,g,7,true));
+  long before=GC.GetAllocatedBytesForCurrentThread();
+  bool same=true;for(int i=0;i<20000;i++)same &= baseline.Same(new ContextOwner(a,b,c,d,e,f,g,7,true));
+  long allocated=GC.GetAllocatedBytesForCurrentThread()-before;
+  if(!same||allocated!=0)throw new Exception("Steady owner snapshots must allocate zero managed bytes.");
+  Console.WriteLine("PASS: 20,000 owner snapshots allocate zero bytes; every native owner, scene/slot, loading and recycled-ID boundary invalidates correctly.");
  }
 }

@@ -283,6 +283,9 @@ void refresh(){
 }
 void tick(){
     if(!VCInFrame())return;Backend& b=backend();b.frames++;
+    // With no requested or owned effect, UI polls still validate context, but
+    // the per-frame hook must not scan the scene or construct boxed identities.
+    if(std::none_of(b.wanted.begin(),b.wanted.end(),[](bool on){return on;}) && !b.god.object.handle && b.cards.empty() && b.enemies.empty() && !b.xpKnown)return;
     try{refresh();if(b.context.kind==2)for(NSInteger i=0;i<4;i++)toggle(i);b.failure=nil;}
     catch(const std::exception& e){b.failure=@(e.what());b.wanted.fill(false);try{release();}catch(...){}b.active.fill(false);}
 }
@@ -353,6 +356,7 @@ BOOL VCMouse(BOOL wanted){
     if(!VCInFrame())return NO;
     try{
         Backend& b=backend();MouseLease& lease=b.mouse;
+        if(!wanted && !lease.held)return NO;
         vc::Class cursor=vc::klass("UnityEngine.CoreModule.dll","UnityEngine","Cursor");
         auto current=[&](const char *name){return vc::number(vc::call(vc::method(cursor,name,0),nullptr));};
         auto set=[&](const char *name,double v){vc::numericCall(vc::method(cursor,name,1),nullptr,{v});};

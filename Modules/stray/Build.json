@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "sourceRoot": "Sources",
+  "family": "Stray",
+  "developmentOnly": false,
+  "sources": [
+    "TrainerFeatures.m",
+    "GameAdapter.m",
+    "NativeAdapter.mm",
+    "GameBridge.m",
+    "SelectionSettings.m",
+    "GameProfile.m",
+    "MemoryAccess.m",
+    "TrainerMaterial.m",
+    "Overlay.m",
+    "OverlaySettings.m",
+    "OverlayShortcuts.m",
+    "Runtime.m",
+    "StrayEngine.mm",
+    "StrayInput.mm",
+    "OverlayCursor.m",
+    "PlayerEffects.mm",
+    "EnemyEffects.mm",
+    "Defluxor.mm"
+  ],
+  "defines": [],
+  "catalogSources": [
+    "TrainerFeatures.m"
+  ],
+  "sdkSources": [
+    "MHTOverlayHost.m",
+    "MHTGlassIntensity.m"
+  ],
+  "testSuite": "mt",
+  "nativeContractTests": "Tests/Stray/BootstrapContractTests.mm"
+}

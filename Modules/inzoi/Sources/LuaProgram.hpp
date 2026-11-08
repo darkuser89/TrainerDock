@@ -2,8 +2,9 @@
 #pragma once
 // Runs only in the exact original B2 VM, on its owning simulation thread.
 static constexpr const char *IZTrainerProgram=R"IZLUA(
-local M={flags={},values={},confirmed={},samples={}}
+local M={flags={},values={},confirmed={},samples={},tickWork=false}
 local names={'Hunger','Cleanliness','Sleep','Toilet','Fun','Society','Admit','Energy'}
+local tickIds={0,1,2,3,4,5,6,7,8,9,10,13,15,19}
 local function near(a,b) return type(a)=='number' and math.abs(a-b)<0.01 end
 local function localObjects()
  local c=inzoi.getB2Subsystem('FB2ControllerSystem')
@@ -31,7 +32,7 @@ function M.release()
   if t and near(t:GetTimeScaleRawValue(),M.timeWritten) then t:SetTimeScale(M.timeOriginal) end
  end
  M.timeOriginal=nil;M.timeWritten=nil
- M.flags={};M.values={};M.confirmed={};M.samples={};M.owner=nil
+ M.flags={};M.values={};M.confirmed={};M.samples={};M.owner=nil;M.tickWork=false
 end
 function M.context()
  local o=localObjects()
@@ -64,6 +65,9 @@ local function scaledCurrency(o,key,feature)
  M.samples[key]=value
 end
 function M.tick()
+ -- The original TimeManager already calls this once per simulation step.
+ -- No active periodic effect means no entity/component discovery or writes.
+ if not M.tickWork then return end
  local o=localObjects()
  if not o or M.owner~=o.key then if M.owner then M.release() end;return end
  local s=stat(o)
@@ -73,9 +77,17 @@ function M.tick()
   end
   if M.flags[10] then scaledStat(s,'Karma',{kind='gain',factor=M.values[10],id=10},'karma') end
   for i,n in ipairs(names) do
-   if M.flags[i-1] then s:SetStat(n,100,0);M.confirmed[i-1]=near(s:GetStat(n),100);M.samples['needs:'..n]=s:GetStat(n) end
+   if M.flags[i-1] then
+    local v=s:GetStat(n)
+    if v~=100 then s:SetStat(n,100,0);v=s:GetStat(n) end
+    M.confirmed[i-1]=near(v,100);M.samples['needs:'..n]=v
+   end
   end
-  if M.flags[9] then s:SetStat('Karma',100,0);M.confirmed[9]=near(s:GetStat('Karma'),100);M.samples.karma=s:GetStat('Karma') end
+  if M.flags[9] then
+   local v=s:GetStat('Karma')
+   if v~=100 then s:SetStat('Karma',100,0);v=s:GetStat('Karma') end
+   M.confirmed[9]=near(v,100);M.samples.karma=v
+  end
  end
  if M.flags[13] then scaledCurrency(o,'Mew',13) end
  if M.flags[15] then scaledCurrency(o,'Nyang',15) end
@@ -84,7 +96,8 @@ function M.tick()
   if t and not t:IsPaused() then
    local current=t:GetTimeScaleRawValue()
    if not M.timeOriginal then M.timeOriginal=current end
-   t:SetTimeScale(M.values[19]);M.timeWritten=t:GetTimeScaleRawValue()
+   if current~=M.values[19] then t:SetTimeScale(M.values[19]);current=t:GetTimeScaleRawValue() end
+   M.timeWritten=current
    M.confirmed[19]=near(M.timeWritten,M.values[19])
   end
  end
@@ -107,7 +120,11 @@ function M.feature(id,wanted,value)
   M.timeOriginal=nil;M.timeWritten=nil
  end
  M.flags[id]=wanted;M.values[id]=value
- M.tick()
+ if changed then
+  M.tickWork=false
+  for _,i in ipairs(tickIds) do if M.flags[i] then M.tickWork=true;break end end
+  M.tick()
+ end
  return {available=true,active=wanted and M.confirmed[id] or false,note=(not wanted and 'Aus.' or (M.confirmed[id] and 'Native Wirkung bestätigt.' or 'Bereit; auf passende Spieländerung warten.'))}
 end
 function M.perform(id,value)

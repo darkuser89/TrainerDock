@@ -3,7 +3,7 @@
 
 static uint8_t *inputObjects[6];
 static BOOL inputLive[6],rejectMode;
-static int inputTypes[3],uiCalls,gameCalls;
+static int inputTypes[3],uiCalls,gameCalls,controllerQueries,viewportQueries;
 static void *activeController;
 static void store(void *object,size_t offset,void *value) { memcpy((char *)object+offset,&value,8); }
 static void *controllerClass(void) { return &inputTypes[0]; }
@@ -13,8 +13,8 @@ static bool valid(const void *object,bool recurse) { (void)recurse;for(int i=0;i
 static bool child(void *a,void *b) { return a==b; }
 static void assign(DI2WeakObject *weak,const void *object) { *weak=(DI2WeakObject){0,0};for(int i=0;i<6;i++)if(object==inputObjects[i])*weak=(DI2WeakObject){i+1,1}; }
 static void *resolve(const DI2WeakObject *weak) { int i=weak->index-1;return i>=0 && i<6 && weak->serial==1 && inputLive[i] ? inputObjects[i] : NULL; }
-static void *controller(const void *world,int player) { (void)world;NSCAssert(player==0,@"local controller only");return activeController; }
-static void *viewport(const void *world) { (void)world;return inputObjects[3]; }
+static void *controller(const void *world,int player) { controllerQueries++;(void)world;NSCAssert(player==0,@"local controller only");return activeController; }
+static void *viewport(const void *world) { viewportQueries++;(void)world;return inputObjects[3]; }
 static void ui(void *object,void *widget,uint8_t lock) {
     NSCAssert(object==activeController && !widget && lock==0,@"native UIOnly, no capture/lock or game widget");uiCalls++;
     if(rejectMode)return;
@@ -37,6 +37,8 @@ void DI2TestOverlayInput(void) {
         .controllerClass=controllerClass,.localPlayerClass=localClass,.viewportClass=viewportClass,
         .playerController=controller,.worldViewport=viewport,.inputUIOnly=ui,.inputGameOnly=game};
     DI2OverlayInput *input=[[DI2OverlayInput alloc]initWithAPI:api];
+    for(int i=0;i<20000;i++)NSCAssert(![input updateWorld:inputObjects[0] wanted:NO],@"Closed overlay stays inactive");
+    NSCAssert(controllerQueries==0 && viewportQueries==0,@"20,000 closed-overlay polls perform no controller or viewport discovery");
     NSCAssert([input updateWorld:inputObjects[0] wanted:YES] && uiCalls==1
         && inputObjects[1][0x470]==0xa5 && inputObjects[1][0x489]==1,@"hidden cursor released with visible arrow");
     for(int i=0;i<10;i++)NSCAssert([input updateWorld:inputObjects[0] wanted:YES],@"keep confirmed UI ownership");

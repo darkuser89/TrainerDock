@@ -100,6 +100,10 @@ def generate():
             phases.append(shell("app:icon", "Build macOS app icon", "icon",
                                 ["$(SRCROOT)/App/Resources/TrainerDock.png", "$(SRCROOT)/script/xcode_support.py"],
                                 ["$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/TrainerDock.icns"]))
+            phases.append(shell("app:catalog", "Install trainer catalog metadata", "catalog",
+                                ["$(SRCROOT)/script/trainer_distribution.py"],
+                                ["$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/TrainerCatalog.json"],
+                                alwaysOutOfDate=1))
         product = add(name + ":product", "PBXFileReference", explicitFileType="wrapper.application" if app else "compiled.mach-o.executable" if tool else "compiled.mach-o.dylib",
                       path="TrainerDock.app" if app else name if tool else "Trainer.dylib", sourceTree="BUILT_PRODUCTS_DIR")
         products.append(product)
@@ -146,6 +150,8 @@ def generate():
             raise ValueError(f"{name}: duplicate object filenames must be disambiguated before generation.")
         module_path = str(module.relative_to(ROOT))
         inputs = checks + ["$(SRCROOT)/" + module_path + "/" + p for p in ("Module.json", "Build.json")]
+        inputs += ["$(SRCROOT)/" + str((source / "LICENSE").relative_to(ROOT)),
+                   "$(SRCROOT)/script/trainer_distribution.py"]
         test_sources = ["Tests/HiDPITests.m", *config_data.get("testSupportSources",[])]
         family = config_data.get("family", module.name)
         if family == "ResidentEvil":
@@ -168,7 +174,8 @@ def generate():
         after = shell(name + ":package", "Catalog, bridge, native and HiDPI checks",
                       "module " + module.name, inputs + ["$(TARGET_BUILD_DIR)/Trainer.dylib"],
                       ["$(TARGET_BUILD_DIR)/" + p for p in ("Module.json", "TrainerConfig.json", "LICENSE")]
-                      + ["$(TARGET_TEMP_DIR)/verified.stamp"])
+                      + ["$(TARGET_TEMP_DIR)/verified.stamp",
+                         "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/" + module.name + ".json"])
         extra_links = list(links)
         for framework in config_data.get("frameworks",[]):
             if not __import__("re").fullmatch(r"[A-Za-z][A-Za-z0-9]*",framework):raise ValueError("Ungültiges Modulframework.")
@@ -186,7 +193,7 @@ def generate():
             OTHER_LDFLAGS=extra_links, ENABLE_HARDENED_RUNTIME="NO"), before, [after])
         module_targets.append((name, target))
 
-    def aggregate(name, dependencies):
+    def aggregate(name, dependencies, modules=False):
         deps = [add(name + ":depends:" + target, "PBXTargetDependency", target=target) for target in dependencies]
         inputs = checks + ["$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/" + p
                            for p in ("TrainerDock", "TrainerDockEpicBroker")]
@@ -194,7 +201,8 @@ def generate():
         inputs += ["$(SRCROOT)/" + p for p in ("Tests/EpicLaunch/MHTEpicLaunchTests.m",
                                                "Core/MHTEpicLaunch.m", "Core/MHTEpicLaunch.h")]
         inputs.append("$(SRCROOT)/script/xcode_project.py")
-        inputs += ["$(TRAINERDOCK_BUILD_ROOT)/Modules/" + p.name + ".mhtmodule/Module.json" for p in released_modules()]
+        if modules:
+            inputs += ["$(TRAINERDOCK_BUILD_ROOT)/Modules/" + p.name + ".mhtmodule/Module.json" for p in released_modules()]
         phase = shell(name + ":checks", "Verify launcher, module signatures and layout", "launcher", inputs,
                       ["$(TARGET_TEMP_DIR)/verified.stamp"])
         target = add("target:" + name, "PBXAggregateTarget", buildConfigurationList=configurations(name, {}),
@@ -202,7 +210,7 @@ def generate():
         targets.append(target)
         return target
 
-    complete = aggregate("TrainerDock-Verified", [app] + [target for _, target in module_targets])
+    complete = aggregate("TrainerDock-Verified", [app] + [target for _, target in module_targets], modules=True)
     launcher = aggregate("TrainerDock-Launcher-Verified", [app])
 
     # All versioned development material is visible without adding it to a product.

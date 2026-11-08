@@ -247,6 +247,11 @@ static BOOL RE2WriteLocalSpeed(MTRE2Engine *engine,void *controller,float target
     if((!value.global && !value.owner.valid) || (value.bindingGuard && !value.bindingGuard()))return NO;
     if(value.stockSlot && pointer((void *)pointer(value.stockSlot,0x10),0x10)!=(uintptr_t)value.object)return NO;
     if(value.reader && value.writer){value.writer(bytes);return [value.reader() isEqual:bytes];}
+    // Persistent raw fields need fresh owner/binding/readback checks, but an
+    // already matching value needs neither a region query nor another write.
+    uint8_t current[8]={0};
+    if(value.size>sizeof(current)||!MTReadMemory((uint8_t *)value.object+value.offset,current,value.size))return NO;
+    if(!memcmp(current,bytes.bytes,value.size))return YES;
     BOOL result=NO;
     if(value.size==1){uint8_t n;[bytes getBytes:&n length:1];result=MTWriteByte(value.object,value.offset,n);}
     else if(value.size==4){uint32_t n;[bytes getBytes:&n length:4];result=MTWriteInt(value.object,value.offset,(int32_t)n);}
@@ -698,13 +703,14 @@ static BOOL RE2WriteLocalSpeed(MTRE2Engine *engine,void *controller,float target
 - (NSDictionary *)diagnostics {
     NSMutableDictionary *d=[@{@"nativeGameThread":@(_engine.isGameThread),@"pendingSpeedRestore":@(_speedOutstanding)} mutableCopy];
     if(_portableProbe)d[@"portableSafe"]=[_portableProbe copy];
-    if(_engine.isGameThread && _playerOwner.valid && _speedOwner.valid && [self objectGetter:191902 owner:31594 object:_speedOwner.component]==_condition){
+    if((_desired[@(RE2FeatureSpeed)]||_speedOutstanding) && _engine.isGameThread && _playerOwner.valid && _speedOwner.valid && [self objectGetter:191902 owner:31594 object:_speedOwner.component]==_condition){
         float (*play)(void *,void *)=[_engine method:191873 owner:23201];float (*motion)(void *,void *)=[_engine method:191875 owner:23201];
         if(play && motion && _engine.threadContext){float p=play(_engine.threadContext,_speedOwner.component),m=motion(_engine.threadContext,_speedOwner.component);if(isfinite(p) && isfinite(m))d[@"localSpeed"]=@{@"input":@(p),@"effective":@(m),@"intervalApplications":@(_speedTelemetryCalls),@"intervalRestores":@(_speedTelemetryRestores)};}
     }
     return d;
 }
 - (BOOL)setOverlayInteraction:(BOOL)wanted {
+    if(!wanted&&!_mouseOwned)return NO;
     if(!_engine.isGameThread)return NO;
     // The exact-build HID singleton belongs to the process, not a player.
     // UI input must also work in title/pause menus and while no player exists.

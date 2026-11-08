@@ -16,33 +16,106 @@ Rückgabecode 77 mit `TRAINERDOCK_ALLOW_MISSING_TEST_GPU=1`; lokale Builds bleib
 streng. Shader-, Pixel-, Rücklese- und Rücknahmefehler brechen weiterhin ab.
 Native Grenz-, Bridge- und HiDPI-Prüfungen laufen auch ohne Test-GPU vollständig.
 
-- Push auf `main` oder **Actions → Build and release TrainerDock → Run workflow**
-  auf `main`: Release-Konfiguration bauen, synthetisch prüfen und anschließend
-  automatisch ein neues stabiles GitHub Release veröffentlichen.
-- Pull Request: nur bauen und prüfen; ZIP als Artefakt für sieben Tage bereitstellen.
-- Tag `vMAJOR.MINOR.PATCH`: denselben vollständigen Build ausführen und erst danach
-  ein GitHub Release mit ZIP und SHA-256-Prüfsumme veröffentlichen.
-- Bestehende Releases nicht überschreiben. Für einen korrigierten Download einen
-  neuen Versions-Tag verwenden.
+Zusätzlich führt CI die Performance-Grenzprüfer unter `Tests/Managed`,
+`Tests/UnrealPerformance` und `Tests/NativePerformance` aus. Sie zählen tatsächliche
+Produktpfade mit synthetischen Besitzern: Leerlauf, Metadatenauflösung, unveränderte
+Aufträge, fremde Änderungen und Rücknahme. Der native Runner verwendet nach dem
+Release-Build dessen Xcode-Objekte mit `--configuration Release`. Der Unreal-Runner
+verlangt einen expliziten isolierten Lua-Host aus `TRAINERDOCK_TEST_LUA_LIBRARY`.
+Keine dieser Prüfungen startet ein Spiel oder liefert einen FPS-Nachweis.
 
-Für automatische Releases ist `MARKETING_VERSION` die Mindestversion.
-`script/ci_version.py` prüft alle Remote-Versions-Tags und erhöht bei bereits
-verwendeter Mindestversion die Patchnummer. Auch Tags ohne fertiges Release
-werden nicht wiederverwendet. Build und Veröffentlichung laufen seriell; der Tag
-wird erst nach erfolgreichem Build für genau dessen Commit erstellt. Kein zusätzlicher
-Tag-Push ist erforderlich. Die Releasebeschreibung zählt die tatsächlich verpackten Trainer.
+## Getrennte Produkte und gezielte Builds
 
-Optional eine konkrete Version aus einem bereits geprüften `main` veröffentlichen:
+Die App enthält nur den Launcher, den eigenen Epic-Starthelfer und
+`Contents/Resources/TrainerCatalog.json`. Trainermodule werden einzeln über die
+App heruntergeladen und außerhalb des App-Bundles verwaltet. Der Ordner
+`Contents/Resources/Modules` enthält ausschließlich einen README-Hinweis für
+ältere App-Updater. Keine Trainerbibliothek wird in den Launcherprozess geladen.
+
+`script/trainer_distribution.py plan` vergleicht die tatsächlichen Eingaben mit
+dem **zuletzt erfolgreich veröffentlichten Katalog**, nicht mit dem vorherigen
+Git-Commit. Pro Trainer werden dessen Builddefinition, Profilmetadaten, Quellen,
+rekursive lokale Header, verwendete SDK-Quellen und Buildflags gehasht. Geteilte
+Resident-Evil-/Kex-Quellen treffen ihre abhängigen Trainer. Ein Managed-Lockeintrag
+betrifft ausschließlich seinen Trainer. Reine App-/UI-Änderungen bauen keine
+Trainer neu. Gemeinsame Buildinfrastruktur darf beide Produktarten invalidieren.
+Testdateien sind keine Produkt-Eingaben; die passenden synthetischen Grenzprüfungen
+laufen weiterhin bei betroffenen Produktänderungen.
+
+- Push auf `main` oder manueller Workflow auf `main`: nur geänderte Produkte
+  bauen, prüfen und veröffentlichen. Unveränderte Produkte behalten ihren Download.
+- Pull Request: gezielte Builds und Prüfungen; keine Veröffentlichung.
+- Expliziter `vMAJOR.MINOR.PATCH`-Tag: setzt die Version eines geänderten Launchers.
+- Die Launcher-Version wird mit `script/ci_version.py` oberhalb vorhandener Tags
+  gewählt. Trainer verwenden eigene streng numerische Versionen. Ist ihre
+  Quellversion nicht höher als vorhandene bzw. reservierte Tags, steigt die
+  Patchnummer automatisch. Vorhandene Pakete und Tags werden niemals ersetzt.
+
+Alle Veröffentlichungen laufen serialisiert. Ein Trainer erhält ein eigenes
+**Prerelease** `trainer-<id>-v<version>` mit `<id>-<version>.zip`. Das ZIP enthält
+exakt vier Dateien unter `<id>.mhtmodule/`: `Module.json`, `TrainerConfig.json`,
+`Trainer.dylib`, `LICENSE`. Paketversion und Metadaten stimmen überein; native
+Profile und Spielidentitäten werden unverändert übernommen. Alte Versionen bleiben
+im Katalog und auf GitHub erhalten.
+
+Erst nach bestätigtem Upload mit passender GitHub-SHA-256-Prüfsumme und Größe wird
+der Katalog `trainer-catalog/catalog.json` aktualisiert. Auch dieses Release bleibt
+Prerelease. Der Katalogtausch verwendet einen vorbereiteten Assetnamen und einen
+kurzlebigen letzten bestätigten Katalog; bei Fehlern wird zurückgenommen. Ein
+abgebrochener Lauf verwendet beim Wiederanlauf bestätigte Bytes und überspringt
+bereits reservierte Tags. Ein nicht bestätigtes Paket erscheint niemals als
+verfügbarer Download. Ein bereits veröffentlichtes stabiles App-Release trägt
+seinen Quellfingerprint, sodass ein später fehlgeschlagenes Katalogupdate keinen
+unnötigen App-Neubau erzwingt.
+
+Nur Launcher-Releases `vX.Y.Z` sind stabil. Dadurch findet der bestehende
+GitHub-App-Updater weiterhin ausschließlich App-Updates. Neue Trainerpakete
+benötigen keine neue App-Veröffentlichung.
+
+## Lokale Vorbereitung und erste Umstellung
+
+Builddaten bleiben unter `~/Library/Developer/TrainerDock`. Normale Entwicklung:
 
 ```sh
-git tag -a v1.0.0 -m 'TrainerDock 1.0.0'
-git push origin v1.0.0
+python3 -B script/build.py --module stray
+python3 -B script/build.py --launcher-only
 ```
 
-`v1.0.0` ist nur das erste Versionsbeispiel; bereits vorhandene Tags nicht ersetzen.
-Der Tag setzt die App-Version, die Workflow-Laufnummer die App-Buildnummer.
-Der Build darf die generierte Xcode-Projektdatei nicht verändern; neue Modulquellen
-deshalb vor dem Commit mit `python3 -B script/xcode_project.py` eintragen.
+Ein vollständiger Entwicklungsbuild kann weiterhin alle freigegebenen echten
+Trainer extern bauen und prüfen. Das Launcher-Scheme benötigt keine vorhandenen
+Trainerpakete mehr. Vor dem ersten schlanken App-Ersatz bestehende eingebettete
+Trainer über `MHTTrainerStore` übernehmen; der Updatehelfer tut dies vor seinem
+atomaren App-Tausch. Bestehende versionierte Benutzertrainer bleiben unangetastet.
+
+Für echte vorhandene, geprüfte Runtimepakete, ohne einen App-Build auszulösen:
+
+```sh
+python3 -B script/trainer_distribution.py plan
+python3 -B script/trainer_distribution.py package
+```
+
+`plan` schreibt den bestätigten Ausgangskatalog und Bauplan unter `Distribution/`;
+`package` prüft und verpackt die tatsächlich geänderten externen Runtimepakete.
+Ein nach bestandenen nativen Prüfungen erzeugter Beleg unter `BuildFingerprints/`
+bindet Quellfingerprint und tatsächliche Bibliotheksbytes. Fehlende oder abweichende
+Belege verlangen einen neuen Trainerbuild; alte externe Binaries werden nicht
+blind aktuellen Quellen zugeordnet.
+Für die allererste Offline-Vorbereitung kann `--catalog <datei>` einen expliziten
+bestätigten oder leeren Bootstrapkatalog verwenden. Keine erfundenen Paket-URLs
+oder Prüfsummen ergänzen. `publish-trainers` veröffentlicht anschließend die
+geprüften Pakete und den Katalog; erst danach den Launcher bauen, damit dessen
+Offlinekatalog die tatsächlich verfügbaren Downloads enthält. Veröffentlichung
+benötigt einen entsprechenden Auftrag und den vorhandenen GitHub-Repositoryzugang.
+
+Die App übernimmt den bestätigten Katalog aus `TRAINERDOCK_CATALOG_FILE` oder
+`~/Library/Developer/TrainerDock/Catalog/catalog.json`. Ohne solche Metadaten wird
+ein gültiger leerer Katalog eingebaut. Die vollständigen Featuremetadaten stammen
+aus den echten nativen Katalogexportern beim separaten Trainerbuild.
+
+Nach Quell-/Targetänderungen `python3 -B script/xcode_project.py` ausführen und das
+deterministisch erzeugte Xcode-Projekt mit committen. CI prüft, dass der Build es
+nicht verändert. Keine Spiele starten, Originaldateien verändern oder Spiele-
+Assemblies auf GitHub veröffentlichen.
 
 ## Eigene C#-Build-Abhängigkeiten
 
@@ -50,14 +123,18 @@ Escape from Duckov und Vampire Survivors benötigen beim C#-Kompilieren Referenz
 aus den originalen Spielinstallationen. Diese Spieldateien gehören weder ins
 Repository noch auf einen GitHub-Runner oder in einen Download.
 
-Deshalb stellt das Entwickler-Prerelease `managed-inputs-v2` ausschließlich unsere
+Deshalb stellt das Entwickler-Prerelease `managed-inputs-v4` ausschließlich unsere
 beiden eigenen kompilierten Trainer-Assemblies bereit. Der Nutzer hat dieses
-Paket ausdrücklich öffentlich freigegeben: aktualisierter Vampire-Survivors-Code
-mit getrennten Steam-/Epic-Buildtupeln und unveränderter Duckov-Code. Das erste
-Paket `managed-inputs-v1` bleibt für ältere Quellstände erhalten. Die übrigen nativen Quellen
-einschließlich Loader, Bridges und Overlays werden in jedem Cloud-Build mit Xcode
-kompiliert. Auch die C#-Policy-Tests werden jedes Mal aus ihren Quellen kompiliert
-und ausgeführt. Der Cloud-Build kompiliert diese beiden Trainer-C#-Payloads selbst
+Paket ausdrücklich öffentlich freigegeben: Beide Trainer vermeiden wiederholte
+Besitzer-Stringallokationen und unnötige Pflege bzw. Neuerzeugung eigener Stat-Werte.
+Die getrennten Steam-/Epic-Buildtupel bleiben erhalten. Die Pakete
+`managed-inputs-v1`, `managed-inputs-v2` und `managed-inputs-v3` bleiben unverändert.
+`v4` enthält zusätzlich die abschließend geprüfte Duckov-Rezeptlisten-/Delegaten-
+und Inventarverbesserung; beide eigenen DLLs sind im aktuellen Auftrag ausdrücklich
+zur öffentlichen Bereitstellung freigegeben. Die übrigen nativen Quellen
+einschließlich Loader, Bridges und Overlays werden bei geändertem Trainer mit Xcode
+kompiliert. Auch die C#-Policy-Tests werden für betroffene Managed-Trainer aus ihren
+Quellen kompiliert und ausgeführt. Der Cloud-Build kompiliert diese beiden Trainer-C#-Payloads selbst
 nicht erneut gegen Spiele-Assemblies.
 
 `Config/ManagedImages.json` enthält die Dateihashes und einen Hash der C#-Quellen,
@@ -70,14 +147,14 @@ Nach einer bewussten C#- oder Originalbindungsänderung:
 1. Die richtigen Originalinstallationen in TrainerDock einrichten; weiterhin alle
    Buildidentitäten und Datei-Hashes prüfen lassen.
 2. `TRAINERDOCK_MANAGED_IMAGES` entfernen. Mit
-   `python3 -B script/managed_inputs.py --release managed-inputs-v3` die eigenen
+   `python3 -B script/managed_inputs.py --release managed-inputs-v5` die eigenen
    Bausteine lokal neu kompilieren. Sie liegen extern unter
    `~/Library/Developer/TrainerDock/ManagedInputs`; nur die JSON-Builddefinition
    gehört ins Git-Repository.
 3. Den vollständigen Build und erforderliche genehmigte Ingame-Prüfungen durchführen.
    Nur die eigenen zwei `*.Managed.dll` als neue Entwickler-Release-Assets publizieren,
    keine Originalreferenzen. Die bisherigen Freigaben gelten konkret für die
-   eigenen Bausteine der Entwickler-Releases v1 und v2; zusätzliche Veröffentlichungen
+   eigenen Bausteine der Entwickler-Releases v1 bis v4; zusätzliche Veröffentlichungen
    benötigen einen passenden Nutzerauftrag.
 4. Quellen und Lockdatei zusammen committen. Der Cloud-Build muss die neuen
    veröffentlichten Bytes erfolgreich prüfen.
@@ -88,10 +165,10 @@ identifizierten Mono-Laufzeit ausgeführt. Synthetische Fixtures bleiben in `Tes
 
 ## Paket und Signierung
 
-`python3 -B script/release.py` prüft die aktuelle App und alle freigegebenen Module
-im externen stabilen Buildbaum. Ein kurzlebiger Paketordner wird anschließend
-entfernt. Unter `~/Library/Developer/TrainerDock/Distribution` bleiben nur das
-aktuelle ZIP und `SHA256SUMS`. Das Paket enthält genau `TrainerDock.app` mit eingebetteten eigenständigen Modulen,
+`python3 -B script/release.py` prüft die aktuelle schlanke App
+im externen stabilen Buildbaum; Trainer werden separat geprüft und paketiert. Ein kurzlebiger Paketordner wird anschließend
+entfernt. Unter `~/Library/Developer/TrainerDock/Distribution` liegen das
+aktuelle App-ZIP, `SHA256SUMS`, der Bauplan und die einzelnen Trainerpakete. Das App-Paket enthält genau `TrainerDock.app` mit Offlinekatalog,
 GPL-Lizenz und Build-/Quellcommitangaben unter `Contents/Resources/BUILD.json`.
 Keine Tests, Spiele, Referenzassemblies, Logs oder Xcode-Caches werden verpackt.
 

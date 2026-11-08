@@ -31,11 +31,11 @@ static GLint fogLocation(GLuint program,const GLchar *name){
  return location;
 }
 static void fogUniform(GLint location,GLfloat value){
- if(NSThread.isMainThread && fromGame(__builtin_return_address(0))){NSMutableDictionary *entry=entryFor(location);if(entry)value=adjusted(entry,location,value);}
+ if(fogWanted && NSThread.isMainThread && fromGame(__builtin_return_address(0))){NSMutableDictionary *entry=entryFor(location);if(entry)value=adjusted(entry,location,value);}
  glUniform1f(location,value);
 }
 static void fogUniformVector(GLint location,GLsizei count,const GLfloat *values){
- if(count==1 && values && NSThread.isMainThread && fromGame(__builtin_return_address(0))){NSMutableDictionary *entry=entryFor(location);if(entry){GLfloat value=adjusted(entry,location,*values);glUniform1fv(location,1,&value);return;}}
+ if(fogWanted && count==1 && values && NSThread.isMainThread && fromGame(__builtin_return_address(0))){NSMutableDictionary *entry=entryFor(location);if(entry){GLfloat value=adjusted(entry,location,*values);glUniform1fv(location,1,&value);return;}}
  glUniform1fv(location,count,values);
 }
 static void fogDelete(GLuint program){if(NSThread.isMainThread)[programs removeObjectForKey:keyFor(program)];glDeleteProgram(program);}
@@ -45,12 +45,20 @@ BOOL KEXFogSet(BOOL wanted){
  for(NSMutableDictionary *entry in programs.allValues){
   if([entry[@"context"] unsignedLongLongValue]!=(uintptr_t)CGLGetCurrentContext())continue;
   GLuint program=[entry[@"program"] unsignedIntValue];GLint near=[entry[@"near"] intValue],far=[entry[@"far"] intValue];
-  if(near<0 || far<0 || !entry[@"originalNear"] || !entry[@"originalFar"] || !glIsProgram(program))continue;
+  if(near<0 || far<0 || !glIsProgram(program))continue;
   glUseProgram(program);
   for(NSString *which in @[@"Near",@"Far"]){
    GLint location=[which isEqual:@"Near"] ? near : far;GLfloat intended=[which isEqual:@"Near"] ? clearNear : clearFar,actual[16]={0};
    glGetUniformfv(program,location,actual);
-   if(wanted){glUniform1f(location,intended);entry[[@"held" stringByAppendingString:which]]=@YES;}
+   if(wanted){
+    // Disabled uploads pass straight through. Capture the actual current GPU
+    // value on acquisition (or a new external upload), never a stale off-state
+    // observation. Active intercepted uploads still keep the latest original.
+    if(!isfinite(actual[0]))continue;
+    if(![entry[[@"held" stringByAppendingString:which]] boolValue] || actual[0]!=intended)
+     entry[[@"original" stringByAppendingString:which]]=@(actual[0]);
+    if(actual[0]!=intended)glUniform1f(location,intended);entry[[@"held" stringByAppendingString:which]]=@YES;
+   }
    else if([entry[[@"held" stringByAppendingString:which]] boolValue]){
     if(actual[0]==intended)glUniform1f(location,[entry[[@"original" stringByAppendingString:which]] floatValue]);entry[[@"held" stringByAppendingString:which]]=@NO;
    }

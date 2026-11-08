@@ -1,12 +1,17 @@
 // SPDX-License-Identifier: GPL-3.0-only
-// Exercise the real launcher with real module metadata; never start a game.
+// Exercise the real launcher with isolated metadata fixtures; never start a game.
 #import "MHTApp.h"
 #import "MHTAppearance.h"
 #import "MHTTrainerSettings.h"
 #import "MHTTrainerViews.h"
+#import "MHTTrainerStore.h"
+#import "MHTTrainerLibrary.h"
 @interface MHTApp (LayoutChecks)
 - (void)filter:(id)sender;
 - (void)refreshInstallation;
+- (void)startGame:(id)sender;
+- (void)reloadTrainerModules;
+- (NSSet<NSString *> *)protectedRuntimePaths;
 @end
 // Deliberately blocked identity check, confined to tests; never used to launch.
 @interface MHTSlowProfile : MHTModule
@@ -15,6 +20,7 @@
 @property(atomic) BOOL slowFinished;
 @end
 @implementation MHTSlowProfile
+- (BOOL)installed{return YES;}
 - (NSString *)pathForProfile:(NSDictionary *)profile {(void)profile;return @"/private/tmp/mht-async-fixture-does-not-exist.app";}
 - (NSDictionary *)inspectPath:(NSString *)path profile:(NSDictionary *)profile error:(NSError **)error {
     (void)path;self.usedMainThread|=NSThread.isMainThread;
@@ -194,16 +200,74 @@ static void checkIcons(void) {
         }
     }
 }
+// Catalog fixtures are metadata only. No runtime or fake cheat is ever built.
+@interface MHTLayoutStore : MHTTrainerStore
+@property(nonatomic) NSUInteger downloadRequests;
+@end
+@implementation MHTLayoutStore
+- (void)installVersion:(NSDictionary *)version forIdentifier:(NSString *)identifier completion:(void (^)(MHTModule *,NSError *))completion {
+    (void)version;(void)identifier;self.downloadRequests++;
+    completion(nil,[NSError errorWithDomain:@"MHT.Layout" code:1 userInfo:@{NSLocalizedDescriptionKey:@"Absichtlicher Downloadfehler im UI-Test"}]);
+}
+@end
+static MHTLayoutStore *fixtureStore(NSString *root) {
+    NSMutableArray *modules=[NSMutableArray new];
+    for(NSUInteger game=0;game<20;game++){
+        NSString *identifier=game==0 ? @"dead-island-2" : [NSString stringWithFormat:@"layout-fixture-%lu",(unsigned long)game];
+        NSString *name=game==0 ? @"Dead Island 2" : [NSString stringWithFormat:@"Layout-Test %02lu",(unsigned long)game];
+        NSMutableArray *features=[NSMutableArray new],*groups=[NSMutableArray new],*profiles=[NSMutableArray new];
+        for(NSUInteger i=0;i<12;i++)[features addObject:@{@"id":@(i),@"title":[NSString stringWithFormat:@"Lange deutsche Testfunktion %lu",(unsigned long)i],@"detail":@"Nur synthetische Darstellung, keine Spielanbindung.",@"binding":@"test.only",@"implemented":@YES,@"numeric":@(i%2),@"oneShot":@(i%3==2),@"integer":@YES,@"initial":@10,@"minimum":@0,@"maximum":@1000,@"step":@1,@"shortcut":@"⇧F12"}];
+        for(NSUInteger i=0;i<3;i++)[groups addObject:@{@"id":[NSString stringWithFormat:@"group-%lu",(unsigned long)i],@"title":[NSString stringWithFormat:@"Testgruppe %lu",(unsigned long)i],@"symbol":@"slider.horizontal.3",@"features":@[@(i*4),@(i*4+1),@(i*4+2),@(i*4+3)]}];
+        for(NSUInteger i=0;i<(game==0?2:1);i++)[profiles addObject:@{@"id":[NSString stringWithFormat:@"test-%lu",(unsigned long)i],@"name":@"Synthetisches Testprofil",@"store":i==0?@"Steam":@"Mac App Store",@"version":@"1.0",@"enabled":@NO,@"bundleIdentifier":[@"local.trainerdock.layout." stringByAppendingString:identifier],@"defaultPaths":@[]}];
+        NSDictionary *manifest=@{@"schemaVersion":@1,@"id":identifier,@"name":name,@"version":@"1.0.0",@"profiles":profiles,@"features":features,@"groups":groups};
+        require([MHTModule validManifest:manifest error:NULL],"synthetic module metadata validates");require(MHTTrainerVersion(@"1.0.0"),"trainer semantic version validates");
+        NSDictionary *version=@{@"version":@"1.0.0",@"moduleABI":@1,@"minimumLauncherVersion":@"1.0.0",@"manifest":manifest};
+        [modules addObject:@{@"id":identifier,@"name":name,@"versions":@[version]}];
+    }
+    [NSFileManager.defaultManager createDirectoryAtPath:root withIntermediateDirectories:YES attributes:nil error:NULL];
+    NSString *catalog=[root stringByAppendingPathComponent:@"Bootstrap.json"];
+    NSData *data=[NSJSONSerialization dataWithJSONObject:@{@"schemaVersion":@1,@"moduleABI":@1,@"modules":modules} options:0 error:NULL];
+    require([data writeToFile:catalog atomically:YES],"isolated catalog fixture is written outside source and build products");
+    NSError *catalogError=nil;require([MHTTrainerStore validatedCatalog:[NSJSONSerialization JSONObjectWithData:data options:0 error:NULL] requireDownloads:NO error:&catalogError]!=nil,catalogError.localizedDescription.UTF8String ?: "catalog fixture validates");
+    MHTLayoutStore *store=[[MHTLayoutStore alloc]initWithRootDirectory:[root stringByAppendingPathComponent:@"Modules"] catalogURL:nil bundledCatalogURL:[NSURL fileURLWithPath:catalog]];
+    require(store.modules.count==20,"metadata-only catalog loads without runtime modules");return store;
+}
+static void checkTrainerDistribution(MHTApp *app) {
+    MHTLayoutStore *store=[app valueForKey:@"trainerStore"];MHTModule *selected=[app valueForKey:@"selected"];
+    require(!selected.installed && ![store installedVersionsForIdentifier:selected.identifier].count,"launcher starts with no downloaded runtimes");
+    NSButton *start=[app valueForKey:@"start"];
+    require([start.title isEqual:@"Trainer laden"] && !start.enabled,"unpublished metadata has an explicit disabled download action");
+    NSArray *rows=[app valueForKey:@"rows"];for(id row in rows){NSControl *toggle=[row valueForKey:@"toggle"],*value=[row valueForKey:@"value"];require(!toggle.enabled && !value.enabled,"remote features are displayed but cannot pretend to control a game");}
+    NSMutableDictionary *download=[selected.catalogVersion mutableCopy];download[@"downloadAvailable"]=@YES;selected.catalogVersion=download;
+    [app startGame:nil];require(store.downloadRequests==1 && ![[app valueForKey:@"sessions"] count],"start without a runtime requests only one trainer download and never a game start");
+    require([[(NSTextField *)[app valueForKey:@"status"] stringValue] containsString:@"Absichtlicher Downloadfehler"],"download failure is shown without an automatic retry or game launch");
+    [app openTrainerLibrary:nil];MHTTrainerLibrary *manager=[app valueForKey:@"trainerLibrary"];[manager.window orderOut:nil];layout(manager.window);
+    NSUInteger glasses=0,available=0;for(NSView *view in descendants(manager.window.contentView)){glasses+=[view.identifier isEqual:@"MHT.TrainerLibrary.Glass"];available+=[view.identifier isEqual:@"MHT.TrainerVersion.Available"];}
+    require(glasses==1 && available==1,"trainer manager presents native glass and individual available versions");
+    NSTableView *table=[manager valueForKey:@"table"];require(table.numberOfRows==20,"manager lists downloads independently of installed games");
+    NSSegmentedControl *scope=[manager valueForKey:@"scope"];scope.selectedSegment=1;[scope sendAction:scope.action to:scope.target];require(table.numberOfRows==0,"downloaded filter is empty without installed trainer packages");
+    NSSize expected=manager.window.frame.size;scope.selectedSegment=0;[scope sendAction:scope.action to:scope.target];layout(manager.window);require(sameSize(expected,manager.window.frame.size),"trainer filtering preserves user window size");
+    NSMutableDictionary *sessions=[app valueForKey:@"sessions"];MHTModule *bound=[app valueForKey:@"selected"];
+    id session=[NSClassFromString(@"MHTSession") new];[session setValue:bound forKey:@"module"];[session setValue:@YES forKey:@"launching"];[session setValue:@"/private/tmp/layout-only-bound-runtime" forKey:@"runtimePath"];sessions[bound.identifier]=session;
+    [app reloadTrainerModules];require([app valueForKey:@"selected"]==bound,"catalog refresh retains the exact module and feature catalog of an active launch");require([[app protectedRuntimePaths] containsObject:@"/private/tmp/layout-only-bound-runtime"],"running session exposes its exact runtime path to deletion protection");
+    [sessions removeObjectForKey:bound.identifier];[app reloadTrainerModules];require([app valueForKey:@"selected"]!=bound,"ended sessions release their bound version for normal library selection");
+    NSMenu *trainerMenu=[NSApp.mainMenu itemWithTitle:@"Trainer"].submenu;require([trainerMenu itemWithTitle:@"Trainer laden & verwalten …"].target==app && [trainerMenu itemWithTitle:@"Nach Trainerupdates suchen"].target==app,"native menu exposes trainer downloads and separate update checks");
+    puts("PASS: empty-install catalog, disabled remote controls, explicit download-only start, German error and native version manager. No games or network requests.");
+}
 @interface MHTLayoutApp : MHTApp
 @property(nonatomic) BOOL checksFinished;
+@property(nonatomic,copy) NSString *fixtureRoot;
 @end
 @implementation MHTLayoutApp
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)application{(void)application;return NO;}
 - (void)applicationWillTerminate:(NSNotification *)notification {
     require(self.checksFinished,"UI tests must finish before the application exits");
     [super applicationWillTerminate:notification];
+    [NSFileManager.defaultManager removeItemAtPath:self.fixtureRoot error:NULL];
 }
 - (void)applicationDidFinishLaunching:(NSNotification *)notification {
+    self.fixtureRoot=[NSTemporaryDirectory() stringByAppendingPathComponent:[@"TrainerDockUILayout-" stringByAppendingString:NSUUID.UUID.UUIDString]];
+    [self setValue:fixtureStore(self.fixtureRoot) forKey:@"trainerStore"];
     [super applicationDidFinishLaunching:notification];
     checkAsyncInspection(^{dispatch_async(dispatch_get_main_queue(),^{
         checkIcons();checkGlassToggle();
@@ -277,7 +341,7 @@ static void checkIcons(void) {
             search.stringValue=@"";[self filter:nil];layout(window);
             if(!sameSize(window.frame.size,expected)){fprintf(stderr,"FAIL: restored library resizes window\n");exit(1);}
         }
-        checkSettings(self);
+        checkSettings(self);checkTrainerDistribution(self);
         printf("PASS: 1x/2x icon representation selection, pixel border, %lu module selections at two window widths and empty search preserve window size. No games launched.\n",(unsigned long)checked);
         self.checksFinished=YES;[NSApp terminate:nil];
     });});

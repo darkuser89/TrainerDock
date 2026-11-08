@@ -77,9 +77,16 @@ der bisherige MHT-Ordner wird weiterhin gelesen.
 - `Tests/`: synthetische Tests, keine Bestandteil der ausgelieferten Anwendung.
 - `script/`: Build und Modulerstellung. `docs/`: versionierte Entwickleranleitungen.
 
-Das Hostprogramm lädt ausschließlich geprüfte Modulmetadaten. Vollständige Trainermodule liegen in der App unter `Contents/Resources/Modules`;
-für ältere Pakete wird daneben `Modules` weiterhin gelesen. Zusätzliche liegen unter
-`~/Library/Application Support/TrainerDock/Modules`. Der Launcher enthält keine Spiellogik.
+Das Hostprogramm liest ausschließlich geprüfte Modulmetadaten aus dem mitgelieferten
+`Contents/Resources/TrainerCatalog.json` und dem letzten gültigen Onlinekatalog.
+Die App enthält keine nativen Trainerpakete. Downloads liegen versioniert unter
+`~/Library/Application Support/TrainerDock/Modules/<id>/<version>/<id>.mhtmodule`.
+Übernommene Altbestände liegen kollisionsfrei unter `<id>/legacy-<Inhaltshash>/`;
+die ursprüngliche Trainerversion bleibt erhalten. Alte flache TrainerDock-/MHT-
+Ordner werden weiterhin gelesen. Laufende Sitzungen behalten ihre genaue
+Modulinstanz und ihren Runtimepfad. Versionen niemals überschreiben oder automatisch
+löschen; Löschungen schützen aktive Sitzungen, Spielprozesse und gemappte Dateien.
+Der Launcher enthält keine Spiellogik.
 Native Runtime-
 Bibliotheken werden erst beim ausdrücklich angeforderten Spielstart im ausgewählten
 Spielprozess geladen. Gleichnamige Objective-C-Klassen verschiedener Backends dürfen
@@ -92,18 +99,24 @@ parallel von Hand pflegen. Tests sind keine Produktquellen. Xcode verwaltet
 inkrementelle Objekte im externen stabilen Buildbaum, nicht im Repository.
 
 Ein einzelnes Modul wird mit `python3 -B script/build.py --module <id>` gebaut,
-ohne den Launcher neu zu kompilieren. Danach „Trainer & Spiele neu laden“.
+ohne den Launcher neu zu kompilieren. Danach „Trainer & Spiele neu laden“. Einzelne Entwicklungsprodukte bleiben im
+externen Buildbaum; Downloads/Installation erfolgen über die Trainerverwaltung.
 
-GitHub Actions baut über `.github/workflows/build-release.yml` auf `xcode-27` alle
-freigegebenen Trainer und den Launcher. Erfolgreiche Pushes auf `main` veröffentlichen
-automatisch eine neue stabile Version; PRs liefern nur geprüfte Artefakte. Explizite
-`vX.Y.Z`-Tags bleiben möglich. `script/ci_version.py` wählt eine freie Version oberhalb
-vorhandener Remote-Tags; Veröffentlichung und Versionswahl sind serialisiert.
-Releases entstehen erst nach erfolgreichem Build. `script/release.py`
-verpackt ausschließlich die App, alle echten Module und Lizenz-/Versionsangaben.
+GitHub Actions plant über `.github/workflows/build-release.yml` auf `xcode-27`
+gegen den zuletzt erfolgreich veröffentlichten Trainerkatalog. Nur geänderte
+Quell-Fingerabdrücke werden gebaut; gemeinsame Header, SDK, Buildoptionen und eigene
+Managed-Abhängigkeiten zählen mit. App-Änderungen erfordern keinen Trainerbuild.
+`script/trainer_distribution.py` plant, paketiert und veröffentlicht getrennt.
+Trainer-Releases `trainer-<id>-v<version>` sind unveränderliche Prereleases;
+`trainer-catalog/catalog.json` verweist erst nach Paketprüfung darauf. Frühere
+Versionen bleiben verfügbar. Geänderte Trainer erhalten eine eigene neue Version,
+Spielbuild/Store bleiben getrennte Profile. Neue Spielbuilds niemals automatisch
+als unterstützt deklarieren. Der Launcher wird nur bei eigener Änderung als
+stabiles `vX.Y.Z` veröffentlicht; `script/release.py` verpackt ausschließlich die
+App samt Metadaten, Lizenz und Versionsangaben. PRs veröffentlichen keine Releases.
 Kein Spielstart und keine Veröffentlichung von Spieldateien gehören zum CI-Build.
 Duckov und Vampire Survivors beziehen nur eigene kompilierte C#-Bausteine aus dem
-vom Nutzer ausdrücklich genehmigten Entwickler-Release `managed-inputs-v2`.
+vom Nutzer ausdrücklich genehmigten Entwickler-Release `managed-inputs-v4`.
 `Config/ManagedImages.json` bindet deren Bytes, Quellen und Originalprofile;
 bei Änderungen lokal neu kompilieren und die Bausteine bewusst aktualisieren.
 Kein stiller Hashwechsel und keine Ersatz- oder Testassembly. Details:
@@ -176,6 +189,29 @@ Die dort dokumentierten NMS-Erkenntnisse gelten als Diagnosemuster, nicht als
   geprüften kurzlebigen Austauschbestand erst nach regulärem Ende einsetzen.
   Bestehende Freigaben beachten; diese Anleitung erteilt keine zusätzlichen Spielstarts.
 
+## Leistung im laufenden Spiel schützen
+
+- Frame-Rückrufe und Kontextpoll getrennt behandeln. Ohne aktivierte Effekte,
+  eigene zurückzunehmende Leases oder explizite Aufträge darf ein Framepfad keine
+  Inventar-, Rezept-, Gegner-, Portal- oder Szenensuche auslösen. Verfügbarkeit
+  im bestehenden Kontextpoll prüfen; Einmalaktionen ausschließlich auf Auftrag.
+- Ein unveränderter Funktionspoll darf nicht erneut die Pflege aller aktiven
+  Effekte anstoßen. Aktive Effekte behalten ihren nötigen originalen Framepfad;
+  Spielthread-Zustellung und echte Rücklesebestätigung nicht wegoptimieren.
+- Nur unveränderliche Metadaten begrenzt cachen. Domain-, Besitzer-, Weak-/GC-,
+  Typ- und Deskriptorprüfungen bleiben erhalten; Spielwerte frisch lesen.
+  Fehlgeschlagene Auflösungen nicht dauerhaft cachen. Gleichwertige eigene Werte
+  nach gültigem Rücklesen nicht erneut schreiben; native Benachrichtigungs- und
+  Settersemantik beachten. Fremde Änderungen und Rücknahme weiterhin schützen.
+- Ausgeblendete Overlays verarbeiten nur den letzten Zustand; unveränderte
+  sichtbare Zustände erzeugen keine neuen Zeichenanforderungen. Beim Öffnen
+  sofort den aktuellen Zustand zeigen. Unveränderte Heartbeats dürfen keine
+  wiederholten Einstellungs- oder Auswahlschreibvorgänge auslösen.
+- Performanceprüfungen müssen Originalpfade mit synthetischen Aufrufzählern
+  absichern: Leerlauf, aktive Wirkung, Besitzerwechsel, Ausschalten und erneute
+  Aktivierung. Eine Codeprüfung oder weniger Aufrufe ist kein FPS-Nachweis.
+  Ingame-Messungen getrennt und nur mit entsprechendem Auftrag durchführen.
+
 ## Prüfen und ausführen
 
 Storevarianten benötigen getrennte, vollständig identifizierte native Bindungen.
@@ -226,7 +262,8 @@ Der Nutzer wünscht Updates direkt über GitHub Releases ohne zusätzliche
 Update-Signierung, Zertifikate, Schlüsselbundabfragen oder Signing-Secrets.
 `App/MHTUpdater.*` und `MHTUpdatePackage.*` verwenden ausschließlich stabile neuere
 Releases von `darkuser89/TrainerDock`, prüfen Assetgröße und GitHubs SHA-256-Digest
-vor dem Entpacken und ersetzen App samt eingebetteten Trainermodulen gemeinsam.
+vor dem Entpacken und ersetzen ausschließlich die App. Versionierte Benutzertrainer bleiben erhalten;
+eingebettete Alttrainer werden vor dem Austausch vollständig geprüft übernommen.
 Keine Downgrades, fremden Downloadquellen oder unvollständigen Pakete akzeptieren.
 Das native ZIP-Entpacken erlaubt keine Pfadausbrüche, Links oder Spezialdateien.
 Vor Installation laufende Spiele abwarten und im Helfer erneut prüfen; Spiele

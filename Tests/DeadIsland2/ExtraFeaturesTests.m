@@ -15,7 +15,7 @@ static NSString *names[ExtraCount]; static int32_t counts[ExtraCount];
 static uint8_t ignoreMap[0x50],mapEntry[16],table[3][0x258];
 static void *containers[4],*assets[3]; static uint8_t slots[4][120],ingredientEntries[3][32];
 static float movementBase,modifierValue; static BOOL modifierPresent,rejectMovement,rejectRefill;
-static int guidCounter,additions,freedArrays,aiCalls,removeModifiers;
+static int guidCounter,additions,freedArrays,aiCalls,removeModifiers,managerQueries,ignoreUpdates;
 static void put(void *p,size_t o,const void *v,size_t n) { memcpy((char *)p+o,v,n); }
 static void ptr(void *p,size_t o,void *v) { put(p,o,&v,8); }
 static void integer(void *p,size_t o,int32_t v) { put(p,o,&v,4); }
@@ -31,8 +31,8 @@ static bool valid(const void *p,bool recurse) { (void)recurse;int i=indexOf(p);r
 static bool child(void *a,void *b) { return a==b; }
 static void assign(DI2WeakObject *weak,const void *p) { int i=indexOf(p);*weak=(DI2WeakObject){i+1,i>=0 ? serial[i] : 0}; }
 static void *resolve(const DI2WeakObject *weak) { int i=weak->index-1;return i>=0 && i<ExtraCount && live[i] && weak->serial==serial[i] ? obj[i] : NULL; }
-static void *manager(void *p) { NSCAssert(p==obj[Player],@"local player");return obj[AI]; }
-static void updateAI(void *p) { NSCAssert(p==obj[AI],@"manager"); }
+static void *manager(void *p) { managerQueries++;NSCAssert(p==obj[Player],@"local player");return obj[AI]; }
+static void updateAI(void *p) { ignoreUpdates++;NSCAssert(p==obj[AI],@"manager"); }
 static void ignorePlayer(void *p,const DI2Array *arguments) {
     NSCAssert(p==obj[AI] && arguments->num==2,@"native command shape");
     const DI2Array *strings=arguments->data;
@@ -134,6 +134,8 @@ void DI2TestExtraFeatures(void) {
     BOOL wanted[DI2FeatureCount]={0},available[DI2FeatureCount]={0},active[DI2FeatureCount]={0};double values[DI2FeatureCount]={0};
     NSMutableArray *states=[NSMutableArray new];for(int i=0;i<DI2FeatureCount;i++)[states addObject:[DI2FeatureState new]];
 #define UPDATE() [service updatePlayer:obj[Player] controller:obj[Controller] inventory:obj[Inventory] wanted:wanted values:values available:available active:active states:states]
+    for(int i=0;i<20000;i++)UPDATE();
+    NSCAssert(managerQueries==0 && ignoreUpdates==0 && aiCalls==0,@"20,000 off polls never discover AI or rebuild the ignore-player map");
     wanted[DI2FeatureStealth]=YES;UPDATE();NSCAssert(active[DI2FeatureStealth] && mapEntry[4] && aiCalls==1,@"local AI ignore readback");
     UPDATE();NSCAssert(aiCalls==1,@"no duplicate AI command");
     wanted[DI2FeatureStealth]=NO;UPDATE();NSCAssert(!mapEntry[4],@"restore AI flag");

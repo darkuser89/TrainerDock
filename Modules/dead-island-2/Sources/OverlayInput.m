@@ -41,6 +41,7 @@ static void *pointer(const void *object, size_t offset) {
     _owned=NO; _starting=NO; memset(&_controller,0,sizeof(_controller)); memset(&_viewport,0,sizeof(_viewport));
 }
 - (BOOL)updateWorld:(void *)world wanted:(BOOL)wanted {
+    if (!wanted && !_owned) return NO;
     BOOL bound=_api.playerController && _api.worldViewport && _api.inputUIOnly && _api.inputGameOnly;
     void *controller=bound && world ? _api.playerController(world,0) : NULL;
     void *viewport=bound && world ? _api.worldViewport(world) : NULL;

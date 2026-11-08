@@ -78,6 +78,7 @@
     state.commandAccepted=command==requestedCommand && (requestedCommand<100 || state.ready);
     for(NSInteger i=0;i<RE2ActiveFeatureCount();i++){
         RE2FeatureState *f=state.features[i];f.value=_values[i];f.wanted=_wanted[i];
+        if(!RE2FeatureInfoAt(i)->implemented){_wanted[i]=NO;f.wanted=NO;f.available=NO;f.active=NO;f.note=RE2FeatureInfoAt(i)->detail;continue;}
         if(state.ready){RE2FeatureState *actual=[_adapter applyFeature:i wanted:_wanted[i] value:_values[i]];f.available=actual.available;f.active=_wanted[i] && actual.active;f.note=actual.note ?: context.note;}
         else f.note=_readOnly ? @"Sichtprüfung der echten Spielanbindung. Funktionen sind gesperrt." : _mode==RE2SessionLoading ? @"Auswahl bleibt erhalten; wartet auf gültigen Einzelspieler." : context.note;
     }

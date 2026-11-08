@@ -314,6 +314,7 @@ BOOL CDSetPlayerStatRatio(unsigned kind,double ratio,uint32_t expectedActorKey) 
 }
 
 BOOL CDSetOverlayInteraction(BOOL wanted) {
+    if(!wanted&&!cursor.owned)return NO;
     char threadName[128]{};pthread_getname_np(pthread_self(),threadName,sizeof(threadName));
     if(!CDCorrectBuild() || strcmp(threadName,"GameThread")) return NO;
     void *ctx=context(0x8f72700);

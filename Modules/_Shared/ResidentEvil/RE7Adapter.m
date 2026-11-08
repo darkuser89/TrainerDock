@@ -161,6 +161,7 @@ static NSData *b7a(const void *p,size_t n){return [NSData dataWithBytes:p length
 - (void)frame7 {
     if(_mouseOwned7)[self setOverlayInteraction:YES];
     [self resumeBirthday7];
+    if(!_wanted7.count)return;
     if(![self local7]){[self releaseEffects];return;}
     for(NSNumber *feature in _wanted7.allKeys.copy)[self applyFeature:feature.integerValue wanted:YES value:_wanted7[feature].doubleValue];
 }
@@ -482,6 +483,7 @@ static NSData *b7a(const void *p,size_t n){return [NSData dataWithBytes:p length
     }return @"Keine RE7-Einmalaktion für diese Funktion.";
 }
 - (BOOL)setOverlayInteraction:(BOOL)wanted {
+    if(!wanted&&!_mouseOwned7)return NO;
     if(!_e7.isGameThread)return NO;
     // A valid process HID device can serve UI even without an active DLC/player.
     // Exact RE7 Mouse wrappers load this manager, pass +0x10 to the native

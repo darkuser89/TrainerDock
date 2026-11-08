@@ -34,4 +34,4 @@ static void update(){NSCAssert(NSThread.isMainThread,@"Control input belongs to 
  }
  setMode(mouse,0);setVisible(mouse,true);[NSCursor.arrowCursor set];ready=getMode(mouse)==0&&getVisible(mouse);
 }
-BOOL MHTControlOverlayInteraction(BOOL wanted){requested=wanted;if(!scheduled.exchange(true)){dispatch_async(dispatch_get_main_queue(),^{update();scheduled=false;});}return wanted&&ready.load();}
+BOOL MHTControlOverlayInteraction(BOOL wanted){BOOL previous=requested.exchange(wanted);if(!wanted&&!previous)return NO;if(!scheduled.exchange(true)){dispatch_async(dispatch_get_main_queue(),^{update();scheduled=false;});}return wanted&&ready.load();}

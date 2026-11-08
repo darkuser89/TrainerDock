@@ -1,5 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-only
 #include "IL2CPP.hpp"
+#include "../../_Shared/Managed/MetadataCache.hpp"
+#include <tuple>
+#include <memory>
 #import <Foundation/Foundation.h>
 #import <dlfcn.h>
 #import <mach-o/loader.h>
@@ -51,15 +54,24 @@ bool bindAPI() {
     dlclose(library);if(valid)api=next;return valid;
 }
 Class klass(const char *assembly,const char *space,const char *name) {
-    void *domain=api.domainGet();if(!domain)return nullptr;
+    void *domain=api.domainGet();
+    using Key=std::tuple<std::string,std::string,std::string>;
+    static mht::managed::MetadataCache<Key,Class,256> cache;
+    return cache.get(domain,(uintptr_t)api.classFromName,Key{assembly,space,name},[&]()->Class {
+    if(!domain)return nullptr;
     size_t count=0;auto assemblies=api.assemblies(domain,&count);if(count>1024)return nullptr;
     for(size_t i=0;i<count;i++){
         void *image=api.assemblyImage(assemblies[i]);const char *label=image ? api.imageName(image) : nullptr;
         if(label && !strcmp(label,assembly))return api.classFromName(image,space,name);
     }
     return nullptr;
+    });
 }
 Method method(Class type,const char *name,int count) {
+    using Key=std::tuple<Class,std::string,int>;
+    static mht::managed::MetadataCache<Key,Method> cache;
+    void *domain=api.domainGet ? api.domainGet() : nullptr;
+    return cache.get(domain,(uintptr_t)api.methods,Key{type,name,count},[&]()->Method {
     for(unsigned depth=0;type && depth<32;depth++,type=api.parent(type)){
         void *iterator=nullptr;Method result=nullptr;
         while(Method m=api.methods(type,&iterator))if(!strcmp(api.methodName(m),name) && (int)api.parameterCount(m)==count){
@@ -69,12 +81,26 @@ Method method(Class type,const char *name,int count) {
         if(result)return result;
     }
     return nullptr;
+    });
 }
 Field field(Class type,const char *name) {
+    using Key=std::pair<Class,std::string>;
+    static mht::managed::MetadataCache<Key,Field> cache;
+    void *domain=api.domainGet ? api.domainGet() : nullptr;
+    return cache.get(domain,(uintptr_t)api.findField,Key{type,name},[&]()->Field {
     for(unsigned n=0;type && n<32;n++,type=api.parent(type))if(Field f=api.findField(type,name))return f;
     return nullptr;
+    });
 }
-std::string typeName(const void *type){char *name=type ? api.typeName(type) : nullptr;std::string result=name ? name : "";if(name)api.freeMemory(name);return result;}
+std::string typeName(const void *type){
+    if(!type)return {};
+    static mht::managed::MetadataCache<const void *,std::shared_ptr<std::string>> cache;
+    auto value=cache.get(api.domainGet ? api.domainGet() : nullptr,(uintptr_t)api.typeName,type,[&]()->std::shared_ptr<std::string>{
+        char *name=api.typeName(type);if(!name)return {};
+        auto result=std::make_shared<std::string>(name);api.freeMemory(name);return result;
+    });
+    return value ? *value : std::string{};
+}
 Object reference(Object object,const char *name){
     if(!object)return nullptr;Field f=field(api.objectClass(object),name);
     Class member=f ? api.typeClass(api.fieldType(f)) : nullptr;

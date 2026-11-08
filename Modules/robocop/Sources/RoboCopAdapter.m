@@ -185,7 +185,9 @@ typedef struct {
     }
     for(size_t i=0;i<count;i++){
         RCDataLease *lease=selected[i];
-        if(!writeBits(owner,lease.offset,lease.kind,target[i])){[self releaseLeases:feature];return NO;}
+        // The first pass already proved the current bytes equal our last value.
+        // Stable leases need readback, not repeated VM-region/write syscalls.
+        if(lease.last!=target[i] && !writeBits(owner,lease.offset,lease.kind,target[i])){[self releaseLeases:feature];return NO;}
         lease.last=target[i];uint64_t now=0;
         if(!readAt(owner,lease.offset,&now,widthFor(lease.kind)) || now!=target[i]){[self releaseLeases:feature];return NO;}
     }
@@ -218,9 +220,9 @@ typedef struct {
         if(!wanted)return s;
         if(_god.captured && [self resolve:_god.owner]!=player)[self releaseGod];
         if(!_god.captured){_god.owner=_player;_god.original[0]=(integer(player,0x58)&0x40000)!=0;_god.captured=YES;}
-        _api.setCanBeDamaged(player,false);s.active=!(integer(player,0x58)&0x40000);
+        if(integer(player,0x58)&0x40000)_api.setCanBeDamaged(player,false);s.active=!(integer(player,0x58)&0x40000);
     }else if(feature==MTFeatureHealth){
-        if(wanted){float max=scalar(health,0x114);if(isfinite(max) && max>0){_api.heal(health,-1.f);s.active=scalar(health,0x10c)==max;}}
+        if(wanted){float max=scalar(health,0x114);if(isfinite(max) && max>0){if(scalar(health,0x10c)!=max)_api.heal(health,-1.f);s.active=scalar(health,0x10c)==max;}}
     }else if(feature==MTFeatureMovement){
         s.available=movement && pointer(player,0x1750)==movement && pointer(movement,0x90)==player;
         if(!s.available || !wanted)return s;
@@ -235,7 +237,7 @@ typedef struct {
         if(wanted && s.available){
             if(_timeOwned && ([self resolve:_timeWorld]!=world || _api.getTime(world)!=_timeLast)){[self releaseTime];return s;}
             if(!_timeOwned){_timeOriginal=_api.getTime(world);_timeWorld=_world;_timeOwned=isfinite(_timeOriginal) && _timeOriginal>0;}
-            if(_timeOwned){_api.setTime(world,_timeOriginal*(float)value);_timeLast=_api.getTime(world);s.active=fabsf(_timeLast-_timeOriginal*(float)value)<0.0001f;if(!s.active)[self releaseTime];}
+            if(_timeOwned){float desired=_timeOriginal*(float)value;if(_api.getTime(world)!=desired)_api.setTime(world,desired);_timeLast=_api.getTime(world);s.active=fabsf(_timeLast-desired)<0.0001f;if(!s.active)[self releaseTime];}
         }
     }else if(feature==MTFeatureXPMultiplier){
         void *attributes=[self resolve:_attributes];s.available=attributes!=NULL;
@@ -286,7 +288,7 @@ typedef struct {
             int32_t *address=pointer(_api.oneHitSlot,0);
             if(_oneHitOwned && _oneHitAddress!=address)[self releaseOneHit];
             if(!_oneHitOwned && address){_oneHitAddress=address;_oneHitOriginal=integer(address,0);_oneHitOwned=YES;}
-            if(_oneHitOwned)s.active=MTWriteInt(address,0,1) && _api.oneHitEnabled(weapon);
+            if(_oneHitOwned)s.active=(integer(address,0)==1 || MTWriteInt(address,0,1)) && _api.oneHitEnabled(weapon);
         }
     }
     return s;

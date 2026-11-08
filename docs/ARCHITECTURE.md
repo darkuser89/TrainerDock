@@ -17,11 +17,29 @@ Modules/<spiel>.mhtmodule/
   LICENSE
 ```
 
-Die mitgelieferten Module liegen in `TrainerDock.app/Contents/Resources/Modules`.
-Ältere Pakete mit dem benachbarten Ordner `Modules` werden weiterhin gelesen. Zusätzliche bzw. ersetzende
-Module können unter `~/Library/Application Support/TrainerDock/Modules` liegen. Ein
-Benutzermodul mit derselben ID hat Vorrang. „Trainer & Spiele neu laden“ lädt die
-Definitionen neu. Dafür muss die App nicht neu kompiliert werden.
+Die App enthält den Offlinekatalog `Contents/Resources/TrainerCatalog.json`, keine
+Trainerbibliotheken. Der GitHub-Katalog wird beim Start asynchron geprüft; bei
+Netzfehlern bleiben letzter gültiger Katalog und installierte Versionen nutzbar.
+Ein expliziter Download installiert nach SHA-256-, Archiv-, Profil-, Architektur-,
+Mindestversions- und Code-Siegel-Prüfung atomar nach:
+
+```text
+~/Library/Application Support/TrainerDock/Modules/<id>/<version>/<id>.mhtmodule/
+```
+
+Alte Versionen bleiben erhalten und sind auswählbar. Altbestände werden nach
+`<id>/legacy-<Inhaltshash>/` kopiert, damit gleich nummerierte spätere Releases
+sie nicht überschreiben. Bestehende flache MHT-/TrainerDock-Ordner bleiben lesbar.
+Die Verwaltung zeigt angebotene, installierte und aktualisierbare Trainer;
+Download startet kein Spiel. Löschen betrifft ausschließlich die gewählte eigene
+Installation und schützt laufende Sitzungen sowie tatsächlich gemappte Runtime-
+Dateien. Einstellungen und Spielpfade werden dabei erhalten.
+
+Vor dem Start sucht der Host eine installierte Version mit tatsächlich passendem
+Originalprofil desselben Stores, Bundle-IDs und Architektur. Die UUID-/Hashprüfung
+bleibt vollständig; ähnliche Versionsnummern oder Profilnamen reichen nicht.
+Die Sitzung behält exakt deren Katalog und Runtimepfad, auch wenn währenddessen
+neue Trainer heruntergeladen werden. App-Updates und Trainer-Updates sind getrennt.
 
 Der Launcher liest die Modulmetadaten. Erst ein ausdrücklicher Spielstart lädt die
 **im gewählten Modul enthaltene** Trainerbibliothek in den passenden Spielprozess.
@@ -68,6 +86,25 @@ Keine Spielsignaturen, Entitlements oder ausführbaren Dateien werden verändert
 Eine fehlende Trainerverbindung wird sichtbar gemeldet; kein stiller Ersatzstart.
 
 ## Livebedienung
+
+Kontextprüfung, Effektpflege und Darstellung haben getrennte Aufgaben. Der
+Kontextpoll ermittelt verfügbare Funktionen; ursprüngliche Frame-Rückrufe halten
+nur eingeschaltete Effekte und eigene Rücknahmen aufrecht. Mehrere unveränderte
+Funktionsabfragen dürfen nicht jede für sich alle Effekte erneut ausführen.
+Nicht implementierte Katalogeinträge gelangen nicht in den Adapter.
+
+Metadatencaches speichern keine Spielwerte oder ungeschützten Spielobjekte.
+Sie sind begrenzt und an die jeweilige Domain bzw. geprüfte native Besitzer- und
+Deskriptoridentität gebunden. Besitzerwechsel und Änderungen durch das Spiel
+bleiben bei jedem Zugriff maßgeblich. Eine bereits bestätigte, unveränderte
+eigene Datenlease benötigt keinen erneuten Schreibzugriff.
+
+Verborgene Overlays behalten lediglich den aktuellen Zustand. Sichtbare Zeilen
+werden nur bei geänderter Darstellung invalidiert; beim Öffnen wird sofort der
+neueste Zustand übernommen. `Tests/HiDPITests.m` zählt hierfür tatsächliche
+Zeichenanforderungen, unabhängig von AppKits verzögerten Dirty-Flags. Der Host
+speichert Auswahl und Optionen nur bei geändertem Inhalt, auch bei regelmäßigen
+Heartbeats. `Tests/MHTTests.m` prüft die Schreibanzahl und externe Änderungen.
 
 `MHTProtocol` überträgt JSON über lokale Distributed Notifications. Nachrichten sind
 an Protokollversion, Modul-ID, Sitzungstoken und PID gebunden. Befehle enthalten eine

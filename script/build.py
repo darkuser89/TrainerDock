@@ -201,8 +201,6 @@ def build(build_dir, module_id=None, launcher_only=False, configuration="Debug",
     if int(sdk.split('.')[0])<27:raise ValueError("Xcode mit macOS-27-SDK oder neuer erforderlich.")
     if module_id and module_id not in [p.name for p in released_modules()]:
         raise ValueError("Unbekanntes Modul oder Entwicklungs-Vorlage, kein fertiger Trainer.")
-    if launcher_only and not (build_dir/"Modules").is_dir():
-        raise ValueError("Zuerst einen vollständigen Build mit Trainermodulen erzeugen.")
     generate()
     scheme="Trainer-"+module_id if module_id else "TrainerDock-Launcher" if launcher_only else "TrainerDock"
     settings=[]
@@ -221,12 +219,9 @@ def build(build_dir, module_id=None, launcher_only=False, configuration="Debug",
          "-jobs",str(min(os.cpu_count() or 2,8)),"-quiet",
          "TRAINERDOCK_BUILD_ROOT="+str(build_dir),*settings,"build"],env=dict(os.environ,PYTHONDONTWRITEBYTECODE="1"))
     from xcode_support import verify_products
-    if module_id and (build_dir/"TrainerDock.app/Contents/Resources/Modules").is_dir():
-        from xcode_support import bundle_modules
-        complete=all((build_dir/"Modules"/(p.name+".mhtmodule")/"TrainerConfig.json").is_file() for p in released_modules())
-        if complete:bundle_modules(build_dir)
-        else:print("Modul geprüft; App-Ressourcen werden nach dem Bau aller neuen Module gemeinsam aktualisiert.")
-    verify_products(build_dir,module_id)
+    # Trainer packages remain separate products. Building one never changes or
+    # re-signs the launcher, and a launcher build needs no installed trainers.
+    verify_products(build_dir,module_id,modules=not launcher_only)
     product=build_dir/"Modules"/(module_id+".mhtmodule") if module_id else build_dir/"TrainerDock.app"
     print(f"Xcode-Build und Prüfungen erfolgreich: {product}")
     return product

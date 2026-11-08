@@ -30,16 +30,20 @@ namespace MHTDuckov {
   readonly string[] notes = new string[35];
   readonly List<OwnStat> modifiers = new List<OwnStat>();
   readonly List<OwnValue> changes = new List<OwnValue>();
+  readonly Dictionary<OwnedValueKey,OwnValue> valueIndex=new Dictionary<OwnedValueKey,OwnValue>();
   readonly List<OwnStat> capacityPending = new List<OwnStat>();
   readonly List<OwnValue> capacityValuesPending = new List<OwnValue>();
   CharacterMainControl player;
   Item root;
-  string owner = "";
+  string owner = "loading";
+  ContextOwner ownerSnapshot;
   int mode = 1;
   string contextNote = "Warte auf lokalen Spielstand.";
   bool creditGuard, expGuard;
   long lastExp;
   bool moneyBound, expBound;
+  readonly EventSubscription moneySubscription=new EventSubscription(),expSubscription=new EventSubscription();
+  static readonly FieldInfo moneyEventField=typeof(EconomyManager).GetField("OnMoneyChanged",BindingFlags.Static|BindingFlags.NonPublic);
   InteractableLootbox loot;
   float scanAt;
   Perk[] perks = new Perk[0];
@@ -49,16 +53,22 @@ namespace MHTDuckov {
   int saveFrame = -1;
   sealed class OwnStat {
    public int feature; public Item item; public Stat stat; public Modifier modifier;
-   public Inventory inventory; public int order;
+   public Inventory inventory; public int order;public float request,contribution,pendingReadback;public int pendingOccupied;public bool multiply,target;
   }
   sealed class OwnValue {
    public int feature; public UObj target; public string key; public object before, last;
-   public Func<object> read; public Action<object> write; public bool touched;
+   public Func<object> read; public Action<object> write; public bool touched;public object detail;
   }
   static string Json(object value) { return JsonConvert.SerializeObject(value); }
   static int Id(UObj obj) { return obj ? obj.GetInstanceID() : 0; }
+  static readonly Dictionary<Type,Dictionary<string,FieldInfo>> fieldCache=new Dictionary<Type,Dictionary<string,FieldInfo>>();
   static FieldInfo Field(Type type, string key) {
-   for (; type != null; type = type.BaseType) { var f=type.GetField(key,Fields); if(f!=null)return f; }
+   Dictionary<string,FieldInfo> fields;FieldInfo found;
+   if(fieldCache.TryGetValue(type,out fields)&&fields.TryGetValue(key,out found))return found;
+   for(Type current=type;current!=null;current=current.BaseType){var f=current.GetField(key,Fields);if(f==null)continue;
+    if(fields==null){if(fieldCache.Count>=128)fieldCache.Clear();fields=new Dictionary<string,FieldInfo>();fieldCache[type]=fields;}
+    if(fields.Count>=128)fields.Clear();fields[key]=f;return f;
+   }
    throw new MissingFieldException(key);
   }
   static bool Near(float a,float b) { return !float.IsNaN(a) && !float.IsInfinity(a) && Mathf.Abs(a-b)<=Mathf.Max(0.0001f,Mathf.Abs(b)*0.0001f); }
@@ -94,25 +104,27 @@ namespace MHTDuckov {
    SceneLoader.onStartedLoadingScene-=Loading;PauseMenu.onPauseMenuOn-=ReleaseAll;
    Saves.SavesSystem.OnCollectSaveData-=BeforeSave;Saves.SavesSystem.OnSetFile-=ReleaseAll;
   }
-  void Loading(SceneLoadingContext unused) { ReleaseAll();owner=""; }
+  void Loading(SceneLoadingContext unused) { ReleaseAll();owner="loading";ownerSnapshot=default(ContextOwner); }
   void BeforeSave() { saveFrame=Time.frameCount;ReleaseAll(); }
   void StartLoot(InteractableLootbox box) { loot=box; }
   void StopLoot(InteractableLootbox box) { if(loot==box)loot=null; }
   static bool MainThread { get { return PlayerLoopHelper.IsMainThread; } }
   bool Refresh() {
    if(!MainThread)return false;
-   int next=1;string key="loading";string note="Warte auf lokalen Einzelspieler.";
+   int next=1;bool hasOwner=false;ContextOwner snapshot=default(ContextOwner);string note="Warte auf lokalen Einzelspieler.";
    var level=LevelManager.Instance;var main=CharacterMainControl.Main;
    if(level && main && main==level.MainCharacter && main.IsMainCharacter && main.CharacterItem && main.Health && !main.Health.IsDead && LevelManager.LevelInited && LevelManager.AfterInit && !LevelManager.LevelInitializing && !SceneLoader.IsSceneLoading) {
     var item=main.CharacterItem;
     if(item.Inventory && !item.Inventory.Loading) {
-     key=Id(level)+":"+Id(main)+":"+Id(item)+":"+Id(item.Inventory)+":"+Id(level.PetCharacter)+":"+Id(main.agentHolder ? main.agentHolder.CurrentHoldGun : null)+":"+Id(Duckov.UI.ItemUIUtilities.SelectedItem)+":"+Saves.SavesSystem.CurrentSlot;
+     hasOwner=true;snapshot=new ContextOwner(level,main,item,item.Inventory,level.PetCharacter,main.agentHolder ? main.agentHolder.CurrentHoldGun : null,Duckov.UI.ItemUIUtilities.SelectedItem,Saves.SavesSystem.CurrentSlot,true);
      next=GameManager.Paused || Saves.SavesSystem.IsSaving || saveFrame==Time.frameCount ? 1 : 2;
      note=next==2 ? "Duckov 2.3.30 · lokaler Einzelspieler." : "Pause/Speichern: eigene Dauereffekte gelöst.";
      player=main;root=item;
     }
    }
-   if(next!=2 || key!=owner) { ReleaseAll();owner=key; }
+   bool changed=!ownerSnapshot.Same(snapshot);
+   if(next!=2||changed)ReleaseAll();
+   if(changed){ownerSnapshot=snapshot;owner=hasOwner ? Id(level)+":"+Id(main)+":"+Id(root)+":"+Id(root.Inventory)+":"+Id(level.PetCharacter)+":"+Id(main.agentHolder ? main.agentHolder.CurrentHoldGun : null)+":"+Id(Duckov.UI.ItemUIUtilities.SelectedItem)+":"+Saves.SavesSystem.CurrentSlot : "loading";}
    mode=next;contextNote=note;
    return next==2;
   }
@@ -175,29 +187,93 @@ namespace MHTDuckov {
   }
   bool Stat(int f,Item item,string key,float amount,bool multiply=false,bool target=false) {
    if(!item)return false;var stat=item.GetStat(key);if(stat==null)return false;
-   var own=modifiers.Find(x=>x.feature==f && x.item==item && x.stat==stat);
+   OwnStat own=null;foreach(var entry in modifiers)if(entry.feature==f&&entry.item==item&&entry.stat==stat){own=entry;break;}
    if(own==null) { own=new OwnStat {feature=f,item=item,stat=stat,order=1000000000+f};modifiers.Add(own); }
+   var kind=multiply ? ModifierType.PercentageMultiply : ModifierType.Add;
+   if(own.modifier!=null&&own.multiply==multiply&&own.target==target&&Near(own.request,amount)
+      &&stat.Modifiers.Contains(own.modifier)&&ReferenceEquals(own.modifier.Source,own)&&own.modifier.Type==kind
+      &&own.modifier.Order==own.order&&Near(own.modifier.Value,own.contribution)&&(!target||Near(stat.Value,amount))) {
+    float current=stat.Value;return !float.IsNaN(current)&&!float.IsInfinity(current);
+   }
    if(own.modifier!=null)stat.RemoveModifier(own.modifier);
    float before=stat.Value;
    float modifier=target ? amount-before : multiply ? amount-1 : amount;
-   own.modifier=new Modifier(multiply ? ModifierType.PercentageMultiply : ModifierType.Add,modifier,true,own.order,own);
+   own.modifier=new Modifier(kind,modifier,true,own.order,own);own.request=amount;own.multiply=multiply;own.target=target;own.contribution=modifier;
    stat.AddModifier(own.modifier);
    float expected=target ? amount : multiply ? before*amount : before+amount;
    return stat.Modifiers.Contains(own.modifier) && Near(stat.Value,expected);
   }
   bool Own(int f,UObj target,string key,Func<object> read,Action<object> write,object value) {
    if(!target)return false;
-   var entry=changes.Find(c=>c.feature==f && c.target==target && c.key==key);
-   if(entry==null) { entry=new OwnValue {feature=f,target=target,key=key,before=read(),read=read,write=write};changes.Add(entry); }
+   OwnValue entry=FindValue(f,target,key);
+   if(entry==null) { entry=new OwnValue {feature=f,target=target,key=key,before=read(),read=read,write=write};AddValue(entry); }
    entry.touched=true;if(!Same(read(),value))write(value);entry.last=value;return Same(read(),value);
   }
+  OwnValue FindValue(int f,UObj target,string key) {OwnValue entry;return valueIndex.TryGetValue(new OwnedValueKey(f,target,key),out entry)?entry:null;}
+  void AddValue(OwnValue entry) {changes.Add(entry);valueIndex[new OwnedValueKey(entry.feature,entry.target,entry.key)]=entry;}
+  void ForgetValue(OwnValue entry) {valueIndex.Remove(new OwnedValueKey(entry.feature,entry.target,entry.key));changes.Remove(entry);}
+  bool ApplyValue(OwnValue entry,object value) {entry.touched=true;if(!Same(entry.read(),value))entry.write(value);entry.last=value;return Same(entry.read(),value);}
+  static OwnValue FieldValue(int f,UObj target,string key) {
+   var field=Field(target.GetType(),key);
+   return new OwnValue {feature=f,target=target,key=key,before=field.GetValue(target),read=()=>field.GetValue(target),write=v=>field.SetValue(target,v)};
+  }
   bool SetField(int f,UObj target,string key,object value) {
-   if(!target)return false;var field=Field(target.GetType(),key);
-   return Own(f,target,key,()=>field.GetValue(target),v=>field.SetValue(target,v),value);
+   if(!target)return false;var entry=FindValue(f,target,key);
+   if(entry==null){entry=FieldValue(f,target,key);AddValue(entry);}return ApplyValue(entry,value);
+  }
+  static OwnValue BulletValue(int f,ItemSetting_Gun setting) {
+   var setter=typeof(ItemSetting_Gun).GetProperty("bulletCount",Fields).GetSetMethod(true);
+   return new OwnValue {feature=f,target=setting,key="bulletCount",before=setting.BulletCount,read=()=>setting.BulletCount,write=v=>setter.Invoke(setting,new object[]{v})};
+  }
+  bool Bullets(int f,ItemSetting_Gun setting) {var entry=FindValue(f,setting,"bulletCount");if(entry==null){entry=BulletValue(f,setting);AddValue(entry);}return ApplyValue(entry,setting.Capacity);}
+  static OwnValue DurabilityValue(int f,Item item) {
+   return new OwnValue {feature=f,target=item,key="Durability",before=item.Durability,read=()=>item.Durability,write=v=>item.Durability=(float)v};
+  }
+  bool Durability(int f,Item item) {if(!item)return false;var entry=FindValue(f,item,"Durability");if(entry==null){entry=DurabilityValue(f,item);AddValue(entry);}return ApplyValue(entry,item.MaxDurabilityWithLoss);}
+  static OwnValue RequirementValue(int f,Perk perk,string key) {
+   var req=perk.Requirement;Func<object> read;Action<object> write;
+   if(key=="requirement.cost"){read=()=>req.cost;write=v=>req.cost=(Cost)v;}
+   else if(key=="requirement.level"){read=()=>req.level;write=v=>req.level=(int)v;}
+   else {read=()=>req.requireTime;write=v=>req.requireTime=(long)v;}
+   return new OwnValue {feature=f,target=perk,key=key,before=read(),read=read,write=write,detail=req};
+  }
+  bool Requirement(int f,Perk perk,string key,object value) {
+   if(!perk||perk.Requirement==null)return false;var entry=FindValue(f,perk,key);
+   if(entry!=null&&!ReferenceEquals(entry.detail,perk.Requirement)){Restore(changes.IndexOf(entry));entry=null;}
+   if(entry==null){entry=RequirementValue(f,perk,key);AddValue(entry);}return ApplyValue(entry,value);
+  }
+  sealed class FormulaOwner {public List<CraftingFormula> sourceSnapshot,lastSnapshot;}
+  static bool SameFormula(CraftingFormula a,CraftingFormula b,bool cost) {
+   return a.id==b.id&&a.result.id==b.result.id&&a.result.amount==b.result.amount&&ReferenceEquals(a.tags,b.tags)
+    &&a.unlockByDefault==b.unlockByDefault&&a.lockInDemo==b.lockInDemo&&a.requirePerk==b.requirePerk&&a.hideInIndex==b.hideInIndex
+    &&(!cost||(a.cost.money==b.cost.money&&ReferenceEquals(a.cost.items,b.cost.items)));
+  }
+  static bool SameFormulas(List<CraftingFormula> a,List<CraftingFormula> b,bool cost) {
+   if(a==null||b==null||a.Count!=b.Count)return false;for(int i=0;i<a.Count;i++)if(!SameFormula(a[i],b[i],cost))return false;return true;
+  }
+  static OwnValue FormulaValue(CraftingFormulaCollection collection,FieldInfo field,List<CraftingFormula> source) {
+   return new OwnValue {feature=17,target=collection,key="formulas",before=source,read=()=>field.GetValue(collection),write=v=>{field.SetValue(collection,v);Field(typeof(CraftingFormulaCollection),"_entries_ReadOnly").SetValue(collection,null);}};
+  }
+  bool FreeFormulas(CraftingFormulaCollection collection,out int count) {
+   count=0;if(!collection)return false;var field=Field(typeof(CraftingFormulaCollection),"list");var current=(List<CraftingFormula>)field.GetValue(collection);if(current==null)return false;
+   var entry=FindValue(17,collection,"formulas");var lease=entry==null?null:entry.detail as FormulaOwner;
+   if(entry!=null&&(lease==null||!ReferenceEquals(current,entry.last)||!SameFormulas(current,lease.lastSnapshot,true))){
+    // A replaced or externally edited list is now foreign. Preserve it as the
+    // next baseline; never restore an older list over someone else's changes.
+    ForgetValue(entry);entry=null;lease=null;
+   }
+   var source=entry==null?current:(List<CraftingFormula>)entry.before;count=source.Count;
+   if(entry!=null&&SameFormulas(source,lease.sourceSnapshot,false)){entry.touched=true;return ReferenceEquals(field.GetValue(collection),entry.last);}
+   var free=new List<CraftingFormula>(source.Count);foreach(var original in source){var formula=original;formula.cost=new Cost(0L);free.Add(formula);}
+   if(entry==null){entry=FormulaValue(collection,field,source);AddValue(entry);}
+   entry.detail=new FormulaOwner {sourceSnapshot=new List<CraftingFormula>(source),lastSnapshot=new List<CraftingFormula>(free)};
+   return ApplyValue(entry,free);
   }
   bool Restore(int index) {
-   var c=changes[index];changes.RemoveAt(index);
+   var c=changes[index];valueIndex.Remove(new OwnedValueKey(c.feature,c.target,c.key));changes.RemoveAt(index);
    if(c.target && Same(c.read(),c.last)) {
+    var formulas=c.detail as FormulaOwner;
+    if(formulas!=null&&!SameFormulas(c.read() as List<CraftingFormula>,formulas.lastSnapshot,true))return true;
     if(c.feature==29 && c.target is Inventory && !CapacitySafety.CanFinish((int)c.before,Occupied((Inventory)c.target))) {
      capacityValuesPending.Add(c);return false;
     }
@@ -214,22 +290,22 @@ namespace MHTDuckov {
    confirmed[f]=false;notes[f]=null;
    if(f==26) { if(!enabledFeatures[25] && !enabledFeatures[26])return ReleaseFeature(25);return true; }
    if(f==25 && enabledFeatures[26])return true;
-   bool complete=!capacityPending.Any(x=>x.feature==f) && !capacityValuesPending.Any(x=>x.feature==f);
-   var weightRoots=new HashSet<Item>();
-   if(f==7)foreach(var c in changes)if(c.feature==7 && c.target is Item && c.target)weightRoots.Add(((Item)c.target).GetRoot());
+   bool complete=true;foreach(var entry in capacityPending)if(entry.feature==f)complete=false;foreach(var entry in capacityValuesPending)if(entry.feature==f)complete=false;
+   HashSet<Item> weightRoots=null;
+   if(f==7)foreach(var c in changes)if(c.feature==7 && c.target is Item && c.target){if(weightRoots==null)weightRoots=new HashSet<Item>();weightRoots.Add(((Item)c.target).GetRoot());}
    for(int i=modifiers.Count-1;i>=0;i--)if(modifiers[i].feature==f) {
     var m=modifiers[i];modifiers.RemoveAt(i);
     if(m.item && m.modifier!=null) {
      m.stat.RemoveModifier(m.modifier);
      if(m.inventory && Occupied(m.inventory)>Mathf.RoundToInt(m.stat.Value)) {
       int occupied=Occupied(m.inventory);
-      m.modifier=new Modifier(ModifierType.Add,occupied-m.stat.Value,true,m.order,m);m.stat.AddModifier(m.modifier);
+      m.contribution=occupied-m.stat.Value;m.modifier=new Modifier(ModifierType.Add,m.contribution,true,m.order,m);m.stat.AddModifier(m.modifier);m.pendingOccupied=occupied;m.pendingReadback=m.stat.Value;
       capacityPending.Add(m);complete=false;
      }
     }
    }
    for(int i=changes.Count-1;i>=0;i--)if(changes[i].feature==f)complete=Restore(i) && complete;
-   foreach(var item in weightRoots)if(item)item.RecalculateTotalWeight();
+   if(weightRoots!=null)foreach(var item in weightRoots)if(item)item.RecalculateTotalWeight();
    if(f==13 && moneyBound) { EconomyManager.OnMoneyChanged-=MoneyChanged;moneyBound=false; }
    if(f==21 && expBound) { EXPManager.onExpChanged-=ExpChanged;expBound=false; }
    confirmed[f]=false;notes[f]=null;return complete;
@@ -240,19 +316,24 @@ namespace MHTDuckov {
     if(!inventory || !Same(c.read(),c.last)) { capacityValuesPending.RemoveAt(i);continue; }
     int occupied=Occupied(inventory), baseline=(int)c.before;
     int next=CapacitySafety.Recover(baseline,occupied);
-    c.write(next);c.last=next;
+    if(!Same(c.read(),next))c.write(next);c.last=next;
     if(CapacitySafety.CanFinish(baseline,occupied) && Same(c.read(),baseline))capacityValuesPending.RemoveAt(i);
    }
    for(int i=capacityPending.Count-1;i>=0;i--) {
     var m=capacityPending[i];
     if(!m.item || !m.inventory) { capacityPending.RemoveAt(i);continue; }
-    m.stat.RemoveModifier(m.modifier);
     int occupied=Occupied(m.inventory);
+    if(occupied==m.pendingOccupied&&m.modifier!=null&&m.stat.Modifiers.Contains(m.modifier)&&ReferenceEquals(m.modifier.Source,m)
+      &&m.modifier.Type==ModifierType.Add&&m.modifier.Order==m.order&&Near(m.modifier.Value,m.contribution)&&Near(m.stat.Value,m.pendingReadback))continue;
+    m.stat.RemoveModifier(m.modifier);
     if(occupied<=Mathf.RoundToInt(m.stat.Value)) { capacityPending.RemoveAt(i);continue; }
-    m.modifier=new Modifier(ModifierType.Add,occupied-m.stat.Value,true,m.order,m);m.stat.AddModifier(m.modifier);
+    m.contribution=occupied-m.stat.Value;m.modifier=new Modifier(ModifierType.Add,m.contribution,true,m.order,m);m.stat.AddModifier(m.modifier);m.pendingOccupied=occupied;m.pendingReadback=m.stat.Value;
    }
   }
   void ReleaseAll() {
+   bool held=moneyBound||expBound||cursorOwned||modifiers.Count!=0||changes.Count!=0;
+   for(int f=0;!held&&f<enabledFeatures.Length;f++)held=enabledFeatures[f];
+   if(!held)return;
    Array.Clear(enabledFeatures,0,enabledFeatures.Length);
    for(int f=0;f<35;f++)ReleaseFeature(f);
    ReleaseMouse();
@@ -263,27 +344,26 @@ namespace MHTDuckov {
    var health=player.Health;var gun=player.agentHolder ? player.agentHolder.CurrentHoldGun : null;
    switch(f) {
     case 0:return Own(f,health,"Invincible",()=>health.Invincible,v=>health.SetInvincible((bool)v),true);
-    case 1:health.SetHealth(health.MaxHealth);return Near(health.CurrentHealth,health.MaxHealth);
+    case 1:if(health.CurrentHealth!=health.MaxHealth)health.SetHealth(health.MaxHealth);return Near(health.CurrentHealth,health.MaxHealth);
     case 2: {
      bool zero=Stat(f,root,"StaminaDrainRate",0,true);
      bool filled=SetField(f,player,"currentStamina",player.MaxStamina);
      return zero && filled && Near(player.CurrentStamina,player.MaxStamina);
     }
     case 3: {
-     bool zero=Stat(f,root,"EnergyCost",0,true);player.CurrentEnergy=player.MaxEnergy;return zero && Near(player.CurrentEnergy,player.MaxEnergy);
+     bool zero=Stat(f,root,"EnergyCost",0,true);if(player.CurrentEnergy!=player.MaxEnergy)player.CurrentEnergy=player.MaxEnergy;return zero && Near(player.CurrentEnergy,player.MaxEnergy);
     }
     case 4: {
-     bool zero=Stat(f,root,"WaterCost",0,true);player.CurrentWater=player.MaxWater;return zero && Near(player.CurrentWater,player.MaxWater);
+     bool zero=Stat(f,root,"WaterCost",0,true);if(player.CurrentWater!=player.MaxWater)player.CurrentWater=player.MaxWater;return zero && Near(player.CurrentWater,player.MaxWater);
     }
     case 5: {
      var setting=gun.GunItemSetting;if(!setting || setting.TargetBulletID<=0 || setting.Capacity<1)return false;
-     var setter=typeof(ItemSetting_Gun).GetProperty("bulletCount",Fields).GetSetMethod(true);
-     return Own(f,setting,"bulletCount",()=>setting.BulletCount,v=>setter.Invoke(setting,new object[]{v}),setting.Capacity);
+     return Bullets(f,setting);
     }
     case 6:return Stat(f,gun.Item,"ReloadTime",.01f,false,true);
     case 7: {
      bool ok=true;foreach(var item in root.GetAllChildren(true,true))if(item && item.GetCharacterItem()==root)ok=SetField(f,item,"weight",0f) && ok;
-     ok=SetField(f,root,"weight",0f) && ok;root.RecalculateTotalWeight();return ok && Near(root.TotalWeight,0);
+     ok=SetField(f,root,"weight",0f) && ok;if(!Near(root.TotalWeight,0))root.RecalculateTotalWeight();return ok && Near(root.TotalWeight,0);
     }
     case 8:return Stat(f,root,"GunCritRateGain",1) & Stat(f,root,"MeleeCritRateGain",1);
     case 9:return Stat(f,root,"GunDamageMultiplier",1000,true) & Stat(f,root,"MeleeDamageMultiplier",1000,true);
@@ -291,11 +371,11 @@ namespace MHTDuckov {
     case 11:return Stat(f,root,"BodyArmor",value,true) & Stat(f,root,"HeadArmor",value,true);
     case 13: {
      if(!moneyBound) { EconomyManager.OnMoneyChanged+=MoneyChanged;moneyBound=true; }
-     var ev=typeof(EconomyManager).GetField("OnMoneyChanged",BindingFlags.Static|BindingFlags.NonPublic).GetValue(null) as Delegate;
-     notes[f]="Nativer Geldgewinn-Handler gebunden; nur positive Einnahmen.";return ev!=null && ev.GetInvocationList().Any(d=>ReferenceEquals(d.Target,this) && d.Method.Name=="MoneyChanged");
+     var ev=moneyEventField.GetValue(null) as Delegate;
+     notes[f]="Nativer Geldgewinn-Handler gebunden; nur positive Einnahmen.";return moneySubscription.Contains(ev,this,"MoneyChanged");
     }
     case 15: {
-     int count=0;bool ok=true;foreach(var item in root.GetAllChildren(true,true))if(item && item.GetCharacterItem()==root && item.UseDurability) { count++;ok=Own(f,item,"Durability",()=>item.Durability,v=>item.Durability=(float)v,item.MaxDurabilityWithLoss) && ok; }
+     int count=0;bool ok=true;foreach(var item in root.GetAllChildren(true,true))if(item && item.GetCharacterItem()==root && item.UseDurability) { count++;ok=Durability(f,item) && ok; }
      return count>0 && ok;
     }
     case 16: {
@@ -317,14 +397,14 @@ namespace MHTDuckov {
     case 21: {
      if(!expBound) { lastExp=EXPManager.EXP;EXPManager.onExpChanged+=ExpChanged;expBound=true; }
      notes[f]="Nativer EP-Gewinn-Handler gebunden; nur neue positive EP.";
-     return EXPManager.onExpChanged!=null && EXPManager.onExpChanged.GetInvocationList().Any(d=>ReferenceEquals(d.Target,this) && d.Method.Name=="ExpChanged");
+     return expSubscription.Contains(EXPManager.onExpChanged,this,"ExpChanged");
     }
     case 22:return Stat(f,root,"WalkSpeed",value,true) & Stat(f,root,"RunSpeed",value,true);
     case 23:notes[f]="Zeitfaktor wird nach dem nativen Update rückgelesen.";return confirmed[f];
     case 24: {
      var cam=GameCamera.Instance;
      bool ok=Own(f,cam,"defaultFOV",()=>cam.defaultFOV,v=>cam.defaultFOV=(float)v,value) & Own(f,cam,"adsFOV",()=>cam.adsFOV,v=>cam.adsFOV=(float)v,value);
-     cam.UpdateFov(0);return ok && cam.mainVCam && Near(cam.mainVCam.m_Lens.FieldOfView,value);
+     if(cam.mainVCam&&!Near(cam.mainVCam.m_Lens.FieldOfView,value))cam.UpdateFov(0);return ok && cam.mainVCam && Near(cam.mainVCam.m_Lens.FieldOfView,value);
     }
     case 25:case 26: {
      var clock=GameClock.Instance;
@@ -342,9 +422,9 @@ namespace MHTDuckov {
     case 31: {
      var inv=root.Inventory;float wanted=Mathf.Max(value,Occupied(inv));
      bool ok=Stat(f,root,"InventoryCapacity",wanted,false,true);
-     var entry=modifiers.Find(x=>x.feature==f && x.item==root);if(entry!=null)entry.inventory=inv;
+     foreach(var entry in modifiers)if(entry.feature==f&&entry.item==root){entry.inventory=inv;break;}
      // The game reconciles this stat in its native update; no detaching/dropping.
-     inv.SetCapacity(Mathf.RoundToInt(wanted));return ok && inv.Capacity==Mathf.RoundToInt(wanted);
+     if(inv.Capacity!=Mathf.RoundToInt(wanted))inv.SetCapacity(Mathf.RoundToInt(wanted));return ok && inv.Capacity==Mathf.RoundToInt(wanted);
     }
     case 32:return Stat(f,root,"StaminaDrainRate",value,true);
     case 33:return Stat(f,root,"EnergyCost",value,true);
@@ -370,26 +450,17 @@ namespace MHTDuckov {
    ScanPerks();bool ok=true;int count=0;
    foreach(var perk in perks)if(perk && perk.Requirement!=null) {
     var req=perk.Requirement;count++;
-    ok=Own(17,perk,"requirement.cost",()=>req.cost,v=>req.cost=(Cost)v,new Cost(0L)) && ok;
-    ok=Own(17,perk,"requirement.level",()=>req.level,v=>req.level=(int)v,0) && ok;
+    ok=Requirement(17,perk,"requirement.cost",new Cost(0L)) && ok;
+    ok=Requirement(17,perk,"requirement.level",0) && ok;
    }
    var collection=CraftingFormulaCollection.Instance;
-   if(collection) {
-    var field=Field(typeof(CraftingFormulaCollection),"list");
-    var original=(List<CraftingFormula>)field.GetValue(collection);
-    // Replace only our own shallow list; preserve formula identity and unlocks.
-    var existing=changes.Find(x=>x.feature==17 && x.target==collection && x.key=="formulas");
-    var source=existing!=null ? (List<CraftingFormula>)existing.before : original;
-    var free=source.Select(x=> { x.cost=new Cost(0L);return x; }).ToList();
-    ok=Own(17,collection,"formulas",()=>field.GetValue(collection),v=> { field.SetValue(collection,v);Field(typeof(CraftingFormulaCollection),"_entries_ReadOnly").SetValue(collection,null); },free) && ok;
-    count+=free.Count;
-   }
+   if(collection){int formulas;ok=FreeFormulas(collection,out formulas)&&ok;count+=formulas;}
    notes[17]="Native Kosten/Levelbedingungen entfernt; vorhandene Freischaltungen bleiben maßgeblich.";
    return count>0 && ok;
   }
   bool ResearchTime() {
    ScanPerks();int count=0;bool ok=true;
-   foreach(var perk in perks)if(perk && perk.Requirement!=null) { var req=perk.Requirement;count++;ok=Own(18,perk,"requirement.time",()=>req.requireTime,v=>req.requireTime=(long)v,0L) && ok; }
+   foreach(var perk in perks)if(perk && perk.Requirement!=null) { var req=perk.Requirement;count++;ok=Requirement(18,perk,"requirement.time",0L) && ok; }
    notes[18]="Native Forschungsdauer 0; Forschung weiterhin selbst starten und bestätigen.";
    return count>0 && ok;
   }

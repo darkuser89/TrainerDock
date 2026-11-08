@@ -23,7 +23,7 @@ func _init():
 func _on_frame():
     if entries.is_empty() and speed_base < 0.0 and mouse_base < 0:
         return
-    var state = JSON.parse_string(inspect())
+    var state = _capture()
     if not state is Dictionary or int(state.get("kind", 0)) != 2:
         release()
 
@@ -32,30 +32,33 @@ func _root():
     return tree.root if tree is SceneTree else null
 
 func inspect() -> String:
+    return JSON.stringify(_capture())
+
+func _capture() -> Dictionary:
     var root = _root()
     var result = {"kind": 0, "identity": "unavailable", "note": "Warte auf Godot-Spielkontext."}
     if root == null:
-        return JSON.stringify(result)
+        return result
     var level = root.get_node_or_null("Level")
     var world = root.get_node_or_null("GameWorld")
     var keepers = root.get_node_or_null("Keepers")
     var data = root.get_node_or_null("Data")
     if not is_instance_valid(level) or not is_instance_valid(world) or not is_instance_valid(keepers) or not is_instance_valid(data):
-        return JSON.stringify(result)
+        return result
     if not is_instance_valid(level.stage) or not is_instance_valid(level.map) or not level.stage.is_level_built or world.gameover:
-        return JSON.stringify({"kind": 1, "identity": "loading", "note": "Warte auf einen laufenden lokalen Einzelspieler-Lauf."})
+        return {"kind": 1, "identity": "loading", "note": "Warte auf einen laufenden lokalen Einzelspieler-Lauf."}
     var local = keepers.local.getAll()
     if local.size() != 1:
-        return JSON.stringify({"kind": 1, "identity": "local-owner", "note": "Genau eine eindeutig zugeordnete lokale Spielfigur erforderlich."})
+        return {"kind": 1, "identity": "local-owner", "note": "Genau eine eindeutig zugeordnete lokale Spielfigur erforderlich."}
     var manager = root.get_node_or_null("StageManager")
     if world.paused or (is_instance_valid(manager) and is_instance_valid(manager.currentStage) and manager.currentStage.stage_ending):
-        return JSON.stringify({"kind": 1, "identity": "pause", "note": "Spielpause: eigene Dauereffekte gelöst; Auswahl bleibt erhalten."})
+        return {"kind": 1, "identity": "pause", "note": "Spielpause: eigene Dauereffekte gelöst; Auswahl bleibt erhalten."}
     var current = local[0]
     if not is_instance_valid(current) or not current.initialized or current.killed or not current.is_multiplayer_authority():
-        return JSON.stringify({"kind": 1, "identity": "player", "note": "Lokale Spielfigur ist noch nicht bereit."})
+        return {"kind": 1, "identity": "player", "note": "Lokale Spielfigur ist noch nicht bereit."}
     var current_dome = level.getDome(str(current.teamId))
     if not is_instance_valid(current_dome):
-        return JSON.stringify({"kind": 1, "identity": "dome", "note": "Warte auf die lokale Kuppel."})
+        return {"kind": 1, "identity": "dome", "note": "Warte auf die lokale Kuppel."}
     var new_identity = "%s:%s:%s:%s:%s" % [level.stage.get_instance_id(), level.map.get_instance_id(), current.get_instance_id(), current_dome.get_instance_id(), world.loadCount]
     identity = new_identity
     data_node = data
@@ -63,10 +66,10 @@ func inspect() -> String:
     dome = current_dome
     team = str(current.teamId)
     player = str(current.playerId)
-    return JSON.stringify({"kind": 2, "identity": identity, "note": "Dome Keeper 5.0.8.14 · lokaler Einzelspieler."})
+    return {"kind": 2, "identity": identity, "note": "Dome Keeper 5.0.8.14 · lokaler Einzelspieler."}
 
 func _valid() -> bool:
-    var state = JSON.parse_string(inspect())
+    var state = _capture()
     return state is Dictionary and int(state.get("kind", 0)) == 2
 
 func _same_owner(record) -> bool:
@@ -232,6 +235,8 @@ func one_shot(feature: int, value: float) -> String:
     return "Rohstoffwert nativ bestätigt." if int(data_node.of(key)) == int(value) else "Keine native Bestätigung."
 
 func mouse(enabled: bool) -> bool:
+    if not enabled and mouse_base < 0:
+        return false
     if not _valid():
         if mouse_base >= 0 and Input.mouse_mode == mouse_last:
             Input.mouse_mode = mouse_base

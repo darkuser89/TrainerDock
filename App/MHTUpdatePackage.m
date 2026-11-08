@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 #import "MHTUpdatePackage.h"
+#import "MHTTrainerStore.h"
 #import <CommonCrypto/CommonDigest.h>
 #import <Security/Security.h>
 #import <archive.h>
@@ -87,8 +88,24 @@ BOOL MHTValidateUpdateApp(NSURL *app,NSString *version,NSError **error){
     if(![info[@"CFBundleIdentifier"] isEqual:@"local.trainerdock.launcher"] || ![info[@"CFBundleExecutable"] isEqual:@"TrainerDock"] ||
        ![info[@"CFBundleShortVersionString"] isEqual:version] || ![info[@"LSMinimumSystemVersion"] isEqual:@"27.0"] ||
        ![NSFileManager.defaultManager isExecutableFileAtPath:[app URLByAppendingPathComponent:@"Contents/MacOS/TrainerDock"].path])return fail(error,@"Die heruntergeladene App passt nicht zu diesem Update.");
-    NSArray *modules=[NSFileManager.defaultManager contentsOfDirectoryAtURL:[app URLByAppendingPathComponent:@"Contents/Resources/Modules"] includingPropertiesForKeys:nil options:0 error:error];
-    if(!modules.count)return fail(error,@"Das Update enthält keine Trainer.");
+    NSURL *catalogURL=[app URLByAppendingPathComponent:@"Contents/Resources/TrainerCatalog.json"];
+    NSDictionary *attributes=[NSFileManager.defaultManager attributesOfItemAtPath:catalogURL.path error:NULL];
+    if(attributes){
+        if(![attributes[NSFileType] isEqual:NSFileTypeRegular] || [attributes[NSFileSize] unsignedLongLongValue]>8*1024*1024)
+            return fail(error,@"Der Trainerkatalog des Updates ist ungültig.");
+        NSData *data=[NSData dataWithContentsOfURL:catalogURL];
+        id catalog=data ? [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL] : nil;
+        // This is an app-update boundary, not the current host's trainer ABI
+        // gate: a newer app may intentionally add support for a newer ABI.
+        if(![catalog isKindOfClass:NSDictionary.class] || ![catalog[@"schemaVersion"] isEqual:@1]
+           || ![catalog[@"moduleABI"] isKindOfClass:NSNumber.class] || [catalog[@"moduleABI"] integerValue]<1
+           || ![catalog[@"modules"] isKindOfClass:NSArray.class] || [catalog[@"modules"] count]>512)
+            return fail(error,@"Der Trainerkatalog des Updates ist ungültig.");
+    }else{
+        NSArray *modules=[NSFileManager.defaultManager contentsOfDirectoryAtURL:[app URLByAppendingPathComponent:@"Contents/Resources/Modules"] includingPropertiesForKeys:nil options:0 error:NULL];
+        BOOL legacy=NO;for(NSURL *module in modules)if([module.pathExtension isEqual:@"mhtmodule"]){legacy=YES;break;}
+        if(!legacy)return fail(error,@"Das Update enthält weder Trainerkatalog noch gültige Altstruktur.");
+    }
     SecStaticCodeRef code=NULL;OSStatus result=SecStaticCodeCreateWithPath((__bridge CFURLRef)app,kSecCSDefaultFlags,&code);
     if(result==errSecSuccess){result=SecStaticCodeCheckValidity(code,kSecCSStrictValidate|kSecCSCheckAllArchitectures|kSecCSCheckNestedCode,NULL);CFRelease(code);}
     // Only structural integrity of the existing ad-hoc code seal; no signing identity/key required.
@@ -97,6 +114,14 @@ BOOL MHTValidateUpdateApp(NSURL *app,NSString *version,NSError **error){
 BOOL MHTSwapUpdate(NSURL *current,NSURL *candidate,NSError **error){
     if(renameatx_np(AT_FDCWD,current.fileSystemRepresentation,AT_FDCWD,candidate.fileSystemRepresentation,RENAME_SWAP)==0)return YES;
     return fail(error,@"Die App konnte nicht ausgetauscht werden. Bitte TrainerDock in einen beschreibbaren Ordner verschieben.");
+}
+BOOL MHTPreserveBundledTrainers(NSURL *current,NSString *storeDirectory,NSError **error){
+    NSMutableArray *errors=[NSMutableArray new];
+    NSArray<MHTModule *> *modules=[MHTModule loadModules:[current URLByAppendingPathComponent:@"Contents/Resources/Modules"].path errors:errors];
+    if(errors.count)return fail(error,@"Vorhandene Trainer konnten nicht sicher übernommen werden. Die bisherige App bleibt erhalten.");
+    MHTTrainerStore *store=[[MHTTrainerStore alloc]initWithRootDirectory:storeDirectory catalogURL:nil bundledCatalogURL:nil];
+    for(MHTModule *module in modules)if(![store importLegacyModule:module error:error])return NO;
+    return YES;
 }
 static BOOL runningGames(NSArray *identifiers){for(NSString *identifier in identifiers)if([NSRunningApplication runningApplicationsWithBundleIdentifier:identifier].count)return YES;return NO;}
 static BOOL launch(NSURL *app){
@@ -119,7 +144,8 @@ int MHTApplyUpdate(NSString *planPath){@autoreleasepool{
     if(![@"ready" writeToURL:[stage URLByAppendingPathComponent:@"Ready"] atomically:YES encoding:NSUTF8StringEncoding error:&error])return 2;
     NSDate *deadline=[NSDate dateWithTimeIntervalSinceNow:60];while(kill(parent,0)==0 && deadline.timeIntervalSinceNow>0)[NSThread sleepForTimeInterval:0.1];
     if(kill(parent,0)==0)return 2; // No force quit, ever.
-    if(runningGames(plan[@"games"]) || !MHTSwapUpdate(current,candidate,&error)){
+    NSString *trainerStore=[NSHomeDirectory() stringByAppendingPathComponent:@"Library/Application Support/TrainerDock/Modules"];
+    if(runningGames(plan[@"games"]) || !MHTPreserveBundledTrainers(current,trainerStore,&error) || !MHTSwapUpdate(current,candidate,&error)){
         launch(current);[NSFileManager.defaultManager removeItemAtURL:stage error:nil];return 1;
     }
     if(!launch(current)){

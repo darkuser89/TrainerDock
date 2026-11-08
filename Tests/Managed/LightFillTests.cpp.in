@@ -1,0 +1,26 @@
+// SPDX-License-Identifier: GPL-3.0-only
+// Actual product fill is inserted by the runner; only the embedding API/storage
+// below is a synthetic fixture. Nothing is linked into a product.
+#include <algorithm>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <stdexcept>
+#include <vector>
+struct Buffer {std::vector<float> cells;uintptr_t count=0;bool badStride=false,misaligned=false;};
+unsigned addresses=0;
+struct {uintptr_t (*arrayLength)(void *);char *(*arrayAddress)(void *,int,uintptr_t);}api;
+struct {size_t lightCells=0;}s;
+void fill(void *colors){__ACTUAL_LIGHT_FILL__}
+void check(bool ok,const char *why){if(!ok){fprintf(stderr,"FAIL: %s\n",why);exit(1);}}
+int main(){
+ api.arrayLength=[](void *o){return ((Buffer *)o)->count;};
+ api.arrayAddress=[](void *o,int stride,uintptr_t index)->char *{addresses++;auto &b=*(Buffer *)o;if(stride!=12||index>b.cells.size()/3)return nullptr;return (char *)b.cells.data()+index*12+(b.badStride&&index?4:0)+(b.misaligned?1:0);};
+ Buffer b;b.cells.assign(90,0);b.count=30;fill(&b);
+ check(addresses==2&&s.lightCells==30,"one native fill uses two embedding calls rather than one per light cell");
+ check(std::all_of(b.cells.begin(),b.cells.end(),[](float x){return x==1;}),"every original RGB float is filled");
+ for(bool misaligned:{false,true}){b.cells.assign(90,0);b.badStride=!misaligned;b.misaligned=misaligned;bool rejected=false;try{fill(&b);}catch(const std::runtime_error&){rejected=true;}check(rejected,"noncontiguous or unaligned arrays rejected before writing");check(std::all_of(b.cells.begin(),b.cells.end(),[](float x){return x==0;}),"rejected fill leaves original storage untouched");}
+ b.badStride=false;b.misaligned=false;for(uintptr_t count:{uintptr_t(0),uintptr_t(2000001)}){b.count=count;bool rejected=false;try{fill(&b);}catch(const std::runtime_error&){rejected=true;}check(rejected,"original minimum/maximum array bounds remain enforced");}
+ puts("PASS: exact Terraria light fill, two interop calls, all RGB cells, unchanged rejected buffers and original count/alignment/stride bounds. No game launched.");
+}

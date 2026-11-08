@@ -12,7 +12,7 @@ constexpr uintptr_t libraryAddress=1000,classAddress=2000,packageAddress=3000;
 constexpr uintptr_t getterAddress=4000,setterAddress=5000;
 std::map<uintptr_t,double> dilation{{100,1},{200,1}};
 bool gameThread=true,failSet=false,failReadAfterSet=false;
-int failedReads=0;
+int failedReads=0,getters=0,setters=0;
 double clampMaximum=4;
 fp::Context context(uintptr_t address=100){fp::Context c;c.ready=true;c.world={address};return c;}
 void reset(double initial=1) {
@@ -43,10 +43,12 @@ id invoke(Object,NSString *n,NSDictionary *arguments) {
     uintptr_t address=[arguments[@"WorldContextObject"][@"object"] unsignedLongLongValue];
     assert(dilation.count(address));
     if([n isEqual:@"GetGlobalTimeDilation"]){
+        getters++;
         if(failedReads){failedReads--;throw std::runtime_error("Synthetic getter failure");}
         return @(dilation.at(address));
     }
     assert([n isEqual:@"SetGlobalTimeDilation"]);
+    setters++;
     if(failSet)throw std::runtime_error("Synthetic setter failure");
     dilation[address]=std::min(clampMaximum,[arguments[@"TimeDilation"] doubleValue]);
     if(failReadAfterSet){failReadAfterSet=false;failedReads=1;}
@@ -56,6 +58,12 @@ id invoke(Object,NSString *n,NSDictionary *arguments) {
 
 int main(){@autoreleasepool{
     auto c=context();
+    reset();getters=setters=0;
+    for(int i=0;i<20000;i++)assert(FPApplySpeed(c,false,1).available);
+    assert(getters==0&&setters==0);
+    assert(FPApplySpeed(c,true,2).active);int writes=setters;
+    for(int i=0;i<1000;i++)assert(FPApplySpeed(c,true,2).active);
+    assert(setters==writes);FPReleaseSpeed();assert(dilation[100]==1);
     // Foreign changes become the baseline before the next desired write.
     reset();assert(FPApplySpeed(c,true,2).active);dilation[100]=3;
     assert(FPApplySpeed(c,true,2.5).active);FPReleaseSpeed();assert(dilation[100]==3);

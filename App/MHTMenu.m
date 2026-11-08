@@ -30,6 +30,8 @@ void MHTInstallMenus(MHTApp *target) {
     NSMenu *trainers=submenu(bar,@"Trainer");
     NSMenuItem *library=[trainers addItemWithTitle:@"Bibliothek anzeigen" action:@selector(showLibrary:) keyEquivalent:@"1"];library.target=target;
     NSMenuItem *manage=[trainers addItemWithTitle:@"Trainer & Spielpfade …" action:@selector(openSettings:) keyEquivalent:@""];manage.target=target;
+    NSMenuItem *downloads=[trainers addItemWithTitle:@"Trainer laden & verwalten …" action:@selector(openTrainerLibrary:) keyEquivalent:@"2"];downloads.target=target;
+    NSMenuItem *trainerUpdates=[trainers addItemWithTitle:@"Nach Trainerupdates suchen" action:@selector(checkTrainerUpdates:) keyEquivalent:@""];trainerUpdates.target=target;
     [trainers addItem:NSMenuItem.separatorItem];
     NSMenuItem *refresh=[trainers addItemWithTitle:@"Trainer & Spiele neu laden" action:@selector(rescan:) keyEquivalent:@"r"];refresh.target=target;
     NSMenu *windows=submenu(bar,@"Fenster");

@@ -32,7 +32,7 @@ static NSData *b8a(const void *p,size_t n){return [NSData dataWithBytes:p length
     uint32_t _mercHash8;int32_t _mercFloor8,_mercBefore8;BOOL _mercReady8,_mercLogged8;
     NSMutableArray<NSValue *> *_mercPending8;NSMutableSet<NSValue *> *_mercSeen8;
     NSMutableDictionary<NSString *,RE8Owner *> *_mercGoals8;
-    CFAbsoluteTime _mercScanNext8,_mercTraceNext8;NSUInteger _mercVisited8,_mercTraceCount8;
+    CFAbsoluteTime _mercScanNext8,_mercTraceNext8,_mercGoalDiscoveryUntil8;NSUInteger _mercVisited8,_mercTraceCount8;
     CFAbsoluteTime _mercTimeLogNext8;NSUInteger _mercCursor8;
     RE8Owner *_mercResumeOwner8;void *_mercResumeSource8;NSString *_mercResumeIdentity8;
     RE8Owner *_mercGoalVerifyOwner8;NSString *_mercGoalVerifyIdentity8;CFAbsoluteTime _mercGoalVerifyAt8;
@@ -264,9 +264,12 @@ static NSData *b8a(const void *p,size_t n){return [NSData dataWithBytes:p length
         }
     }return s;
 }
-- (void)releaseEffects {_mercGoalVerifyAt8=0;_mercGoalVerifyOwner8=nil;_mercReady8=NO;_mercPending8=nil;_mercSeen8=nil;_mercGoals8=nil;_mercScanNext8=0;[_wanted8 removeAllObjects];_moneyReady8=NO;_highlightApplied8=NO;_highlightNext8=0;_guiPauseNext8=0;_timeVerifyAt8=0;_timeVerifyIdentity8=nil;[super releaseEffects];[_highlightOwners8 removeAllObjects];[_weaponBindings8 removeAllObjects];}
+- (void)releaseEffects {_mercGoalVerifyAt8=0;_mercGoalVerifyOwner8=nil;_mercGoalDiscoveryUntil8=0;_mercReady8=NO;_mercPending8=nil;_mercSeen8=nil;_mercGoals8=nil;_mercScanNext8=0;[_wanted8 removeAllObjects];_moneyReady8=NO;_highlightApplied8=NO;_highlightNext8=0;_guiPauseNext8=0;_timeVerifyAt8=0;_timeVerifyIdentity8=nil;[super releaseEffects];[_highlightOwners8 removeAllObjects];[_weaponBindings8 removeAllObjects];}
 - (void)frame8 {
     if(_mouseOwned8)[self setOverlayInteraction:YES];
+    CFAbsoluteTime now=CFAbsoluteTimeGetCurrent();
+    if(!_wanted8.count&&!_mercResumeOwner8&&!_timeVerifyAt8&&!_mercGoalVerifyAt8
+       &&now>_mercGoalDiscoveryUntil8&&(now>_weaponTraceUntil8||_weaponTraceCount8>=32))return;
     if(![self local8]){[self releaseEffects];return;}
     [self resumeMerc8];
     [self inspectMerc8];
@@ -288,6 +291,10 @@ static NSData *b8a(const void *p,size_t n){return [NSData dataWithBytes:p length
     }return c ? NULL : found;
 }
 - (void)inspectMerc8 {
+    // Goal discovery supports an explicit one-shot. Do not walk up to 65,536
+    // scene nodes repeatedly during an unrelated or completely untrained run.
+    CFAbsoluteTime requestedNow=CFAbsoluteTimeGetCurrent();
+    if(requestedNow>_mercGoalDiscoveryUntil8&&!_mercGoalVerifyAt8)return;
     if(!_mercStage8 || ![self mercLinked8])return;
     if(!_mercLogged8){_mercLogged8=YES;
         const uint32_t methods[][2]={{608060,15896},{53261,15036},{607854,47358},{607855,47358},{607857,47358},{256496,36598},{3847,112442},{3848,112442},{739886,19855},{739888,19855},{739906,19855},{739912,19855},{739916,19855},{197019,7897},{192643,47418},{192651,47418},{192656,47418},{192657,47418},{597514,12577},{597512,12577},{597525,106785},{738944,14680},{738950,14680},{793918,53980},{793916,53980},{793922,80223},{738952,14680}};
@@ -370,6 +377,8 @@ static NSData *b8a(const void *p,size_t n){return [NSData dataWithBytes:p length
 }
 - (NSString *)mercOpenGoal8 {
     if(![self mercActive8])return @"Ziel benötigt ein aktives Söldner-Gebiet außerhalb des Shops.";
+    _mercGoalDiscoveryUntil8=CFAbsoluteTimeGetCurrent()+10;
+    [self inspectMerc8];
     NSMutableArray<RE8Owner *> *active=[NSMutableArray new];
     for(RE8Owner *owner in _mercGoals8.allValues.copy){if(!owner.valid)continue;
         void *p=[_e8 field:151914 owner:14680 type:122731 object:owner.component size:1];uint8_t on=0;
@@ -741,6 +750,7 @@ static NSData *b8a(const void *p,size_t n){return [NSData dataWithBytes:p length
     }return @"Diese Village-Einmalaktion ist noch nicht freigegeben.";
 }
 - (BOOL)setOverlayInteraction:(BOOL)wanted {
+    if(!wanted&&!_mouseOwned8)return NO;
     if(!_e8.isGameThread)return NO;
     // UI mouse is independent of Ethan/Rose/Mercenaries gameplay ownership.
     // Independently derived from Village Mouse wrappers and their native

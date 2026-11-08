@@ -22,5 +22,6 @@
   "family": "RoboCop",
   "sdkSources": [
     "MHTGlassIntensity.m"
-  ]
+  ],
+  "nativeContractTests": "Tests/RoboCop/LeaseWriteTests.m"
 }

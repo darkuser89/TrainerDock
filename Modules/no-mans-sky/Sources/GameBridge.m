@@ -73,6 +73,7 @@
     }
     for(NSInteger i=0;i<MTFeatureCount;i++){
         MTFeatureState *f=state.features[i];f.value=_values[i];f.wanted=_wanted[i];
+        if(!MTFeatureInfoAt(i)->implemented){_wanted[i]=NO;f.wanted=NO;f.available=NO;f.active=NO;f.note=MTFeatureInfoAt(i)->detail;continue;}
         if(state.ready){MTFeatureState *actual=[_adapter applyFeature:i wanted:_wanted[i] value:_values[i]];f.available=actual.available;f.active=_wanted[i] && actual.active;f.note=actual.note ?: context.note;}
         else f.note=_mode==MTSessionLoading ? @"Auswahl bleibt erhalten; wartet auf gültigen Spielkontext." : context.note;
     }

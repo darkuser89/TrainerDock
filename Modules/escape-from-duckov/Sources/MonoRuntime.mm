@@ -7,6 +7,8 @@
 #import <dlfcn.h>
 #import <os/log.h>
 #include <cstring>
+#include "../../_Shared/Managed/MetadataCache.hpp"
+#include <tuple>
 namespace {
 struct MonoAPI {
  void *(*root)();void *(*domain)();void (*domains)(void (*)(void *,void *),void *);
@@ -25,7 +27,7 @@ NSLock *lock;NSMutableArray<dispatch_block_t> *pending;
 thread_local bool gameplay=false;
 void ensureQueue(){static dispatch_once_t once;dispatch_once(&once,^{lock=[NSLock new];pending=[NSMutableArray new];});}
 void tick() {
- ensureQueue();[lock lock];NSArray<dispatch_block_t> *work=pending.copy;[pending removeAllObjects];[lock unlock];
+ ensureQueue();[lock lock];if(!pending.count){[lock unlock];return;}NSArray<dispatch_block_t> *work=pending.copy;[pending removeAllObjects];[lock unlock];
  gameplay=true;
  @autoreleasepool {for(dispatch_block_t block in work)@try {block();}@catch(NSException *e){os_log_error(OS_LOG_DEFAULT,"TrainerDock Duckov native callback: %{public}@",e.name);}}
  gameplay=false;
@@ -48,7 +50,10 @@ bool bindMono() {
  return true;
 }
 void *invoke(const char *name,int count,void **args=nullptr) {
- if(!trainerClass)return nullptr;void *method=api.method(trainerClass,name,count);if(!method)return nullptr;
+ if(!trainerClass)return nullptr;
+ using Key=std::tuple<void *,std::string,int>;static mht::managed::MetadataCache<Key,void *> cache;
+ void *method=cache.get(api.domain ? api.domain() : nullptr,(uintptr_t)api.method,Key{trainerClass,name,count},[&]{return api.method(trainerClass,name,count);});
+ if(!method)return nullptr;
  void *exception=nullptr;void *result=api.invoke(method,nullptr,args,&exception);
  if(exception){failure=[NSString stringWithFormat:@"Mono: %s",api.className(api.objectClass(exception))];os_log_error(OS_LOG_DEFAULT,"TrainerDock Duckov %{public}@ in %{public}s",failure,name);return nullptr;}
  return result;

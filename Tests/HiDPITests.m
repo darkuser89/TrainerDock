@@ -5,18 +5,22 @@
 #import "MHTGlassIntensity.h"
 #import "TrainerMaterial.h"
 #import "OverlaySettings.h"
+#import <objc/runtime.h>
 #if defined(MHT_DI2)
 #define OverlayRoot DI2OverlayRoot
 #define Material DI2TrainerMaterial
 #define Normalize DI2NormalizeOverlayOptions
+#define TrainerState DI2TrainerState
 #elif defined(MHT_RE)
 #define OverlayRoot RE2OverlayRoot
 #define Material MTTrainerMaterial
 #define Normalize RE2NormalizeOverlayOptions
+#define TrainerState RE2TrainerState
 #else
 #define OverlayRoot MTOverlayRoot
 #define Material MTTrainerMaterial
 #define Normalize MTNormalizeOverlayOptions
+#define TrainerState MTTrainerState
 #endif
 @interface OverlayRoot (GlassChecks)
 - (void)headerClick:(NSPoint)point;
@@ -29,6 +33,37 @@ static MHTGlassSlider *sliderIn(NSView *view) {
     if([view isKindOfClass:MHTGlassSlider.class])return (MHTGlassSlider *)view;
     for(NSView *child in view.subviews){MHTGlassSlider *slider=sliderIn(child);if(slider)return slider;}
     return nil;
+}
+static NSView *watchedOverlay;
+static NSUInteger invalidations;
+static IMP originalSetNeedsDisplay;
+static void countInvalidation(NSView *view,SEL selector,BOOL flag) {
+    if(flag && [view isDescendantOf:watchedOverlay])invalidations++;
+    ((void(*)(id,SEL,BOOL))originalSetNeedsDisplay)(view,selector,flag);
+}
+static void checkIdlePresentation(OverlayRoot *root) {
+    TrainerState *state=[TrainerState new];state.ready=YES;state.status=@"Synthetischer Kontext";state.message=@"Unverändert";
+    [root applyOverlayOptions:@{@"visible":@YES}];[root updateState:state];
+    // Count actual invalidation requests, not AppKit's existing deferred dirty
+    // flags (glass may legitimately retain those until the next display pass).
+    Method method=class_getInstanceMethod(NSView.class,@selector(setNeedsDisplay:));
+    watchedOverlay=root;invalidations=0;originalSetNeedsDisplay=method_setImplementation(method,(IMP)countInvalidation);
+    @try {
+        for(NSUInteger i=0;i<1000;i++)[root updateState:state];
+        check(invalidations==0,"1000 unchanged state polls invalidate no overlay view");
+        [root applyOverlayOptions:@{@"visible":@NO,@"badge":@NO}];invalidations=0;
+        for(NSUInteger i=0;i<1000;i++){
+            state.features[0].active=(i%2)==1;state.features[0].wanted=state.features[0].active;
+            [root updateState:state];
+        }
+        check(invalidations==0,"1000 changing states invalidate no hidden overlay view");
+        [root applyOverlayOptions:@{@"visible":@YES}];
+        check(invalidations>0,"reopening presents the latest hidden state immediately");
+        invalidations=0;[root updateState:state];
+        check(invalidations==0,"presentation snapshots handle an in-place mutable bridge state");
+    } @finally {
+        method_setImplementation(method,originalSetNeedsDisplay);watchedOverlay=nil;
+    }
 }
 static void checkGlass(OverlayRoot *root,NSWindow *window) {
     check([Normalize(@{})[@"glassIntensity"] doubleValue]==0.5,"old preferences use unchanged native glass at the midpoint");
@@ -99,6 +134,7 @@ int main(void){@autoreleasepool {
     window.releasedWhenClosed=NO;
     OverlayRoot *root=[[OverlayRoot alloc]initWithFrame:window.contentView.bounds version:@"HiDPI synthetic"];
     [window.contentView addSubview:root];
+    checkIdlePresentation(root);
     checkGlass(root,window);
     for(NSNumber *zoom in @[@0.7,@0.9,@1.0,@1.3]){
         [root applyOverlayOptions:@{@"visible":@YES,@"liquidGlass":@NO,@"scale":zoom,@"position":@"free",@"x":@0.413,@"y":@0.287}];
@@ -118,5 +154,5 @@ int main(void){@autoreleasepool {
         }}
     }
     [root removeFromSuperview];[window close];
-    puts("PASS: glass range, forwarded slider input, restoration, accessibility and footer; real overlay at 1x/2x and four zoom levels. No game launched.");
+    puts("PASS: idle/hidden overlay invalidation, glass range, forwarded slider input, restoration, accessibility and footer; real overlay at 1x/2x and four zoom levels. No game launched.");
 }return 0;}

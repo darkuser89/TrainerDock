@@ -71,6 +71,14 @@ BOOL VCEnqueue(dispatch_block_t work){
 BOOL VCEnsureLoop(){
     using namespace vc;
     if(!NSThread.isMainThread)return NO;
+    // A newly observed callback proves the existing registration is still live.
+    // Reinspect the original loop only when no callback progressed since the
+    // preceding retry; never allocate/enumerate its managed array twice a second
+    // while our confirmed original callback is running normally.
+    static uint64_t verifiedFrames=0;
+    uint64_t progress=frames.load();
+    if(installed && progress && progress!=verifiedFrames){verifiedFrames=progress;return YES;}
+
     if(!logger)logger=os_log_create("local.mht.vampire-crawlers","UnityLoop");
     try{
         if(!bindAPI() || !api.domainGet())return NO;

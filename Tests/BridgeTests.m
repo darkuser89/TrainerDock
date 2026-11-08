@@ -12,7 +12,7 @@
 @implementation MTGameContext @end
 @interface Fixture : NSObject <MTGameAdapter>
 @property(nonatomic) MTSessionKind mode;
-@property(nonatomic) NSUInteger world,actions,releases;
+@property(nonatomic) NSUInteger world,actions,releases,unsupportedCalls;
 @property(nonatomic) BOOL suppressFirst;
 @end
 @implementation Fixture
@@ -20,7 +20,7 @@
 - (void)onGameThread:(dispatch_block_t)work{dispatch_async(dispatch_get_main_queue(),work);}
 - (MTGameContext *)captureContext {MTGameContext *c=[MTGameContext new];c.kind=self.mode;c.identity=[NSString stringWithFormat:@"world-%lu",(unsigned long)self.world];c.note=@"fixture";return c;}
 - (void)releaseEffects{self.releases++;}
-- (MTFeatureState *)applyFeature:(MTFeature)feature wanted:(BOOL)wanted value:(double)value{(void)value;MTFeatureState *s=[MTFeatureState new];s.available=YES;s.active=wanted&&!(self.suppressFirst&&feature==0);s.note=@"fixture readback";return s;}
+- (MTFeatureState *)applyFeature:(MTFeature)feature wanted:(BOOL)wanted value:(double)value{(void)value;if(!MTFeatureInfoAt(feature)->implemented)self.unsupportedCalls++;MTFeatureState *s=[MTFeatureState new];s.available=YES;s.active=wanted&&!(self.suppressFirst&&feature==0);s.note=@"fixture readback";return s;}
 - (NSString *)performOneShot:(MTFeature)feature value:(double)value{(void)feature;(void)value;self.actions++;return @"fixture action";}
 - (BOOL)setOverlayInteraction:(BOOL)wanted{return wanted;}
 @end
@@ -40,6 +40,12 @@ int main(void){@autoreleasepool{
 #endif
     MHTStartControl(bridge,^NSDictionary *{return @{};},^(NSDictionary *options){(void)options;});
     [bridge poll];drain();check(bridge.state.ready,@"Solo context ready");
+    for(NSInteger i=0;i<MTFeatureCount;i++)if(!MTFeatureInfoAt(i)->implemented){
+        [bridge setWanted:YES forFeature:i];[bridge performFeature:i];drain();
+        MTFeatureState *disabled=bridge.state.features[i];
+        check(!disabled.wanted && !disabled.active && !disabled.available,@"Unimplemented functions stay unavailable without native work");
+    }
+    check(adapter.unsupportedCalls==0,@"Polling and commands never enter unimplemented adapter paths");
 #if defined(MHT_LOP)
     check(MTFeatureCount==36 && MTFeatureHealth==0,@"Lies of P has no master entry");
     [bridge setWanted:YES forFeature:MTFeatureHealth];drain();

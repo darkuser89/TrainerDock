@@ -285,6 +285,7 @@ static NSData *b3(const void *p,size_t n){return [NSData dataWithBytes:p length:
     return written && after==0 ? @"Zähler auf 0 gesetzt und nativ bestätigt." : @"Zähleränderung nicht bestätigt.";
 }
 - (BOOL)setOverlayInteraction:(BOOL)wanted {
+    if(!wanted&&!_mouseOwned)return NO;
     if(!_e.isGameThread)return NO;
     // UI input is owned by the process HID device, even in menus without Jill/Carlos.
     void *device=[_e singletonAt:0x1092f3a30];const size_t offsets[]={0x168,0x169,0x16b};const uint8_t values[]={1,0,1};

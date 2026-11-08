@@ -90,17 +90,22 @@ def managed(module_id):
 
 
 def bundle_modules(root):
+    """Install metadata only; old updater versions require a nonempty directory.
+
+    Existing user trainers are never touched. The caller must migrate an old
+    app's embedded modules before replacing that app (the updater does so).
+    """
+    from trainer_distribution import bootstrap
     app = root / "TrainerDock.app"
     if not app.is_dir():
         return
-    target = app / "Contents/Resources/Modules"
+    resources = app / "Contents/Resources"
+    bootstrap(root, resources / "TrainerCatalog.json")
+    target = resources / "Modules"
     if target.exists():
         shutil.rmtree(target)
     target.mkdir(parents=True)
-    for source in released_modules():
-        package = root / "Modules" / (source.name + ".mhtmodule")
-        shutil.copytree(package, target / package.name)
-    build.run(["codesign", "--force", "--sign", "-", "--timestamp=none", app], stdout=subprocess.DEVNULL)
+    (target / "README.txt").write_text("Trainer einzeln über TrainerDock laden. Installierte Versionen liegen im persönlichen TrainerDock-Ordner.\n")
 
 
 def package_module(module_id):
@@ -112,13 +117,17 @@ def package_module(module_id):
     common = object_file(folder, "MHTProtocol.m")
     with tempfile.TemporaryDirectory(prefix="checks-", dir=environment_path("TARGET_TEMP_DIR")) as temp:
         build.trainer(ROOT / "Modules" / module_id, root / "Modules", Path(temp), common, native_objects=objects)
+    from trainer_distribution import record_verified_build
+    record_verified_build(root, module_id)
     stamp()
 
 
 def check_launcher():
     root = build_root()
     bundle_modules(root)
+    build.run(["codesign", "--force", "--sign", "-", "--timestamp=none", root / "TrainerDock.app"], stdout=subprocess.DEVNULL)
     build.run(["/usr/bin/python3", "-B", ROOT / "Tests/test_xcode_project.py"])
+    (root / "Modules").mkdir(exist_ok=True)
     folder = environment_path("PROJECT_TEMP_DIR") / os.environ["CONFIGURATION"] / "TrainerDock.build/Objects-normal/arm64"
     common = object_file(folder, "MHTProtocol.m")
     core = [object_file(folder, p.name) for p in sorted((ROOT / "Core").glob("*.m"))]
@@ -138,8 +147,8 @@ def check_launcher():
             obj = stage / (name + ".o")
             build.compile_object(ROOT / "Tests" / (name + ".m"), obj, includes)
             exe = stage / name
-            build.link([obj, common, *core], exe)
-            build.run([exe, root / "Modules"] if name == "MHTTests" else [exe])
+            build.link([obj, common, *core], exe, extra_flags=["-larchive.2"])
+            build.run([exe, root / "TrainerDock.app/Contents/Resources/TrainerCatalog.json"] if name == "MHTTests" else [exe])
         contents = stage / "LauncherLayoutTests.app/Contents"
         (contents / "MacOS").mkdir(parents=True)
         (contents / "Info.plist").write_bytes(plistlib.dumps(dict(
@@ -161,15 +170,15 @@ def check_launcher():
         update_info.update(CFBundleIdentifier="local.trainerdock.updater-tests",CFBundleExecutable="UpdaterTests")
         (update_contents/"Info.plist").write_bytes(plistlib.dumps(update_info))
         update_test=update_contents/"MacOS/UpdaterTests"
-        build.link([update_obj,object_file(folder,"MHTUpdater.m"),object_file(folder,"MHTUpdatePackage.m")],update_test,extra_flags=extra)
+        build.link([update_obj,common,*core,object_file(folder,"MHTUpdater.m"),object_file(folder,"MHTUpdatePackage.m")],update_test,extra_flags=extra)
         build.run([update_test])
-    verify_products(root)
+    verify_products(root, modules=False)
     stamp()
 
 
-def verify_products(root, module_id=None):
+def verify_products(root, module_id=None, modules=True):
     paths = [root / "Modules" / (p.name + ".mhtmodule") for p in released_modules()
-             if module_id is None or p.name == module_id]
+             if modules and (module_id is None or p.name == module_id)]
     for module in paths:
         binary = module / "Trainer.dylib"
         build.run(["codesign", "--verify", "--strict", binary])
@@ -188,6 +197,11 @@ def verify_products(root, module_id=None):
             raise ValueError("Launcher muss macOS 27.0 voraussetzen.")
         if info.get("CFBundleIconFile") != "TrainerDock" or not (app / "Contents/Resources/TrainerDock.icns").is_file():
             raise ValueError("Das TrainerDock-App-Icon fehlt.")
+        from trainer_distribution import read_catalog
+        read_catalog(app / "Contents/Resources/TrainerCatalog.json")
+        embedded = app / "Contents/Resources/Modules"
+        if embedded.exists() and any(p.name.endswith(".mhtmodule") or p.name.endswith(".dylib") for p in embedded.iterdir()):
+            raise ValueError("Die Launcher-App darf keine Trainerbibliotheken enthalten.")
         build.run(["codesign", "--verify", "--deep", "--strict", app])
         verify_minimum(app / "Contents/MacOS/TrainerDock")
         broker = app / "Contents/MacOS/TrainerDockEpicBroker"
@@ -209,9 +223,9 @@ def verify_minimum(binary):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("managed", "module", "launcher", "icon"))
+    parser.add_argument("action", choices=("managed", "module", "launcher", "icon", "catalog"))
     parser.add_argument("module_id", nargs="?")
     args = parser.parse_args()
-    if args.action not in ("launcher", "icon") and not args.module_id:
+    if args.action not in ("launcher", "icon", "catalog") and not args.module_id:
         parser.error("module_id erforderlich")
-    {"managed": managed, "module": package_module, "launcher": lambda _: check_launcher(), "icon": lambda _: icon()}[args.action](args.module_id)
+    {"managed": managed, "module": package_module, "launcher": lambda _: check_launcher(), "icon": lambda _: icon(), "catalog": lambda _: bundle_modules(build_root())}[args.action](args.module_id)

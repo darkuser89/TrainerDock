@@ -115,6 +115,9 @@ static void *sharedIngredientTable(const DI2GameAPI *api, void *original) {
 }
 - (BOOL)stealthPlayer:(void *)player controller:(void *)controller wanted:(BOOL)wanted available:(BOOL *)available {
     BOOL bound=_api.aiManager && _api.setIgnorePlayer && _api.updateIgnorePlayers && _api.ignorePlayers;
+    // An unused switch must not rebuild the engine's AI ignore-player map.
+    // An owned lease still follows the normal guarded restoration path below.
+    if (!wanted && !_stealthApplied) { *available=bound; return NO; }
     void *manager=bound ? _api.aiManager(player) : NULL,*state=pointerAt(controller,0x260);
     if (![self object:manager class:_api.aiManagerClass] || ![self object:state class:_api.playerStateClass]) manager=NULL;
     int32_t identifier=0; uint8_t ignored=0;
@@ -323,6 +326,11 @@ static void *sharedIngredientTable(const DI2GameAPI *api, void *original) {
         && recipes.capacity<=65536 && (!recipes.num || recipes.data);
     BOOL success=valid;
     NSMutableSet<NSValue *> *seen=[NSMutableSet new];
+    NSMutableDictionary<NSValue *,DI2FreeRecipe *> *byObject=[NSMutableDictionary new];
+    for (DI2FreeRecipe *entry in _recipes) {
+        void *object=_api.weakGet(&entry->weak);
+        if (object) byObject[[NSValue valueWithPointer:object]]=entry;
+    }
     for (int32_t i=0;valid && i<recipes.num;i++) {
         void *asset=pointerAt(recipes.data,(size_t)i*8);
         if (![self object:asset class:_api.recipeClass]) continue;
@@ -330,8 +338,7 @@ static void *sharedIngredientTable(const DI2GameAPI *api, void *original) {
         if (![self object:object class:_api.ingredientsClass]) continue;
         NSValue *identity=[NSValue valueWithPointer:object]; if ([seen containsObject:identity]) continue;
         [seen addObject:identity];
-        DI2FreeRecipe *entry=nil;
-        for (DI2FreeRecipe *candidate in _recipes) if (_api.weakGet(&candidate->weak)==object) { entry=candidate; break; }
+        DI2FreeRecipe *entry=byObject[identity];
         if (!entry && _recipes.count<8192) {
             void *vtable=pointerAt(object,0); BOOL known=NO;
             for (int j=0;j<3;j++) if (_api.ingredientVTables[j] && vtable==_api.ingredientVTables[j]) known=YES;
@@ -342,6 +349,7 @@ static void *sharedIngredientTable(const DI2GameAPI *api, void *original) {
             // is the game's own zero-cost implementation, not generated code.
             if (!DI2WritePointer(object,0,(char *)entry->shadow+16)) { success=NO; continue; }
             [_recipes addObject:entry];
+            byObject[identity]=entry;
         }
         if (!entry || ![self freeRecipe:entry object:object]) {
             success=NO;

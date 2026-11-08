@@ -1,9 +1,41 @@
 // SPDX-License-Identifier: GPL-3.0-only
 #import "MHTModule.h"
+#import "MHTTrainerStore.h"
 #import "MHTProtocol.h"
 #import "MHTDiscovery.h"
 #import "MHTBranding.h"
+#import <objc/runtime.h>
 #include <math.h>
+static void check(BOOL condition,NSString *message);
+static NSString *watchedPreferencePrefix;
+static NSUInteger preferenceWrites;
+static IMP originalPreferenceWrite;
+static void countPreferenceWrite(id defaults,SEL selector,id value,NSString *key){
+    if([key hasPrefix:watchedPreferencePrefix])preferenceWrites++;
+    ((void(*)(id,SEL,id,NSString *))originalPreferenceWrite)(defaults,selector,value,key);
+}
+static void preferenceHeartbeatTests(void){
+    MHTModule *module=[MHTModule new];NSString *identifier=[@"heartbeat-test-" stringByAppendingString:NSUUID.UUID.UUIDString];
+    module.manifest=@{@"id":identifier};watchedPreferencePrefix=[@"MHT." stringByAppendingString:identifier];
+    Method method=class_getInstanceMethod(NSUserDefaults.class,@selector(setObject:forKey:));
+    preferenceWrites=0;originalPreferenceWrite=method_setImplementation(method,(IMP)countPreferenceWrite);
+    @try {
+        NSDictionary *settings=@{@"glassIntensity":@0.75,@"restore":@YES};
+        NSDictionary *selection=@{@"0":@{@"wanted":@YES,@"value":@2}};
+        for(NSUInteger i=0;i<300;i++){[module saveSettings:settings];[module saveSelection:selection];}
+        check(preferenceWrites==2,@"300 identical heartbeats write settings and selection only once each");
+        [module saveSettings:@{@"glassIntensity":@0.25}];[module saveSelection:@{@"0":@{@"wanted":@NO,@"value":@2}}];
+        check(preferenceWrites==4,@"Real option and selection changes still persist immediately");
+        NSString *key=[watchedPreferencePrefix stringByAppendingString:@".settings"];
+        [NSUserDefaults.standardUserDefaults setObject:@{@"glassIntensity":@0.9} forKey:key];
+        [module saveSettings:settings];
+        check(preferenceWrites==6 && [module.settings[@"glassIntensity"] doubleValue]==0.75,@"External preference changes are observed rather than hidden by a stale cache");
+    } @finally {
+        method_setImplementation(method,originalPreferenceWrite);
+        for(NSString *suffix in @[@".settings",@".selection"])[NSUserDefaults.standardUserDefaults removeObjectForKey:[watchedPreferencePrefix stringByAppendingString:suffix]];
+        watchedPreferencePrefix=nil;
+    }
+}
 static void check(BOOL condition,NSString *message){if(!condition){fprintf(stderr,"FAIL: %s\n",message.UTF8String);exit(1);}}
 static NSString *fixtureBundle(NSString *root,NSString *name,NSString *bundleID){
     NSString *bundle=[root stringByAppendingPathComponent:name],*contents=[bundle stringByAppendingPathComponent:@"Contents"];
@@ -64,7 +96,8 @@ static void epicDiscoveryTests(void){
     }
 }
 int main(int argc,const char *argv[]) {@autoreleasepool {
-    check(argc==2,@"Module directory argument");
+    check(argc==2,@"Module directory or offline catalog argument");
+    preferenceHeartbeatTests();
     epicDiscoveryTests();
     NSDictionary *legacy=@{@"MHT.balatro.path.steam-arm64":@"/Games/Balatro.app",@"MHT.balatro.settings":@{@"glassIntensity":@0.73},@"MHT.profile.balatro":@"steam-arm64",@"MHT.balatro.selection":@{@"0":@{@"wanted":@YES}},@"Unrelated":@42};
     NSDictionary *current=@{@"MHT.balatro.settings":@{@"glassIntensity":@0.9},@"TrainerDock.custom":@YES};
@@ -126,8 +159,19 @@ int main(int argc,const char *argv[]) {@autoreleasepool {
     m[@"deadline"]=@102;
     check(!MHTAcceptCommand(m,@"other",session,42,seen,100) && !MHTAcceptCommand(m,@"test",@"wrong",42,seen,100) && !MHTAcceptCommand(m,@"test",session,43,seen,100),@"Module, session, process isolation");
     m[@"deadline"]=@(NAN);check(!MHTAcceptCommand(m,@"test",session,42,seen,100),@"NaN rejected");
-    NSMutableArray *errors=[NSMutableArray new];NSArray<MHTModule *> *modules=[MHTModule loadModules:[NSString stringWithUTF8String:argv[1]] errors:errors];
-    check(!errors.count && modules.count>0,[NSString stringWithFormat:@"Independent modules load: %@",errors]);
+    NSMutableArray *errors=[NSMutableArray new];NSString *input=[NSString stringWithUTF8String:argv[1]];
+    NSArray<MHTModule *> *modules;
+    if([input.pathExtension isEqual:@"json"]){
+        NSError *catalogError=nil;NSDictionary *catalog=[MHTTrainerStore validatedCatalog:[NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:input] options:0 error:NULL] requireDownloads:NO error:&catalogError];
+        check(catalog!=nil,[NSString stringWithFormat:@"Offline catalog is valid: %@",catalogError]);
+        NSMutableArray *metadata=[NSMutableArray new];
+        for(NSDictionary *entry in catalog[@"modules"]){
+            NSDictionary *latest=[entry[@"versions"] sortedArrayUsingComparator:^NSComparisonResult(NSDictionary *a,NSDictionary *b){return MHTCompareTrainerVersions(b[@"version"],a[@"version"]);}].firstObject;
+            MHTModule *module=[MHTModule new];module.manifest=latest[@"manifest"];[metadata addObject:module];
+            check(!module.installed && !module.runtimePath,@"Offline catalog cannot introduce a runtime library into the host");
+        }
+        modules=metadata;
+    } else {modules=[MHTModule loadModules:input errors:errors];check(!errors.count && modules.count>0,[NSString stringWithFormat:@"Independent modules load: %@",errors]);}
     // Metadata-only fixtures: no trainer library is loaded or copied.
     NSString *modeRoot=[NSTemporaryDirectory() stringByAppendingPathComponent:[@"MHT-StartMode-" stringByAppendingString:NSUUID.UUID.UUIDString]];
     NSString *fixture=[modeRoot stringByAppendingPathComponent:@"fixture.mhtmodule"];
@@ -136,8 +180,9 @@ int main(int argc,const char *argv[]) {@autoreleasepool {
     @try {
         NSArray *cases=@[@{@"launchMode":@"app"},@{@"launchMode":@"executable"},@{@"launchMode":@"epic",@"epicAppName":@"fixture-app",@"epicNamespace":@"fixture-namespace"},@{@"launchMode":@"unknown"},@{@"launchMode":@"epic"},@{@"launchMode":@"epic",@"epicAppName":@"bad/value",@"epicNamespace":@"fixture-namespace"}];
         for(NSUInteger i=0;i<cases.count;i++){
-            NSMutableDictionary *profile=[modules.firstObject.profiles.firstObject mutableCopy];[profile addEntriesFromDictionary:cases[i]];
-            NSMutableDictionary *manifest=[modules.firstObject.manifest mutableCopy];manifest[@"profiles"]=@[profile];
+            NSMutableDictionary *profile=[@{@"id":@"fixture",@"name":@"Prüfprofil",@"enabled":@YES,@"store":@"Steam",@"version":@"1",@"bundleIdentifier":@"local.mht.fixture",@"executable":@"Fixture",@"uuids":@[@"00000000-0000-0000-0000-000000000001"]} mutableCopy];[profile addEntriesFromDictionary:cases[i]];
+            NSDictionary *testFeature=@{@"id":@0,@"title":@"Prüffunktion",@"binding":@"F1",@"implemented":@YES,@"numeric":@NO,@"oneShot":@NO,@"integer":@NO,@"initial":@0,@"minimum":@0,@"maximum":@1,@"step":@1};
+            NSMutableDictionary *manifest=[@{@"schemaVersion":@1,@"id":@"fixture",@"name":@"Prüftrainer",@"version":@"1.0.0",@"profiles":@[profile],@"features":@[testFeature]} mutableCopy];
             NSDictionary *configuration=@{@"schemaVersion":@1,@"app":@{@"name":@"Fixture",@"bundleIdentifier":@"local.mht.fixture",@"version":@"1.0",@"build":@"1"},@"profiles":@[profile]};
             writeItem(fixture,@"Module.json",manifest);writeItem(fixture,@"TrainerConfig.json",configuration);
             NSMutableArray *failures=[NSMutableArray new];NSArray *loaded=[MHTModule loadModules:modeRoot errors:failures];
@@ -158,10 +203,11 @@ int main(int argc,const char *argv[]) {@autoreleasepool {
         check(![module inspectPath:@"/private/tmp/does-not-exist.app" profile:module.profiles.firstObject error:NULL],@"Wrong game path rejected");
         NSDictionary *profile=module.profiles.firstObject;
         NSDictionary *env=[module environmentForGame:@{@"executable":@"/test/Game"} profile:profile session:session];
-        check([env[@"MHT_MODULE"] isEqual:module.identifier] && [env[@"MHT_SESSION"] isEqual:session] && [env[@"DYLD_INSERT_LIBRARIES"] isEqual:module.runtimePath],@"Launch environment isolated");
+        if(module.installed){check([env[@"MHT_MODULE"] isEqual:module.identifier] && [env[@"MHT_SESSION"] isEqual:session] && [env[@"DYLD_INSERT_LIBRARIES"] isEqual:module.runtimePath],@"Launch environment isolated");
         NSString *key=@"MHT_OPTIONS";
         NSDictionary *overlay=MHTDecodeMessage(env[key]);check(![overlay[@"visible"] boolValue] && [overlay[@"liquidGlass"] boolValue],@"Launch hidden with Liquid Glass always enabled");
+        }else check(!env,@"Catalog-only trainers cannot form a launch environment before installation");
         check([profile[@"store"] length]>0,@"Explicit supported store");
     }
-    puts("PASS: protocol isolation, replay/deadline rejection, all native catalogs, game validation and launch configuration.");
+    puts("PASS: protocol isolation, replay/deadline rejection, available catalog metadata, game validation and launch configuration.");
 }return 0;}

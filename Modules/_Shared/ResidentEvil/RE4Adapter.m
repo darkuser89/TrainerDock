@@ -122,7 +122,7 @@ typedef struct {uint64_t words[3];} RE4IndirectGuid;
     return itemID && [_e4 isObject:item kindOf:50224] ? [self itemNameID4:itemID(_e4.threadContext,item)] : nil;
 }
 - (void)diagnosticItemNames4 {
-    if(![self local4] || ![NSProcessInfo.processInfo.environment[@"RE2_BINDING_SCAN"] isEqual:@"1"])return;
+    if(![NSProcessInfo.processInfo.environment[@"RE2_BINDING_SCAN"] isEqual:@"1"] || ![self local4])return;
     for(NSUInteger i=0;i<2 && _itemNameCursor4<sizeof(RE4ItemIDs)/sizeof(RE4ItemIDs[0]);i++, _itemNameCursor4++){
         int32_t itemID=RE4ItemIDs[_itemNameCursor4];NSString *name=[self itemNameID4:itemID];
         if(name && [name rangeOfString:@"marke|token|ticket|gold|silber" options:NSRegularExpressionSearch|NSCaseInsensitiveSearch].location!=NSNotFound)
@@ -563,13 +563,14 @@ typedef struct {uint64_t words[3];} RE4IndirectGuid;
             void *body=[self objectGetter:356434 owner:13556 object:c];os_log(_log4,"RE4 body updater type=%{public}u",[_e4 typeOf:body]);
             for(size_t o=0x10;o<0x340;o+=8){uint32_t t=[_e4 typeOf:(void *)r4p(c,o)];if(t!=UINT32_MAX)os_log(_log4,"RE4 context field=%{public}lu type=%{public}u",(unsigned long)o,t);}
         }
-    }return s;
+    }
+    // Clock-unit calibration and optional name diagnostics are observations,
+    // not frame-maintained effects. Run them at the regular context poll.
+    [self calibrateClock4];[self diagnosticItemNames4];return s;
 }
 - (void)releaseEffects {[_wanted4 removeAllObjects];_recoilCamera4=nil;_gainMoneyReady4=NO;_gainMoneyApplied4=NO;_gainScoreReady4=NO;_gainScoreApplied4=NO;[super releaseEffects];}
 - (void)frame4 {
     if(_mouseOwned4)[self setOverlayInteraction:YES];
-    [self calibrateClock4];
-    [self diagnosticItemNames4];
     if(!_wanted4.count)return;if(![self local4]){[self releaseEffects];return;}
     for(NSNumber *f in _wanted4.allKeys.copy)[self applyFeature:(RE2Feature)f.integerValue wanted:YES value:_wanted4[f].doubleValue];
 }
@@ -685,6 +686,7 @@ typedef struct {uint64_t words[3];} RE4IndirectGuid;
     }return @"Diese RE4-Einmalaktion ist noch nicht angebunden.";
 }
 - (BOOL)setOverlayInteraction:(BOOL)wanted {
+    if(!wanted&&!_mouseOwned4)return NO;
     if(!_e4.isGameThread)return NO;
     // UI mouse belongs to the process HID device, not a loaded player context.
     void *device=[_e4 singletonAt:0x10cd8d9e8];const size_t offsets[]={0x160,0x161,0x163};const uint8_t values[]={1,0,1};

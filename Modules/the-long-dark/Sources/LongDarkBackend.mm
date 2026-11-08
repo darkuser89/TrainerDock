@@ -31,20 +31,20 @@ struct Backend {
 };
 Backend& state(){static auto b=new Backend;return *b;}
 std::string slotKey(Object o,tld::Class k,const char *name){return std::to_string((uintptr_t)o)+":"+std::to_string((uintptr_t)k)+":"+name;}
-std::vector<uint8_t> numeric(Field f,double n){auto boxed=boxNumber(api.fieldType(f),n);Root root(boxed);std::vector<uint8_t> data(fieldSize(f));memcpy(data.data(),api.unbox(boxed),data.size());return data;}
-double scalar(Object o,const char *name,tld::Class k=nullptr){if(!k)k=api.objectClass(o);Field f=field(k,name);auto bytes=read(o,f);Root boxed(api.box(api.typeClass(api.fieldType(f)),bytes.data()));return number(boxed.get());}
+std::vector<uint8_t> numeric(Field f,double n){return numericField(f,n);}
+double scalar(Object o,const char *name,tld::Class k=nullptr){if(!k)k=api.objectClass(o);Field f=field(k,name);return numberField(f,read(o,f));}
 void setScalar(Object o,const char *name,double n){Field f=field(api.objectClass(o),name);write(o,f,numeric(f,n));if(std::fabs(scalar(o,name)-n)>std::max(0.001,std::fabs(n)*0.000001))throw std::runtime_error("Die Ressourcenrücklesung weicht ab.");}
 Slot& lease(Object o,tld::Class k,const char *name){auto &b=state();auto key=slotKey(o,k,name);auto it=b.slots.find(key);if(it==b.slots.end()){
  Slot s;s.klass=k;s.member=field(k,name);s.original=read(o,s.member);s.last=s.original;if(!api.valueType(api.typeClass(api.fieldType(s.member)))){Object original=nullptr;memcpy(&original,s.original.data(),8);s.originalReference.reset(original);}if(o)s.owner.reset(o,true);it=b.slots.emplace(key,std::move(s)).first;}
  it->second.touched=true;it->second.contributors.insert(b.applying);return it->second;}
-void own(Object o,tld::Class k,const char *name,double n,bool multiply=false){Slot &s=lease(o,k,name);if(multiply){Root boxed(api.box(api.typeClass(api.fieldType(s.member)),s.original.data()));n*=number(boxed.get());}
+void own(Object o,tld::Class k,const char *name,double n,bool multiply=false){Slot &s=lease(o,k,name);if(multiply)n*=numberField(s.member,s.original);
  auto bytes=numeric(s.member,n);if(read(o,s.member)!=bytes)write(o,s.member,bytes);if(read(o,s.member)!=bytes)throw std::runtime_error("Die Rücklesung des eigenen Feldwerts weicht ab.");s.last=std::move(bytes);}
 void own(Object o,const char *name,double n,bool multiply=false){own(o,api.objectClass(o),name,n,multiply);}
 void ownReference(Object o,const char *name,Object value){auto &s=lease(o,api.objectClass(o),name);if(api.valueType(api.typeClass(api.fieldType(s.member))))throw std::runtime_error("Ein Referenzfeld wurde erwartet.");
  std::vector<uint8_t> bytes(sizeof(Object));memcpy(bytes.data(),&value,sizeof(value));s.lastReference.reset(value);if(read(o,s.member)!=bytes)write(o,s.member,bytes);if(read(o,s.member)!=bytes)throw std::runtime_error("Die Referenzrücklesung weicht ab.");s.last=bytes;}
 void ownEmptyArray(Object o,const char *name){auto &s=lease(o,api.objectClass(o),name);auto arrayClass=api.typeClass(api.fieldType(s.member));auto element=api.elementClass(arrayClass);if(!element)throw std::runtime_error("Ein ursprüngliches Listenfeld wurde erwartet.");
  if(!s.lastReference.get() || api.arrayLength(s.lastReference.get())!=0){Root empty(api.arrayNew(element,0));ownReference(o,name,empty.get());}else ownReference(o,name,s.lastReference.get());}
-double enumValue(const char *typeName,const char *name){auto k=type(typeName);auto bytes=read(nullptr,field(k,name));Root value(api.box(k,bytes.data()));return number(value.get());}
+double enumValue(const char *typeName,const char *name){auto k=type(typeName);auto f=field(k,name);return numberField(f,read(nullptr,f));}
 Object blueprintManager(){return call(method(type("BlueprintManager","TLD.Gear"),"get_Instance",0),nullptr);}
 void exitFly(){auto &b=state();if(b.flyHeld){try{Object camera=staticReference(type("FlyMode"),"m_Camera");if(camera==b.flyCamera.get() && alive(camera) && number(call(method(type("CameraDebugMode"),"get_IsFly",0),nullptr)))call(method(type("FlyMode"),"Exit",0),nullptr);}catch(const std::exception&){}b.flyHeld=false;b.flyCamera.reset();}}
 void ownWeight(Object o,const char *name,double kg){auto &s=lease(o,api.objectClass(o),name);if(typeName(api.fieldType(s.member))!="TLD.IntBackedUnit.ItemWeight")throw std::runtime_error("Der ursprüngliche Gewichtsdatentyp wurde erwartet.");
@@ -70,7 +70,7 @@ void weather(int selected){const char *names[]={"LightSnow","HeavySnow","Blizzar
  if(getNumber(u,"GetWeatherStage")!=number(enumValue.get()))throw std::runtime_error("Der Wetterwechsel ist noch nicht bestätigt.");}
 void setHour(double hour){Object tod=component("GetTimeOfDayComponent");Method m=method(api.objectClass(tod),"SetNormalizedTime",1);if(!m)throw std::runtime_error("Die ursprüngliche Zeitänderungsfunktion fehlt.");numericCall(m,tod,{hour/24.0});if(std::fabs(getNumber(tod,"GetNormalizedTime")-hour/24.0)>.002)throw std::runtime_error("Die Zeitrücklesung weicht ab.");}
 std::vector<Object> gear(){auto &b=state();double now=NSDate.date.timeIntervalSinceReferenceDate;
- if(now-b.gearRefresh>.25){b.items.clear();auto owned=list(reference(b.inventory.get(),"m_Items"));if(owned.empty())owned=findObjects(type("GearItem"),true);for(Object o:owned)if(alive(o) && api.objectClass(o)==type("GearItem") && boolean(o,"m_InPlayerInventory"))b.items.emplace_back(o,true);b.gearRefresh=now;}
+ if(now-b.gearRefresh>.25){b.items.clear();auto owned=gearItemList(reference(b.inventory.get(),"m_Items"),type("GearItemObject","TLD.Gear"),type("GearItem"));for(Object o:owned)if(alive(o) && api.objectClass(o)==type("GearItem") && boolean(o,"m_InPlayerInventory"))b.items.emplace_back(o,true);b.gearRefresh=now;}
  std::vector<Object> result;for(auto &r:b.items)if(alive(r.get()) && boolean(r.get(),"m_InPlayerInventory"))result.push_back(r.get());return result;}
 Object addGear(const char *name,int count){
  Object p=state().player.get();Method m=method(api.objectClass(p),"AddItemCONSOLE",3);
@@ -121,7 +121,7 @@ void apply(NSInteger f){auto &b=state();double v=b.values[f];Object p=b.player.g
  case MTFeaturePain:cure("GetSprainPainComponent","HasSprainPain");cure("GetHeadacheComponent","HasHeadache");break;
  case MTFeatureDamageTaken:{Object broken=component("GetBrokenBody");own(broken,"m_DamageMultiplier",v);own(broken,"<HasAffliction>k__BackingField",1);break;}
  case MTFeatureItemUses:{unsigned count=0;for(Object o:gear()){
-  if(Object stack=reference(o,"m_StackableItem")){auto &entry=lease(stack,api.objectClass(stack),"m_Units");Root initial(api.box(api.typeClass(api.fieldType(entry.member)),entry.original.data()));own(stack,"m_Units",std::max(2.0,number(initial.get())));count++;}
+  if(Object stack=reference(o,"m_StackableItem")){auto &entry=lease(stack,api.objectClass(stack),"m_Units");own(stack,"m_Units",std::max(2.0,numberField(entry.member,entry.original)));count++;}
   if(Object use=reference(o,"m_DegradeOnUse")){own(use,"m_DegradeHP",0);count++;}
   if(Object food=reference(o,"m_FoodItem")){double capacity=getNumber(component("GetHungerComponent"),"GetAdjustedMaxReserveCalories");own(food,"m_MustConsumeAll",0);own(food,"m_CaloriesRemaining",std::max(scalar(food,"m_CaloriesTotal"),capacity)+1);count++;}
   if(Object water=reference(o,"m_WaterSupply")){liquidFloor(water,"m_VolumeInLiters",2);count++;}
@@ -131,14 +131,14 @@ void apply(NSInteger f){auto &b=state();double v=b.values[f];Object p=b.player.g
  case MTFeatureWeight:{Object inv=b.inventory.get();own(inv,"m_ForceOverrideWeight",1);ownWeight(inv,"m_OverridedWeight",0);break;}
  case MTFeatureCapacity:{Object e=component("GetEncumberComponent");for(const char *n:{"m_MaxCarryCapacity","m_MaxCarryCapacityWhenExhausted","m_NoSprintCarryCapacity","m_NoWalkCarryCapacity"})ownWeight(e,n,v);break;}
  case MTFeatureDurability:case MTFeatureWear:{auto items=gear();if(items.empty())throw std::runtime_error("Keine eigene Inventarausrüstung verfügbar.");for(Object o:items){
-  if(f==MTFeatureDurability){own(o,"m_HaltDecay",1);Slot &s=lease(o,api.objectClass(o),"m_CurrentHP");auto current=read(o,s.member);Root a(api.box(api.typeClass(api.fieldType(s.member)),current.data())),baseline(api.box(api.typeClass(api.fieldType(s.member)),s.original.data()));if(number(a.get())<number(baseline.get())){write(o,s.member,s.original);s.last=s.original;}else{s.last=current;}}
+  if(f==MTFeatureDurability){own(o,"m_HaltDecay",1);Slot &s=lease(o,api.objectClass(o),"m_CurrentHP");auto current=read(o,s.member);if(numberField(s.member,current)<numberField(s.member,s.original)){write(o,s.member,s.original);s.last=s.original;}else{s.last=current;}}
   else if(!b.wanted[MTFeatureDurability])own(o,"m_DecayScalar",v,true);else throw std::runtime_error("Der Haltbarkeitsschutz hat Vorrang vor dem Verschleiß.");
  }break;}
  case MTFeatureEasyCraft:{auto blueprints=list(invoke(blueprintManager(),"GetAllBlueprints"));if(blueprints.empty())throw std::runtime_error("Die Baupläne sind noch nicht geladen.");
  for(Object bp:blueprints){for(const char *n:{"m_RequiredGear","m_RequiredPowder","m_RequiredLiquid"})ownEmptyArray(bp,n);ownReference(bp,"m_RequiredTool",nullptr);own(bp,"m_RequiresLight",0);own(bp,"m_RequiresLitFire",0);own(bp,"m_RequiredCraftingLocation",enumValue("CraftingLocation","Anywhere"));}break;}
  case MTFeaturePredators:{unsigned count=0;for(Object region:findObjects(type("SpawnRegion"))){if(!getNumber(region,"IsPredator"))continue;
  for(const char *difficulty:{"Pilgrim","Voyageur","Stalker","Interloper"}){
-  for(const char *period:{"Day","Night"}){std::string name=std::string("m_MaxSimultaneousSpawns")+period+difficulty;auto &entry=lease(region,api.objectClass(region),name.c_str());Root original(api.box(api.typeClass(api.fieldType(entry.member)),entry.original.data()));own(region,name.c_str(),std::min(40.0,std::ceil(number(original.get())*v)));}
+  for(const char *period:{"Day","Night"}){std::string name=std::string("m_MaxSimultaneousSpawns")+period+difficulty;auto &entry=lease(region,api.objectClass(region),name.c_str());own(region,name.c_str(),std::min(40.0,std::ceil(numberField(entry.member,entry.original)*v)));}
   std::string name=std::string("m_MaxRespawnsPerDay")+difficulty;own(region,name.c_str(),v,true);
  }count++;}
  if(!count)throw std::runtime_error("Keine aktive Raubtierregion verfügbar.");break;}
@@ -162,7 +162,9 @@ void apply(NSInteger f){auto &b=state();double v=b.values[f];Object p=b.player.g
 }
 void restoreTime(){auto &b=state();if(!b.timeHeld || b.wanted[MTFeatureGameSpeed])return;auto k=type("Time","UnityEngine","UnityEngine.CoreModule.dll");double n=number(call(method(k,"get_timeScale",0),nullptr));if(n<=0)return;if(std::fabs(n-b.timeLast)<.001)numericCall(method(k,"set_timeScale",1),nullptr,{b.timeBase});b.timeHeld=false;}
 void frame(){auto &b=state();try{
- TLDObserveSaveGuard();if(b.mouse)TLDMouse(YES);double now=NSDate.date.timeIntervalSinceReferenceDate;if(now-b.lastTick<.1)return;b.lastTick=now;
+ TLDObserveSaveGuard();if(b.mouse)TLDMouse(YES);
+ if(std::none_of(b.wanted.begin(),b.wanted.end(),[](bool on){return on;}) && b.slots.empty() && !b.timeHeld && !b.flyHeld)return;
+ double now=NSDate.date.timeIntervalSinceReferenceDate;if(now-b.lastTick<.1)return;b.lastTick=now;
  if(!refresh())return;for(auto &entry:b.slots){entry.second.touched=false;entry.second.contributors.clear();}
  for(NSInteger i=0;i<MTFeatureCount;i++){b.active[i]=false;b.available[i]=MTFeatureInfoAt((MTFeature)i)->implemented;b.notes[i]=nil;
   if(!b.wanted[i] || MTFeatureInfoAt((MTFeature)i)->oneShot || !MTFeatureInfoAt((MTFeature)i)->implemented)continue;
@@ -205,6 +207,7 @@ NSString *TLDOneShot(NSInteger f,double value){if(!TLDInFrame() || !state().read
  return @"Originale Aktion ausgeführt und zurückgelesen.";
  }catch(const std::exception& e){return [NSString stringWithFormat:@"Nicht bestätigt: %s",e.what()];}}
 BOOL TLDMouse(BOOL wanted){if(!TLDInFrame())return NO;auto &b=state();b.mouse=wanted;
+ if(!wanted && !b.mouseHeld)return NO;
  try{auto c=type("Cursor","UnityEngine","UnityEngine.CoreModule.dll"),input=type("InputManager");auto get=[&](const char *n){return number(call(method(c,n,0),nullptr));};auto set=[&](const char *n,double v){numericCall(method(c,n,1),nullptr,{v});};
  Field ignore=field(input,"s_IgnoreInput");
  if(!wanted){if(b.mouseHeld){auto bytes=numeric(ignore,b.oldIgnore?1:0);write(nullptr,ignore,bytes);Field cursorState=field(input,"m_CursorState");if(scalar(nullptr,"m_CursorState",input)==b.lastCursorState)write(nullptr,cursorState,numeric(cursorState,b.oldCursorState));set("set_visible",b.oldVisible?1:0);set("set_lockState",b.oldLock);}b.mouseHeld=false;return NO;}

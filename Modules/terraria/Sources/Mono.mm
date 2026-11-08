@@ -1,5 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-only
 #include "Mono.hpp"
+#include "../../_Shared/Managed/MetadataCache.hpp"
+#include <tuple>
+#include <memory>
 #include <dlfcn.h>
 #include <cmath>
 #include <cstring>
@@ -12,12 +15,33 @@ bool bind(){if(api.root)return true;API a={};
  if(!a.root())return false;api=a;return true;
 }
 void *image(const char *name){for(const char *suffix:{"",".dll",".exe"}){std::string n=std::string(name)+suffix;if(void *i=api.loaded(n.c_str()))return i;}return nullptr;}
-Klass type(const char *space,const char *name,const char *imageName){void *i=image(imageName);Klass k=i?api.klass(i,space,name):nullptr;if(!k)throw std::runtime_error(std::string("Ursprünglicher Typ fehlt: ")+space+"."+name);return k;}
-Field field(Klass k,const char *name){for(;k;k=api.parent(k))if(Field f=api.field(k,name))return f;throw std::runtime_error(std::string("Ursprüngliches Feld fehlt: ")+name);}
-Method method(Klass k,const char *name,int count){for(;k;k=api.parent(k))if(Method m=api.method(k,name,count))return m;throw std::runtime_error(std::string("Ursprüngliche Methode fehlt: ")+name);}
+Klass type(const char *space,const char *name,const char *imageName){
+ using Key=std::tuple<std::string,std::string,std::string>;static mht::managed::MetadataCache<Key,Klass,256> cache;
+ return cache.get(api.root ? api.root() : nullptr,(uintptr_t)api.klass,Key{imageName,space,name},[&]()->Klass {
+  void *i=image(imageName);Klass k=i?api.klass(i,space,name):nullptr;if(!k)throw std::runtime_error(std::string("Ursprünglicher Typ fehlt: ")+space+"."+name);return k;
+ });
+}
+Field field(Klass k,const char *name){
+ using Key=std::pair<Klass,std::string>;static mht::managed::MetadataCache<Key,Field> cache;
+ return cache.get(api.root ? api.root() : nullptr,(uintptr_t)api.field,Key{k,name},[&]()->Field {
+  for(;k;k=api.parent(k))if(Field f=api.field(k,name))return f;throw std::runtime_error(std::string("Ursprüngliches Feld fehlt: ")+name);
+ });
+}
+Method method(Klass k,const char *name,int count){
+ using Key=std::tuple<Klass,std::string,int>;static mht::managed::MetadataCache<Key,Method> cache;
+ return cache.get(api.root ? api.root() : nullptr,(uintptr_t)api.method,Key{k,name,count},[&]()->Method {
+  for(;k;k=api.parent(k))if(Method m=api.method(k,name,count))return m;throw std::runtime_error(std::string("Ursprüngliche Methode fehlt: ")+name);
+ });
+}
 Object call(Method m,Object o,std::vector<void *> args){Object exception=nullptr;Object result=api.invoke(m,o,args.empty()?nullptr:args.data(),&exception);if(exception)throw std::runtime_error("Der ursprüngliche Mono-Aufruf wurde abgelehnt.");return result;}
 std::string text(Object o){if(!o)return {};char *s=api.utf8(o);std::string r=s?s:"";if(s)api.free(s);return r;}
-std::string typeName(void *t){char *s=api.typeName(t);std::string r=s?s:"";if(s)api.free(s);return r;}
+std::string typeName(void *t){
+ if(!t)return {};
+ static mht::managed::MetadataCache<void *,std::shared_ptr<std::string>> cache;
+ auto result=cache.get(api.root ? api.root() : nullptr,(uintptr_t)api.typeName,t,[&]()->std::shared_ptr<std::string>{
+  char *name=api.typeName(t);if(!name)return {};auto value=std::make_shared<std::string>(name);api.free(name);return value;
+ });return result?*result:std::string{};
+}
 int scalarKind(Field f){auto t=api.fieldType(f);Klass k=api.classFromType?api.classFromType(t):nullptr;if(k && api.isEnum && api.isEnum(k))t=api.enumBase(k);return api.kind(t);}
 size_t size(Field f){int k=scalarKind(f);if(k==2)return 1;if(k==8||k==9||k==12)return 4;if(k==10||k==11||k==13)return 8;if(typeName(api.fieldType(f))=="System.TimeSpan")return 8;throw std::runtime_error("Nicht unterstützte native Zahlenwertanbindung.");}
 std::vector<uint8_t> read(Object o,Klass k,Field f){std::vector<uint8_t> b(size(f));if(api.flags(f)&16)api.readStatic(api.vtable(api.root(),k),f,b.data());else if(o)api.read(o,f,b.data());else throw std::runtime_error("Der ursprüngliche Besitzer fehlt.");return b;}

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 #import "MHTUpdater.h"
 #import "MHTUpdatePackage.h"
+#import "MHTTrainerStore.h"
 #import <sys/stat.h>
 #import <unistd.h>
 static NSString *const automaticKey=@"TrainerDock.AutomaticUpdates";
@@ -70,7 +71,7 @@ static NSString *const checkedKey=@"TrainerDock.LastUpdateCheck";
             [NSUserDefaults.standardUserDefaults setObject:NSDate.date forKey:checkedKey];
             if(!release){if(manual)[self message:@"TrainerDock ist aktuell" detail:[NSString stringWithFormat:@"Version %@ ist installiert.",NSBundle.mainBundle.infoDictionary[@"CFBundleShortVersionString"]]];return;}
             NSAlert *alert=[NSAlert new];alert.messageText=[NSString stringWithFormat:@"TrainerDock %@ ist verfügbar",release[@"version"]];
-            alert.informativeText=@"App und Trainer gemeinsam herunterladen und installieren? TrainerDock wird anschließend neu gestartet.";
+            alert.informativeText=@"TrainerDock herunterladen und installieren? Deine gespeicherten Trainer und Versionen bleiben erhalten. TrainerDock wird anschließend neu gestartet.";
             [alert addButtonWithTitle:@"Laden und installieren"];[alert addButtonWithTitle:@"Später"];
             if([alert runModal]==NSAlertFirstButtonReturn)[self download:release];
         });
@@ -146,6 +147,11 @@ static NSString *const checkedKey=@"TrainerDock.LastUpdateCheck";
     self.status.stringValue=@"TrainerDock wird neu gestartet …";
     NSURL *stage=self.stage,*app=NSBundle.mainBundle.bundleURL.URLByResolvingSymlinksInPath,*helper=[stage URLByAppendingPathComponent:@"Updater"],*plan=[stage URLByAppendingPathComponent:@"Plan.plist"];
     NSMutableSet *games=[NSMutableSet new];
+    MHTTrainerStore *trainerStore=MHTTrainerStore.sharedStore;
+    for(MHTModule *module in trainerStore.modules){
+        for(MHTModule *installed in [trainerStore installedVersionsForIdentifier:module.identifier])
+            for(NSDictionary *profile in installed.profiles)if([profile[@"bundleIdentifier"] isKindOfClass:NSString.class])[games addObject:profile[@"bundleIdentifier"]];
+    }
     NSArray *roots=@[[app URLByAppendingPathComponent:@"Contents/Resources/Modules"],[app.URLByDeletingLastPathComponent URLByAppendingPathComponent:@"Modules"],
         [NSURL fileURLWithPath:[NSHomeDirectory() stringByAppendingPathComponent:@"Library/Application Support/TrainerDock/Modules"]],
         [NSURL fileURLWithPath:[NSHomeDirectory() stringByAppendingPathComponent:@"Library/Application Support/MHT/Modules"]]];

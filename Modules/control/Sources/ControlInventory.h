@@ -10,7 +10,7 @@ class MHTControlInventory {
 public:
     MHTControlInventory();
     ~MHTControlInventory();
-    MHTControlInventoryResult update(uintptr_t avatar,uintptr_t inventory,bool materials,bool freeCraft);
+    MHTControlInventoryResult update(uintptr_t avatar,uintptr_t inventory,bool materials,bool freeCraft,bool inspect=true);
     void release();
     void discardOwner();
 private:

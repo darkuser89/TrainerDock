@@ -52,8 +52,12 @@ void MHTControlInventory::discardOwner(){
     // Avatar stacks can already be gone. Registry content has a separate owner.
     state->stacks.clear();release();
 }
-MHTControlInventoryResult MHTControlInventory::update(uintptr_t avatar,uintptr_t inventory,bool materials,bool freeCraft){
-    MHTControlInventoryResult result;if(!MHTControlOnEngineFrame()||!MHTControlEngineIdentity()||!avatar||!inventory)return result;
+MHTControlInventoryResult MHTControlInventory::update(uintptr_t avatar,uintptr_t inventory,bool materials,bool freeCraft,bool inspect){
+    MHTControlInventoryResult result;
+    // Availability discovery belongs to the bounded UI poll, not every engine
+    // frame. A final off transition must still restore our own live leases.
+    if(!materials&&!freeCraft&&!inspect&&!state->crafting&&state->stacks.empty())return result;
+    if(!MHTControlOnEngineFrame()||!MHTControlEngineIdentity()||!avatar||!inventory)return result;
     auto &s=*state;uintptr_t registry=r<uintptr_t>(MHTControlAddress(MHTControlDatabase)),array=r<uintptr_t>(registry+0x628);uint32_t count=r<uint32_t>(registry+0x624);
     if(registry!=s.registry||array!=s.array||count!=s.recipes.size()){
         release();s.recipes.clear();s.ingredients.clear();s.registry=registry;s.array=array;
@@ -68,11 +72,24 @@ MHTControlInventoryResult MHTControlInventory::update(uintptr_t avatar,uintptr_t
     }
     result.recipesAvailable=s.recipes.size()==72&&!s.ingredients.empty();if(!result.recipesAvailable)return result;
     if(freeCraft){bool ok=true;const uint32_t zero=0;for(const Recipe &recipe:s.recipes){
-        if(r<uintptr_t>(recipe.address+0xe0)!=recipe.ingredients){ok=false;continue;}
-        ok&=MHTControlWrite(recipe.address+0x108,&zero,4)&&MHTControlWrite(recipe.address+0xe8,&zero,4)
-            &&r<int>(recipe.address+0x108)==0&&r<uint32_t>(recipe.address+0xe8)==0;
+        // Ingredient owner, count and cost belong to one bounded 44-byte span.
+        // Read it together rather than issuing five separate Mach reads per
+        // unchanged recipe on every frame. Actual writes get a fresh snapshot.
+        uint8_t snapshot[0x2c];uintptr_t ingredients=0;uint32_t quantity=0;int cost=0;
+        if(!MHTControlRead(recipe.address+0xe0,snapshot,sizeof(snapshot))){ok=false;continue;}
+        memcpy(&ingredients,snapshot,8);memcpy(&quantity,snapshot+8,4);memcpy(&cost,snapshot+0x28,4);
+        if(ingredients!=recipe.ingredients){ok=false;continue;}
+        bool changed=cost!=0||quantity!=0,written=true;
+        if(cost)written=MHTControlWrite(recipe.address+0x108,&zero,4);
+        if(written&&quantity)written=MHTControlWrite(recipe.address+0xe8,&zero,4);
+        if(changed&&written){
+            written=MHTControlRead(recipe.address+0xe0,snapshot,sizeof(snapshot));
+            if(written){memcpy(&ingredients,snapshot,8);memcpy(&quantity,snapshot+8,4);memcpy(&cost,snapshot+0x28,4);}
+        }
+        ok&=written&&ingredients==recipe.ingredients&&quantity==0&&cost==0;
     }s.crafting=true;result.craftActive=ok;}
     else if(s.crafting)release();
+    if(!materials&&!inspect&&s.stacks.empty())return result;
     uintptr_t global=(uintptr_t)dlsym(RTLD_DEFAULT,"_ZN1r11GlobalIDMap12sm_pInstanceE");void *map=(void*)r<uintptr_t>(global);
     auto resolve=(void*(*)(void*,const uint64_t*))dlsym(RTLD_DEFAULT,"_ZNK1r11GlobalIDMap10getPointerERKNS_8GlobalIDE");
     uintptr_t list=r<uintptr_t>(inventory+0x38);uint32_t n=r<uint32_t>(inventory+0x40),handle=r<uint32_t>(avatar+0x20);
@@ -89,7 +106,7 @@ MHTControlInventoryResult MHTControlInventory::update(uintptr_t avatar,uintptr_t
         result.materialCount++;live.insert(gid);
         if(materials){auto it=s.stacks.find(gid);if(it!=s.stacks.end()&&(it->second.item!=item||it->second.component!=stack||it->second.holder!=holder||it->second.ownerHandle!=handle)){s.stacks.erase(it);it=s.stacks.end();}
             if(it==s.stacks.end())it=s.stacks.emplace(gid,Stack{gid,item,stack,holder,handle,amount,amount}).first;
-            int target=MAX(amount,999);materialOK&=MHTControlWrite(stack+0x38,&target,4)&&r<int>(stack+0x38)==target;it->second.last=target;
+            int target=MAX(amount,999);materialOK&=(amount==target||MHTControlWrite(stack+0x38,&target,4))&&r<int>(stack+0x38)==target;it->second.last=target;
         }else{auto it=s.stacks.find(gid);if(it!=s.stacks.end()){if(amount==it->second.last)MHTControlWrite(stack+0x38,&it->second.original,4);s.stacks.erase(it);}}
     }
     for(auto it=s.stacks.begin();it!=s.stacks.end();)if(!live.count(it->first))it=s.stacks.erase(it);else ++it;

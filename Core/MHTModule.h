@@ -5,11 +5,19 @@
 @property(nonatomic,copy) NSString *directory;
 @property(nonatomic,readonly) NSString *identifier;
 @property(nonatomic,readonly) NSString *name;
+@property(nonatomic,readonly) NSString *version;
+@property(nonatomic,readonly) BOOL installed;
+@property(nonatomic,readonly) NSString *installRevision;
+@property(nonatomic,readonly) NSString *installationLabel;
+// Metadata only for remote entries; no runtime is loaded into the host.
+@property(nonatomic,copy) NSDictionary *catalogVersion;
+@property(nonatomic) BOOL updateAvailable;
 @property(nonatomic,readonly) NSArray<NSDictionary *> *profiles;
 @property(nonatomic,readonly) NSArray<NSDictionary *> *features;
 // Presentation only; feature IDs and the native catalog remain unchanged.
 @property(nonatomic,readonly) NSArray<NSDictionary *> *featureGroups;
 + (BOOL)validFeatureGroups:(id)groups featureCount:(NSUInteger)count;
++ (BOOL)validManifest:(id)manifest error:(NSError **)error;
 + (NSArray<MHTModule *> *)loadModules:(NSString *)directory errors:(NSMutableArray<NSString *> *)errors;
 + (NSString *)moduleDirectory;
 + (NSArray<MHTModule *> *)availableModules:(NSMutableArray<NSString *> *)errors;

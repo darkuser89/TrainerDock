@@ -184,7 +184,7 @@ static uint8_t editStat(MTFeature f) {
     uintptr_t address=base+offset;uint8_t previous[64];if(!MTReadMemory((void *)address,previous,n))return NO;
     if(r && (n!=[r[@"last"] length]||memcmp(previous,[r[@"last"] bytes],n))){[_conflicts addObject:key];return NO;}
     if(!r){r=[@{@"owner":@(owner),@"weak":weakData(owner?weak(owner):Weak{}),@"base":@(base),@"offset":@(offset),@"stat":@(id),@"original":[NSData dataWithBytes:previous length:n],@"last":[NSData dataWithBytes:previous length:n]} mutableCopy];_writes[key]=r;}
-    if(!MTWriteMemory((void *)address,bytes,n))return NO;
+    if(memcmp(previous,bytes,n) && !MTWriteMemory((void *)address,bytes,n))return NO;
     r[@"last"]=[NSData dataWithBytes:bytes length:n];uint8_t readback[64];return MTReadMemory((void *)address,readback,n)&&!memcmp(bytes,readback,n);
 }
 - (BOOL)fixed:(uint8_t)id target:(int32_t)value prefix:(NSString *)prefix {
@@ -208,7 +208,7 @@ static uint8_t editStat(MTFeature f) {
     int64_t next=int64_t(currentPartial)-previous+delta;
     if(next<INT32_MIN||next>INT32_MAX||delta<INT32_MIN||delta>INT32_MAX||base+delta<INT32_MIN||base+delta>INT32_MAX)return NO;
     if(!r){r=[@{@"weak":weakData(_statsWeak),@"stat":@(id),@"delta":@0} mutableCopy];_contributions[key]=r;}
-    setPartial(_stats,id,(int32_t)next);r[@"delta"]=@(delta);r[@"lastPartial"]=@(next);
+    if(currentPartial!=next)setPartial(_stats,id,(int32_t)next);r[@"delta"]=@(delta);r[@"lastPartial"]=@(next);
     return partial(_stats,id)==next && stat(_stats,id)==base+delta;
 }
 - (void)releaseStealth {
@@ -377,6 +377,7 @@ static uint8_t editStat(MTFeature f) {
 }
 - (BOOL)setOverlayInteraction:(BOOL)wanted {
     if(!_valid||![self isGameThread])return NO;
+    if(!wanted&&!_mouseOwned){[_platformCursor restore:YES];return NO;}
     uintptr_t world=ptr(at(0x10673d830));
     uintptr_t controller=object(world)?((uintptr_t(*)(uintptr_t,int))at(LOPGetController))(world,0):0;
     if(!object(controller)||!((bool(*)(uintptr_t))at(LOPLocalController))(controller))controller=0;

@@ -45,7 +45,10 @@ FPSpeedResult FPApplySpeed(const fp::Context &c,bool wanted,double value) {
             throw std::runtime_error("Vorheriges Engine-Tempo wartet auf bestätigte Rücknahme.");
         if(!wanted) {
             if(!releaseLease())throw std::runtime_error("Engine-Tempo-Rücknahme noch nicht bestätigt; wird erneut versucht.");
-            result.value=get(c.world);result.available=true;return result;
+            // The backend displays the requested factor, not this unused live
+            // value. With no lease there is no reason to resolve an engine CDO
+            // and invoke a native getter for an off switch.
+            result.available=true;return result;
         }
         if(!std::isfinite(value) || value<.25 || value>4)
             throw std::runtime_error("Tempo außerhalb 0,25 bis 4");
@@ -56,7 +59,7 @@ FPSpeedResult FPApplySpeed(const fp::Context &c,bool wanted,double value) {
             // A new desired write leases the foreign value as its new baseline.
             original=current;last=current;
         }
-        if(!setOwned(c.world,value)) {
+        if(current!=static_cast<float>(value) && !setOwned(c.world,value)) {
             const bool restored=releaseLease();
             throw std::runtime_error(restored ? "Engine-Tempo nicht zurückgelesen."
                 : "Engine-Tempo nicht zurückgelesen; Rücknahme wird erneut versucht.");

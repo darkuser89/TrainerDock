@@ -148,6 +148,16 @@
 			"isa" = "PBXBuildFile";
 			"fileRef" = "ECEB8461BC8525DA286936B1";
 		};
+		"67D621D47DEBF3802156D031" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "App/MHTTrainerLibrary.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"287321472DFF42170A741C39" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "67D621D47DEBF3802156D031";
+		};
 		"32FA36AB74BAC439FCAFDC0D" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.objc";
@@ -242,6 +252,26 @@
 			"isa" = "PBXBuildFile";
 			"fileRef" = "75FDEDF139FD73E324B16235";
 		};
+		"30F9740DCC41216715F312F7" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Core/MHTTrainerArchive.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"6EB00FA654B023CAF8380483" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "30F9740DCC41216715F312F7";
+		};
+		"B5E48D959C5A50E3527F8C61" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Core/MHTTrainerStore.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"E6A9196ED9AA76956E15D0C6" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "B5E48D959C5A50E3527F8C61";
+		};
 		"71A295E05EF3AAF22670B173" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.objc";
@@ -255,7 +285,7 @@
 		"1694EF60C3A8EE056828BF55" = {
 			"isa" = "PBXSourcesBuildPhase";
 			"buildActionMask" = 2147483647;
-			"files" = ("816667EAA05D1566EF55C2A8", "8E1752935B1DFCB8BFF60B4E", "D3AF5CADB89B65166CDD9444", "82336DD7D099C5B3196679E2", "E938BE848E3750C74451C7A3", "430BF5B177B1147374591557", "8F170029D39DA07380B30926", "28ACFAFA28A31D1571AC0824", "AC5B5134B5BB60B05F6BA3FA", "A0618446616328E0C16B7E4D", "A3D4D281C87F97B48F6C3A64", "E442196840C1F5D424CD14CB", "7F1177AD655FCF5E75A5FD60", "2D055E32FF0EA40BE88949F1", "CE4889B1E19CBC38F6CA3C2E");
+			"files" = ("816667EAA05D1566EF55C2A8", "8E1752935B1DFCB8BFF60B4E", "D3AF5CADB89B65166CDD9444", "82336DD7D099C5B3196679E2", "287321472DFF42170A741C39", "E938BE848E3750C74451C7A3", "430BF5B177B1147374591557", "8F170029D39DA07380B30926", "28ACFAFA28A31D1571AC0824", "AC5B5134B5BB60B05F6BA3FA", "A0618446616328E0C16B7E4D", "A3D4D281C87F97B48F6C3A64", "E442196840C1F5D424CD14CB", "7F1177AD655FCF5E75A5FD60", "2D055E32FF0EA40BE88949F1", "6EB00FA654B023CAF8380483", "E6A9196ED9AA76956E15D0C6", "CE4889B1E19CBC38F6CA3C2E");
 			"runOnlyForDeploymentPostprocessing" = 0;
 		};
 		"8FD1CA41DCCFF74B72CD7ADE" = {
@@ -290,6 +320,18 @@
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" icon\n";
 			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"1690D330C5DA076ACA024B82" = {
+			"isa" = "PBXShellScriptBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"inputPaths" = ("$(SRCROOT)/script/trainer_distribution.py");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/TrainerCatalog.json");
+			"name" = "Install trainer catalog metadata";
+			"shellPath" = "/bin/bash";
+			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" catalog\n";
+			"runOnlyForDeploymentPostprocessing" = 0;
+			"alwaysOutOfDate" = 1;
 		};
 		"A4EA575B674B3360A1567417" = {
 			"isa" = "PBXFileReference";
@@ -335,7 +377,7 @@
 		"9B492FD0BF085E3B7DBB21E0" = {
 			"isa" = "PBXNativeTarget";
 			"buildConfigurationList" = "4C02B547681A41E7B1280C1D";
-			"buildPhases" = ("1694EF60C3A8EE056828BF55", "8FD1CA41DCCFF74B72CD7ADE", "88EAC1297EFC578EA1E87A58", "42414E89EEC00F8C7B0C416D", "C5751A8ABB2E8908C1D2A9D5");
+			"buildPhases" = ("1694EF60C3A8EE056828BF55", "8FD1CA41DCCFF74B72CD7ADE", "88EAC1297EFC578EA1E87A58", "42414E89EEC00F8C7B0C416D", "1690D330C5DA076ACA024B82", "C5751A8ABB2E8908C1D2A9D5");
 			"buildRules" = ();
 			"dependencies" = ("A17AC5C1B4FEBAEDE0E42A86");
 			"name" = "TrainerDock";
@@ -351,8 +393,8 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/balatro/Module.json", "$(SRCROOT)/Modules/balatro/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Balatro/NativeContractTests.mm", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/balatro/Module.json", "$(SRCROOT)/Modules/balatro/Build.json", "$(SRCROOT)/Modules/balatro/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Balatro/NativeContractTests.mm", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/balatro.json");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module balatro\n";
@@ -589,8 +631,8 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/control/Module.json", "$(SRCROOT)/Modules/control/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Control/NativeContractTests.mm", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/control/Module.json", "$(SRCROOT)/Modules/control/Build.json", "$(SRCROOT)/Modules/control/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Control/NativeContractTests.mm", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/control.json");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module control\n";
@@ -865,8 +907,8 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/crimson-desert/Module.json", "$(SRCROOT)/Modules/crimson-desert/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/crimson-desert/Module.json", "$(SRCROOT)/Modules/crimson-desert/Build.json", "$(SRCROOT)/Modules/crimson-desert/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/crimson-desert.json");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module crimson-desert\n";
@@ -1087,8 +1129,8 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/cyberpunk-2077/Module.json", "$(SRCROOT)/Modules/cyberpunk-2077/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/cyberpunk-2077/Module.json", "$(SRCROOT)/Modules/cyberpunk-2077/Build.json", "$(SRCROOT)/Modules/cyberpunk-2077/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/cyberpunk-2077.json");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module cyberpunk-2077\n";
@@ -1339,8 +1381,8 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/dead-island-2/Module.json", "$(SRCROOT)/Modules/dead-island-2/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/DeadIsland2/ExtraFeaturesTests.m", "$(SRCROOT)/Tests/DeadIsland2/GameBridgeTests.m", "$(SRCROOT)/Tests/DeadIsland2/OverlayInputTests.m", "$(SRCROOT)/Tests/DeadIsland2/SelectionSettingsTests.m", "$(SRCROOT)/Tests/DeadIsland2OverlayHostTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/dead-island-2/Module.json", "$(SRCROOT)/Modules/dead-island-2/Build.json", "$(SRCROOT)/Modules/dead-island-2/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/DeadIsland2/ExtraFeaturesTests.m", "$(SRCROOT)/Tests/DeadIsland2/GameBridgeTests.m", "$(SRCROOT)/Tests/DeadIsland2/OverlayInputTests.m", "$(SRCROOT)/Tests/DeadIsland2/SelectionSettingsTests.m", "$(SRCROOT)/Tests/DeadIsland2OverlayHostTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/dead-island-2.json");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module dead-island-2\n";
@@ -1555,8 +1597,8 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/death-stranding/Module.json", "$(SRCROOT)/Modules/death-stranding/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/DeathStranding/NativeContractTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/death-stranding/Module.json", "$(SRCROOT)/Modules/death-stranding/Build.json", "$(SRCROOT)/Modules/death-stranding/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/DeathStranding/NativeContractTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/death-stranding.json");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module death-stranding\n";
@@ -1791,8 +1833,8 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/dome-keeper/Module.json", "$(SRCROOT)/Modules/dome-keeper/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/DomeKeeper/NativeContractTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/dome-keeper/Module.json", "$(SRCROOT)/Modules/dome-keeper/Build.json", "$(SRCROOT)/Modules/dome-keeper/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/DomeKeeper/NativeContractTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/dome-keeper.json");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module dome-keeper\n";
@@ -2029,8 +2071,8 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/escape-from-duckov/Module.json", "$(SRCROOT)/Modules/escape-from-duckov/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Duckov/NativeContractTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/escape-from-duckov/Module.json", "$(SRCROOT)/Modules/escape-from-duckov/Build.json", "$(SRCROOT)/Modules/escape-from-duckov/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Duckov/NativeContractTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/escape-from-duckov.json");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module escape-from-duckov\n";
@@ -2255,8 +2297,8 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/frostpunk-2/Module.json", "$(SRCROOT)/Modules/frostpunk-2/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Frostpunk2/UnrealContractTests.mm", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/frostpunk-2/Module.json", "$(SRCROOT)/Modules/frostpunk-2/Build.json", "$(SRCROOT)/Modules/frostpunk-2/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Frostpunk2/UnrealContractTests.mm", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/frostpunk-2.json");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module frostpunk-2\n";
@@ -2591,8 +2633,8 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/inzoi/Module.json", "$(SRCROOT)/Modules/inzoi/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/InZOI/LuaSymbols.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/inzoi/Module.json", "$(SRCROOT)/Modules/inzoi/Build.json", "$(SRCROOT)/Modules/inzoi/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/InZOI/LuaSymbols.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/inzoi.json");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module inzoi\n";
@@ -2867,8 +2909,8 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/lies-of-p/Module.json", "$(SRCROOT)/Modules/lies-of-p/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/LiesOfP/NativeContractTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/lies-of-p/Module.json", "$(SRCROOT)/Modules/lies-of-p/Build.json", "$(SRCROOT)/Modules/lies-of-p/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/LiesOfP/NativeContractTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/lies-of-p.json");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module lies-of-p\n";
@@ -3089,8 +3131,8 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/no-mans-sky/Module.json", "$(SRCROOT)/Modules/no-mans-sky/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/NoMansSky/NativeContractTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/no-mans-sky/Module.json", "$(SRCROOT)/Modules/no-mans-sky/Build.json", "$(SRCROOT)/Modules/no-mans-sky/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/NoMansSky/NativeContractTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/no-mans-sky.json");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module no-mans-sky\n";
@@ -3315,8 +3357,8 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/resident-evil-2/Module.json", "$(SRCROOT)/Modules/resident-evil-2/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/ResidentEvilBridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/resident-evil-2/Module.json", "$(SRCROOT)/Modules/resident-evil-2/Build.json", "$(SRCROOT)/Modules/_Shared/ResidentEvil/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/ResidentEvilBridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/resident-evil-2.json");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module resident-evil-2\n";
@@ -3677,8 +3719,8 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/resident-evil-3/Module.json", "$(SRCROOT)/Modules/resident-evil-3/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/ResidentEvilBridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/resident-evil-3/Module.json", "$(SRCROOT)/Modules/resident-evil-3/Build.json", "$(SRCROOT)/Modules/_Shared/ResidentEvil/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/ResidentEvilBridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/resident-evil-3.json");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module resident-evil-3\n";
@@ -3877,8 +3919,8 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/resident-evil-4/Module.json", "$(SRCROOT)/Modules/resident-evil-4/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/ResidentEvilBridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/resident-evil-4/Module.json", "$(SRCROOT)/Modules/resident-evil-4/Build.json", "$(SRCROOT)/Modules/_Shared/ResidentEvil/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/ResidentEvilBridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/resident-evil-4.json");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module resident-evil-4\n";
@@ -4077,8 +4119,8 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/resident-evil-7/Module.json", "$(SRCROOT)/Modules/resident-evil-7/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/ResidentEvilBridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/resident-evil-7/Module.json", "$(SRCROOT)/Modules/resident-evil-7/Build.json", "$(SRCROOT)/Modules/_Shared/ResidentEvil/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/ResidentEvilBridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/resident-evil-7.json");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module resident-evil-7\n";
@@ -4277,8 +4319,8 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/resident-evil-village/Module.json", "$(SRCROOT)/Modules/resident-evil-village/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/ResidentEvilBridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/resident-evil-village/Module.json", "$(SRCROOT)/Modules/resident-evil-village/Build.json", "$(SRCROOT)/Modules/_Shared/ResidentEvil/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/ResidentEvilBridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/resident-evil-village.json");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module resident-evil-village\n";
@@ -4477,8 +4519,8 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/robocop/Module.json", "$(SRCROOT)/Modules/robocop/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/robocop/Module.json", "$(SRCROOT)/Modules/robocop/Build.json", "$(SRCROOT)/Modules/robocop/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/RoboCop/LeaseWriteTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/robocop.json");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module robocop\n";
@@ -4685,12 +4727,288 @@
 			"productReference" = "9CB3948BF8BF35F41F0822D4";
 			"productType" = "com.apple.product-type.library.dynamic";
 		};
+		"7044AD035BCF6802C433E920" = {
+			"isa" = "PBXShellScriptBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/stray/Module.json", "$(SRCROOT)/Modules/stray/Build.json", "$(SRCROOT)/Modules/stray/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Stray/BootstrapContractTests.mm", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/stray.json");
+			"name" = "Catalog, bridge, native and HiDPI checks";
+			"shellPath" = "/bin/bash";
+			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module stray\n";
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"4AF18264C96B3EF6311E4BF4" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/stray/Sources/TrainerFeatures.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"497DED6361179FF76AE90E4B" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "4AF18264C96B3EF6311E4BF4";
+		};
+		"03C7099F34B664FCA9CC9141" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/stray/Sources/GameAdapter.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"DFE23F7EFAB201CAB4173F9A" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "03C7099F34B664FCA9CC9141";
+		};
+		"7F38B8477CA758A3491D5705" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/stray/Sources/NativeAdapter.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"FB883B82AE5A77FB17989B11" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "7F38B8477CA758A3491D5705";
+		};
+		"4B5825D5FA066F2EB29FD643" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/stray/Sources/GameBridge.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"B28F320CDA35C8BF17238CD5" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "4B5825D5FA066F2EB29FD643";
+		};
+		"8C7802A31B81EBD5253A4AF2" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/stray/Sources/SelectionSettings.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"F904869ED651EB274D7B7116" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "8C7802A31B81EBD5253A4AF2";
+		};
+		"32FFF5E196D202C7695B452A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/stray/Sources/GameProfile.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"2A91A9F8227CBC788F88EE22" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "32FFF5E196D202C7695B452A";
+		};
+		"0D29E367C0B2F11C875178E8" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/stray/Sources/MemoryAccess.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"0FF5A40D0027DA880B1D36B8" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "0D29E367C0B2F11C875178E8";
+		};
+		"0B2FD022CABAB640907004DB" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/stray/Sources/TrainerMaterial.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"2E4AA7AE68782BE3DD94F1D4" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "0B2FD022CABAB640907004DB";
+		};
+		"75A9A653155EDCB3C6466C75" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/stray/Sources/Overlay.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"459994B531D8536436C71B11" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "75A9A653155EDCB3C6466C75";
+		};
+		"9E0ACCBE7B235C0664E1EECB" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/stray/Sources/OverlaySettings.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"7A8AFA51DA6B5D8B241F4AF7" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "9E0ACCBE7B235C0664E1EECB";
+		};
+		"6204C180B5CE7F9D89C62F06" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/stray/Sources/OverlayShortcuts.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"9F8E5D8431E30225E09D4551" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "6204C180B5CE7F9D89C62F06";
+		};
+		"6C0F330346963B5F8ECC9FD6" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/stray/Sources/Runtime.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"4D00F8E97E349A4E3C3B9FA1" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "6C0F330346963B5F8ECC9FD6";
+		};
+		"03824C4F41BD0D23DC26438F" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/stray/Sources/StrayEngine.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"6A17B3A94D8DBE49F7544A31" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "03824C4F41BD0D23DC26438F";
+		};
+		"DAFB146CDDF49E3DF2027276" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/stray/Sources/StrayInput.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"88C76B54EF0147F962855B1E" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "DAFB146CDDF49E3DF2027276";
+		};
+		"C78582350EADE1F5B79DC280" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/stray/Sources/OverlayCursor.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"C38A851E38DD3C2C5A2F513F" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "C78582350EADE1F5B79DC280";
+		};
+		"7F0EDF4B052130AE42296D40" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/stray/Sources/PlayerEffects.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"62AFE98B65A3C4776E133893" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "7F0EDF4B052130AE42296D40";
+		};
+		"AB896FA968001FBE794970D8" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/stray/Sources/EnemyEffects.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"11B804C859F7C161DB143C60" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "AB896FA968001FBE794970D8";
+		};
+		"0F13CE4BDE49FBA45BEC3F96" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/stray/Sources/Defluxor.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"7985E72BD2318421EE1E93E2" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "0F13CE4BDE49FBA45BEC3F96";
+		};
+		"FEAB5F5B9D33081A72CEFEBB" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "22F60203652AD2078DD0A34C";
+		};
+		"443D3A0B32D56A7DE8052564" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "A0AEEDF4F51BB81D82826C2B";
+		};
+		"A6CB02139492F9C1A2D19C84" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "71A295E05EF3AAF22670B173";
+		};
+		"A651BE0A9BD0D3B69E4D9749" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ("497DED6361179FF76AE90E4B", "DFE23F7EFAB201CAB4173F9A", "FB883B82AE5A77FB17989B11", "B28F320CDA35C8BF17238CD5", "F904869ED651EB274D7B7116", "2A91A9F8227CBC788F88EE22", "0FF5A40D0027DA880B1D36B8", "2E4AA7AE68782BE3DD94F1D4", "459994B531D8536436C71B11", "7A8AFA51DA6B5D8B241F4AF7", "9F8E5D8431E30225E09D4551", "4D00F8E97E349A4E3C3B9FA1", "6A17B3A94D8DBE49F7544A31", "88C76B54EF0147F962855B1E", "C38A851E38DD3C2C5A2F513F", "62AFE98B65A3C4776E133893", "11B804C859F7C161DB143C60", "7985E72BD2318421EE1E93E2", "FEAB5F5B9D33081A72CEFEBB", "443D3A0B32D56A7DE8052564", "A6CB02139492F9C1A2D19C84");
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"80FFD8812F6084D8AE9E04D3" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"6C29D5AE5836C1CB4E8DE2C8" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "compiled.mach-o.dylib";
+			"path" = "Trainer.dylib";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"7DD7413C18F94E73AAF002D6" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "F4DEF456225CDD06E427CB99";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "Trainer";
+				"EXECUTABLE_PREFIX" = "";
+				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
+				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
+				"SKIP_INSTALL" = "YES";
+				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/stray.mhtmodule";
+				"HEADER_SEARCH_PATHS" = ("$(SRCROOT)/Modules/stray/Sources", "$(SRCROOT)/ModuleSDK", "$(DERIVED_FILE_DIR)");
+				"GCC_PREPROCESSOR_DEFINITIONS" = ("$(inherited)");
+				"OTHER_LDFLAGS" = ("$(inherited)", "-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++");
+				"ENABLE_HARDENED_RUNTIME" = "NO";
+			};
+			"name" = "Debug";
+		};
+		"82D17FDD265F01F4C7AC3302" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "F4DEF456225CDD06E427CB99";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "Trainer";
+				"EXECUTABLE_PREFIX" = "";
+				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64";
+				"ONLY_ACTIVE_ARCH" = "NO";
+				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
+				"SKIP_INSTALL" = "YES";
+				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/stray.mhtmodule";
+				"HEADER_SEARCH_PATHS" = ("$(SRCROOT)/Modules/stray/Sources", "$(SRCROOT)/ModuleSDK", "$(DERIVED_FILE_DIR)");
+				"GCC_PREPROCESSOR_DEFINITIONS" = ("$(inherited)");
+				"OTHER_LDFLAGS" = ("$(inherited)", "-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++");
+				"ENABLE_HARDENED_RUNTIME" = "NO";
+			};
+			"name" = "Release";
+		};
+		"6DE89A09065B78510EE33AAE" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = ("7DD7413C18F94E73AAF002D6", "82D17FDD265F01F4C7AC3302");
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Debug";
+		};
+		"676956BF6355DD6A1E7ABB91" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = "6DE89A09065B78510EE33AAE";
+			"buildPhases" = ("A651BE0A9BD0D3B69E4D9749", "80FFD8812F6084D8AE9E04D3", "7044AD035BCF6802C433E920");
+			"buildRules" = ();
+			"dependencies" = ();
+			"name" = "Trainer-stray";
+			"productName" = "Trainer";
+			"productReference" = "6C29D5AE5836C1CB4E8DE2C8";
+			"productType" = "com.apple.product-type.library.dynamic";
+		};
 		"88541D3C8BB4010FD261F893" = {
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/terraria/Module.json", "$(SRCROOT)/Modules/terraria/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Terraria/NativeContractTests.mm", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/terraria/Module.json", "$(SRCROOT)/Modules/terraria/Build.json", "$(SRCROOT)/Modules/terraria/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Terraria/NativeContractTests.mm", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/terraria.json");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module terraria\n";
@@ -4925,8 +5243,8 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/the-long-dark/Module.json", "$(SRCROOT)/Modules/the-long-dark/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/TheLongDark/NativeContractTests.mm", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/the-long-dark/Module.json", "$(SRCROOT)/Modules/the-long-dark/Build.json", "$(SRCROOT)/Modules/the-long-dark/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/TheLongDark/NativeContractTests.mm", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/the-long-dark.json");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module the-long-dark\n";
@@ -5181,8 +5499,8 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/turok/Module.json", "$(SRCROOT)/Modules/turok/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/Kex/SDLFixture.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Kex/NativeContractTests.m", "$(SRCROOT)/Tests/Kex/FogRendererTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/turok/Module.json", "$(SRCROOT)/Modules/turok/Build.json", "$(SRCROOT)/Modules/turok/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/Kex/SDLFixture.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Kex/NativeContractTests.m", "$(SRCROOT)/Tests/Kex/FogRendererTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/turok.json");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module turok\n";
@@ -5427,8 +5745,8 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/turok-2/Module.json", "$(SRCROOT)/Modules/turok-2/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/Kex/SDLFixture.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Kex/NativeContractTests.m", "$(SRCROOT)/Tests/Kex/FogRendererTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/turok-2/Module.json", "$(SRCROOT)/Modules/turok-2/Build.json", "$(SRCROOT)/Modules/turok-2/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/Kex/SDLFixture.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Kex/NativeContractTests.m", "$(SRCROOT)/Tests/Kex/FogRendererTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/turok-2.json");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module turok-2\n";
@@ -5673,8 +5991,8 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/vampire-crawlers/Module.json", "$(SRCROOT)/Modules/vampire-crawlers/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/VampireCrawlers/NativeContractTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/vampire-crawlers/Module.json", "$(SRCROOT)/Modules/vampire-crawlers/Build.json", "$(SRCROOT)/Modules/vampire-crawlers/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/VampireCrawlers/NativeContractTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/vampire-crawlers.json");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module vampire-crawlers\n";
@@ -5931,8 +6249,8 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/vampire-survivors/Module.json", "$(SRCROOT)/Modules/vampire-survivors/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/VampireSurvivors/NativeContractTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/vampire-survivors/Module.json", "$(SRCROOT)/Modules/vampire-survivors/Build.json", "$(SRCROOT)/Modules/vampire-survivors/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/VampireSurvivors/NativeContractTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/vampire-survivors.json");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module vampire-survivors\n";
@@ -6229,6 +6547,10 @@
 			"isa" = "PBXTargetDependency";
 			"target" = "6B5C6172466F2377029931F4";
 		};
+		"21A4186840C2B0F717A64412" = {
+			"isa" = "PBXTargetDependency";
+			"target" = "676956BF6355DD6A1E7ABB91";
+		};
 		"6BA2211DF3C25CAA7F9A92DF" = {
 			"isa" = "PBXTargetDependency";
 			"target" = "002D7C436B072E071D56EBB8";
@@ -6257,7 +6579,7 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDockEpicBroker", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/UpdaterTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/Tests/EpicLaunch/MHTEpicLaunchTests.m", "$(SRCROOT)/Core/MHTEpicLaunch.m", "$(SRCROOT)/Core/MHTEpicLaunch.h", "$(SRCROOT)/script/xcode_project.py", "$(TRAINERDOCK_BUILD_ROOT)/Modules/balatro.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/control.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/crimson-desert.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/cyberpunk-2077.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dead-island-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/death-stranding.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dome-keeper.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/escape-from-duckov.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/frostpunk-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/inzoi.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/lies-of-p.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/no-mans-sky.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-3.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-4.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-7.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-village.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/robocop.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/terraria.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/the-long-dark.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/turok.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/turok-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-crawlers.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-survivors.mhtmodule/Module.json");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDockEpicBroker", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/UpdaterTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/Tests/EpicLaunch/MHTEpicLaunchTests.m", "$(SRCROOT)/Core/MHTEpicLaunch.m", "$(SRCROOT)/Core/MHTEpicLaunch.h", "$(SRCROOT)/script/xcode_project.py", "$(TRAINERDOCK_BUILD_ROOT)/Modules/balatro.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/control.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/crimson-desert.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/cyberpunk-2077.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dead-island-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/death-stranding.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dome-keeper.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/escape-from-duckov.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/frostpunk-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/inzoi.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/lies-of-p.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/no-mans-sky.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-3.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-4.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-7.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-village.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/robocop.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/stray.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/terraria.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/the-long-dark.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/turok.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/turok-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-crawlers.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-survivors.mhtmodule/Module.json");
 			"outputPaths" = ("$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Verify launcher, module signatures and layout";
 			"shellPath" = "/bin/bash";
@@ -6288,7 +6610,7 @@
 			"isa" = "PBXAggregateTarget";
 			"buildConfigurationList" = "E22F6C63F7B2C5E22B06EE00";
 			"buildPhases" = ("0B57929311D45D24D41D5FCE");
-			"dependencies" = ("01D96416F6F93BF1DC10B9D8", "A28C28D74AE9FBAEC53CE198", "36013B31F45A59B7C8CB0888", "A0FDF4B37C707111CB32E1A5", "CF6BE48E68C0E99F81083648", "A7BDF65D7E105531D1DC649D", "B92277F24CD027F727D4514F", "34342D799653556E620628DA", "7449C3F3C34131FD0EB3A421", "C02F4B177F39822F92EA5213", "106D4641E71DA6C778CF4CBF", "6561344919C7BF6BE1F42743", "AC1F7B583FE6A11E281B8BDE", "60F380C2074288C6460BFD85", "6DBA4DB370D5F75917CA806D", "995596E49E9F6DA0E42E2708", "336BD94A1A522E8AA5F7397F", "84E408AA69E0E4CB94910C1D", "A9CDD78B45897AE592EEDDB8", "6BA2211DF3C25CAA7F9A92DF", "7DD50E27EA90517EE995A488", "864915CAAE5596B03686F391", "6C9EB4A8984D09AEA39A42C2", "1D62A35B9498B42A1E93A9B5", "07878358E7EDB489DBD1E15B");
+			"dependencies" = ("01D96416F6F93BF1DC10B9D8", "A28C28D74AE9FBAEC53CE198", "36013B31F45A59B7C8CB0888", "A0FDF4B37C707111CB32E1A5", "CF6BE48E68C0E99F81083648", "A7BDF65D7E105531D1DC649D", "B92277F24CD027F727D4514F", "34342D799653556E620628DA", "7449C3F3C34131FD0EB3A421", "C02F4B177F39822F92EA5213", "106D4641E71DA6C778CF4CBF", "6561344919C7BF6BE1F42743", "AC1F7B583FE6A11E281B8BDE", "60F380C2074288C6460BFD85", "6DBA4DB370D5F75917CA806D", "995596E49E9F6DA0E42E2708", "336BD94A1A522E8AA5F7397F", "84E408AA69E0E4CB94910C1D", "A9CDD78B45897AE592EEDDB8", "21A4186840C2B0F717A64412", "6BA2211DF3C25CAA7F9A92DF", "7DD50E27EA90517EE995A488", "864915CAAE5596B03686F391", "6C9EB4A8984D09AEA39A42C2", "1D62A35B9498B42A1E93A9B5", "07878358E7EDB489DBD1E15B");
 			"name" = "TrainerDock-Verified";
 			"productName" = "TrainerDock-Verified";
 		};
@@ -6300,7 +6622,7 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDockEpicBroker", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/UpdaterTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/Tests/EpicLaunch/MHTEpicLaunchTests.m", "$(SRCROOT)/Core/MHTEpicLaunch.m", "$(SRCROOT)/Core/MHTEpicLaunch.h", "$(SRCROOT)/script/xcode_project.py", "$(TRAINERDOCK_BUILD_ROOT)/Modules/balatro.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/control.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/crimson-desert.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/cyberpunk-2077.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dead-island-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/death-stranding.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dome-keeper.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/escape-from-duckov.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/frostpunk-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/inzoi.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/lies-of-p.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/no-mans-sky.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-3.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-4.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-7.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-village.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/robocop.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/terraria.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/the-long-dark.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/turok.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/turok-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-crawlers.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-survivors.mhtmodule/Module.json");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDockEpicBroker", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/UpdaterTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/Tests/EpicLaunch/MHTEpicLaunchTests.m", "$(SRCROOT)/Core/MHTEpicLaunch.m", "$(SRCROOT)/Core/MHTEpicLaunch.h", "$(SRCROOT)/script/xcode_project.py");
 			"outputPaths" = ("$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Verify launcher, module signatures and layout";
 			"shellPath" = "/bin/bash";
@@ -6371,6 +6693,12 @@
 			"path" = "App/MHTMenu.h";
 			"sourceTree" = "SOURCE_ROOT";
 		};
+		"E0CCF9DA88339D53979396C8" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "App/MHTTrainerLibrary.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
 		"B14609CCFFEEF157817E7EEB" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.h";
@@ -6397,7 +6725,7 @@
 		};
 		"13C4608B5138EBE9B3A45A55" = {
 			"isa" = "PBXGroup";
-			"children" = ("DC88D5694081BCC3FFDB10E5", "4891A4B31E8F1FF614C4FC25", "7671806C0BD0B16514F4141B", "F2D4E3918D1BBE220C2CA7AE", "890BDE4F897C88F73F278553", "CFD9C2F571E99B733C1BF344", "0EF1C6533DCBE77A6050BE78", "CCBCA2ADA2F9E98C493A77EA", "2AD78100CC2A2961EE446631", "4ED345BA8AD873B26B4BF6E7", "ECEB8461BC8525DA286936B1", "B14609CCFFEEF157817E7EEB", "32FA36AB74BAC439FCAFDC0D", "ED7D39E3C04D51AFAD0C698B", "292991DDDE8DA3463EAA0BCB", "E2E08CCC1B95AA8341870DE3", "4CD8372648F00300BAF48BDF", "3C116C6681C279159939BCBA", "5B69EE234172352024C9B3D1");
+			"children" = ("DC88D5694081BCC3FFDB10E5", "4891A4B31E8F1FF614C4FC25", "7671806C0BD0B16514F4141B", "F2D4E3918D1BBE220C2CA7AE", "890BDE4F897C88F73F278553", "CFD9C2F571E99B733C1BF344", "0EF1C6533DCBE77A6050BE78", "CCBCA2ADA2F9E98C493A77EA", "2AD78100CC2A2961EE446631", "4ED345BA8AD873B26B4BF6E7", "ECEB8461BC8525DA286936B1", "E0CCF9DA88339D53979396C8", "67D621D47DEBF3802156D031", "B14609CCFFEEF157817E7EEB", "32FA36AB74BAC439FCAFDC0D", "ED7D39E3C04D51AFAD0C698B", "292991DDDE8DA3463EAA0BCB", "E2E08CCC1B95AA8341870DE3", "4CD8372648F00300BAF48BDF", "3C116C6681C279159939BCBA", "5B69EE234172352024C9B3D1");
 			"name" = "App";
 			"sourceTree" = "<group>";
 		};
@@ -6431,9 +6759,21 @@
 			"path" = "Core/MHTModule.h";
 			"sourceTree" = "SOURCE_ROOT";
 		};
+		"1E6D10BB4CF13678C3C77DFB" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Core/MHTTrainerArchive.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"B3BA87D8EB83AEED7D4B57CD" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Core/MHTTrainerStore.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
 		"2BA340BF271E1A0E2D6B10FC" = {
 			"isa" = "PBXGroup";
-			"children" = ("A07675CF7C65916A421CD5BF", "CE3FD9523DC9D280BDBBD69F", "80BB4B2A2BB7BDC714683597", "FD40B31E7DB1485ED64E6BF7", "77E0D995C1A0B31A0CE463C4", "EE09981FD6F3DAA33195E160", "6CA6132F2A5226AF8401CF9A", "91335BD57E1BEDE5040E4AC9", "ACFB5E962E9F4D466158B4CB", "75FDEDF139FD73E324B16235");
+			"children" = ("A07675CF7C65916A421CD5BF", "CE3FD9523DC9D280BDBBD69F", "80BB4B2A2BB7BDC714683597", "FD40B31E7DB1485ED64E6BF7", "77E0D995C1A0B31A0CE463C4", "EE09981FD6F3DAA33195E160", "6CA6132F2A5226AF8401CF9A", "91335BD57E1BEDE5040E4AC9", "ACFB5E962E9F4D466158B4CB", "75FDEDF139FD73E324B16235", "1E6D10BB4CF13678C3C77DFB", "30F9740DCC41216715F312F7", "B3BA87D8EB83AEED7D4B57CD", "B5E48D959C5A50E3527F8C61");
 			"name" = "Core";
 			"sourceTree" = "<group>";
 		};
@@ -6525,6 +6865,18 @@
 			"isa" = "PBXGroup";
 			"children" = ("A4867D85791408DADE4D763B", "FD43824895EE6DA1E019C952", "F73F69B4AF049CAA21E8A1AB", "109D00914EB14077F1863F2B", "5F3AC9004352EBEAE90DE33A", "A167C31DF5AF5F44F09418E7", "20291EAF31809E75244ABC3D", "4453079D062BB92F8FFF6430");
 			"name" = "Kex";
+			"sourceTree" = "<group>";
+		};
+		"D3259BE9E82FD1A60D1DBF7C" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/_Shared/Managed/MetadataCache.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"4F0867EC0F35650953F16ED3" = {
+			"isa" = "PBXGroup";
+			"children" = ("D3259BE9E82FD1A60D1DBF7C");
+			"name" = "Managed";
 			"sourceTree" = "<group>";
 		};
 		"F2AC6257F642F6CF3540794E" = {
@@ -6781,7 +7133,7 @@
 		};
 		"F5CD0D66BBAACE9BD02FC0DA" = {
 			"isa" = "PBXGroup";
-			"children" = ("F577290FBEBE66D032A717B7", "3E9222D68D78AFDC47F9F929");
+			"children" = ("F577290FBEBE66D032A717B7", "4F0867EC0F35650953F16ED3", "3E9222D68D78AFDC47F9F929");
 			"name" = "_Shared";
 			"sourceTree" = "<group>";
 		};
@@ -8591,6 +8943,180 @@
 			"name" = "robocop";
 			"sourceTree" = "<group>";
 		};
+		"F49AE3A0F4DBB95E9E096FC9" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/stray/Sources/Defluxor.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"EB3C503643397A0578799E14" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/stray/Sources/EnemyBindings.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"DA29CCA46DCB2C045646F578" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/stray/Sources/EnemyEffects.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"673EF33223F1737FF7D44582" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/stray/Sources/GameAdapter.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"CD00AB48373805D3BD5D1EF9" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/stray/Sources/GameBridge.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"53932B71F7FCF79329B94139" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/stray/Sources/GameProfile.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"056232A27FCCC2BED0D322D0" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/stray/Sources/LICENSE";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"95DC89E406DA52E6B0CC1ECA" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/stray/Sources/MemoryAccess.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"C1FFE8BC2444756F6E41CA71" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/stray/Sources/NativeAdapter.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"AF858A697980D3BC4B5FDBB1" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/stray/Sources/Overlay.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"E550AF2267D849CD8E4BA77C" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/stray/Sources/OverlayCursor.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"889BA4A800D39D35D6F0C3CA" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/stray/Sources/OverlaySettings.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"1934879E7893C9B27E326D2C" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/stray/Sources/OverlayShortcuts.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"2FE15980E44C935BAA679FE1" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/stray/Sources/PlayerEffects.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"60D443BC2AB17A1DF418FBC2" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/stray/Sources/SelectionSettings.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"CD3A0373414E08AB8B765763" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/stray/Sources/StrayBindings.inc";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"4380D5C471198011D1973AC8" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/stray/Sources/StrayEngine.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"087FA811959AF47849279F31" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/stray/Sources/StrayFieldSearch.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"D738E049CF79CDB6769E0434" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/stray/Sources/StrayInput.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"1D7BC6FEB5EC0E77B22332A8" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/stray/Sources/StrayMetadataGuard.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"503F1A3FEAF8CEEFFCAA131D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/stray/Sources/TrainerFeatures.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"0C7EFCBCF6798C527839FE16" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/stray/Sources/TrainerMaterial.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"32A3DF98B7EF4C699AB88DAA" = {
+			"isa" = "PBXGroup";
+			"children" = ("F49AE3A0F4DBB95E9E096FC9", "0F13CE4BDE49FBA45BEC3F96", "EB3C503643397A0578799E14", "DA29CCA46DCB2C045646F578", "AB896FA968001FBE794970D8", "673EF33223F1737FF7D44582", "03C7099F34B664FCA9CC9141", "CD00AB48373805D3BD5D1EF9", "4B5825D5FA066F2EB29FD643", "53932B71F7FCF79329B94139", "32FFF5E196D202C7695B452A", "056232A27FCCC2BED0D322D0", "95DC89E406DA52E6B0CC1ECA", "0D29E367C0B2F11C875178E8", "C1FFE8BC2444756F6E41CA71", "7F38B8477CA758A3491D5705", "AF858A697980D3BC4B5FDBB1", "75A9A653155EDCB3C6466C75", "E550AF2267D849CD8E4BA77C", "C78582350EADE1F5B79DC280", "889BA4A800D39D35D6F0C3CA", "9E0ACCBE7B235C0664E1EECB", "1934879E7893C9B27E326D2C", "6204C180B5CE7F9D89C62F06", "2FE15980E44C935BAA679FE1", "7F0EDF4B052130AE42296D40", "6C0F330346963B5F8ECC9FD6", "60D443BC2AB17A1DF418FBC2", "8C7802A31B81EBD5253A4AF2", "CD3A0373414E08AB8B765763", "4380D5C471198011D1973AC8", "03824C4F41BD0D23DC26438F", "087FA811959AF47849279F31", "D738E049CF79CDB6769E0434", "DAFB146CDDF49E3DF2027276", "1D7BC6FEB5EC0E77B22332A8", "503F1A3FEAF8CEEFFCAA131D", "4AF18264C96B3EF6311E4BF4", "0C7EFCBCF6798C527839FE16", "0B2FD022CABAB640907004DB");
+			"name" = "Sources";
+			"sourceTree" = "<group>";
+		};
+		"3F5E248A510674CCF6562306" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/stray/AGENTS.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"33A2E92454F7EB574ACEA615" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/stray/Build.json";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"CAE7496404470E465DE774DC" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/stray/CHAT_START.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"F0F16B66EDDD51EA1FBF13A4" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/stray/Module.json";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"5DDB43B7954BB43F1BC488A2" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/stray/README.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"E44D1C1848AD6A203FDB1CD5" = {
+			"isa" = "PBXGroup";
+			"children" = ("32A3DF98B7EF4C699AB88DAA", "3F5E248A510674CCF6562306", "33A2E92454F7EB574ACEA615", "CAE7496404470E465DE774DC", "F0F16B66EDDD51EA1FBF13A4", "5DDB43B7954BB43F1BC488A2");
+			"name" = "stray";
+			"sourceTree" = "<group>";
+		};
 		"628328C240313FF9DA7954FD" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.h";
@@ -9385,7 +9911,7 @@
 		};
 		"3797E64238CADC23F937DE2E" = {
 			"isa" = "PBXGroup";
-			"children" = ("F5CD0D66BBAACE9BD02FC0DA", "062F91E27C907B63C78F7073", "F29A61C506744D62FFB58934", "1F9595D298B0BD4FF2FF13AE", "FDFA05E8490CAC3E37AE63AF", "898B94E7AC7DB70258FD2A01", "68C7961B65B1794F4BF28196", "50E4DE60874E10233AA7AFC8", "98439BD32F5C169B43BE76B6", "0AF43817911FFDCB111070D9", "4EC81F2EB8C383AA17DF6AE5", "027A2B1713B83CD8FE2CBA30", "D0394ED0C36569BFD589E21B", "660D1D64EB32477DA11A088A", "4F86B9E2458B5BE159E75394", "173345CF9A59DE6320E20C81", "3838914CEA3D824168E88C24", "378A4E09183E2A1D8A7D4C55", "5808CBF31DC8F0ED68AE438C", "5D681153DFF38506792EA780", "7B5AAD514B418ABABE7D686E", "610AA1E9AF73168D94F702C1", "3577637F891C0A404F721F5C", "430F7067714B7904EBD099D9", "D77FA87A6E6576CD5A0AE202");
+			"children" = ("F5CD0D66BBAACE9BD02FC0DA", "062F91E27C907B63C78F7073", "F29A61C506744D62FFB58934", "1F9595D298B0BD4FF2FF13AE", "FDFA05E8490CAC3E37AE63AF", "898B94E7AC7DB70258FD2A01", "68C7961B65B1794F4BF28196", "50E4DE60874E10233AA7AFC8", "98439BD32F5C169B43BE76B6", "0AF43817911FFDCB111070D9", "4EC81F2EB8C383AA17DF6AE5", "027A2B1713B83CD8FE2CBA30", "D0394ED0C36569BFD589E21B", "660D1D64EB32477DA11A088A", "4F86B9E2458B5BE159E75394", "173345CF9A59DE6320E20C81", "3838914CEA3D824168E88C24", "378A4E09183E2A1D8A7D4C55", "5808CBF31DC8F0ED68AE438C", "E44D1C1848AD6A203FDB1CD5", "5D681153DFF38506792EA780", "7B5AAD514B418ABABE7D686E", "610AA1E9AF73168D94F702C1", "3577637F891C0A404F721F5C", "430F7067714B7904EBD099D9", "D77FA87A6E6576CD5A0AE202");
 			"name" = "Modules";
 			"sourceTree" = "<group>";
 		};
@@ -9479,6 +10005,12 @@
 			"path" = "Tests/Control/FinalDiagnostic.mm";
 			"sourceTree" = "SOURCE_ROOT";
 		};
+		"B90B98DA005D31B6AED2152F" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/Control/IdleMaintenanceTests.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
 		"34F36895198DB1B4413187CE" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.cpp.objcpp";
@@ -9495,6 +10027,12 @@
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.cpp.objcpp";
 			"path" = "Tests/Control/InventoryDiagnostic.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"0F705FFB1116F7CA05443AC9" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/Control/InventoryMaintenanceTests.mm";
 			"sourceTree" = "SOURCE_ROOT";
 		};
 		"68B9A95593E62D2BFB00F6B2" = {
@@ -9607,7 +10145,7 @@
 		};
 		"C558322C90F7C824EA333596" = {
 			"isa" = "PBXGroup";
-			"children" = ("99E594B93ED2A4D2CBCCEB25", "4505BCC526A99D3E628AD3A1", "CBE1CFD70C6B9728CA3AB9CC", "C5634407B4E48EFF607E06F5", "B66C5E85AC69B3CE1EC17A28", "6AC6024C1872CDC437C9B203", "959E43BCAF66CDC58EDAD469", "34F36895198DB1B4413187CE", "C8D85DFF1E046A21F37BCCC2", "BC9D941FA479D0125697093F", "68B9A95593E62D2BFB00F6B2", "C8DCDEE87F9065280CF5342A", "A6A61F2B2D891545BAE7CDCC", "1C810E16478A7DB93A9C75A2", "382C3F16BA310060DACB6296", "41A70BE5A8CBAC7008B6C921", "C9945F8C737F83F9FEC563B7", "A596660C6FACED2411E03B18", "9CF97B69FC32CBA8CF7D7FF4", "0DF48778B518952C2A2CA8E3", "EB384381C3065AAEC48705A9", "BE69F53466227A80C3266625", "2CC000D157FF36BD7ED11061", "FF7C6EF960B544062C87E74D", "DE811D9AD977801FDF062CB7", "D585C023A87994125F7A82D8", "8F8A5EC64EC0BCF4427E9E6E", "A04F9CDBC9E62EF6733CE9EE");
+			"children" = ("99E594B93ED2A4D2CBCCEB25", "4505BCC526A99D3E628AD3A1", "CBE1CFD70C6B9728CA3AB9CC", "C5634407B4E48EFF607E06F5", "B66C5E85AC69B3CE1EC17A28", "6AC6024C1872CDC437C9B203", "959E43BCAF66CDC58EDAD469", "B90B98DA005D31B6AED2152F", "34F36895198DB1B4413187CE", "C8D85DFF1E046A21F37BCCC2", "BC9D941FA479D0125697093F", "0F705FFB1116F7CA05443AC9", "68B9A95593E62D2BFB00F6B2", "C8DCDEE87F9065280CF5342A", "A6A61F2B2D891545BAE7CDCC", "1C810E16478A7DB93A9C75A2", "382C3F16BA310060DACB6296", "41A70BE5A8CBAC7008B6C921", "C9945F8C737F83F9FEC563B7", "A596660C6FACED2411E03B18", "9CF97B69FC32CBA8CF7D7FF4", "0DF48778B518952C2A2CA8E3", "EB384381C3065AAEC48705A9", "BE69F53466227A80C3266625", "2CC000D157FF36BD7ED11061", "FF7C6EF960B544062C87E74D", "DE811D9AD977801FDF062CB7", "D585C023A87994125F7A82D8", "8F8A5EC64EC0BCF4427E9E6E", "A04F9CDBC9E62EF6733CE9EE");
 			"name" = "Control";
 			"sourceTree" = "<group>";
 		};
@@ -9977,6 +10515,12 @@
 			"path" = "Tests/InZOI/Evaluate.py";
 			"sourceTree" = "SOURCE_ROOT";
 		};
+		"6BB5E4FD5381BC7064BB4F91" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/InZOI/IdleTickTests.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
 		"E5C335261E532EC806013EBF" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "text";
@@ -10025,9 +10569,21 @@
 			"path" = "Tests/InZOI/Query.py";
 			"sourceTree" = "SOURCE_ROOT";
 		};
+		"4BD444FAE951F176ABC2E1A6" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/InZOI/VMDispatchSymbols.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"596E6F2446B7C83505CDEAE6" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/InZOI/VMDispatchTests.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
 		"D462BEEFAEB93437D38C2C9F" = {
 			"isa" = "PBXGroup";
-			"children" = ("AD6CBE97D13E873C22517561", "4945E115FAA69753174FBDFA", "1738D0A0F412E24A87A85DEC", "64A7D1CE23529B18BDE2121B", "E855AC9C2E4A7678A38C4337", "1D10210EE7C2D676D5C04F6F", "E5C335261E532EC806013EBF", "0AD75CD62CC8A053617D1099", "C9F3863296DB652859375038", "5713C6142B921B6060A36D8E", "A65F41C7DD14F1E14C493C4D", "4C8AF7F4FFC69B93111A7C1F", "0431F38A96BBF82FA15BBFD9", "F523AD2EA33DCA66C037E60D");
+			"children" = ("AD6CBE97D13E873C22517561", "4945E115FAA69753174FBDFA", "1738D0A0F412E24A87A85DEC", "64A7D1CE23529B18BDE2121B", "E855AC9C2E4A7678A38C4337", "1D10210EE7C2D676D5C04F6F", "6BB5E4FD5381BC7064BB4F91", "E5C335261E532EC806013EBF", "0AD75CD62CC8A053617D1099", "C9F3863296DB652859375038", "5713C6142B921B6060A36D8E", "A65F41C7DD14F1E14C493C4D", "4C8AF7F4FFC69B93111A7C1F", "0431F38A96BBF82FA15BBFD9", "F523AD2EA33DCA66C037E60D", "4BD444FAE951F176ABC2E1A6", "596E6F2446B7C83505CDEAE6");
 			"name" = "InZOI";
 			"sourceTree" = "<group>";
 		};
@@ -10035,6 +10591,12 @@
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "text";
 			"path" = "Tests/Kex/Control.swift";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"1AE89A6D68CF8D1EFED34974" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/Kex/FogPerformanceTests.m";
 			"sourceTree" = "SOURCE_ROOT";
 		};
 		"1ABE8659407DC57F7D0A4FD1" = {
@@ -10075,7 +10637,7 @@
 		};
 		"47F172D0BD1D471CF0388A64" = {
 			"isa" = "PBXGroup";
-			"children" = ("B326EB23257CADEBF64820F4", "1ABE8659407DC57F7D0A4FD1", "77BDD2A172DFCC5670CD8159", "B849F12D902436E393837A7E", "5F96A68CAE461E8816B51687", "681377F6CA22F9B1AFCB4B85", "7CFE9F9BC012899477CC8A1D");
+			"children" = ("B326EB23257CADEBF64820F4", "1AE89A6D68CF8D1EFED34974", "1ABE8659407DC57F7D0A4FD1", "77BDD2A172DFCC5670CD8159", "B849F12D902436E393837A7E", "5F96A68CAE461E8816B51687", "681377F6CA22F9B1AFCB4B85", "7CFE9F9BC012899477CC8A1D");
 			"name" = "Kex";
 			"sourceTree" = "<group>";
 		};
@@ -10091,6 +10653,66 @@
 			"name" = "LiesOfP";
 			"sourceTree" = "<group>";
 		};
+		"EA6B0D312D1D5BF8D2115C57" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/Managed/GearListTests.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"126C6F62E34DC61B4C189DD3" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/Managed/IdleFrameTests.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"F997A86BD964B9A8F1245107" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/Managed/IL2CPPMetadataTests.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"F1D86D891C7A762C280530FC" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Managed/LightFillTests.cpp.in";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"0440F1A1C9A5BC04B25688D5" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Managed/ManagedHotPathTests.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"444EC77883EB074B5DF5938C" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Managed/MetadataCacheTests.cpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"5096087E27DBFBE261C65417" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Managed/RunPerformanceTests.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"414BA22E27DAEE16828FD8D3" = {
+			"isa" = "PBXGroup";
+			"children" = ("EA6B0D312D1D5BF8D2115C57", "126C6F62E34DC61B4C189DD3", "F997A86BD964B9A8F1245107", "F1D86D891C7A762C280530FC", "0440F1A1C9A5BC04B25688D5", "444EC77883EB074B5DF5938C", "5096087E27DBFBE261C65417");
+			"name" = "Managed";
+			"sourceTree" = "<group>";
+		};
+		"8339988EA3C197419B0F9E6A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/NativePerformance/RunPerformanceTests.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"2028435DB50D71B9AC2D9152" = {
+			"isa" = "PBXGroup";
+			"children" = ("8339988EA3C197419B0F9E6A");
+			"name" = "NativePerformance";
+			"sourceTree" = "<group>";
+		};
 		"BC2DF99693E8F4744D9AB086" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.objc";
@@ -10101,6 +10723,12 @@
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "text";
 			"path" = "Tests/NoMansSky/Control.swift";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"9511913297A471A8F6FC8655" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/NoMansSky/IdleMaintenanceTests.m";
 			"sourceTree" = "SOURCE_ROOT";
 		};
 		"4259EF6A148E40FF41887C15" = {
@@ -10129,8 +10757,128 @@
 		};
 		"C7937F2CF58FBDC42DD73A82" = {
 			"isa" = "PBXGroup";
-			"children" = ("BC2DF99693E8F4744D9AB086", "707F8F2E6EA78D227EA535E2", "4259EF6A148E40FF41887C15", "9DD83E6110D3CA6627AD90BF", "4BCEEA61C0216484EBD44FA6", "EAC34D10A178CCEA29EA3F13");
+			"children" = ("BC2DF99693E8F4744D9AB086", "707F8F2E6EA78D227EA535E2", "9511913297A471A8F6FC8655", "4259EF6A148E40FF41887C15", "9DD83E6110D3CA6627AD90BF", "4BCEEA61C0216484EBD44FA6", "EAC34D10A178CCEA29EA3F13");
 			"name" = "NoMansSky";
+			"sourceTree" = "<group>";
+		};
+		"CEEA6662D939735D1C3C4003" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/ResidentEvil/IdleMaintenanceTests.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"2A2D710C03603B9081651734" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/ResidentEvil/LedgerPerformanceTests.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"E23C8F9FADE485BB2413FC4D" = {
+			"isa" = "PBXGroup";
+			"children" = ("CEEA6662D939735D1C3C4003", "2A2D710C03603B9081651734");
+			"name" = "ResidentEvil";
+			"sourceTree" = "<group>";
+		};
+		"8893E745F53D6B0746B74D60" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/RoboCop/LeaseWriteTests.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"70352AD347BDDCBB3E9C2D71" = {
+			"isa" = "PBXGroup";
+			"children" = ("8893E745F53D6B0746B74D60");
+			"name" = "RoboCop";
+			"sourceTree" = "<group>";
+		};
+		"9AE51AC9748FA4D0A04A5AF7" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/Stray/BootstrapContractTests.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"2B05A350F2304F28029E197B" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Stray/BuildCandidate.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"A51B445CAE125FBBA6FC9329" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Stray/Control.swift";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"911CA17C89D05C1F0A471179" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/Stray/CursorTests.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"E490E01C954A241A6C56B9B5" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/Stray/DefluxorContractTests.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"117868A9D6F1115EBCCB069A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/Stray/EnemyContractTests.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"F9BFBC3CF94D2423A635C036" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/Stray/FieldSearchTests.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"C9BE6FF06A0B4E48A2D2AB30" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/Stray/InputLeaseTests.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"FC9B59512C17C8CC2225EC22" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Stray/Inspect.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"B807E0B1C2920F92D58412FB" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Stray/Launch.swift";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"A384ABEFB6A012B1CF98FA68" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/Stray/MetadataCacheTests.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"8B902C6FFB34D11817D898BD" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/Stray/PlayerLeaseTests.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"397F3E676F1F46E5AFAB279A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/Stray/Probe.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"9396D0A28B9CC9C76690A567" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Stray/Query.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"A0B8D4F7790FF0A7CD35B821" = {
+			"isa" = "PBXGroup";
+			"children" = ("9AE51AC9748FA4D0A04A5AF7", "2B05A350F2304F28029E197B", "A51B445CAE125FBBA6FC9329", "911CA17C89D05C1F0A471179", "E490E01C954A241A6C56B9B5", "117868A9D6F1115EBCCB069A", "F9BFBC3CF94D2423A635C036", "C9BE6FF06A0B4E48A2D2AB30", "FC9B59512C17C8CC2225EC22", "B807E0B1C2920F92D58412FB", "A384ABEFB6A012B1CF98FA68", "8B902C6FFB34D11817D898BD", "397F3E676F1F46E5AFAB279A", "9396D0A28B9CC9C76690A567");
+			"name" = "Stray";
 			"sourceTree" = "<group>";
 		};
 		"C984C9640AE611D073891C75" = {
@@ -10269,6 +11017,54 @@
 			"isa" = "PBXGroup";
 			"children" = ("10EE681AA842DBACE84477B0", "CA45F85EBFFA29630882DDC7", "8D711399345D7AA2AC546A5A", "A8E0A77578A7AB735DD55B26", "B3C06B4B13040A4B8FED8992", "36F1E5BFADD18FA04A4DBC00", "30DE89535AC55E8A0082A264", "0BEF2DE55A823513E0450925", "339CD85CF54648867CE90930", "161FE3303A6B4FBF37F218AE", "22CDE40908108C1F8E52D450", "B7AA26E8B890026D5703ECA5");
 			"name" = "TheLongDark";
+			"sourceTree" = "<group>";
+		};
+		"A4599E409628E6C1523D6004" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/TrainerDistribution/BuildTools.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"EACC07BE953726337E07A2E0" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/TrainerDistribution/DownloadSmoke.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"0C5586D8E0A1B25335C1AFC7" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/TrainerDistribution/ImportLegacy.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"7EFFB12CC467FBC04DA1FF6A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/TrainerDistribution/RunTests.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"243930069756C892F3FE0BA9" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/TrainerDistribution/StoreTests.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"9F9A7451392F18218D813F04" = {
+			"isa" = "PBXGroup";
+			"children" = ("A4599E409628E6C1523D6004", "EACC07BE953726337E07A2E0", "0C5586D8E0A1B25335C1AFC7", "7EFFB12CC467FBC04DA1FF6A", "243930069756C892F3FE0BA9");
+			"name" = "TrainerDistribution";
+			"sourceTree" = "<group>";
+		};
+		"B6BF809F0FC64252DC3445A3" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/UnrealPerformance/RunPerformanceTests.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"E664071C6F2BCF7EE1084992" = {
+			"isa" = "PBXGroup";
+			"children" = ("B6BF809F0FC64252DC3445A3");
+			"name" = "UnrealPerformance";
 			"sourceTree" = "<group>";
 		};
 		"B3428F00090617853BD1CBF5" = {
@@ -10415,6 +11211,12 @@
 			"path" = "Tests/test_ci_version.py";
 			"sourceTree" = "SOURCE_ROOT";
 		};
+		"DB9AF736CFC1402AD48660C4" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/test_distribution.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
 		"54F9CF01D24044637CF3D68C" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "text";
@@ -10447,7 +11249,7 @@
 		};
 		"6DC4FAD667A85B8567F612FB" = {
 			"isa" = "PBXGroup";
-			"children" = ("95B85911D95C09F76077731D", "C558322C90F7C824EA333596", "9681BA565B80261048F375D6", "578887ED95FE266FE7E3C8CC", "774BF8DD634424BA7BD916BA", "3C9AA7F0D72E39A723213356", "9ABCB2D9903EA261D4B7675F", "5AF284A3CC275F9661B07490", "AAA2EB948E4ACFEE43FAC82B", "D462BEEFAEB93437D38C2C9F", "47F172D0BD1D471CF0388A64", "C8438F0955C23E64B24CBFF4", "C7937F2CF58FBDC42DD73A82", "453BCC9F40C25129A11AFE42", "66C06B56AC0DB42568B2CB8C", "0AB8D325CA82C5A2F0E18B6F", "C3BD1762E47CFABFCD557C0D", "8959DF4A9F4735B4184ED876", "FE179AB05960397A0672CCDC", "272738046A71249570292AA4", "DAB207F704FDB6B20BDD3AA5", "92301B6E4315211EDE150A05", "EE99C02AC506535CD0888494", "46494363C1164468D58AC7DD", "619756B388236A8F9381AE69", "7392DD52806320306589C2A7", "54F9CF01D24044637CF3D68C", "8B873C8801208A32F871EEF6", "C10871D3BA468B9911412563", "3D3477CCF699C841A7E9A36D", "C20FA7C518ADBFC4CFB3FE75");
+			"children" = ("95B85911D95C09F76077731D", "C558322C90F7C824EA333596", "9681BA565B80261048F375D6", "578887ED95FE266FE7E3C8CC", "774BF8DD634424BA7BD916BA", "3C9AA7F0D72E39A723213356", "9ABCB2D9903EA261D4B7675F", "5AF284A3CC275F9661B07490", "AAA2EB948E4ACFEE43FAC82B", "D462BEEFAEB93437D38C2C9F", "47F172D0BD1D471CF0388A64", "C8438F0955C23E64B24CBFF4", "414BA22E27DAEE16828FD8D3", "2028435DB50D71B9AC2D9152", "C7937F2CF58FBDC42DD73A82", "E23C8F9FADE485BB2413FC4D", "70352AD347BDDCBB3E9C2D71", "A0B8D4F7790FF0A7CD35B821", "453BCC9F40C25129A11AFE42", "66C06B56AC0DB42568B2CB8C", "9F9A7451392F18218D813F04", "E664071C6F2BCF7EE1084992", "0AB8D325CA82C5A2F0E18B6F", "C3BD1762E47CFABFCD557C0D", "8959DF4A9F4735B4184ED876", "FE179AB05960397A0672CCDC", "272738046A71249570292AA4", "DAB207F704FDB6B20BDD3AA5", "92301B6E4315211EDE150A05", "EE99C02AC506535CD0888494", "46494363C1164468D58AC7DD", "619756B388236A8F9381AE69", "7392DD52806320306589C2A7", "DB9AF736CFC1402AD48660C4", "54F9CF01D24044637CF3D68C", "8B873C8801208A32F871EEF6", "C10871D3BA468B9911412563", "3D3477CCF699C841A7E9A36D", "C20FA7C518ADBFC4CFB3FE75");
 			"name" = "Tests";
 			"sourceTree" = "<group>";
 		};
@@ -10691,6 +11493,12 @@
 			"path" = "script/release.py";
 			"sourceTree" = "SOURCE_ROOT";
 		};
+		"4439DE3D2E492CDB0A007BC1" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "script/trainer_distribution.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
 		"5B6E1FBC07A724EEE167B29B" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "text";
@@ -10705,7 +11513,7 @@
 		};
 		"85487AF95FE8060AE6366092" = {
 			"isa" = "PBXGroup";
-			"children" = ("B2E0D4D5162B5D18A81FBDC4", "54AF040D7250B86A3D44C62F", "1A30D4623DCCCBECC24A5819", "CFA4B601BAB50361408AA8E6", "AC3BA1AA1A2857D310AC7927", "2E846E4C478E231648CBC7BC", "F9F3191982F979775719036E", "B1933F8E4EC05F02AC9318E6", "5B6E1FBC07A724EEE167B29B", "D8AFCC943A4121B40CFA77A1");
+			"children" = ("B2E0D4D5162B5D18A81FBDC4", "54AF040D7250B86A3D44C62F", "1A30D4623DCCCBECC24A5819", "CFA4B601BAB50361408AA8E6", "AC3BA1AA1A2857D310AC7927", "2E846E4C478E231648CBC7BC", "F9F3191982F979775719036E", "B1933F8E4EC05F02AC9318E6", "4439DE3D2E492CDB0A007BC1", "5B6E1FBC07A724EEE167B29B", "D8AFCC943A4121B40CFA77A1");
 			"name" = "script";
 			"sourceTree" = "<group>";
 		};
@@ -10759,7 +11567,7 @@
 		};
 		"0A3E27B8CA818264D75C8D81" = {
 			"isa" = "PBXGroup";
-			"children" = ("18FF5A37EC6215B0C548A632", "A4EA575B674B3360A1567417", "0C54B35A036A6A5F66500870", "8514A5005905E7AC966AA13D", "ABC009279859D95948608A7B", "DAE68E039F16F762988438F5", "B4C2EC0A318F35C0C0F88CC3", "F36F43EECD8C85A9C338A275", "96E0801C832166B4B9D6BAD1", "FBCB12816DDC187D9622F973", "9CBC248AE6CBF096D8AAD3DD", "90B2896427AD88F06AEE44DA", "D662E4D0C40E51E0943D2A8C", "8DD27ED101D41C973ED3B0C2", "01A159395358FF6CA61C1BDC", "FF06EF98D1125FEFFB9F65F4", "D16E45F13555F4C93C52D080", "A6158DD26712C538D5C34682", "F3C7869E35D9A1879E8D484B", "9CB3948BF8BF35F41F0822D4", "A2AF556B254194350707E231", "72ECF1D380F962AA039CB4A1", "454B0AF300D7EB5DCFEB0A57", "D13E33385F8F44CE6DBF726C", "F049A51994C694CFB36F118F", "4E14C6621731AC7373885BE2");
+			"children" = ("18FF5A37EC6215B0C548A632", "A4EA575B674B3360A1567417", "0C54B35A036A6A5F66500870", "8514A5005905E7AC966AA13D", "ABC009279859D95948608A7B", "DAE68E039F16F762988438F5", "B4C2EC0A318F35C0C0F88CC3", "F36F43EECD8C85A9C338A275", "96E0801C832166B4B9D6BAD1", "FBCB12816DDC187D9622F973", "9CBC248AE6CBF096D8AAD3DD", "90B2896427AD88F06AEE44DA", "D662E4D0C40E51E0943D2A8C", "8DD27ED101D41C973ED3B0C2", "01A159395358FF6CA61C1BDC", "FF06EF98D1125FEFFB9F65F4", "D16E45F13555F4C93C52D080", "A6158DD26712C538D5C34682", "F3C7869E35D9A1879E8D484B", "9CB3948BF8BF35F41F0822D4", "6C29D5AE5836C1CB4E8DE2C8", "A2AF556B254194350707E231", "72ECF1D380F962AA039CB4A1", "454B0AF300D7EB5DCFEB0A57", "D13E33385F8F44CE6DBF726C", "F049A51994C694CFB36F118F", "4E14C6621731AC7373885BE2");
 			"name" = "Products";
 			"sourceTree" = "<group>";
 		};
@@ -10803,7 +11611,7 @@
 			"productRefGroup" = "0A3E27B8CA818264D75C8D81";
 			"projectDirPath" = "";
 			"projectRoot" = "";
-			"targets" = ("280950CF6AC5C31930FDD3EB", "9B492FD0BF085E3B7DBB21E0", "6B7CD1EF17007936405E1B6E", "92849A14EE4AD84BE6FBDA13", "1366DF5032A73C177DC2C81B", "6FD9A6562490373088E0BC39", "57169098A783799C3FAC2923", "84C3752285C773770659C886", "0ED9D04802E14338851CEA76", "240D569859218DE346C7B099", "F568D9165AED75AB55C883D5", "730DB787C419314C2E3C8E0F", "C13F7F8275A3CCFB57EEE43D", "EB68ABF763C47B3B66CB5AA9", "1F6B84363E2CB0E012842A18", "C8AF616DA5CACC5B35BBD736", "789CA890B287F8D8E55DECD9", "F5F2131170E5FCF56D851C7A", "8404F0B645EEB966D7E6C7F6", "6B5C6172466F2377029931F4", "002D7C436B072E071D56EBB8", "544C2AD9AD77B34E7C6D7F06", "AE17FDFF55D04DE26EC32CB4", "762A8D915C4EDF302A25639A", "AB37692E9208AD9A947631C4", "E4E236468DD5CC8D45F3FA82", "5826C760A6B14C431B64B1F3", "E8D25D95B7BEC2D17E3D01C9");
+			"targets" = ("280950CF6AC5C31930FDD3EB", "9B492FD0BF085E3B7DBB21E0", "6B7CD1EF17007936405E1B6E", "92849A14EE4AD84BE6FBDA13", "1366DF5032A73C177DC2C81B", "6FD9A6562490373088E0BC39", "57169098A783799C3FAC2923", "84C3752285C773770659C886", "0ED9D04802E14338851CEA76", "240D569859218DE346C7B099", "F568D9165AED75AB55C883D5", "730DB787C419314C2E3C8E0F", "C13F7F8275A3CCFB57EEE43D", "EB68ABF763C47B3B66CB5AA9", "1F6B84363E2CB0E012842A18", "C8AF616DA5CACC5B35BBD736", "789CA890B287F8D8E55DECD9", "F5F2131170E5FCF56D851C7A", "8404F0B645EEB966D7E6C7F6", "6B5C6172466F2377029931F4", "676956BF6355DD6A1E7ABB91", "002D7C436B072E071D56EBB8", "544C2AD9AD77B34E7C6D7F06", "AE17FDFF55D04DE26EC32CB4", "762A8D915C4EDF302A25639A", "AB37692E9208AD9A947631C4", "E4E236468DD5CC8D45F3FA82", "5826C760A6B14C431B64B1F3", "E8D25D95B7BEC2D17E3D01C9");
 		};
 	};
 	"rootObject" = "244210E48437B6556980A702";

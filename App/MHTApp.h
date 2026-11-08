@@ -7,4 +7,6 @@
 - (void)showLibrary:(id)sender;
 - (void)checkForUpdates:(id)sender;
 - (void)toggleAutomaticChecks:(id)sender;
+- (void)openTrainerLibrary:(id)sender;
+- (void)checkTrainerUpdates:(id)sender;
 @end

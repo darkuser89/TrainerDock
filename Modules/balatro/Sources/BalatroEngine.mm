@@ -45,7 +45,7 @@ static int tick(lua_State *L) {
  @autoreleasepool {
   if(!installed || !pthread_equal(engineThread,pthread_self()))return 0;
   frameState=L;frames++;
-  os_unfair_lock_lock(&pendingLock);NSArray<dispatch_block_t> *jobs=pending.copy;[pending removeAllObjects];os_unfair_lock_unlock(&pendingLock);
+  os_unfair_lock_lock(&pendingLock);NSArray<dispatch_block_t> *jobs=nil;if(pending.count){jobs=pending.copy;[pending removeAllObjects];}os_unfair_lock_unlock(&pendingLock);
   for(dispatch_block_t job in jobs)job();
   frameState=NULL;
  }

@@ -6,4 +6,5 @@ BOOL MHTVerifyUpdateArchive(NSURL *archive,NSDictionary *release,NSError **error
 BOOL MHTExtractUpdate(NSURL *archive,NSURL *directory,NSError **error);
 BOOL MHTValidateUpdateApp(NSURL *app,NSString *version,NSError **error);
 BOOL MHTSwapUpdate(NSURL *current,NSURL *candidate,NSError **error);
+BOOL MHTPreserveBundledTrainers(NSURL *current,NSString *storeDirectory,NSError **error);
 int MHTApplyUpdate(NSString *planPath);

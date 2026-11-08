@@ -12,6 +12,21 @@ Im Build entsteht eine eigenständige `.mhtmodule` mit `Trainer.dylib`, Manifest
 Profildatei und Lizenz. Sie benötigt kein anderes Modul und keine zentral abgelegte
 Trainerbibliothek. Die generische SDK-Anbindung wird in das Modul kompiliert.
 
+## Getrennte Versionen und Veröffentlichung
+
+Ein gemeinsames Git-Repository enthält alle Quellen. `Modules/<id>` bleibt über
+Spielupdates stabil; kein kopiertes Quellprojekt pro Spielbuild. Ein neuer
+unterstützter Spielbuild bekommt ein vollständig geprüftes eigenes Profil und
+anschließend eine neue Trainerversion. Store-/Buildidentitäten niemals still
+ersetzen. `selectionVersion` schützt inkompatible Änderungen der Funktions-IDs.
+
+CI vergleicht Quell- und Abhängigkeitsfingerabdrücke mit dem zuletzt bestätigten
+Katalog. Es baut nur betroffene Trainer und veröffentlicht unveränderliche
+`trainer-<id>-v<version>`-Pakete. Der Katalog nennt den vollständigen nativen
+Funktionskatalog, Originalprofile, Download, Größe, SHA-256 und erforderliche
+Launcher-/ABI-Version. Veröffentlichtes niemals überschreiben oder neu hashen;
+Korrekturen erhalten neue Versionsnummern. Einzelheiten: [RELEASING.md](RELEASING.md).
+
 Profile können mit `compatibilityNote` einen kurzen deutschen Editionshinweis
 (höchstens 120 Zeichen) angeben. Der Launcher zeigt ihn in Rot bei der gewählten
 Storeversion, im Profilmenü und in den Pfadeinstellungen. Er verändert keine

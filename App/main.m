@@ -24,7 +24,8 @@ int main(int argc,const char *argv[]) {@autoreleasepool {
                 if(!valid)[errors addObject:failure.localizedDescription ?: @"Identity check failed."];
             }
         }
-        return modules.count && !errors.count ? 0 : 1;
+        // A fresh launcher may intentionally have no downloaded trainers yet.
+        return !errors.count ? 0 : 1;
     }
     if(argc>2 || (argc==2 && strcmp(argv[1],"--smoke")))return 2;
     [NSApplication sharedApplication];[NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
