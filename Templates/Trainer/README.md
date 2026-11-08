@@ -20,6 +20,10 @@ Den Arbeitsauftrag aus [CHAT_START.md](CHAT_START.md) verwenden oder den globale
 Skill `$trainer-template` aufrufen. Der kanonische Vorlagenordner ist
 `/Users/jbw/Documents/MHT/Templates/Trainer`.
 
+Der Skill wird unter [skills/trainer-template](../../skills/trainer-template/SKILL.md)
+mit versioniert. Die installierte Fassung liegt unter
+`~/.codex/skills/trainer-template`; bei Skilländerungen beide Fassungen abgleichen.
+
 Ein neues Quellmodul anlegen:
 
 ```sh
@@ -89,9 +93,11 @@ Der Befehl aktualisiert `TrainerDock.xcodeproj` und baut das native Scheme
 `python3 -B script/xcode_project.py` ausführen. Mindestziel für App und Trainer
 ist macOS 27.0.
 
-Ausgabe: `~/Library/Developer/TrainerDock/Modules/mein-spiel.mhtmodule`. Anschließend im
-Launcher „Trainer & Spiele neu laden“. Das Modul enthält die ganze Trainerbibliothek,
-Profile, Katalog und Lizenz; der Launcher benötigt keine spielabhängige Änderung.
+Ausgabe: `~/Library/Developer/TrainerDock/Modules/mein-spiel.mhtmodule`. Dieses
+Buildprodukt wird nicht automatisch im Launcher installiert. Nach bestätigter
+Veröffentlichung den Katalog aktualisieren und den Trainer in der App herunterladen.
+Das Modul enthält die ganze Trainerbibliothek, Profile, Katalog und Lizenz;
+der Launcher benötigt keine spielabhängige Änderung.
 
 Details zum Vertrag: [Modulanleitung](../../docs/MODULES.md) und
 [Architektur](../../docs/ARCHITECTURE.md). Die gemeinsamen SDK-Quellen befinden sich
@@ -109,11 +115,28 @@ eigene Klicks; Tastaturfokus und geschlossene Mausbedienung bleiben beim Spiel.
 
 ## Einzelne Downloads und Spielupdates
 
-TrainerDock enthält keine gebündelten Trainerbibliotheken. Das Modul wird als
-unveränderliches Paket `trainer-<id>-v<version>` veröffentlicht und über den
-geprüften Katalog angeboten. Alte Pakete bleiben installiert, auswählbar und
-gezielt löschbar. Unter `Modules/<id>` nur eine gemeinsame Quellbasis pflegen;
-neue Spielbuilds mit eigenen vollständig geprüften Profilen ergänzen. Geänderte
-Quellen und Abhängigkeiten erhalten über CI eine neue Trainerversion. Keine alten
-Releases überschreiben, keine ungeprüften Spielbuilds automatisch freigeben.
-Siehe `docs/MODULES.md` und `docs/RELEASING.md`.
+TrainerDock enthält keine gebündelten Trainerbibliotheken. Für ein **neues Spiel**
+eine neue Modul-ID anlegen; bei **Spielupdates, weiteren Stores und Korrekturen**
+das vorhandene `Modules/<id>` weiterentwickeln. Bisherige geprüfte Profile und IDs
+erhalten, neue Originalbuilds als eigene geprüfte Profile ergänzen. Keine
+Quellkopien oder Modul-IDs je Spielversion erzeugen.
+
+Paketversion (`MAJOR.MINOR.PATCH`), Spielversion und Store getrennt halten.
+Bei inkompatibel geänderten Funktions-IDs zusätzlich `selectionVersion` ändern.
+Eine neue Paketversion ist keine automatische Freigabe eines neuen Spielbuilds.
+
+Den einzelnen Trainer mit `script/build.py --module <id> --configuration Release`
+bauen. Bei beauftragter Veröffentlichung Quellen, Tests, Profile und regeneriertes
+Xcode-Projekt zusammen auf `main` bringen. CI baut nur tatsächlich geänderte
+Produkte samt betroffenen Abhängigkeiten; einen App-Tag oder Gesamtbuild benötigt
+ein reines Trainerupdate nicht. Geteilte SDK-Änderungen können mehrere Trainer betreffen.
+
+Das Paket `trainer-<id>-v<version>` wird erst mit bestätigtem Katalogeintrag
+zum Download angeboten. Alte Releases und installierte Versionen bleiben erhalten.
+Keine veröffentlichten Pakete, Prüfsummen oder Buildbelege überschreiben.
+Eine direkte Xcode-Kompilierung ersetzt keinen Beleg des Release-Buildwrappers
+nach finalem CodeSign. `script/release.py` paketiert ausschließlich die App.
+
+Den konkreten CI-/lokalen Veröffentlichungsablauf einschließlich Wiederanlauf lesen:
+[Neue Trainer und Spielupdates veröffentlichen](../../docs/RELEASING.md#neue-trainer-und-spielupdates-veröffentlichen).
+Diese Anleitung erteilt keine zusätzliche Veröffentlichungs- oder Spielstartfreigabe.

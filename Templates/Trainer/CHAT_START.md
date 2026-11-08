@@ -23,7 +23,28 @@ Launcher nur zum Laden und Anzeigen der Moduloptionen verwenden. Builds,
 Code und Audit getrennt halten; bestehende Projekte und Saves schützen.
 Keine Spiele automatisch für Tests starten oder beenden. Nicht durchgeführte
 Ingame-Prüfungen ausdrücklich nennen und unbelegte Profile deaktiviert lassen.
+
+Lies docs/RELEASING.md zum Einzeltrainer-Ablauf. Baue gezielt mit
+script/build.py --module <id> --configuration Release. Wenn die Veröffentlichung
+beauftragt ist, Quellen, Tests, Profile und das regenerierte Xcode-Projekt gemeinsam
+auf main bringen und Paket/Katalog bis zum bestätigten Download prüfen.
+Keine Trainerbibliotheken in den Launcher einbauen oder alte Releases ersetzen.
 ```
 
 Im Auftrag Spielname, Store und gewünschte Funktionen konkret nennen. Einen
 Spielstart oder Ingame-Test bei Bedarf ausdrücklich zusätzlich beauftragen.
+
+Für ein Update statt der Neuanlage verwenden:
+
+```text
+Nutze $trainer-template, um den vorhandenen Trainer für [Spiel/Store] an den
+installierten neuen Spielbuild anzupassen. Behalte seine Modul-ID, bisherigen
+geprüften Profile, alten Releases und Benutzereinstellungen. Ergänze neue
+Originalbuilds als eigene zunächst deaktivierte Profile und prüfe deren native
+Anbindung. Kein zweites Modul und keine Quellkopie pro Spielversion anlegen.
+Lies AGENTS.md sowie docs/RELEASING.md. Baue nur den betroffenen Trainer und
+gegebenenfalls tatsächlich betroffene gemeinsame Abhängigkeiten. Unterscheide
+Paketversion, Spielbuild und Store. Bereite eine neue unveränderliche Einzelversion
+mit geprüftem Katalogeintrag vor; veröffentliche sie im Umfang meines Auftrags.
+Keine Spielstarts oder Ingame-Prüfungen ohne entsprechenden Auftrag ableiten.
+```

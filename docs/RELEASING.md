@@ -72,6 +72,96 @@ Nur Launcher-Releases `vX.Y.Z` sind stabil. Dadurch findet der bestehende
 GitHub-App-Updater weiterhin ausschließlich App-Updates. Neue Trainerpakete
 benötigen keine neue App-Veröffentlichung.
 
+## Neue Trainer und Spielupdates veröffentlichen
+
+### Neues Spiel oder vorhandener Trainer
+
+Für ein neues Spiel mit `script/new_module.py` eine neue stabile ID anlegen.
+Für ein Spielupdate, eine neue Storevariante oder eine Trainerkorrektur dagegen
+das bestehende `Modules/<id>` verwenden. Keine Modul-ID pro Spielbuild, keine
+Quellkopien je Version und keine gesonderten Git-Repositories pro Trainer anlegen.
+Alte Quellstände bleiben durch Git-Historie und unveränderliche Release-Tags erhalten.
+
+Bisherige geprüfte Profile mit ihren stabilen IDs behalten. Eine neue
+Originalidentität als eigenes, zunächst deaktiviertes Profil ergänzen; UUIDs, Version,
+Store und native Bindungen frisch prüfen. Ähnliche Adressen oder ein erfolgreiches
+Paketieren belegen keine Spielkompatibilität. Nur belegte Profile freigeben;
+nicht durchgeführte Ingame-Prüfungen ausdrücklich nennen. Spielstarts erfolgen
+ausschließlich im bereits beauftragten Umfang.
+Ein in der neuen Runtime nicht mehr belegtes Altprofil dort deaktivieren;
+die weiterhin passenden alten Pakete und ihre Profil-IDs erhalten.
+
+Die Paketversion in `Module.json` verwendet `MAJOR.MINOR.PATCH`; die Spielversion
+steht separat im Profil. CI übernimmt eine höhere konfigurierte Paketversion
+oder erhöht die Patchnummer über alle veröffentlichten/reservierten Versionen.
+Eine Korrektur erhält ein neues Paket, statt eine alte Veröffentlichung zu ersetzen.
+Bei inkompatiblen Änderungen numerischer Feature-IDs außerdem `selectionVersion`
+ändern. Alte Auswahl- und Pfadschlüssel nicht auf andere Funktionen umdeuten.
+
+### Bevorzugter Weg über GitHub Actions
+
+1. Quellen, Profile, Funktionskatalog, Gruppen und passende Tests im selben Modul
+   aktualisieren. Den vollständigen Trainer im Modul halten; der Launcher bleibt
+   allgemein. Bei eigenen C#-Änderungen zusätzlich den unten beschriebenen
+   Managed-Input-Ablauf verwenden; keine Spiel-Assemblies hochladen.
+2. Gezielt bauen und prüfen:
+
+   ```sh
+   python3 -B script/build.py --module spiel-id --configuration Release
+   python3 -B script/xcode_project.py
+   ```
+
+   Das lokale Produkt unter `~/Library/Developer/TrainerDock/Modules` ist ein
+   Buildprodukt und wird nicht automatisch zu einer installierten Benutzerversion.
+   Der Wrapper erzeugt erst nach finalem CodeSign und bestandener Prüfung den
+   passenden Veröffentlichungsbeleg. Keine geladenen Bibliotheken überschreiben.
+3. Den Diff prüfen und, wenn die Veröffentlichung beauftragt ist, die
+   zusammengehörenden Quellen, Profile, Tests und das deterministische Xcode-Projekt
+   committen und auf `main` pushen. PRs prüfen nur und veröffentlichen nichts.
+   Für einen Trainerwechsel keinen `vX.Y.Z`-App-Tag erzeugen.
+4. Den Workflow bis zum tatsächlichen Ergebnis verfolgen. Sein Bauplan enthält
+   alle geänderten Produkte und betroffenen Abhängigkeiten. Ein reines Trainerupdate
+   benötigt keinen App-Build; eine SDK-Änderung kann mehrere Trainer betreffen.
+5. Das neue `trainer-<id>-v<version>`-Asset und den bestätigten Katalogeintrag
+   prüfen. In der App „Nach Trainerupdates suchen“ bzw. die Trainerverwaltung
+   öffnen. Den neuen Trainer ausdrücklich herunterladen; der Download startet
+   kein Spiel. Bisherige Versionen bleiben daneben erhalten, auswählbar und
+   bei Nichtbenutzung gezielt löschbar. Nicht automatisch alle Trainer aktualisieren.
+
+### Lokale Paketierung bei entsprechendem Veröffentlichungsauftrag
+
+Alle Befehle laufen im kanonischen Repository und verwenden denselben externen
+Buildbaum. Für die Veröffentlichung aus dem vollständig committeten Quellstand
+arbeiten; `--commit` muss genau diesen Stand nennen. Zuerst damit planen:
+
+```sh
+python3 -B script/trainer_distribution.py plan
+```
+
+Dann **jede** in `~/Library/Developer/TrainerDock/Distribution/plan.json` unter
+`modules` genannte ID mit `script/build.py --module <id> --configuration Release`
+bauen. Erst danach:
+
+```sh
+python3 -B script/trainer_distribution.py package
+python3 -B script/trainer_distribution.py publish-trainers --commit <vollständiger-quellcommit>
+```
+
+`trainer_distribution.py` besitzt keinen `--module`-Filter: Es verarbeitet den
+bestätigten Bauplan. Enthält dieser mehrere Trainer, gehören sie alle zum
+geprüften Änderungsumfang. Der separate Befehl `script/release.py` erstellt das
+**App-Paket**, nicht einen Einzeltrainer. `publish-launcher` ist ausschließlich
+für einen tatsächlich geänderten, separat gebauten und geprüften Launcher bestimmt.
+
+Bei Quellenänderungen nach der Planung neu planen und betroffene Trainer erneut
+bauen. Bei fehlendem Beleg oder abweichendem Binary-Hash den Release-Buildwrapper
+ausführen; keine Hashes oder Belege passend schreiben. Nach einem Fehler den
+veröffentlichten Katalog und vorhandene Tags neu einlesen. Ein bereits erfolgreich
+veröffentlichtes Paket bleibt unverändert; reservierte Versionsnummern nicht
+wiederverwenden. Einen bestätigten Katalog nicht von Hand mit erfundenen Downloads
+oder Prüfsummen ergänzen. GitHub-Katalogbestätigung verwendet die unveränderliche
+Asset-ID, da die kanonische Downloadadresse kurzzeitig eine alte CDN-Antwort liefern kann.
+
 ## Lokale Vorbereitung und erste Umstellung
 
 Builddaten bleiben unter `~/Library/Developer/TrainerDock`. Normale Entwicklung:

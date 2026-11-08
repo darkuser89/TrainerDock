@@ -20,6 +20,15 @@ selbst nur bei einem Auftrag zur Verbesserung der Vorlage verändern.
   Wirkungen beachten. Einmalaktionen niemals automatisch ausführen oder wiederholen.
 - Vollständiger Trainer einschließlich Overlay bleibt im Modul; keine Spiellogik
   in `App/` oder `Core/` ergänzen. Der Launcher bleibt unverändert.
+- Nur für neue Spiele neue Modul-IDs erzeugen. Spielupdates und weitere Stores
+  ergänzen das vorhandene Modul um eigene geprüfte Profile; bisherige IDs und
+  Originalbindungen erhalten. Paketversion und Spielbuild getrennt halten.
+- Trainer einzeln mit `script/build.py --module <id> --configuration Release`
+  bauen. Bei beauftragter Veröffentlichung den gezielten CI-/Katalogablauf aus
+  [docs/RELEASING.md](../../docs/RELEASING.md#neue-trainer-und-spielupdates-veröffentlichen)
+  verwenden. Alte Releases und installierte Versionen erhalten; keine Binaries
+  in Git oder die App kopieren, keine veröffentlichten Bytes/Prüfsummen ersetzen.
+  Lokale Buildprodukte werden nicht automatisch im Launcher installiert.
 - Spielstarts und Tests im Originalprozess benötigen einen entsprechenden
   Nutzerauftrag. Builds und synthetische Tests starten keine Spiele.
 - Vor der ersten Ingame-Prüfung die projektweite Anleitung

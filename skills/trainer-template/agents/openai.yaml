@@ -1,0 +1,4 @@
+interface:
+  display_name: "Trainer Template"
+  short_description: "Native Trainer entwickeln und einzeln veröffentlichen"
+  default_prompt: "Nutze $trainer-template, um einen echten Trainer für TrainerDock anzulegen oder zu aktualisieren und eine Einzelveröffentlichung vorzubereiten."

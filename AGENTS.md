@@ -99,8 +99,9 @@ parallel von Hand pflegen. Tests sind keine Produktquellen. Xcode verwaltet
 inkrementelle Objekte im externen stabilen Buildbaum, nicht im Repository.
 
 Ein einzelnes Modul wird mit `python3 -B script/build.py --module <id>` gebaut,
-ohne den Launcher neu zu kompilieren. Danach „Trainer & Spiele neu laden“. Einzelne Entwicklungsprodukte bleiben im
-externen Buildbaum; Downloads/Installation erfolgen über die Trainerverwaltung.
+ohne den Launcher neu zu kompilieren. Entwicklungsprodukte bleiben im externen
+Buildbaum und werden nicht automatisch installiert. Bestätigte Veröffentlichungen
+über den Trainerkatalog laden und in der Trainerverwaltung installieren.
 
 GitHub Actions plant über `.github/workflows/build-release.yml` auf `xcode-27`
 gegen den zuletzt erfolgreich veröffentlichten Trainerkatalog. Nur geänderte
@@ -121,6 +122,38 @@ vom Nutzer ausdrücklich genehmigten Entwickler-Release `managed-inputs-v4`.
 bei Änderungen lokal neu kompilieren und die Bausteine bewusst aktualisieren.
 Kein stiller Hashwechsel und keine Ersatz- oder Testassembly. Details:
 `docs/RELEASING.md`. Ad-hoc-Signierung ist keine Notarisierung.
+
+### Neue Trainer und Spielupdates einzeln ausliefern
+
+- Neues Spiel: mit `script/new_module.py` eine neue stabile Modul-ID anlegen;
+  bis zur belegten Anbindung `developmentOnly` und deaktivierte Profile erhalten.
+- Spielupdate oder weiterer Store: das vorhandene `Modules/<id>` weiterentwickeln,
+  kein zweites Modul, Quellarchiv oder Versionsverzeichnis im Code anlegen.
+  Bisherige geprüfte Profile und IDs erhalten; neue Build-/Storeidentitäten als
+  eigene Profile ergänzen und deren native Bindungen tatsächlich prüfen.
+  Altprofile ohne belegte Bindung in der neuen Runtime deaktivieren; deren
+  bisherige Releases bleiben unverändert verfügbar.
+- Trainerpaketversion (`MAJOR.MINOR.PATCH`), Spielbuild und Store getrennt halten.
+  Ein neues Paket erweitert nicht automatisch die Kompatibilität. Inkompatible
+  Feature-ID-Änderungen benötigen zusätzlich eine neue `selectionVersion`.
+- Mit `python3 -B script/build.py --module <id> --configuration Release` gezielt
+  bauen und prüfen. Der Veröffentlichungsbeleg entsteht erst nach Xcodes finaler
+  Codeversiegelung; direkte Scheme-Builds oder alte Binaries ersetzen ihn nicht.
+  Lokale Buildprodukte werden nicht automatisch im Launcher installiert.
+- Bei beauftragter Veröffentlichung Quellen, Profile, Tests und das regenerierte
+  Xcode-Projekt zusammen auf `main` bringen. CI plant gegen den letzten bestätigten
+  Katalog, baut alle tatsächlich betroffenen Trainer und veröffentlicht deren
+  neue unveränderliche Pakete. Für einen reinen Trainerwechsel keinen App-Tag und
+  keinen Launcher-Gesamtbuild erzwingen. Geteilte Abhängigkeiten können mehrere
+  Trainer betreffen; den ermittelten Bauplan nicht künstlich auf eine ID kürzen.
+- Einzelreleases sind erst abgeschlossen, wenn Paket und Katalog bestätigt sind
+  und die App den Download anbietet. Alte Releases, installierte Versionen,
+  Einstellungen und laufende Runtimepfade erhalten. Paketversionen, Prüfsummen
+  und Buildbelege niemals nachträglich überschreiben oder zur Fehlerumgehung ändern.
+
+Der konkrete Ablauf einschließlich lokaler Paketierung und Wiederanlauf nach
+Fehlern steht in [docs/RELEASING.md](docs/RELEASING.md#neue-trainer-und-spielupdates-veröffentlichen).
+Diese Anleitung erweitert weder Veröffentlichungs- noch Spielstartfreigaben.
 
 Epic-Profile verwenden getrennte Storekennungen und Installationspfade, auch bei
 gleicher Bundle-ID wie Steam. `launchMode: "epic"` nutzt `Core/MHTEpicLaunch` und
