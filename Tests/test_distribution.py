@@ -178,6 +178,30 @@ class DistributionTests(unittest.TestCase):
         foreign = self.root / "ForeignBuild"; foreign.mkdir(); (foreign / "unrelated").touch()
         with self.assertRaises(ValueError): distribution.prepare_build_root(foreign)
 
+    def test_wrapper_receipt_binds_final_codesigned_bytes(self):
+        import build
+        build_root = self.root / "FinalBuild"
+        distribution.prepare_build_root(build_root)
+        product = build_root / "Modules/one.mhtmodule/Trainer.dylib"
+        product.parent.mkdir(parents=True)
+        product.write_bytes(b"before-final-codesign")
+        receipt = build_root / "BuildFingerprints/one.json"
+        receipt.parent.mkdir(); receipt.write_text('{"obsolete":true}')
+        def xcode(*args, **kwargs):
+            self.assertFalse(receipt.exists(), "old receipt survives failed native build")
+            product.write_bytes(b"after-xcode-final-codesign")
+        def verify(*args, **kwargs):
+            self.assertEqual(product.read_bytes(), b"after-xcode-final-codesign")
+            self.assertFalse(receipt.exists(), "receipt issued before final signature verification")
+        with patch("xcode_project.generate"), patch("xcode_project.released_modules",return_value=[self.root/"Modules/one"]), patch.object(build.subprocess,"check_output",return_value="27.0"), patch.object(build,"run",side_effect=xcode), patch("xcode_support.verify_products",side_effect=verify), patch.object(distribution,"module_fingerprint",return_value="a"*64):
+            build.build(build_root,module_id="one",configuration="Release")
+        stored = json.loads(receipt.read_text())
+        self.assertEqual(stored["sha256"],hashlib.sha256(product.read_bytes()).hexdigest())
+        self.assertNotEqual(stored["sha256"],hashlib.sha256(b"before-final-codesign").hexdigest())
+        with patch("xcode_project.generate"), patch("xcode_project.released_modules",return_value=[self.root/"Modules/one"]), patch.object(build.subprocess,"check_output",return_value="27.0"), patch.object(build,"run",side_effect=xcode), patch("xcode_support.verify_products",side_effect=verify), patch.object(distribution,"module_fingerprint",side_effect=["a"*64,"b"*64]):
+            with self.assertRaises(ValueError): build.build(build_root,module_id="one",configuration="Release")
+        self.assertFalse(receipt.exists(), "changed-during-build source received a publication receipt")
+
     def test_publication_refuses_stale_baseline_before_mutating(self):
         github = distribution.GitHub("test-only", "commit")
         previous = distribution.empty_catalog()

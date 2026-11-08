@@ -174,8 +174,7 @@ def generate():
         after = shell(name + ":package", "Catalog, bridge, native and HiDPI checks",
                       "module " + module.name, inputs + ["$(TARGET_BUILD_DIR)/Trainer.dylib"],
                       ["$(TARGET_BUILD_DIR)/" + p for p in ("Module.json", "TrainerConfig.json", "LICENSE")]
-                      + ["$(TARGET_TEMP_DIR)/verified.stamp",
-                         "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/" + module.name + ".json"])
+                      + ["$(TARGET_TEMP_DIR)/verified.stamp"])
         extra_links = list(links)
         for framework in config_data.get("frameworks",[]):
             if not __import__("re").fullmatch(r"[A-Za-z][A-Za-z0-9]*",framework):raise ValueError("Ungültiges Modulframework.")

@@ -110,6 +110,9 @@ def bundle_modules(root):
 
 def package_module(module_id):
     root = build_root()
+    # This phase precedes Xcode's final CodeSign. It may invalidate, but never
+    # create, a receipt claiming that the resulting runtime bytes are final.
+    (root / "BuildFingerprints" / (module_id + ".json")).unlink(missing_ok=True)
     _, _, config = module_data(module_id)
     folder = environment_path("OBJECT_FILE_DIR_normal") / config.get("architecture", "arm64")
     names = config["sources"] + config.get("sdkSources", [])
@@ -117,8 +120,6 @@ def package_module(module_id):
     common = object_file(folder, "MHTProtocol.m")
     with tempfile.TemporaryDirectory(prefix="checks-", dir=environment_path("TARGET_TEMP_DIR")) as temp:
         build.trainer(ROOT / "Modules" / module_id, root / "Modules", Path(temp), common, native_objects=objects)
-    from trainer_distribution import record_verified_build
-    record_verified_build(root, module_id)
     stamp()
 
 

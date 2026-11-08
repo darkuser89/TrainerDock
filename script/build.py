@@ -201,6 +201,13 @@ def build(build_dir, module_id=None, launcher_only=False, configuration="Debug",
     if int(sdk.split('.')[0])<27:raise ValueError("Xcode mit macOS-27-SDK oder neuer erforderlich.")
     if module_id and module_id not in [p.name for p in released_modules()]:
         raise ValueError("Unbekanntes Modul oder Entwicklungs-Vorlage, kein fertiger Trainer.")
+    from trainer_distribution import module_fingerprint, record_verified_build
+    selected = [] if launcher_only else [p for p in released_modules() if module_id is None or p.name == module_id]
+    fingerprints = {p.name: module_fingerprint(p) for p in selected}
+    # Only the wrapper can confirm final bytes after Xcode's final CodeSign.
+    # A failed/restarted native build must never retain an old publication receipt.
+    for identifier in fingerprints:
+        (build_dir/"BuildFingerprints"/(identifier+".json")).unlink(missing_ok=True)
     generate()
     scheme="Trainer-"+module_id if module_id else "TrainerDock-Launcher" if launcher_only else "TrainerDock"
     settings=[]
@@ -222,6 +229,8 @@ def build(build_dir, module_id=None, launcher_only=False, configuration="Debug",
     # Trainer packages remain separate products. Building one never changes or
     # re-signs the launcher, and a launcher build needs no installed trainers.
     verify_products(build_dir,module_id,modules=not launcher_only)
+    for identifier, fingerprint in fingerprints.items():
+        record_verified_build(build_dir,identifier,fingerprint)
     product=build_dir/"Modules"/(module_id+".mhtmodule") if module_id else build_dir/"TrainerDock.app"
     print(f"Xcode-Build und Prüfungen erfolgreich: {product}")
     return product

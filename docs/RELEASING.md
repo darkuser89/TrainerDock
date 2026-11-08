@@ -96,10 +96,13 @@ python3 -B script/trainer_distribution.py package
 
 `plan` schreibt den bestätigten Ausgangskatalog und Bauplan unter `Distribution/`;
 `package` prüft und verpackt die tatsächlich geänderten externen Runtimepakete.
-Ein nach bestandenen nativen Prüfungen erzeugter Beleg unter `BuildFingerprints/`
+Ein erst nach vollständig beendetem Xcode-Build, finaler CodeSign-Phase und
+Signaturprüfung vom Buildwrapper erzeugter Beleg unter `BuildFingerprints/`
 bindet Quellfingerprint und tatsächliche Bibliotheksbytes. Fehlende oder abweichende
 Belege verlangen einen neuen Trainerbuild; alte externe Binaries werden nicht
-blind aktuellen Quellen zugeordnet.
+blind aktuellen Quellen zugeordnet. Direkte Xcode-Scheme-Builds erzeugen keinen
+Veröffentlichungsbeleg; dafür anschließend `script/build.py --module <id>`
+verwenden. Quelländerungen während des Builds verhindern die Belegerstellung.
 Für die allererste Offline-Vorbereitung kann `--catalog <datei>` einen expliziten
 bestätigten oder leeren Bootstrapkatalog verwenden. Keine erfundenen Paket-URLs
 oder Prüfsummen ergänzen. `publish-trainers` veröffentlicht anschließend die

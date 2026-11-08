@@ -324,11 +324,13 @@ def package_module(build_root, item):
     return record
 
 
-def record_verified_build(build_root, identifier):
-    """Only called after the real native product and all its checks succeeded."""
+def record_verified_build(build_root, identifier, expected_fingerprint):
+    """Only the wrapper calls this after Xcode exits and final signing verifies."""
+    if module_fingerprint(ROOT / "Modules" / identifier) != expected_fingerprint:
+        raise ValueError("Trainerquellen haben sich während des Builds geändert; erneut bauen.")
     library = Path(build_root) / "Modules" / (identifier + ".mhtmodule/Trainer.dylib")
     write_json(Path(build_root) / "BuildFingerprints" / (identifier + ".json"), {
-        "fingerprint": module_fingerprint(ROOT / "Modules" / identifier),
+        "fingerprint": expected_fingerprint,
         "sha256": hashlib.sha256(library.read_bytes()).hexdigest()})
 
 

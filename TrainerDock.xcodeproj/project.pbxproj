@@ -394,7 +394,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = ();
 			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/balatro/Module.json", "$(SRCROOT)/Modules/balatro/Build.json", "$(SRCROOT)/Modules/balatro/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Balatro/NativeContractTests.mm", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/balatro.json");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module balatro\n";
@@ -632,7 +632,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = ();
 			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/control/Module.json", "$(SRCROOT)/Modules/control/Build.json", "$(SRCROOT)/Modules/control/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Control/NativeContractTests.mm", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/control.json");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module control\n";
@@ -908,7 +908,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = ();
 			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/crimson-desert/Module.json", "$(SRCROOT)/Modules/crimson-desert/Build.json", "$(SRCROOT)/Modules/crimson-desert/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/crimson-desert.json");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module crimson-desert\n";
@@ -1130,7 +1130,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = ();
 			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/cyberpunk-2077/Module.json", "$(SRCROOT)/Modules/cyberpunk-2077/Build.json", "$(SRCROOT)/Modules/cyberpunk-2077/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/cyberpunk-2077.json");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module cyberpunk-2077\n";
@@ -1382,7 +1382,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = ();
 			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/dead-island-2/Module.json", "$(SRCROOT)/Modules/dead-island-2/Build.json", "$(SRCROOT)/Modules/dead-island-2/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/DeadIsland2/ExtraFeaturesTests.m", "$(SRCROOT)/Tests/DeadIsland2/GameBridgeTests.m", "$(SRCROOT)/Tests/DeadIsland2/OverlayInputTests.m", "$(SRCROOT)/Tests/DeadIsland2/SelectionSettingsTests.m", "$(SRCROOT)/Tests/DeadIsland2OverlayHostTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/dead-island-2.json");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module dead-island-2\n";
@@ -1598,7 +1598,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = ();
 			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/death-stranding/Module.json", "$(SRCROOT)/Modules/death-stranding/Build.json", "$(SRCROOT)/Modules/death-stranding/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/DeathStranding/NativeContractTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/death-stranding.json");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module death-stranding\n";
@@ -1834,7 +1834,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = ();
 			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/dome-keeper/Module.json", "$(SRCROOT)/Modules/dome-keeper/Build.json", "$(SRCROOT)/Modules/dome-keeper/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/DomeKeeper/NativeContractTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/dome-keeper.json");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module dome-keeper\n";
@@ -2072,7 +2072,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = ();
 			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/escape-from-duckov/Module.json", "$(SRCROOT)/Modules/escape-from-duckov/Build.json", "$(SRCROOT)/Modules/escape-from-duckov/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Duckov/NativeContractTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/escape-from-duckov.json");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module escape-from-duckov\n";
@@ -2298,7 +2298,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = ();
 			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/frostpunk-2/Module.json", "$(SRCROOT)/Modules/frostpunk-2/Build.json", "$(SRCROOT)/Modules/frostpunk-2/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Frostpunk2/UnrealContractTests.mm", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/frostpunk-2.json");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module frostpunk-2\n";
@@ -2634,7 +2634,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = ();
 			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/inzoi/Module.json", "$(SRCROOT)/Modules/inzoi/Build.json", "$(SRCROOT)/Modules/inzoi/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/InZOI/LuaSymbols.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/inzoi.json");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module inzoi\n";
@@ -2910,7 +2910,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = ();
 			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/lies-of-p/Module.json", "$(SRCROOT)/Modules/lies-of-p/Build.json", "$(SRCROOT)/Modules/lies-of-p/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/LiesOfP/NativeContractTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/lies-of-p.json");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module lies-of-p\n";
@@ -3132,7 +3132,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = ();
 			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/no-mans-sky/Module.json", "$(SRCROOT)/Modules/no-mans-sky/Build.json", "$(SRCROOT)/Modules/no-mans-sky/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/NoMansSky/NativeContractTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/no-mans-sky.json");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module no-mans-sky\n";
@@ -3358,7 +3358,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = ();
 			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/resident-evil-2/Module.json", "$(SRCROOT)/Modules/resident-evil-2/Build.json", "$(SRCROOT)/Modules/_Shared/ResidentEvil/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/ResidentEvilBridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/resident-evil-2.json");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module resident-evil-2\n";
@@ -3720,7 +3720,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = ();
 			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/resident-evil-3/Module.json", "$(SRCROOT)/Modules/resident-evil-3/Build.json", "$(SRCROOT)/Modules/_Shared/ResidentEvil/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/ResidentEvilBridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/resident-evil-3.json");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module resident-evil-3\n";
@@ -3920,7 +3920,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = ();
 			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/resident-evil-4/Module.json", "$(SRCROOT)/Modules/resident-evil-4/Build.json", "$(SRCROOT)/Modules/_Shared/ResidentEvil/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/ResidentEvilBridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/resident-evil-4.json");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module resident-evil-4\n";
@@ -4120,7 +4120,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = ();
 			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/resident-evil-7/Module.json", "$(SRCROOT)/Modules/resident-evil-7/Build.json", "$(SRCROOT)/Modules/_Shared/ResidentEvil/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/ResidentEvilBridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/resident-evil-7.json");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module resident-evil-7\n";
@@ -4320,7 +4320,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = ();
 			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/resident-evil-village/Module.json", "$(SRCROOT)/Modules/resident-evil-village/Build.json", "$(SRCROOT)/Modules/_Shared/ResidentEvil/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/ResidentEvilBridgeTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/resident-evil-village.json");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module resident-evil-village\n";
@@ -4520,7 +4520,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = ();
 			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/robocop/Module.json", "$(SRCROOT)/Modules/robocop/Build.json", "$(SRCROOT)/Modules/robocop/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/RoboCop/LeaseWriteTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/robocop.json");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module robocop\n";
@@ -4732,7 +4732,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = ();
 			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/stray/Module.json", "$(SRCROOT)/Modules/stray/Build.json", "$(SRCROOT)/Modules/stray/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Stray/BootstrapContractTests.mm", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/stray.json");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module stray\n";
@@ -5008,7 +5008,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = ();
 			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/terraria/Module.json", "$(SRCROOT)/Modules/terraria/Build.json", "$(SRCROOT)/Modules/terraria/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Terraria/NativeContractTests.mm", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/terraria.json");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module terraria\n";
@@ -5244,7 +5244,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = ();
 			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/the-long-dark/Module.json", "$(SRCROOT)/Modules/the-long-dark/Build.json", "$(SRCROOT)/Modules/the-long-dark/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/TheLongDark/NativeContractTests.mm", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/the-long-dark.json");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module the-long-dark\n";
@@ -5500,7 +5500,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = ();
 			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/turok/Module.json", "$(SRCROOT)/Modules/turok/Build.json", "$(SRCROOT)/Modules/turok/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/Kex/SDLFixture.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Kex/NativeContractTests.m", "$(SRCROOT)/Tests/Kex/FogRendererTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/turok.json");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module turok\n";
@@ -5746,7 +5746,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = ();
 			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/turok-2/Module.json", "$(SRCROOT)/Modules/turok-2/Build.json", "$(SRCROOT)/Modules/turok-2/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/Kex/SDLFixture.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Kex/NativeContractTests.m", "$(SRCROOT)/Tests/Kex/FogRendererTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/turok-2.json");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module turok-2\n";
@@ -5992,7 +5992,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = ();
 			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/vampire-crawlers/Module.json", "$(SRCROOT)/Modules/vampire-crawlers/Build.json", "$(SRCROOT)/Modules/vampire-crawlers/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/VampireCrawlers/NativeContractTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/vampire-crawlers.json");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module vampire-crawlers\n";
@@ -6250,7 +6250,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = ();
 			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/vampire-survivors/Module.json", "$(SRCROOT)/Modules/vampire-survivors/Build.json", "$(SRCROOT)/Modules/vampire-survivors/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/VampireSurvivors/NativeContractTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
-			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp", "$(TRAINERDOCK_BUILD_ROOT)/BuildFingerprints/vampire-survivors.json");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
 			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module vampire-survivors\n";
