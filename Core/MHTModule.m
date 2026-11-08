@@ -128,6 +128,7 @@ static BOOL number(id v){return [v isKindOfClass:NSNumber.class] && isfinite([v 
 - (NSDictionary *)environmentForGame:(NSDictionary *)game profile:(NSDictionary *)profile session:(NSString *)session {
     NSMutableDictionary *e=[@{@"DYLD_INSERT_LIBRARIES":self.runtimePath,@"MHT_MODULE":self.identifier,@"MHT_SESSION":session,
         @"MHT_TARGET":game[@"executable"],@"MHT_CONFIG":self.configurationPath,@"MHT_PROFILE":profile[@"id"]} mutableCopy];
+    if([game[@"libraryDirectory"] isKindOfClass:NSString.class])e[@"DYLD_LIBRARY_PATH"]=game[@"libraryDirectory"];
     NSDictionary *custom=[profile[@"launchEnvironment"] isKindOfClass:NSDictionary.class] ? profile[@"launchEnvironment"] : @{};
     // Module environment may provide distribution-specific identifiers, but cannot replace the common protocol.
     for(NSString *key in custom)if(![key hasPrefix:@"MHT_"] && ![key hasPrefix:@"DYLD_"] && [custom[key] isKindOfClass:NSString.class])e[key]=custom[key];

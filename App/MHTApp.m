@@ -3,6 +3,7 @@
 #import "MHTModule.h"
 #import "MHTDiscovery.h"
 #import "MHTProtocol.h"
+#import "GameIdentity.h"
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
 #import "MHTGameIcons.h"
@@ -311,9 +312,11 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
 }
 - (void)startGame:(id)sender {
     (void)sender;if(!self.selected || self.session.launching)return;
+    if(self.session.running){self.status.stringValue=@"Das ausgewählte Spiel läuft bereits.";return;}
     MHTModule *module=self.selected;NSDictionary *profile=self.profile;NSError *error=nil;
     NSDictionary *game=[module inspectPath:[module pathForProfile:profile] profile:profile error:&error];
     if(!game){self.status.stringValue=error.localizedDescription;return;}
+    if(MTExecutableIsRunning(game[@"executable"])){self.status.stringValue=@"Bitte die laufende Spielinstanz regulär beenden.";return;}
     for(NSRunningApplication *running in NSWorkspace.sharedWorkspace.runningApplications)
         for(NSDictionary *p in module.profiles)if([running.bundleIdentifier isEqual:p[@"bundleIdentifier"]] || [running.bundleURL.URLByResolvingSymlinksInPath.path isEqual:game[@"path"]]){self.status.stringValue=@"Bitte die laufende Spielinstanz regulär beenden.";return;}
     if([profile[@"store"] isEqual:@"Steam"] && ![NSRunningApplication runningApplicationsWithBundleIdentifier:@"com.valvesoftware.steam"].count){self.status.stringValue=@"Bitte Steam öffnen und dann erneut starten.";return;}
@@ -321,7 +324,7 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
     MHTSession *session=[MHTSession new];session.token=NSUUID.UUID.UUIDString;session.profile=profile;session.launching=YES;session.startedAt=NSDate.date.timeIntervalSince1970;
     NSMutableDictionary *options=[module.settings mutableCopy];options[@"visible"]=@NO;session.options=options;self.sessions[module.identifier]=session;
     if([profile[@"launchMode"] isEqual:@"executable"]){
-        NSTask *task=[NSTask new];task.executableURL=[NSURL fileURLWithPath:game[@"executable"]];task.currentDirectoryURL=[NSURL fileURLWithPath:game[@"path"]];
+        NSTask *task=[NSTask new];task.executableURL=[NSURL fileURLWithPath:game[@"executable"]];task.currentDirectoryURL=[NSURL fileURLWithPath:game[@"workingDirectory"] ?: game[@"path"]];
         NSMutableDictionary *environment=[NSProcessInfo.processInfo.environment mutableCopy];[environment addEntriesFromDictionary:[module environmentForGame:game profile:profile session:session.token]];task.environment=environment;
         task.standardOutput=NSFileHandle.fileHandleWithNullDevice;task.standardError=NSFileHandle.fileHandleWithNullDevice;
         session.task=task;BOOL launched=[task launchAndReturnError:&error];session.launching=NO;

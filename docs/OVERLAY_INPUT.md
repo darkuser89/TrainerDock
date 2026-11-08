@@ -95,3 +95,19 @@ einsetzen. Anschließend überholte eigene Testdateien entfernen.
 
 Die aktuelle NMS-Mauskorrektur wurde vom Nutzer im Spiel bestätigt. Daraus folgt
 keine Kompatibilitätszusage für andere Engines, Stores oder Spielupdates.
+
+## SDL-/Mono-Start und Fernsteuerung
+
+Bei Terraria registrierte sich ein direkt gestartetes Originalprogramm verzögert
+als macOS-App. Ein zu frühes `getApp` startete deshalb eine zweite Instanz.
+Vor der UI-Auswahl den bestehenden Executable-Pfad und PID sowie die native
+Rückmeldung prüfen und auf die tatsächliche App-Registrierung warten. Kein
+UI-Werkzeug als Ersatzstart einsetzen. Der Host prüft auch unregistrierte native
+Prozesse über `MTExecutableIsRunning`.
+
+Terrarias SDL-Softwarecursor blieb bei synthetischen CUA-Klicks an anderer Stelle
+als der macOS-Zeiger. Solche Klicks belegen weder einen Produktfehler noch die
+Bedienbarkeit mit echter Maus. Die sichtbare Cursorposition und den ausgelösten
+Schalter getrennt rücklesen; nötigenfalls eine kurze gebündelte Nutzerprüfung
+anfordern. Das isolierte Panel benötigt außerdem explizit
+`mouseInteractionEnabled` passend zum Bedienwunsch und Fokus.

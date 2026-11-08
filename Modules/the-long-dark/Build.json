@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "sourceRoot": "Sources",
+  "family": "TheLongDark",
+  "developmentOnly": false,
+  "sources": [
+    "TrainerFeatures.m",
+    "GameAdapter.m",
+    "NativeAdapter.m",
+    "GameBridge.m",
+    "SelectionSettings.m",
+    "GameProfile.m",
+    "MemoryAccess.m",
+    "TrainerMaterial.m",
+    "Overlay.m",
+    "OverlaySettings.m",
+    "OverlayShortcuts.m",
+    "Runtime.m",
+    "IL2CPP.mm",
+    "UnityLoop.mm",
+    "LongDarkBackend.mm",
+    "SaveGuard.mm"
+  ],
+  "defines": [],
+  "catalogSources": [
+    "TrainerFeatures.m"
+  ],
+  "sdkSources": [
+    "MHTOverlayHost.m",
+    "MHTGlassIntensity.m"
+  ],
+  "testSuite": "mt",
+  "nativeContractTests": "Tests/TheLongDark/NativeContractTests.mm"
+}

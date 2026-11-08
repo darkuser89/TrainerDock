@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "id": "death-stranding",
+  "name": "Death Stranding Director’s Cut",
+  "version": "0.1.0",
+  "profiles": [
+    {
+      "id": "death-stranding-mas-arm64",
+      "name": "Death Stranding Director’s Cut · Mac App Store",
+      "bundleIdentifier": "com.505games.deathstranding",
+      "executable": "DeathStranding",
+      "version": "1.1.4",
+      "teamIdentifier": "96RLY8D2JE",
+      "uuids": [
+        "6823C89C-242D-37B0-ABC4-4D45A67E7C4C"
+      ],
+      "enabled": true,
+      "store": "Mac App Store",
+      "gameVersion": "1.004"
+    }
+  ],
+  "groups": [
+    {
+      "id": "player",
+      "title": "Spieler",
+      "symbol": "person",
+      "features": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        10,
+        11,
+        14,
+        15,
+        16
+      ]
+    },
+    {
+      "id": "equipment",
+      "title": "Waffen & Ausrüstung",
+      "symbol": "shield",
+      "features": [
+        6,
+        7,
+        8,
+        9,
+        12,
+        17
+      ]
+    },
+    {
+      "id": "vehicles",
+      "title": "Fahrzeuge",
+      "symbol": "car",
+      "features": [
+        13,
+        18
+      ]
+    },
+    {
+      "id": "construction",
+      "title": "Bauen & Materialien",
+      "symbol": "hammer",
+      "features": [
+        19,
+        20,
+        21,
+        24,
+        25
+      ]
+    },
+    {
+      "id": "currency",
+      "title": "Chirale Kristalle",
+      "symbol": "sparkles",
+      "features": [
+        22
+      ]
+    },
+    {
+      "id": "game",
+      "title": "Spiel",
+      "symbol": "speedometer",
+      "features": [
+        23
+      ]
+    }
+  ]
+}

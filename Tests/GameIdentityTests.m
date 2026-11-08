@@ -6,6 +6,7 @@
 #import <mach/machine.h>
 #import <libkern/OSByteOrder.h>
 #import <CommonCrypto/CommonDigest.h>
+#import <mach-o/dyld.h>
 static void check(BOOL ok,const char *message){if(!ok){fprintf(stderr,"FAIL: %s\n",message);exit(1);}}
 static NSData *thin(cpu_type_t cpu) {
     struct mach_header_64 h={.magic=MH_MAGIC_64,.cputype=cpu,.filetype=MH_EXECUTE,.ncmds=1,.sizeofcmds=sizeof(struct uuid_command)};
@@ -58,7 +59,24 @@ static void originalIntegrity(NSString *directory){
     check([NSFileManager.defaultManager createSymbolicLinkAtPath:[bundle stringByAppendingPathComponent:exe] withDestinationPath:outside error:nil],"fixture symlink");
     check(!MTInspectGame(bundle,profile,nil),"symlink outside bundle rejected");
 }
+static void wrapperIntegrity(NSString *directory){
+    NSString *bundle=[directory stringByAppendingPathComponent:@"Wrapped.app"],*exe=@"Contents/MacOS/Native",*wrapper=@"Contents/MacOS/Start",*plist=@"Contents/Info.plist";
+    NSString *libs=[bundle stringByAppendingPathComponent:@"Contents/MacOS/libs"];
+    [NSFileManager.defaultManager createDirectoryAtPath:libs withIntermediateDirectories:YES attributes:nil error:nil];
+    NSData *binary=thin(CPU_TYPE_ARM64),*script=[@"#!/bin/sh\nexec ./Native\n" dataUsingEncoding:NSUTF8StringEncoding];
+    NSData *metadata=[NSPropertyListSerialization dataWithPropertyList:@{@"CFBundleIdentifier":@"local.mht.wrapper",@"CFBundleExecutable":@"Start",@"CFBundleShortVersionString":@"1"} format:NSPropertyListXMLFormat_v1_0 options:0 error:nil];
+    [binary writeToFile:[bundle stringByAppendingPathComponent:exe] atomically:YES];[script writeToFile:[bundle stringByAppendingPathComponent:wrapper] atomically:YES];[metadata writeToFile:[bundle stringByAppendingPathComponent:plist] atomically:YES];
+    NSMutableDictionary *p=[@{@"enabled":@YES,@"bundleIdentifier":@"local.mht.wrapper",@"executable":@"Native",@"bundleExecutable":@"Start",@"launchMode":@"executable",@"workingDirectory":@"Contents/MacOS",@"libraryDirectory":@"Contents/MacOS/libs",@"version":@"1",@"uuids":@[@"11111111-2222-3333-8444-555555555555"],@"signatureScope":@"sha256-original",@"integrityApproval":@"user-confirmed-steam-original",@"integrityFiles":@[exe,wrapper,plist],@"fileChecks":@[chunk(exe,binary,0,binary.length),chunk(wrapper,script,0,script.length),chunk(plist,metadata,0,metadata.length)]} mutableCopy];
+    NSDictionary *valid=[p copy],*game=MTInspectGame(bundle,p,nil);
+    check([game[@"executable"] isEqual:[bundle stringByAppendingPathComponent:exe]] && [game[@"libraryDirectory"] isEqual:libs],"verified native entry and confined original directories");
+    p[@"integrityFiles"]=@[exe,plist];p[@"fileChecks"]=@[chunk(exe,binary,0,binary.length),chunk(plist,metadata,0,metadata.length)];check(!MTInspectGame(bundle,p,nil),"unhashed original wrapper rejected");
+    [p setDictionary:valid];p[@"workingDirectory"]=@"../outside";check(!MTInspectGame(bundle,p,nil),"escaping working directory rejected");
+    [p setDictionary:valid];p[@"libraryDirectory"]=@"/tmp";check(!MTInspectGame(bundle,p,nil),"absolute library directory rejected");
+    [p setDictionary:valid];[NSFileManager.defaultManager removeItemAtPath:libs error:nil];[NSFileManager.defaultManager createSymbolicLinkAtPath:libs withDestinationPath:directory error:nil];check(!MTInspectGame(bundle,p,nil),"escaping library symlink rejected");
+}
 int main(void){@autoreleasepool {
+    char own[PATH_MAX];uint32_t ownLength=sizeof(own);check(!_NSGetExecutablePath(own,&ownLength) && MTExecutableIsRunning(@(own)),"native process detection includes unregistered command-line executable");
+    check(!MTExecutableIsRunning(@"/nonexistent/trainerdock-game"),"absent process path is not running");
     NSString *directory=[NSTemporaryDirectory() stringByAppendingPathComponent:[@"MHT-Identity-" stringByAppendingString:NSUUID.UUID.UUIDString]];
     check([NSFileManager.defaultManager createDirectoryAtPath:directory withIntermediateDirectories:NO attributes:nil error:NULL],"temporary fixture directory");
     NSString *path=[directory stringByAppendingPathComponent:@"Game"];
@@ -80,6 +98,7 @@ int main(void){@autoreleasepool {
         }
         [[NSData dataWithBytes:"bad" length:3] writeToFile:path atomically:YES];check(!MTReadExecutableIdentity(path),"truncated file is rejected");
         originalIntegrity(directory);
+        wrapperIntegrity(directory);
     }@finally {[NSFileManager.defaultManager removeItemAtPath:directory error:NULL];}
     puts("PASS: thin/universal arm64 UUIDs, 32/64-bit fat tables, Intel rejection, truncation, overlap, duplicate slices and overflow.");
     puts("PASS: exact-original full coverage, changed bytes, missing approval, gaps, overlaps, metadata, escaping symlinks and preserved signature requirement.");

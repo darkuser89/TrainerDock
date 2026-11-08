@@ -217,3 +217,34 @@ niemals für Updates schließen. Bei fehlgeschlagenem App-Start den atomaren Tau
 zurücknehmen. Benutzermodule und Einstellungen bleiben außerhalb der App.
 Die vorhandene technische Ad-hoc-Codeversiegelung der arm64-Produkte bleibt bestehen;
 macOS-Schutzmechanismen nicht verändern. Keine privaten Schlüssel verwenden.
+
+## The Long Dark: eng begrenzte Originalfreigabe
+
+Der Nutzer hat nach Steams fehlerfreier Dateiprüfung ausdrücklich die vollständige
+Prüfung `sha256-original` für Steam-Build **26450964**, Version **2.60 (0)**,
+arm64-UUID `96B749EC-0FB3-332F-96F9-1859539DE52C` genehmigt. macOS beanstandet
+in dieser Installation die mitgelieferte `Contents/PlugIns/libsteam_api.dylib`.
+Die Originaldateien und Signaturen bleiben unverändert. Die sieben im Profil
+aufgeführten Dateien müssen lückenlos ihren gespeicherten SHA-256-Werten entsprechen;
+keine stillen Hashupdates und keine Freigabe weiterer Builds.
+
+Die IL2CPP-Anbindung dieses Spiels muss Referenzfelder mit dem typisierten
+`il2cpp_field_set_value_object` schreiben: Das dritte Argument ist das Objekt
+selbst, nicht die Adresse einer lokalen Zeigervariablen. Primitive Felder verwenden
+ihren eigenen Rohwertpfad. `Inventory.m_Items` enthält inline gespeicherte
+`GearItemObject`-Werte; eine solche Liste darf nicht als Referenzarray gelesen werden.
+Die Modul-Grenztests sichern beide ABI-Grenzen außerhalb des Spiels ab.
+
+## Terraria: eng begrenzte Originalfreigabe
+
+Der Nutzer hat ausschließlich Steam-Build **24893155**, Spielversion **1.4.5.8**,
+arm64-UUID `EC32A5AF-44E5-37D6-8BB7-60B58BCD68FD` ausdrücklich über
+`sha256-original` freigegeben. Alle 28 im Profil erfassten Originaldateien müssen
+in ihren 33 lückenlosen Abschnitten übereinstimmen. Das originale Shellskript
+`Terraria` bleibt unverändert und zusätzlich gebunden; gestartet wird das geprüfte
+native `Terraria.bin.osx`. Keine stillen Hashupdates oder Freigaben weiterer Builds.
+
+Mono-Spielzugriffe benötigen den tatsächlich beobachteten originalen Update-Rückruf,
+GC-Handles und typisierte Metadaten. Enum-Untertypen und FNA-TimeSpan prüfen.
+Terrarias verzögerte App-Registrierung und getrennte SDL-/Systemcursor sind unter
+`docs/OVERLAY_INPUT.md` beschrieben; UI-Auswahl darf keinen zweiten Start erzeugen.

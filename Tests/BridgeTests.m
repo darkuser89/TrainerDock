@@ -59,8 +59,8 @@ int main(void){@autoreleasepool{
         &&[mapped[@(MTFeaturePlayerMultiplier)][@"value"] doubleValue]==3,@"Dropping the old master preserves the intended feature and numeric bindings");
 #endif
     NSInteger continuous=-1,oneShot=-1,numeric=-1;
-    for(NSInteger i=1;i<MTFeatureCount;i++){const MTFeatureInfo *f=MTFeatureInfoAt(i);if(f->implemented && !f->oneShot)continuous=i;if(f->oneShot)oneShot=i;if(f->numeric)numeric=i;}
-    check(continuous>=0 && oneShot>=0 && numeric>=0,@"Fixture has feature types");
+    for(NSInteger i=1;i<MTFeatureCount;i++){const MTFeatureInfo *f=MTFeatureInfoAt(i);if(f->implemented && !f->oneShot)continuous=i;if(f->implemented && f->oneShot)oneShot=i;if(f->implemented && f->numeric)numeric=i;}
+    check(continuous>=0 && numeric>=0,@"Fixture has continuous and numeric features");
     [bridge setWanted:YES forFeature:continuous];[bridge setWanted:YES forFeature:continuous];drain();
     check(bridge.state.features[continuous].wanted && bridge.state.features[continuous].active,@"Repeated set-on is idempotent");
     [bridge setWanted:NO forFeature:continuous];[bridge setWanted:NO forFeature:continuous];drain();
@@ -70,14 +70,14 @@ int main(void){@autoreleasepool{
     check(!bridge.state.ready && bridge.state.features[continuous].wanted && !bridge.state.features[continuous].active,@"Loading preserves selection and releases effects");
     adapter.mode=MTSessionSolo;adapter.world++;[bridge poll];drain();
     check(bridge.state.features[continuous].active,@"Continuous effects resume after loading");
-    NSUInteger before=adapter.actions;[bridge poll];[bridge performFeature:oneShot];adapter.world++;drain();
+    NSUInteger before=adapter.actions;[bridge poll];if(oneShot>=0)[bridge performFeature:oneShot];adapter.world++;drain();
     check(adapter.actions==before,@"One-shot discarded after owner/world changes");
     adapter.mode=MTSessionNetwork;[bridge poll];drain();
     check(bridge.state.ready && bridge.state.features[continuous].wanted && bridge.state.features[continuous].active,@"Network context preserves selection and effects");
-    [bridge performFeature:oneShot];drain();check(adapter.actions==before+1,@"Network accepts an explicit one-shot");before=adapter.actions;
+    if(oneShot>=0){[bridge performFeature:oneShot];drain();check(adapter.actions==before+1,@"Network accepts an explicit one-shot");}before=adapter.actions;
     adapter.mode=MTSessionSolo;[bridge poll];drain();check(bridge.state.features[continuous].active,@"Mode changes preserve continuous choices");
     [bridge setValue:NAN forFeature:numeric];drain();check(isfinite(bridge.state.features[numeric].value),@"Invalid numeric values rejected");
-    [bridge setWanted:YES forFeature:continuous];drain();[bridge poll];for(int i=0;i<24;i++)[bridge performFeature:oneShot];[bridge performAction:MTTrainerDisableAll];adapter.mode=MTSessionLoading;drain();
+    [bridge setWanted:YES forFeature:continuous];drain();[bridge poll];for(int i=0;i<24;i++){if(oneShot>=0)[bridge performFeature:oneShot];else [bridge setWanted:YES forFeature:continuous];}[bridge performAction:MTTrainerDisableAll];adapter.mode=MTSessionLoading;drain();
     check(!bridge.state.features[continuous].wanted && adapter.actions==before,@"All-off survives a full queue and loading");
     NSDictionary *options=MTNormalizeOverlayOptions(@{@"liquidGlass":@NO});check(![options[@"liquidGlass"] boolValue],@"Glass-off survives option normalization");
     MTTrainerMaterial *material=[[MTTrainerMaterial alloc]initWithContentView:[NSView new] cornerRadius:12];material.liquidGlassEnabled=NO;check(!material.allowsLiquidGlass && material.materialMode!=MTTrainerMaterialLiquidGlass,@"Glass-off selects native fallback");

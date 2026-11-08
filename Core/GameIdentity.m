@@ -10,8 +10,20 @@
 #include <sys/stat.h>
 #include <limits.h>
 #include <math.h>
+#include <libproc.h>
 static id fail(NSError **error,NSString *reason) {if(error)*error=[NSError errorWithDomain:@"local.mactrainer.profile" code:1 userInfo:@{NSLocalizedDescriptionKey:reason}];return nil;}
 static BOOL string(id value) {return [value isKindOfClass:NSString.class] && [value length]>0;}
+BOOL MTExecutableIsRunning(NSString *path) {
+    if(!string(path) || !path.isAbsolutePath)return NO;
+    char expected[PATH_MAX];if(!realpath(path.fileSystemRepresentation,expected))return NO;
+    int count=proc_listallpids(NULL,0);if(count<=0 || count>65536)return NO;
+    NSUInteger capacity=(NSUInteger)count+64;NSMutableData *storage=[NSMutableData dataWithLength:capacity*sizeof(pid_t)];
+    int actual=proc_listallpids(storage.mutableBytes,(int)storage.length);pid_t *pids=storage.mutableBytes;
+    for(NSUInteger i=0;i<MIN((NSUInteger)MAX(actual,0),capacity);i++){
+        char raw[PROC_PIDPATHINFO_MAXSIZE],canonical[PATH_MAX];
+        if(pids[i]>0 && proc_pidpath(pids[i],raw,sizeof(raw))>0 && realpath(raw,canonical) && !strcmp(expected,canonical))return YES;
+    }return NO;
+}
 NSDictionary *MTLoadConfiguration(NSString *path,NSError **error) {
     if(!string(path))return fail(error,@"Konfigurationspfad fehlt.");
     NSData *data=[NSData dataWithContentsOfFile:path];
@@ -26,6 +38,8 @@ NSDictionary *MTLoadConfiguration(NSString *path,NSError **error) {
         if([p[@"enabled"] boolValue]){
             if(!string(p[@"bundleIdentifier"]) || !string(p[@"executable"]) || ![p[@"uuids"] isKindOfClass:NSArray.class] || ![p[@"uuids"] count])return fail(error,@"Aktive Profile benötigen Bundle-ID, Executable und geprüfte UUIDs.");
             if([p[@"executable"] containsString:@"/"])return fail(error,@"Executable muss ein Dateiname sein.");
+            if(p[@"bundleExecutable"] && (!string(p[@"bundleExecutable"]) || [p[@"bundleExecutable"] containsString:@"/"] || ![p[@"launchMode"] isEqual:@"executable"] || ![p[@"signatureScope"] isEqual:@"sha256-original"]))return fail(error,@"Originaler Startwrapper benötigt eine explizite vollständige Originalfreigabe.");
+            for(NSString *key in @[@"workingDirectory",@"libraryDirectory"])if(p[key] && (!string(p[key]) || [p[key] isAbsolutePath] || [[p[key] pathComponents] containsObject:@".."] || ![p[@"launchMode"] isEqual:@"executable"]))return fail(error,@"Ungültiges relatives Startverzeichnis.");
             for(id uuid in p[@"uuids"])if(!string(uuid) || ![[NSUUID alloc]initWithUUIDString:uuid])return fail(error,@"Ungültige UUID im aktiven Profil.");
             for(NSString *key in @[@"teamIdentifier",@"version"])if(p[key] && ![p[key] isKindOfClass:NSString.class])return fail(error,@"Ungültige Profilmetadaten.");
         }
@@ -112,6 +126,7 @@ static BOOL checkResources(NSString *bundle,NSDictionary *profile) {
            || [profile[@"integrityFiles"] count]<2 || [profile[@"integrityFiles"] count]>32)return NO;
         NSSet *required=[NSSet setWithArray:profile[@"integrityFiles"]];
         NSString *main=[@"Contents/MacOS" stringByAppendingPathComponent:profile[@"executable"]];
+        if(profile[@"bundleExecutable"] && ![required containsObject:[@"Contents/MacOS" stringByAppendingPathComponent:profile[@"bundleExecutable"]]])return NO;
         if(required.count!=[profile[@"integrityFiles"] count] || ![required containsObject:@"Contents/Info.plist"]
            || ![required containsObject:main] || ![required isEqual:[NSSet setWithArray:coverage.allKeys]])return NO;
         for(NSString *path in required){
@@ -131,7 +146,15 @@ NSDictionary *MTInspectGame(NSString *path,NSDictionary *profile,NSError **error
     if(![profile[@"enabled"] boolValue] || !path.isAbsolutePath)return fail(error,@"Profil ist nicht freigegeben oder Pfad fehlt.");
     NSString *canonical=path.stringByStandardizingPath.stringByResolvingSymlinksInPath;
     NSDictionary *info=[NSDictionary dictionaryWithContentsOfURL:[NSURL fileURLWithPath:[canonical stringByAppendingPathComponent:@"Contents/Info.plist"]] error:NULL];
-    if(![info[@"CFBundleIdentifier"] isEqual:profile[@"bundleIdentifier"]] || ![info[@"CFBundleExecutable"] isEqual:profile[@"executable"]])return fail(error,@"Bundle-ID oder Executable passt nicht zum Profil.");
+    if(![info[@"CFBundleIdentifier"] isEqual:profile[@"bundleIdentifier"]] || ![info[@"CFBundleExecutable"] isEqual:(profile[@"bundleExecutable"] ?: profile[@"executable"])])return fail(error,@"Bundle-ID oder Executable passt nicht zum Profil.");
+    if(profile[@"bundleExecutable"] && (![profile[@"launchMode"] isEqual:@"executable"] || ![profile[@"signatureScope"] isEqual:@"sha256-original"] || !string(profile[@"bundleExecutable"]) || [profile[@"bundleExecutable"] containsString:@"/"]))return fail(error,@"Ungeprüfter Startwrapper.");
+    NSMutableDictionary *launch=[NSMutableDictionary new];
+    for(NSString *key in @[@"workingDirectory",@"libraryDirectory"])if(profile[key]){
+        NSString *relative=profile[key];if(!string(relative) || relative.isAbsolutePath || [relative.pathComponents containsObject:@".."] || ![profile[@"launchMode"] isEqual:@"executable"])return fail(error,@"Ungültiges Startverzeichnis.");
+        NSString *directory=[[canonical stringByAppendingPathComponent:relative] stringByResolvingSymlinksInPath];BOOL isDirectory=NO;
+        if(![directory hasPrefix:[canonical stringByAppendingString:@"/"]] || ![NSFileManager.defaultManager fileExistsAtPath:directory isDirectory:&isDirectory] || !isDirectory)return fail(error,@"Startverzeichnis verlässt das Spielbundle oder fehlt.");
+        launch[key]=directory;
+    }
     NSString *executable=[canonical stringByAppendingPathComponent:[@"Contents/MacOS" stringByAppendingPathComponent:profile[@"executable"]]];
     NSDictionary *identity=MTReadExecutableIdentity(executable);
     if(!identity || ![profile[@"uuids"] containsObject:identity[@"uuid"]])return fail(error,@"Spiel-Build/Architektur nicht freigegeben. Keine passende arm64-Identität.");
@@ -142,7 +165,7 @@ NSDictionary *MTInspectGame(NSString *path,NSDictionary *profile,NSError **error
     if(profile[@"signatureScope"] && !sliceSignature && !exactOriginal)return fail(error,@"Unbekannte Signaturprüfung im Profil.");
     if(exactOriginal){
         if(![profile[@"fileChecks"] count])return fail(error,@"Originalfreigabe benötigt vollständige Dateiprüfungen.");
-        return @{@"path":canonical,@"executable":executable,@"uuid":identity[@"uuid"],@"integrityMode":@"sha256-original"};
+        [launch addEntriesFromDictionary:@{@"path":canonical,@"executable":executable,@"uuid":identity[@"uuid"],@"integrityMode":@"sha256-original"}];return launch;
     }
     if(sliceSignature && (!string(profile[@"signatureIdentifier"]) || ![profile[@"signatureCDHash"] isKindOfClass:NSString.class] || [profile[@"signatureCDHash"] length]!=40 || ![profile[@"fileChecks"] count]))return fail(error,@"Ausführbares Profil benötigt Original-Signaturidentität und Ressourcenprüfung.");
     SecStaticCodeRef code=NULL;OSStatus status;
@@ -163,7 +186,7 @@ NSDictionary *MTInspectGame(NSString *path,NSDictionary *profile,NSError **error
     }
     if(code)CFRelease(code);
     if(status)return fail(error,[NSString stringWithFormat:@"Originalsignatur nicht bestätigt (%d).",(int)status]);
-    return @{@"path":canonical,@"executable":executable,@"uuid":identity[@"uuid"]};
+    [launch addEntriesFromDictionary:@{@"path":canonical,@"executable":executable,@"uuid":identity[@"uuid"]}];return launch;
 }
 BOOL MTCurrentProcessMatches(NSDictionary *profile,NSString *target) {
     if(![profile[@"enabled"] boolValue] || !target.isAbsolutePath)return NO;

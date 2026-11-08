@@ -81,6 +81,7 @@ static void updateOverlayInput(void) {
     updateKeyboardShortcuts();
     MTOverlayRoot *root=NSApp.isActive ? shortcutRoot(nil,YES) : nil;
     BOOL wanted=root.wantsMouseInteraction;
+    for(MHTOverlayHost *host in overlayHosts)host.mouseInteractionEnabled=wanted && host.overlay==root;
     if (inputRequested!=wanted) { inputRequested=wanted; [gameplay setOverlayInteraction:wanted]; }
 }
 

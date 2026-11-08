@@ -1,0 +1,339 @@
+{
+  "schemaVersion": 1,
+  "id": "terraria",
+  "name": "Terraria",
+  "version": "0.1.0",
+  "profiles": [
+    {
+      "id": "steam-arm64-1.4.5.8",
+      "name": "Steam \u00b7 1.4.5.8 (24893155)",
+      "enabled": true,
+      "bundleIdentifier": "org.Terraria",
+      "executable": "Terraria.bin.osx",
+      "bundleExecutable": "Terraria",
+      "workingDirectory": "Contents/MacOS",
+      "libraryDirectory": "Contents/MacOS/osx",
+      "launchMode": "executable",
+      "uuids": [
+        "EC32A5AF-44E5-37D6-8BB7-60B58BCD68FD"
+      ],
+      "teamIdentifier": "",
+      "version": "1.0",
+      "gameVersion": "1.4.5.8",
+      "store": "Steam",
+      "steamAppId": "105600",
+      "steamBuildId": "24893155",
+      "signatureScope": "sha256-original",
+      "integrityApproval": "user-confirmed-steam-original",
+      "integrityFiles": [
+        "Contents/Info.plist",
+        "Contents/MacOS/Terraria",
+        "Contents/MacOS/Terraria.bin.osx",
+        "Contents/Resources/Terraria.exe",
+        "Contents/Resources/FNA.dll.config",
+        "Contents/Resources/FNA.dll",
+        "Contents/Resources/I18N.West.dll",
+        "Contents/Resources/I18N.dll",
+        "Contents/Resources/Mono.Posix.dll",
+        "Contents/Resources/Mono.Security.dll",
+        "Contents/Resources/System.Configuration.dll",
+        "Contents/Resources/System.Core.dll",
+        "Contents/Resources/System.Data.dll",
+        "Contents/Resources/System.Drawing.dll",
+        "Contents/Resources/System.Numerics.dll",
+        "Contents/Resources/System.Runtime.Serialization.dll",
+        "Contents/Resources/System.Security.dll",
+        "Contents/Resources/System.Windows.Forms.dll",
+        "Contents/Resources/System.Xml.Linq.dll",
+        "Contents/Resources/System.Xml.dll",
+        "Contents/Resources/System.dll",
+        "Contents/Resources/WindowsBase.dll",
+        "Contents/Resources/mscorlib.dll",
+        "Contents/MacOS/osx/libFAudio.0.dylib",
+        "Contents/MacOS/osx/libFNA3D.0.dylib",
+        "Contents/MacOS/osx/libSDL3.0.dylib",
+        "Contents/MacOS/osx/libnfd.dylib",
+        "Contents/MacOS/osx/libsteam_api.dylib"
+      ],
+      "fileChecks": [
+        {
+          "path": "Contents/Info.plist",
+          "fileSize": 1060,
+          "offset": 0,
+          "length": 1060,
+          "sha256": "562c25582b2bf70a668a7f0c0ef114814d3849ffbf72f3f60e761befca120d44"
+        },
+        {
+          "path": "Contents/MacOS/Terraria",
+          "fileSize": 590,
+          "offset": 0,
+          "length": 590,
+          "sha256": "4150ed57f3a0db37dd118a838ca2771edff74412d32289e84196f2221ffa456f"
+        },
+        {
+          "path": "Contents/MacOS/Terraria.bin.osx",
+          "fileSize": 16956032,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "67d508e73cd948cb7b3987f3ddf4daf9476e077d2fcde9db5b150727026a8c6e"
+        },
+        {
+          "path": "Contents/MacOS/Terraria.bin.osx",
+          "fileSize": 16956032,
+          "offset": 8388608,
+          "length": 8388608,
+          "sha256": "441593a12d8ade1691309257d52c8175a6e42566ac188981c308f86b08890099"
+        },
+        {
+          "path": "Contents/MacOS/Terraria.bin.osx",
+          "fileSize": 16956032,
+          "offset": 16777216,
+          "length": 178816,
+          "sha256": "7af84982ab378c0134b4f4a4cbbdca5212b6084beed2ab1b35284fd5bc51be29"
+        },
+        {
+          "path": "Contents/Resources/Terraria.exe",
+          "fileSize": 26597376,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "7fc1d3f40a4ea2a2863b761accd82c25dbb70acef95b7ef825c34e851ea8a470"
+        },
+        {
+          "path": "Contents/Resources/Terraria.exe",
+          "fileSize": 26597376,
+          "offset": 8388608,
+          "length": 8388608,
+          "sha256": "c5d9872ceb3834f49ab6a47e27f41c1552eecfe7cde73b9b3e39977edf354843"
+        },
+        {
+          "path": "Contents/Resources/Terraria.exe",
+          "fileSize": 26597376,
+          "offset": 16777216,
+          "length": 8388608,
+          "sha256": "23a5e570d85d4e05beaca7d797f71bb42ea191604ca95073db2602b3b3f006d8"
+        },
+        {
+          "path": "Contents/Resources/Terraria.exe",
+          "fileSize": 26597376,
+          "offset": 25165824,
+          "length": 1431552,
+          "sha256": "1064de8a5e79bb66348479801fac084321190f17a1a1af50bece4fcbdabd194f"
+        },
+        {
+          "path": "Contents/Resources/FNA.dll.config",
+          "fileSize": 1049,
+          "offset": 0,
+          "length": 1049,
+          "sha256": "c935003d1bb00b56935a136562bc91333b0629eff1adaf1aef118a5da778a3f9"
+        },
+        {
+          "path": "Contents/Resources/FNA.dll",
+          "fileSize": 1090560,
+          "offset": 0,
+          "length": 1090560,
+          "sha256": "46d201f59ce6c3827414b2c2c5141c218acabda605b02e564d73ca2efb2a3171"
+        },
+        {
+          "path": "Contents/Resources/I18N.West.dll",
+          "fileSize": 71680,
+          "offset": 0,
+          "length": 71680,
+          "sha256": "e9054516fe6d75f376f7091b406001404b2ef54d2e52941431ecf54888c68e6c"
+        },
+        {
+          "path": "Contents/Resources/I18N.dll",
+          "fileSize": 39936,
+          "offset": 0,
+          "length": 39936,
+          "sha256": "d87308179b69ca7879f890278bd2c54d429fc32126fb83dd1d1fecf9847e5172"
+        },
+        {
+          "path": "Contents/Resources/Mono.Posix.dll",
+          "fileSize": 214528,
+          "offset": 0,
+          "length": 214528,
+          "sha256": "b5b12ed8df49db5a4597a3393ee1d2a340621e00fa320655323ae39793ef5f30"
+        },
+        {
+          "path": "Contents/Resources/Mono.Security.dll",
+          "fileSize": 241152,
+          "offset": 0,
+          "length": 241152,
+          "sha256": "77dc191189335bbc7886751a697669a2fa352f1a5723105546e06218eba43df8"
+        },
+        {
+          "path": "Contents/Resources/System.Configuration.dll",
+          "fileSize": 122880,
+          "offset": 0,
+          "length": 122880,
+          "sha256": "c1f69221dbbda2c25a4fbf2c63a5024b0994b4e70caeed3f25d5f095731fed8e"
+        },
+        {
+          "path": "Contents/Resources/System.Core.dll",
+          "fileSize": 1087488,
+          "offset": 0,
+          "length": 1087488,
+          "sha256": "3562db19a87d1d1267468fba7f311a4d2f0f0cec78b6148143ae1d4845cd2771"
+        },
+        {
+          "path": "Contents/Resources/System.Data.dll",
+          "fileSize": 2102272,
+          "offset": 0,
+          "length": 2102272,
+          "sha256": "b8d59d74f00d9874cedefeddfa7dcf70b0a6febb90fe109044fc7c2e5c42c3c6"
+        },
+        {
+          "path": "Contents/Resources/System.Drawing.dll",
+          "fileSize": 491520,
+          "offset": 0,
+          "length": 491520,
+          "sha256": "184cda72ae8beac7da8e6ef97619c890d24a59ffd31b6750d2617494b6589ab4"
+        },
+        {
+          "path": "Contents/Resources/System.Numerics.dll",
+          "fileSize": 119808,
+          "offset": 0,
+          "length": 119808,
+          "sha256": "c4cd050b23c2b55b5175417c60d6607192d0490fbc2dd8fad5db5a0515abb00f"
+        },
+        {
+          "path": "Contents/Resources/System.Runtime.Serialization.dll",
+          "fileSize": 939008,
+          "offset": 0,
+          "length": 939008,
+          "sha256": "0809c50a60d0554c2207297ca4ae81f748db57bee142dfd4985a275e8defdb08"
+        },
+        {
+          "path": "Contents/Resources/System.Security.dll",
+          "fileSize": 315904,
+          "offset": 0,
+          "length": 315904,
+          "sha256": "30e9679c5496c6f3d01558535c7a20eac65110671ab43315d9383e6cd43b69cd"
+        },
+        {
+          "path": "Contents/Resources/System.Windows.Forms.dll",
+          "fileSize": 3051008,
+          "offset": 0,
+          "length": 3051008,
+          "sha256": "0c850cd1d5343599a1c3cb2751e280903fb3668c29ef0aed93e3d84c453beecf"
+        },
+        {
+          "path": "Contents/Resources/System.Xml.Linq.dll",
+          "fileSize": 137728,
+          "offset": 0,
+          "length": 137728,
+          "sha256": "291f5a1e50a73682ecf2ea40747422840c10c8974cd81575b5821acceaf73d52"
+        },
+        {
+          "path": "Contents/Resources/System.Xml.dll",
+          "fileSize": 3173888,
+          "offset": 0,
+          "length": 3173888,
+          "sha256": "b1f3de84046b5d8905b31c759c0c66a8328734c931f2e33849e380c785afbcab"
+        },
+        {
+          "path": "Contents/Resources/System.dll",
+          "fileSize": 2594816,
+          "offset": 0,
+          "length": 2594816,
+          "sha256": "f991747c3c6aeb3fac4009f06258fc1d4d6b46cf593e1f4f8704da6c63c7e96b"
+        },
+        {
+          "path": "Contents/Resources/WindowsBase.dll",
+          "fileSize": 164864,
+          "offset": 0,
+          "length": 164864,
+          "sha256": "d4db491de06752ee77e2d2090a086bd4b79c7987efdcd9373ed4272df85edbbf"
+        },
+        {
+          "path": "Contents/Resources/mscorlib.dll",
+          "fileSize": 4633088,
+          "offset": 0,
+          "length": 4633088,
+          "sha256": "d5c8e4e627fc060c788d7865b3852ee663cb42670028dc98c5e7e75792515baf"
+        },
+        {
+          "path": "Contents/MacOS/osx/libFAudio.0.dylib",
+          "fileSize": 543232,
+          "offset": 0,
+          "length": 543232,
+          "sha256": "cdf21b0b8015dcf82512d35f300fb5f3b03b8539b2123e9173e675c5ede0076a"
+        },
+        {
+          "path": "Contents/MacOS/osx/libFNA3D.0.dylib",
+          "fileSize": 1026544,
+          "offset": 0,
+          "length": 1026544,
+          "sha256": "adfa2a8b6f9569bb82d6333b251be2de0f18a5ca6b476794e462b32a6bc16b9b"
+        },
+        {
+          "path": "Contents/MacOS/osx/libSDL3.0.dylib",
+          "fileSize": 6825856,
+          "offset": 0,
+          "length": 6825856,
+          "sha256": "648058651dee72677d909c03992a85d551795b05bbf5465b8d89b16a6c6fe283"
+        },
+        {
+          "path": "Contents/MacOS/osx/libnfd.dylib",
+          "fileSize": 85760,
+          "offset": 0,
+          "length": 85760,
+          "sha256": "b94606955b60bfe28768d5a9fa8290dd9876d14bc4179e29fd96c0500c7670d1"
+        },
+        {
+          "path": "Contents/MacOS/osx/libsteam_api.dylib",
+          "fileSize": 610384,
+          "offset": 0,
+          "length": 610384,
+          "sha256": "025a42fe02a40411429bc6afa7ff0092547408b03bf57d89da68413faed80176"
+        }
+      ],
+      "launchEnvironment": {
+        "SteamAppId": "105600",
+        "SteamGameId": "105600"
+      }
+    }
+  ],
+  "groups": [
+    {
+      "id": "player",
+      "title": "Spieler",
+      "symbol": "person",
+      "features": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "inventory",
+      "title": "Inventar & Handwerk",
+      "symbol": "shippingbox",
+      "features": [
+        6,
+        8
+      ]
+    },
+    {
+      "id": "combat",
+      "title": "Kampf",
+      "symbol": "scope",
+      "features": [
+        9
+      ]
+    },
+    {
+      "id": "world",
+      "title": "Welt & Spiel",
+      "symbol": "globe",
+      "features": [
+        7,
+        10,
+        11
+      ]
+    }
+  ]
+}

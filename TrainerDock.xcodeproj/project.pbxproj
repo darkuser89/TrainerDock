@@ -1426,6 +1426,238 @@
 			"productReference" = "B4C2EC0A318F35C0C0F88CC3";
 			"productType" = "com.apple.product-type.library.dynamic";
 		};
+		"EB26D61E58EE970A7C93F5FF" = {
+			"isa" = "PBXShellScriptBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/death-stranding/Module.json", "$(SRCROOT)/Modules/death-stranding/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/DeathStranding/NativeContractTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"name" = "Catalog, bridge, native and HiDPI checks";
+			"shellPath" = "/bin/bash";
+			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module death-stranding\n";
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"45D3E010BE4EB6F46006952E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/death-stranding/Sources/TrainerFeatures.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"79B3C3B15DBCAEB17345A815" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "45D3E010BE4EB6F46006952E";
+		};
+		"8687919E311DF6B3642BA342" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/death-stranding/Sources/GameAdapter.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"F2FDCB5F1E3296A23555539A" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "8687919E311DF6B3642BA342";
+		};
+		"3F839EBC0147B5B6418640F2" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/death-stranding/Sources/NativeAdapter.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"1F16D0DE1567F2F20C522536" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "3F839EBC0147B5B6418640F2";
+		};
+		"8A32BCE18FE1983816695583" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/death-stranding/Sources/GameBridge.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"C5D1FF00B7887FA7A0F90C3A" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "8A32BCE18FE1983816695583";
+		};
+		"A08B5C548DD7435AF62D5CD0" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/death-stranding/Sources/SelectionSettings.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"15DCDF3FD25CF70E8F366154" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "A08B5C548DD7435AF62D5CD0";
+		};
+		"80476CEE7381ADC1415EF5A6" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/death-stranding/Sources/GameProfile.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"4E7D51CFA80C89082B08DF56" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "80476CEE7381ADC1415EF5A6";
+		};
+		"C6D172D323A659880CF78584" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/death-stranding/Sources/MemoryAccess.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"38BE126A755DBEACC949A0B6" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "C6D172D323A659880CF78584";
+		};
+		"0D82319E257559109F4553F7" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/death-stranding/Sources/TrainerMaterial.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"A541DFAC410FAA789CCB4452" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "0D82319E257559109F4553F7";
+		};
+		"2BF149FAF9BF404BB5CAB794" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/death-stranding/Sources/Overlay.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"65AD17713D7D2413516ED643" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "2BF149FAF9BF404BB5CAB794";
+		};
+		"9ABA0A1BC93366B8F380A20D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/death-stranding/Sources/OverlaySettings.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"405E93DFD295DE15F66EB75B" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "9ABA0A1BC93366B8F380A20D";
+		};
+		"895D6ACB317F23EF2AFF5B04" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/death-stranding/Sources/OverlayShortcuts.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"D8C81DEB1A2F9F751D248E3E" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "895D6ACB317F23EF2AFF5B04";
+		};
+		"88E3FB30F5B8FDBF58E4A8EB" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/death-stranding/Sources/Runtime.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"1F93C89C7EC02D5708195BA4" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "88E3FB30F5B8FDBF58E4A8EB";
+		};
+		"FE81F10473CB50F06040BE9B" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/death-stranding/Sources/DecimaEngine.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"4590A50881A1A41B80B80B51" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "FE81F10473CB50F06040BE9B";
+		};
+		"FD09C22CBDE9BE71F34C2EA4" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/death-stranding/Sources/OverlayCursor.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"3575D3A181054294B6FF7E93" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "FD09C22CBDE9BE71F34C2EA4";
+		};
+		"12358CBA0E47D5CEE019C157" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "22F60203652AD2078DD0A34C";
+		};
+		"12E0790C73D9FEDFEBB5013D" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "A0AEEDF4F51BB81D82826C2B";
+		};
+		"551B7CA8048B72EB6CD51EC6" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "71A295E05EF3AAF22670B173";
+		};
+		"3A4B0D938226D44C55241B71" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ("79B3C3B15DBCAEB17345A815", "F2FDCB5F1E3296A23555539A", "1F16D0DE1567F2F20C522536", "C5D1FF00B7887FA7A0F90C3A", "15DCDF3FD25CF70E8F366154", "4E7D51CFA80C89082B08DF56", "38BE126A755DBEACC949A0B6", "A541DFAC410FAA789CCB4452", "65AD17713D7D2413516ED643", "405E93DFD295DE15F66EB75B", "D8C81DEB1A2F9F751D248E3E", "1F93C89C7EC02D5708195BA4", "4590A50881A1A41B80B80B51", "3575D3A181054294B6FF7E93", "12358CBA0E47D5CEE019C157", "12E0790C73D9FEDFEBB5013D", "551B7CA8048B72EB6CD51EC6");
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"9E0B00DD598312932F42EC44" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"F36F43EECD8C85A9C338A275" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "compiled.mach-o.dylib";
+			"path" = "Trainer.dylib";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"654BD817D886867CEA09D639" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "F4DEF456225CDD06E427CB99";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "Trainer";
+				"EXECUTABLE_PREFIX" = "";
+				"MACH_O_TYPE" = "mh_dylib";
+				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
+				"SKIP_INSTALL" = "YES";
+				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/death-stranding.mhtmodule";
+				"HEADER_SEARCH_PATHS" = ("$(SRCROOT)/Modules/death-stranding/Sources", "$(SRCROOT)/ModuleSDK", "$(DERIVED_FILE_DIR)");
+				"GCC_PREPROCESSOR_DEFINITIONS" = ("$(inherited)");
+				"OTHER_LDFLAGS" = ("$(inherited)", "-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++");
+				"ENABLE_HARDENED_RUNTIME" = "NO";
+			};
+			"name" = "Debug";
+		};
+		"7B88F456AA42FFC840F57B2E" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "F4DEF456225CDD06E427CB99";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "Trainer";
+				"EXECUTABLE_PREFIX" = "";
+				"MACH_O_TYPE" = "mh_dylib";
+				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
+				"SKIP_INSTALL" = "YES";
+				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/death-stranding.mhtmodule";
+				"HEADER_SEARCH_PATHS" = ("$(SRCROOT)/Modules/death-stranding/Sources", "$(SRCROOT)/ModuleSDK", "$(DERIVED_FILE_DIR)");
+				"GCC_PREPROCESSOR_DEFINITIONS" = ("$(inherited)");
+				"OTHER_LDFLAGS" = ("$(inherited)", "-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++");
+				"ENABLE_HARDENED_RUNTIME" = "NO";
+			};
+			"name" = "Release";
+		};
+		"535E2F6EAC7CD0A26C90D62E" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = ("654BD817D886867CEA09D639", "7B88F456AA42FFC840F57B2E");
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Debug";
+		};
+		"84C3752285C773770659C886" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = "535E2F6EAC7CD0A26C90D62E";
+			"buildPhases" = ("3A4B0D938226D44C55241B71", "9E0B00DD598312932F42EC44", "EB26D61E58EE970A7C93F5FF");
+			"buildRules" = ();
+			"dependencies" = ();
+			"name" = "Trainer-death-stranding";
+			"productName" = "Trainer";
+			"productReference" = "F36F43EECD8C85A9C338A275";
+			"productType" = "com.apple.product-type.library.dynamic";
+		};
 		"062B55AB9AF82500810E0520" = {
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
@@ -3672,6 +3904,490 @@
 			"productReference" = "9CB3948BF8BF35F41F0822D4";
 			"productType" = "com.apple.product-type.library.dynamic";
 		};
+		"88541D3C8BB4010FD261F893" = {
+			"isa" = "PBXShellScriptBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/terraria/Module.json", "$(SRCROOT)/Modules/terraria/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Terraria/NativeContractTests.mm", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"name" = "Catalog, bridge, native and HiDPI checks";
+			"shellPath" = "/bin/bash";
+			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module terraria\n";
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"EBA29EC731884E054943A670" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/terraria/Sources/TrainerFeatures.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"CBC57C197D2F8E07BF47E769" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "EBA29EC731884E054943A670";
+		};
+		"30B0987E9F4B3C4B32ED6FF8" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/terraria/Sources/GameAdapter.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"4986367C5E00C0B106AC42A0" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "30B0987E9F4B3C4B32ED6FF8";
+		};
+		"FCE79B0725A81F7B00C85D14" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/terraria/Sources/NativeAdapter.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"711C836931D48E1B9EFF0D32" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "FCE79B0725A81F7B00C85D14";
+		};
+		"282DB3AF93D9D64E161ADC4C" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/terraria/Sources/GameBridge.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"512FCA226449142AC2C25356" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "282DB3AF93D9D64E161ADC4C";
+		};
+		"C188C85E5978762294E6D9BD" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/terraria/Sources/SelectionSettings.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"12E61C9F6A46F26A617FA69C" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "C188C85E5978762294E6D9BD";
+		};
+		"9935306042394806DD739F47" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/terraria/Sources/GameProfile.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"AC6BA6BB4C8C3F5843525A3A" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "9935306042394806DD739F47";
+		};
+		"6A3352B885C0C615B3CF03EE" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/terraria/Sources/MemoryAccess.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"DAA3EEAD4F47F14A53219133" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "6A3352B885C0C615B3CF03EE";
+		};
+		"ACD7F753766ED239CE10316F" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/terraria/Sources/TrainerMaterial.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"8E2235C636CFAF4F35229B17" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "ACD7F753766ED239CE10316F";
+		};
+		"10B2FA3A0783D4917E7132A7" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/terraria/Sources/Overlay.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"18955F44BF732E070760D103" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "10B2FA3A0783D4917E7132A7";
+		};
+		"C0CA4E66C351558996355836" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/terraria/Sources/OverlaySettings.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"1FA1C3C7DC57872FB82E0070" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "C0CA4E66C351558996355836";
+		};
+		"6CA4657DEA4D954AF5F2569A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/terraria/Sources/OverlayShortcuts.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"251206FE6EA85BF2195ECA0D" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "6CA4657DEA4D954AF5F2569A";
+		};
+		"7BE24A8F42A474FE7A76EE60" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/terraria/Sources/Runtime.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"8D03CC4C5D3AA5F9FF40138E" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "7BE24A8F42A474FE7A76EE60";
+		};
+		"06D87D050A3A373F29F9542E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/terraria/Sources/Mono.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"420390E9A54E168C2F448C0D" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "06D87D050A3A373F29F9542E";
+		};
+		"04227B9C271B8C0D695BF858" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/terraria/Sources/TerrariaBackend.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"D8CA20C9EC281F770E1FE29E" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "04227B9C271B8C0D695BF858";
+		};
+		"2DB7BA4BFA76614F0A84E4CE" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "22F60203652AD2078DD0A34C";
+		};
+		"344706CD45DFC343F7FF61C6" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "A0AEEDF4F51BB81D82826C2B";
+		};
+		"C794742C18F6940F2020DE40" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "71A295E05EF3AAF22670B173";
+		};
+		"8732FE64826DEE3D633CDB32" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ("CBC57C197D2F8E07BF47E769", "4986367C5E00C0B106AC42A0", "711C836931D48E1B9EFF0D32", "512FCA226449142AC2C25356", "12E61C9F6A46F26A617FA69C", "AC6BA6BB4C8C3F5843525A3A", "DAA3EEAD4F47F14A53219133", "8E2235C636CFAF4F35229B17", "18955F44BF732E070760D103", "1FA1C3C7DC57872FB82E0070", "251206FE6EA85BF2195ECA0D", "8D03CC4C5D3AA5F9FF40138E", "420390E9A54E168C2F448C0D", "D8CA20C9EC281F770E1FE29E", "2DB7BA4BFA76614F0A84E4CE", "344706CD45DFC343F7FF61C6", "C794742C18F6940F2020DE40");
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"64C290459070B69A03CEAD55" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"A2AF556B254194350707E231" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "compiled.mach-o.dylib";
+			"path" = "Trainer.dylib";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"083FA3A884514C0E0B7CA884" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "F4DEF456225CDD06E427CB99";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "Trainer";
+				"EXECUTABLE_PREFIX" = "";
+				"MACH_O_TYPE" = "mh_dylib";
+				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
+				"SKIP_INSTALL" = "YES";
+				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/terraria.mhtmodule";
+				"HEADER_SEARCH_PATHS" = ("$(SRCROOT)/Modules/terraria/Sources", "$(SRCROOT)/ModuleSDK", "$(DERIVED_FILE_DIR)");
+				"GCC_PREPROCESSOR_DEFINITIONS" = ("$(inherited)");
+				"OTHER_LDFLAGS" = ("$(inherited)", "-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++");
+				"ENABLE_HARDENED_RUNTIME" = "NO";
+			};
+			"name" = "Debug";
+		};
+		"A233A2C3F9A61D623B34DE86" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "F4DEF456225CDD06E427CB99";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "Trainer";
+				"EXECUTABLE_PREFIX" = "";
+				"MACH_O_TYPE" = "mh_dylib";
+				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
+				"SKIP_INSTALL" = "YES";
+				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/terraria.mhtmodule";
+				"HEADER_SEARCH_PATHS" = ("$(SRCROOT)/Modules/terraria/Sources", "$(SRCROOT)/ModuleSDK", "$(DERIVED_FILE_DIR)");
+				"GCC_PREPROCESSOR_DEFINITIONS" = ("$(inherited)");
+				"OTHER_LDFLAGS" = ("$(inherited)", "-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++");
+				"ENABLE_HARDENED_RUNTIME" = "NO";
+			};
+			"name" = "Release";
+		};
+		"344577313809C7F36289CC21" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = ("083FA3A884514C0E0B7CA884", "A233A2C3F9A61D623B34DE86");
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Debug";
+		};
+		"002D7C436B072E071D56EBB8" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = "344577313809C7F36289CC21";
+			"buildPhases" = ("8732FE64826DEE3D633CDB32", "64C290459070B69A03CEAD55", "88541D3C8BB4010FD261F893");
+			"buildRules" = ();
+			"dependencies" = ();
+			"name" = "Trainer-terraria";
+			"productName" = "Trainer";
+			"productReference" = "A2AF556B254194350707E231";
+			"productType" = "com.apple.product-type.library.dynamic";
+		};
+		"689775FAEEF9D5F1A39CAB59" = {
+			"isa" = "PBXShellScriptBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/the-long-dark/Module.json", "$(SRCROOT)/Modules/the-long-dark/Build.json", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/TheLongDark/NativeContractTests.mm", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"name" = "Catalog, bridge, native and HiDPI checks";
+			"shellPath" = "/bin/bash";
+			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module the-long-dark\n";
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"EE25C123237B3259432F132B" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/the-long-dark/Sources/TrainerFeatures.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"43C315F94B4D453A867BACD2" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "EE25C123237B3259432F132B";
+		};
+		"EE4532F7910D8387131701ED" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/the-long-dark/Sources/GameAdapter.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"7F412CE9F71792DCC6D40E44" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "EE4532F7910D8387131701ED";
+		};
+		"02AD127001646B22F5B3C6B5" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/the-long-dark/Sources/NativeAdapter.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"E5D62CAC46C413EF08F0AB94" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "02AD127001646B22F5B3C6B5";
+		};
+		"7A270D425BABEAAD719BF339" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/the-long-dark/Sources/GameBridge.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"BC0D52BC1C1BDC4FA2C90167" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "7A270D425BABEAAD719BF339";
+		};
+		"393C68E68D85D8F01B6E11C5" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/the-long-dark/Sources/SelectionSettings.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"DC8C167197F7B67B79788E97" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "393C68E68D85D8F01B6E11C5";
+		};
+		"1DA622A5AC5650D0FECDF043" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/the-long-dark/Sources/GameProfile.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"F52E5995FCF6578FB03E8AD9" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "1DA622A5AC5650D0FECDF043";
+		};
+		"582DA30A4EA2CD273A04AB0E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/the-long-dark/Sources/MemoryAccess.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"1937562035A6F7C10758BC16" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "582DA30A4EA2CD273A04AB0E";
+		};
+		"0BF953B3FBF72796EFA0BE09" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/the-long-dark/Sources/TrainerMaterial.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"29205826D1A93BED15241CA9" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "0BF953B3FBF72796EFA0BE09";
+		};
+		"CC8E880969A652141A64747B" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/the-long-dark/Sources/Overlay.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"151627D22987D1DD3D4FB470" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "CC8E880969A652141A64747B";
+		};
+		"8564C31A9877BA5C60281332" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/the-long-dark/Sources/OverlaySettings.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"A4F579FA8101E232A504CA38" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "8564C31A9877BA5C60281332";
+		};
+		"E96247C4A4EA5C4527BCA557" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/the-long-dark/Sources/OverlayShortcuts.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"C89E98CB61AF60D4E60DFC08" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "E96247C4A4EA5C4527BCA557";
+		};
+		"EE4320F974B8F59CFA35E4BE" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/the-long-dark/Sources/Runtime.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"48BCCD4925F07E05BD22719C" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "EE4320F974B8F59CFA35E4BE";
+		};
+		"AC5026B24702DD3C93C8E272" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/the-long-dark/Sources/IL2CPP.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"4FB7B68919CD314E650B20C7" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "AC5026B24702DD3C93C8E272";
+		};
+		"B71468DAC79642F85E6CB8AB" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/the-long-dark/Sources/UnityLoop.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"288F1B03C0469F0619C2DC3F" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "B71468DAC79642F85E6CB8AB";
+		};
+		"9153035EB4A2FFA9F02A5876" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/the-long-dark/Sources/LongDarkBackend.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"239426A15BFE4EF2D58235BF" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "9153035EB4A2FFA9F02A5876";
+		};
+		"2727533860014C7AA396E32A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/the-long-dark/Sources/SaveGuard.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"C6EE38780F35ADE654D700D8" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "2727533860014C7AA396E32A";
+		};
+		"AF0663D6B38952393A1815DC" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "22F60203652AD2078DD0A34C";
+		};
+		"AEFEB8310D5071CA6347AAB1" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "A0AEEDF4F51BB81D82826C2B";
+		};
+		"22461F88B1339CF504F029D3" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "71A295E05EF3AAF22670B173";
+		};
+		"476CA635F5E9F32F464DD22A" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ("43C315F94B4D453A867BACD2", "7F412CE9F71792DCC6D40E44", "E5D62CAC46C413EF08F0AB94", "BC0D52BC1C1BDC4FA2C90167", "DC8C167197F7B67B79788E97", "F52E5995FCF6578FB03E8AD9", "1937562035A6F7C10758BC16", "29205826D1A93BED15241CA9", "151627D22987D1DD3D4FB470", "A4F579FA8101E232A504CA38", "C89E98CB61AF60D4E60DFC08", "48BCCD4925F07E05BD22719C", "4FB7B68919CD314E650B20C7", "288F1B03C0469F0619C2DC3F", "239426A15BFE4EF2D58235BF", "C6EE38780F35ADE654D700D8", "AF0663D6B38952393A1815DC", "AEFEB8310D5071CA6347AAB1", "22461F88B1339CF504F029D3");
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"FEB5730047393D0DEFC096EB" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"72ECF1D380F962AA039CB4A1" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "compiled.mach-o.dylib";
+			"path" = "Trainer.dylib";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"71E6435E0E86F1D0B4D9562B" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "F4DEF456225CDD06E427CB99";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "Trainer";
+				"EXECUTABLE_PREFIX" = "";
+				"MACH_O_TYPE" = "mh_dylib";
+				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
+				"SKIP_INSTALL" = "YES";
+				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/the-long-dark.mhtmodule";
+				"HEADER_SEARCH_PATHS" = ("$(SRCROOT)/Modules/the-long-dark/Sources", "$(SRCROOT)/ModuleSDK", "$(DERIVED_FILE_DIR)");
+				"GCC_PREPROCESSOR_DEFINITIONS" = ("$(inherited)");
+				"OTHER_LDFLAGS" = ("$(inherited)", "-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++");
+				"ENABLE_HARDENED_RUNTIME" = "NO";
+			};
+			"name" = "Debug";
+		};
+		"013EFD8465DE024868D2E03D" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "F4DEF456225CDD06E427CB99";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "Trainer";
+				"EXECUTABLE_PREFIX" = "";
+				"MACH_O_TYPE" = "mh_dylib";
+				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
+				"SKIP_INSTALL" = "YES";
+				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/the-long-dark.mhtmodule";
+				"HEADER_SEARCH_PATHS" = ("$(SRCROOT)/Modules/the-long-dark/Sources", "$(SRCROOT)/ModuleSDK", "$(DERIVED_FILE_DIR)");
+				"GCC_PREPROCESSOR_DEFINITIONS" = ("$(inherited)");
+				"OTHER_LDFLAGS" = ("$(inherited)", "-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++");
+				"ENABLE_HARDENED_RUNTIME" = "NO";
+			};
+			"name" = "Release";
+		};
+		"DEFD80A6AB2D7549A3F05001" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = ("71E6435E0E86F1D0B4D9562B", "013EFD8465DE024868D2E03D");
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Debug";
+		};
+		"544C2AD9AD77B34E7C6D7F06" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = "DEFD80A6AB2D7549A3F05001";
+			"buildPhases" = ("476CA635F5E9F32F464DD22A", "FEB5730047393D0DEFC096EB", "689775FAEEF9D5F1A39CAB59");
+			"buildRules" = ();
+			"dependencies" = ();
+			"name" = "Trainer-the-long-dark";
+			"productName" = "Trainer";
+			"productReference" = "72ECF1D380F962AA039CB4A1";
+			"productType" = "com.apple.product-type.library.dynamic";
+		};
 		"A4D4074ADEB1482D652FCEBD" = {
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
@@ -4172,6 +4888,10 @@
 			"isa" = "PBXTargetDependency";
 			"target" = "57169098A783799C3FAC2923";
 		};
+		"B92277F24CD027F727D4514F" = {
+			"isa" = "PBXTargetDependency";
+			"target" = "84C3752285C773770659C886";
+		};
 		"34342D799653556E620628DA" = {
 			"isa" = "PBXTargetDependency";
 			"target" = "0ED9D04802E14338851CEA76";
@@ -4212,6 +4932,14 @@
 			"isa" = "PBXTargetDependency";
 			"target" = "6B5C6172466F2377029931F4";
 		};
+		"6BA2211DF3C25CAA7F9A92DF" = {
+			"isa" = "PBXTargetDependency";
+			"target" = "002D7C436B072E071D56EBB8";
+		};
+		"7DD50E27EA90517EE995A488" = {
+			"isa" = "PBXTargetDependency";
+			"target" = "544C2AD9AD77B34E7C6D7F06";
+		};
 		"1D62A35B9498B42A1E93A9B5" = {
 			"isa" = "PBXTargetDependency";
 			"target" = "AB37692E9208AD9A947631C4";
@@ -4224,7 +4952,7 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/UpdaterTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/script/xcode_project.py", "$(TRAINERDOCK_BUILD_ROOT)/Modules/balatro.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/control.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/crimson-desert.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/cyberpunk-2077.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dead-island-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dome-keeper.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/escape-from-duckov.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/lies-of-p.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/no-mans-sky.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-3.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-4.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-7.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-village.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/robocop.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-crawlers.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-survivors.mhtmodule/Module.json");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/UpdaterTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/script/xcode_project.py", "$(TRAINERDOCK_BUILD_ROOT)/Modules/balatro.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/control.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/crimson-desert.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/cyberpunk-2077.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dead-island-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/death-stranding.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dome-keeper.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/escape-from-duckov.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/lies-of-p.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/no-mans-sky.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-3.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-4.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-7.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-village.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/robocop.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/terraria.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/the-long-dark.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-crawlers.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-survivors.mhtmodule/Module.json");
 			"outputPaths" = ("$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Verify launcher, module signatures and layout";
 			"shellPath" = "/bin/bash";
@@ -4255,7 +4983,7 @@
 			"isa" = "PBXAggregateTarget";
 			"buildConfigurationList" = "E22F6C63F7B2C5E22B06EE00";
 			"buildPhases" = ("0B57929311D45D24D41D5FCE");
-			"dependencies" = ("01D96416F6F93BF1DC10B9D8", "A28C28D74AE9FBAEC53CE198", "36013B31F45A59B7C8CB0888", "A0FDF4B37C707111CB32E1A5", "CF6BE48E68C0E99F81083648", "A7BDF65D7E105531D1DC649D", "34342D799653556E620628DA", "7449C3F3C34131FD0EB3A421", "6561344919C7BF6BE1F42743", "AC1F7B583FE6A11E281B8BDE", "60F380C2074288C6460BFD85", "6DBA4DB370D5F75917CA806D", "995596E49E9F6DA0E42E2708", "336BD94A1A522E8AA5F7397F", "84E408AA69E0E4CB94910C1D", "A9CDD78B45897AE592EEDDB8", "1D62A35B9498B42A1E93A9B5", "07878358E7EDB489DBD1E15B");
+			"dependencies" = ("01D96416F6F93BF1DC10B9D8", "A28C28D74AE9FBAEC53CE198", "36013B31F45A59B7C8CB0888", "A0FDF4B37C707111CB32E1A5", "CF6BE48E68C0E99F81083648", "A7BDF65D7E105531D1DC649D", "B92277F24CD027F727D4514F", "34342D799653556E620628DA", "7449C3F3C34131FD0EB3A421", "6561344919C7BF6BE1F42743", "AC1F7B583FE6A11E281B8BDE", "60F380C2074288C6460BFD85", "6DBA4DB370D5F75917CA806D", "995596E49E9F6DA0E42E2708", "336BD94A1A522E8AA5F7397F", "84E408AA69E0E4CB94910C1D", "A9CDD78B45897AE592EEDDB8", "6BA2211DF3C25CAA7F9A92DF", "7DD50E27EA90517EE995A488", "1D62A35B9498B42A1E93A9B5", "07878358E7EDB489DBD1E15B");
 			"name" = "TrainerDock-Verified";
 			"productName" = "TrainerDock-Verified";
 		};
@@ -4267,7 +4995,7 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/UpdaterTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/script/xcode_project.py", "$(TRAINERDOCK_BUILD_ROOT)/Modules/balatro.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/control.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/crimson-desert.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/cyberpunk-2077.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dead-island-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dome-keeper.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/escape-from-duckov.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/lies-of-p.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/no-mans-sky.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-3.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-4.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-7.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-village.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/robocop.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-crawlers.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-survivors.mhtmodule/Module.json");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/UpdaterTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/script/xcode_project.py", "$(TRAINERDOCK_BUILD_ROOT)/Modules/balatro.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/control.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/crimson-desert.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/cyberpunk-2077.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dead-island-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/death-stranding.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dome-keeper.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/escape-from-duckov.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/lies-of-p.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/no-mans-sky.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-3.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-4.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-7.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-village.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/robocop.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/terraria.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/the-long-dark.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-crawlers.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-survivors.mhtmodule/Module.json");
 			"outputPaths" = ("$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Verify launcher, module signatures and layout";
 			"shellPath" = "/bin/bash";
@@ -5304,6 +6032,138 @@
 			"name" = "dead-island-2";
 			"sourceTree" = "<group>";
 		};
+		"F075EB55301723D7522FA98A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/death-stranding/Sources/DecimaBindings.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"6BD3FC5AE9DF2E785A3413DF" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/death-stranding/Sources/DecimaEngine.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"A9BC0BC12306F83F4C84BBC1" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/death-stranding/Sources/GameAdapter.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"3B8C38C9139E893B36F1121B" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/death-stranding/Sources/GameBridge.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"95F72D7FFBF98427F07E3651" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/death-stranding/Sources/GameProfile.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"85E3F6E7B2A8450C0DC78521" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/death-stranding/Sources/LICENSE";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"7F5EDC44E0F61FD92588F156" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/death-stranding/Sources/MemoryAccess.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"0E728710E67051B82D3086B4" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/death-stranding/Sources/NativeAdapter.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"606E9316A843B207456FDDC9" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/death-stranding/Sources/Overlay.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"AEB9302DEB44E93715F85B73" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/death-stranding/Sources/OverlayCursor.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"9EC99DE9DFC23F0A4597FB00" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/death-stranding/Sources/OverlaySettings.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"B01DA829A7CA1B20C272565E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/death-stranding/Sources/OverlayShortcuts.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"C27F22F887F6B88A840C8440" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/death-stranding/Sources/SelectionSettings.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"F677769608466CA663AFB60E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/death-stranding/Sources/TrainerFeatures.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"3EBAA38844AD97070CAC3F71" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/death-stranding/Sources/TrainerMaterial.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"3E6571E92FCD5B7A8E27A498" = {
+			"isa" = "PBXGroup";
+			"children" = ("F075EB55301723D7522FA98A", "6BD3FC5AE9DF2E785A3413DF", "FE81F10473CB50F06040BE9B", "A9BC0BC12306F83F4C84BBC1", "8687919E311DF6B3642BA342", "3B8C38C9139E893B36F1121B", "8A32BCE18FE1983816695583", "95F72D7FFBF98427F07E3651", "80476CEE7381ADC1415EF5A6", "85E3F6E7B2A8450C0DC78521", "7F5EDC44E0F61FD92588F156", "C6D172D323A659880CF78584", "0E728710E67051B82D3086B4", "3F839EBC0147B5B6418640F2", "606E9316A843B207456FDDC9", "2BF149FAF9BF404BB5CAB794", "AEB9302DEB44E93715F85B73", "FD09C22CBDE9BE71F34C2EA4", "9EC99DE9DFC23F0A4597FB00", "9ABA0A1BC93366B8F380A20D", "B01DA829A7CA1B20C272565E", "895D6ACB317F23EF2AFF5B04", "88E3FB30F5B8FDBF58E4A8EB", "C27F22F887F6B88A840C8440", "A08B5C548DD7435AF62D5CD0", "F677769608466CA663AFB60E", "45D3E010BE4EB6F46006952E", "3EBAA38844AD97070CAC3F71", "0D82319E257559109F4553F7");
+			"name" = "Sources";
+			"sourceTree" = "<group>";
+		};
+		"5DD94EDA67F11E04A1B4D613" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/death-stranding/AGENTS.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"CEAEEAE5BE50E88B12892D40" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/death-stranding/Build.json";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"B3FC3ADAEA7DA431311A3B36" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/death-stranding/CHAT_START.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"EA8DDDF945B464F5A4201C26" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/death-stranding/Module.json";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"BED627193C8D8270CE1607E4" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/death-stranding/README.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"68C7961B65B1794F4BF28196" = {
+			"isa" = "PBXGroup";
+			"children" = ("3E6571E92FCD5B7A8E27A498", "5DD94EDA67F11E04A1B4D613", "CEAEEAE5BE50E88B12892D40", "B3FC3ADAEA7DA431311A3B36", "EA8DDDF945B464F5A4201C26", "BED627193C8D8270CE1607E4");
+			"name" = "death-stranding";
+			"sourceTree" = "<group>";
+		};
 		"8D1C76A4886DF89DE2948626" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.cpp.h";
@@ -6000,6 +6860,276 @@
 			"name" = "robocop";
 			"sourceTree" = "<group>";
 		};
+		"628328C240313FF9DA7954FD" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/terraria/Sources/GameAdapter.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"55B5DB294B75EBBBA43EF5F6" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/terraria/Sources/GameBridge.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"59D99BD95B6E406D811E676E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/terraria/Sources/GameProfile.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"DB03AEB012A62140DBBFFA6B" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/terraria/Sources/LICENSE";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"457379BE58542F9B208F7D32" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/terraria/Sources/MemoryAccess.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"687208E95B57F2CA5F251B63" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/terraria/Sources/Mono.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"4ED3336A5430486EF3897DF5" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/terraria/Sources/NativeAdapter.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"2A704A18BDCF80BB904DAC88" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/terraria/Sources/Overlay.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"645580EF638B25F4182E83EA" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/terraria/Sources/OverlaySettings.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"FCBC61E0E6E1C48AF13E0BCD" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/terraria/Sources/OverlayShortcuts.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"146A589A086C1E581AF2B79A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/terraria/Sources/SelectionSettings.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"28AA0BF341EC8AB72197544F" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/terraria/Sources/TerrariaBackend.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"469A33A4023FA43742C28CAD" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/terraria/Sources/TrainerFeatures.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"8309BCF581F93FBD02F1D80B" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/terraria/Sources/TrainerMaterial.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"7B08630E9577DA21F0218D65" = {
+			"isa" = "PBXGroup";
+			"children" = ("628328C240313FF9DA7954FD", "30B0987E9F4B3C4B32ED6FF8", "55B5DB294B75EBBBA43EF5F6", "282DB3AF93D9D64E161ADC4C", "59D99BD95B6E406D811E676E", "9935306042394806DD739F47", "DB03AEB012A62140DBBFFA6B", "457379BE58542F9B208F7D32", "6A3352B885C0C615B3CF03EE", "687208E95B57F2CA5F251B63", "06D87D050A3A373F29F9542E", "4ED3336A5430486EF3897DF5", "FCE79B0725A81F7B00C85D14", "2A704A18BDCF80BB904DAC88", "10B2FA3A0783D4917E7132A7", "645580EF638B25F4182E83EA", "C0CA4E66C351558996355836", "FCBC61E0E6E1C48AF13E0BCD", "6CA4657DEA4D954AF5F2569A", "7BE24A8F42A474FE7A76EE60", "146A589A086C1E581AF2B79A", "C188C85E5978762294E6D9BD", "28AA0BF341EC8AB72197544F", "04227B9C271B8C0D695BF858", "469A33A4023FA43742C28CAD", "EBA29EC731884E054943A670", "8309BCF581F93FBD02F1D80B", "ACD7F753766ED239CE10316F");
+			"name" = "Sources";
+			"sourceTree" = "<group>";
+		};
+		"37390153B6905B4D375394F8" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/terraria/AGENTS.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"45BFEDFCABD98CC6E7EDD02A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/terraria/Build.json";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"8ADB1B52C78F0DF4A450077F" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/terraria/CHAT_START.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"F7FA7B736661BD0FE23778B1" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/terraria/Module.json";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"6E565A478D31088F2C2AA12C" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/terraria/README.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"5D681153DFF38506792EA780" = {
+			"isa" = "PBXGroup";
+			"children" = ("7B08630E9577DA21F0218D65", "37390153B6905B4D375394F8", "45BFEDFCABD98CC6E7EDD02A", "8ADB1B52C78F0DF4A450077F", "F7FA7B736661BD0FE23778B1", "6E565A478D31088F2C2AA12C");
+			"name" = "terraria";
+			"sourceTree" = "<group>";
+		};
+		"FE0890E0DCAA6F2A7202704F" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/the-long-dark/Sources/GameAdapter.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"881A895CA48750D51130B7B4" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/the-long-dark/Sources/GameBridge.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"6DF9A1E65706DF698EA1D315" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/the-long-dark/Sources/GameProfile.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"A6F06AB4816EAECD0AC30046" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/the-long-dark/Sources/IL2CPP.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"EC2C17965B74E0AFDD5314A5" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/the-long-dark/Sources/LICENSE";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"CFDEC3694839E99682E9FD4A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/the-long-dark/Sources/LongDarkBackend.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"53F7198C729C8AC5C0219295" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/the-long-dark/Sources/MemoryAccess.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"CB89E5E56B1B42A78F902EDE" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/the-long-dark/Sources/NativeAdapter.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"FC41ACAA35A5FF54E2F2488E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/the-long-dark/Sources/NativeFields.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"FF2698C6797488D1D9F9023A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/the-long-dark/Sources/Overlay.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"8838D73928E43056684776B4" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/the-long-dark/Sources/OverlaySettings.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"9D0A97B69700907A14233EDB" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/the-long-dark/Sources/OverlayShortcuts.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"24B4D4177BEC2C4DBD93777A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/the-long-dark/Sources/SaveGuard.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"087F51F9170DB6E5282FAF03" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/the-long-dark/Sources/SelectionSettings.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"374D4E68C16F5033D3FBEB7B" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/the-long-dark/Sources/TrainerFeatures.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"DFDAEFE54BF6860DE87A06D5" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/the-long-dark/Sources/TrainerMaterial.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"8DFE09E9A6D40715C457B2B8" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/the-long-dark/Sources/UnityLoop.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"E2ECC8304FE2C202CB865D61" = {
+			"isa" = "PBXGroup";
+			"children" = ("FE0890E0DCAA6F2A7202704F", "EE4532F7910D8387131701ED", "881A895CA48750D51130B7B4", "7A270D425BABEAAD719BF339", "6DF9A1E65706DF698EA1D315", "1DA622A5AC5650D0FECDF043", "A6F06AB4816EAECD0AC30046", "AC5026B24702DD3C93C8E272", "EC2C17965B74E0AFDD5314A5", "CFDEC3694839E99682E9FD4A", "9153035EB4A2FFA9F02A5876", "53F7198C729C8AC5C0219295", "582DA30A4EA2CD273A04AB0E", "CB89E5E56B1B42A78F902EDE", "02AD127001646B22F5B3C6B5", "FC41ACAA35A5FF54E2F2488E", "FF2698C6797488D1D9F9023A", "CC8E880969A652141A64747B", "8838D73928E43056684776B4", "8564C31A9877BA5C60281332", "9D0A97B69700907A14233EDB", "E96247C4A4EA5C4527BCA557", "EE4320F974B8F59CFA35E4BE", "24B4D4177BEC2C4DBD93777A", "2727533860014C7AA396E32A", "087F51F9170DB6E5282FAF03", "393C68E68D85D8F01B6E11C5", "374D4E68C16F5033D3FBEB7B", "EE25C123237B3259432F132B", "DFDAEFE54BF6860DE87A06D5", "0BF953B3FBF72796EFA0BE09", "8DFE09E9A6D40715C457B2B8", "B71468DAC79642F85E6CB8AB");
+			"name" = "Sources";
+			"sourceTree" = "<group>";
+		};
+		"5198A631A5E1C64378132E24" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/the-long-dark/AGENTS.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"90C0856034EE7F470A4239E7" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/the-long-dark/Build.json";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"12143E2E0604D8D542647056" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/the-long-dark/CHAT_START.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"109A649CDD241545CC0819EA" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/the-long-dark/Module.json";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"10829DD24704D9E55373ED6F" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/the-long-dark/README.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"7B5AAD514B418ABABE7D686E" = {
+			"isa" = "PBXGroup";
+			"children" = ("E2ECC8304FE2C202CB865D61", "5198A631A5E1C64378132E24", "90C0856034EE7F470A4239E7", "12143E2E0604D8D542647056", "109A649CDD241545CC0819EA", "10829DD24704D9E55373ED6F");
+			"name" = "the-long-dark";
+			"sourceTree" = "<group>";
+		};
 		"92EF6DC532357E793F6CC0C4" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.h";
@@ -6272,7 +7402,7 @@
 		};
 		"3797E64238CADC23F937DE2E" = {
 			"isa" = "PBXGroup";
-			"children" = ("F5CD0D66BBAACE9BD02FC0DA", "062F91E27C907B63C78F7073", "F29A61C506744D62FFB58934", "1F9595D298B0BD4FF2FF13AE", "FDFA05E8490CAC3E37AE63AF", "898B94E7AC7DB70258FD2A01", "50E4DE60874E10233AA7AFC8", "98439BD32F5C169B43BE76B6", "027A2B1713B83CD8FE2CBA30", "D0394ED0C36569BFD589E21B", "660D1D64EB32477DA11A088A", "4F86B9E2458B5BE159E75394", "173345CF9A59DE6320E20C81", "3838914CEA3D824168E88C24", "378A4E09183E2A1D8A7D4C55", "5808CBF31DC8F0ED68AE438C", "430F7067714B7904EBD099D9", "D77FA87A6E6576CD5A0AE202");
+			"children" = ("F5CD0D66BBAACE9BD02FC0DA", "062F91E27C907B63C78F7073", "F29A61C506744D62FFB58934", "1F9595D298B0BD4FF2FF13AE", "FDFA05E8490CAC3E37AE63AF", "898B94E7AC7DB70258FD2A01", "68C7961B65B1794F4BF28196", "50E4DE60874E10233AA7AFC8", "98439BD32F5C169B43BE76B6", "027A2B1713B83CD8FE2CBA30", "D0394ED0C36569BFD589E21B", "660D1D64EB32477DA11A088A", "4F86B9E2458B5BE159E75394", "173345CF9A59DE6320E20C81", "3838914CEA3D824168E88C24", "378A4E09183E2A1D8A7D4C55", "5808CBF31DC8F0ED68AE438C", "5D681153DFF38506792EA780", "7B5AAD514B418ABABE7D686E", "430F7067714B7904EBD099D9", "D77FA87A6E6576CD5A0AE202");
 			"name" = "Modules";
 			"sourceTree" = "<group>";
 		};
@@ -6552,6 +7682,72 @@
 			"name" = "DeadIsland2";
 			"sourceTree" = "<group>";
 		};
+		"47087790ADD4642A42E2EB21" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/DeathStranding/BBStressCheck.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"911D3ADA2E899B88FA46CF35" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/DeathStranding/BuildCandidate.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"79D7A5F088F0E3B2A7BF8175" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/DeathStranding/CandidateProbe.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"46D8CD68583DFC3CDD40629C" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/DeathStranding/ExpandedCheck.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"378476EEA7B3883301937FC5" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/DeathStranding/NativeContractTests.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"84C90F90A0B74500F80EEAED" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/DeathStranding/RuntimeProbe.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"8534F22C8405C9C2AF86BBAA" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/DeathStranding/StartupFixture.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"3054729ED247C775B65D4C07" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/DeathStranding/StartupTests.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"53813BAAED41B9A1D51C3C77" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/DeathStranding/StoreHarness.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"02558A3F5AA7A9F54F5F04C9" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/DeathStranding/WaterReserveCheck.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"774BF8DD634424BA7BD916BA" = {
+			"isa" = "PBXGroup";
+			"children" = ("47087790ADD4642A42E2EB21", "911D3ADA2E899B88FA46CF35", "79D7A5F088F0E3B2A7BF8175", "46D8CD68583DFC3CDD40629C", "378476EEA7B3883301937FC5", "84C90F90A0B74500F80EEAED", "8534F22C8405C9C2AF86BBAA", "3054729ED247C775B65D4C07", "53813BAAED41B9A1D51C3C77", "02558A3F5AA7A9F54F5F04C9");
+			"name" = "DeathStranding";
+			"sourceTree" = "<group>";
+		};
 		"52267E550A0625B6DE52B257" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.objc";
@@ -6634,6 +7830,138 @@
 			"isa" = "PBXGroup";
 			"children" = ("BC2DF99693E8F4744D9AB086", "707F8F2E6EA78D227EA535E2", "4259EF6A148E40FF41887C15", "9DD83E6110D3CA6627AD90BF", "4BCEEA61C0216484EBD44FA6", "EAC34D10A178CCEA29EA3F13");
 			"name" = "NoMansSky";
+			"sourceTree" = "<group>";
+		};
+		"C984C9640AE611D073891C75" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Terraria/BuildCandidate.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"3FDC152E1740584CF4AD0E84" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/Terraria/CandidateChecks.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"C6F39D2E952354224CAE81DC" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Terraria/Control.swift";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"FD78604A13E70AF23C0877F9" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Terraria/InspectAssembly.cs";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"B313604079075C238C55CFE9" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Terraria/InspectAssembly.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"F2D650543AC0DDDC05FC4976" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Terraria/Launch.swift";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"BF31B3253A4680FCD3030C23" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/Terraria/NativeContractTests.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"15C5E02CBF3D4C11BE10B386" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/Terraria/ProfileCheck.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"5BD501D30C585EED33C9FCEF" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Terraria/Query.swift";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"453BCC9F40C25129A11AFE42" = {
+			"isa" = "PBXGroup";
+			"children" = ("C984C9640AE611D073891C75", "3FDC152E1740584CF4AD0E84", "C6F39D2E952354224CAE81DC", "FD78604A13E70AF23C0877F9", "B313604079075C238C55CFE9", "F2D650543AC0DDDC05FC4976", "BF31B3253A4680FCD3030C23", "15C5E02CBF3D4C11BE10B386", "5BD501D30C585EED33C9FCEF");
+			"name" = "Terraria";
+			"sourceTree" = "<group>";
+		};
+		"10EE681AA842DBACE84477B0" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/TheLongDark/BuildCandidate.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"CA45F85EBFFA29630882DDC7" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/TheLongDark/BuildProbe.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"8D711399345D7AA2AC546A5A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/TheLongDark/CandidateChecks.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"A8E0A77578A7AB735DD55B26" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/TheLongDark/Control.swift";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"B3C06B4B13040A4B8FED8992" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/TheLongDark/Disassemble.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"36F1E5BFADD18FA04A4DBC00" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/TheLongDark/Launch.swift";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"30DE89535AC55E8A0082A264" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/TheLongDark/NativeContractTests.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"0BEF2DE55A823513E0450925" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/TheLongDark/OriginalMethods.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"339CD85CF54648867CE90930" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/TheLongDark/Probe.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"161FE3303A6B4FBF37F218AE" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/TheLongDark/ProfileCheck.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"22CDE40908108C1F8E52D450" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/TheLongDark/Query.swift";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"66C06B56AC0DB42568B2CB8C" = {
+			"isa" = "PBXGroup";
+			"children" = ("10EE681AA842DBACE84477B0", "CA45F85EBFFA29630882DDC7", "8D711399345D7AA2AC546A5A", "A8E0A77578A7AB735DD55B26", "B3C06B4B13040A4B8FED8992", "36F1E5BFADD18FA04A4DBC00", "30DE89535AC55E8A0082A264", "0BEF2DE55A823513E0450925", "339CD85CF54648867CE90930", "161FE3303A6B4FBF37F218AE", "22CDE40908108C1F8E52D450");
+			"name" = "TheLongDark";
 			"sourceTree" = "<group>";
 		};
 		"B3428F00090617853BD1CBF5" = {
@@ -6800,7 +8128,7 @@
 		};
 		"6DC4FAD667A85B8567F612FB" = {
 			"isa" = "PBXGroup";
-			"children" = ("95B85911D95C09F76077731D", "C558322C90F7C824EA333596", "9681BA565B80261048F375D6", "578887ED95FE266FE7E3C8CC", "3C9AA7F0D72E39A723213356", "9ABCB2D9903EA261D4B7675F", "C8438F0955C23E64B24CBFF4", "C7937F2CF58FBDC42DD73A82", "0AB8D325CA82C5A2F0E18B6F", "C3BD1762E47CFABFCD557C0D", "8959DF4A9F4735B4184ED876", "FE179AB05960397A0672CCDC", "272738046A71249570292AA4", "DAB207F704FDB6B20BDD3AA5", "92301B6E4315211EDE150A05", "EE99C02AC506535CD0888494", "46494363C1164468D58AC7DD", "54F9CF01D24044637CF3D68C", "8B873C8801208A32F871EEF6", "C10871D3BA468B9911412563", "3D3477CCF699C841A7E9A36D", "C20FA7C518ADBFC4CFB3FE75");
+			"children" = ("95B85911D95C09F76077731D", "C558322C90F7C824EA333596", "9681BA565B80261048F375D6", "578887ED95FE266FE7E3C8CC", "774BF8DD634424BA7BD916BA", "3C9AA7F0D72E39A723213356", "9ABCB2D9903EA261D4B7675F", "C8438F0955C23E64B24CBFF4", "C7937F2CF58FBDC42DD73A82", "453BCC9F40C25129A11AFE42", "66C06B56AC0DB42568B2CB8C", "0AB8D325CA82C5A2F0E18B6F", "C3BD1762E47CFABFCD557C0D", "8959DF4A9F4735B4184ED876", "FE179AB05960397A0672CCDC", "272738046A71249570292AA4", "DAB207F704FDB6B20BDD3AA5", "92301B6E4315211EDE150A05", "EE99C02AC506535CD0888494", "46494363C1164468D58AC7DD", "54F9CF01D24044637CF3D68C", "8B873C8801208A32F871EEF6", "C10871D3BA468B9911412563", "3D3477CCF699C841A7E9A36D", "C20FA7C518ADBFC4CFB3FE75");
 			"name" = "Tests";
 			"sourceTree" = "<group>";
 		};
@@ -7106,7 +8434,7 @@
 		};
 		"0A3E27B8CA818264D75C8D81" = {
 			"isa" = "PBXGroup";
-			"children" = ("A4EA575B674B3360A1567417", "0C54B35A036A6A5F66500870", "8514A5005905E7AC966AA13D", "ABC009279859D95948608A7B", "DAE68E039F16F762988438F5", "B4C2EC0A318F35C0C0F88CC3", "96E0801C832166B4B9D6BAD1", "FBCB12816DDC187D9622F973", "D662E4D0C40E51E0943D2A8C", "8DD27ED101D41C973ED3B0C2", "01A159395358FF6CA61C1BDC", "FF06EF98D1125FEFFB9F65F4", "D16E45F13555F4C93C52D080", "A6158DD26712C538D5C34682", "F3C7869E35D9A1879E8D484B", "9CB3948BF8BF35F41F0822D4", "F049A51994C694CFB36F118F", "4E14C6621731AC7373885BE2");
+			"children" = ("A4EA575B674B3360A1567417", "0C54B35A036A6A5F66500870", "8514A5005905E7AC966AA13D", "ABC009279859D95948608A7B", "DAE68E039F16F762988438F5", "B4C2EC0A318F35C0C0F88CC3", "F36F43EECD8C85A9C338A275", "96E0801C832166B4B9D6BAD1", "FBCB12816DDC187D9622F973", "D662E4D0C40E51E0943D2A8C", "8DD27ED101D41C973ED3B0C2", "01A159395358FF6CA61C1BDC", "FF06EF98D1125FEFFB9F65F4", "D16E45F13555F4C93C52D080", "A6158DD26712C538D5C34682", "F3C7869E35D9A1879E8D484B", "9CB3948BF8BF35F41F0822D4", "A2AF556B254194350707E231", "72ECF1D380F962AA039CB4A1", "F049A51994C694CFB36F118F", "4E14C6621731AC7373885BE2");
 			"name" = "Products";
 			"sourceTree" = "<group>";
 		};
@@ -7150,7 +8478,7 @@
 			"productRefGroup" = "0A3E27B8CA818264D75C8D81";
 			"projectDirPath" = "";
 			"projectRoot" = "";
-			"targets" = ("9B492FD0BF085E3B7DBB21E0", "6B7CD1EF17007936405E1B6E", "92849A14EE4AD84BE6FBDA13", "1366DF5032A73C177DC2C81B", "6FD9A6562490373088E0BC39", "57169098A783799C3FAC2923", "0ED9D04802E14338851CEA76", "240D569859218DE346C7B099", "C13F7F8275A3CCFB57EEE43D", "EB68ABF763C47B3B66CB5AA9", "1F6B84363E2CB0E012842A18", "C8AF616DA5CACC5B35BBD736", "789CA890B287F8D8E55DECD9", "F5F2131170E5FCF56D851C7A", "8404F0B645EEB966D7E6C7F6", "6B5C6172466F2377029931F4", "AB37692E9208AD9A947631C4", "E4E236468DD5CC8D45F3FA82", "5826C760A6B14C431B64B1F3", "E8D25D95B7BEC2D17E3D01C9");
+			"targets" = ("9B492FD0BF085E3B7DBB21E0", "6B7CD1EF17007936405E1B6E", "92849A14EE4AD84BE6FBDA13", "1366DF5032A73C177DC2C81B", "6FD9A6562490373088E0BC39", "57169098A783799C3FAC2923", "84C3752285C773770659C886", "0ED9D04802E14338851CEA76", "240D569859218DE346C7B099", "C13F7F8275A3CCFB57EEE43D", "EB68ABF763C47B3B66CB5AA9", "1F6B84363E2CB0E012842A18", "C8AF616DA5CACC5B35BBD736", "789CA890B287F8D8E55DECD9", "F5F2131170E5FCF56D851C7A", "8404F0B645EEB966D7E6C7F6", "6B5C6172466F2377029931F4", "002D7C436B072E071D56EBB8", "544C2AD9AD77B34E7C6D7F06", "AB37692E9208AD9A947631C4", "E4E236468DD5CC8D45F3FA82", "5826C760A6B14C431B64B1F3", "E8D25D95B7BEC2D17E3D01C9");
 		};
 	};
 	"rootObject" = "244210E48437B6556980A702";

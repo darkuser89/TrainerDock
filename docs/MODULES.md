@@ -26,6 +26,15 @@ dessen ursprünglicher Installationsordner nicht als `.app` registriert ist.
 Ohne dieses Feld verwendet TrainerDock den normalen macOS-Appstart. Beide Wege übergeben
 denselben Trainervertrag; ein Startfehler darf keinen Ersatzstart ohne Trainer auslösen.
 
+Bei einem originalen Shellwrapper kann ein ausdrücklich freigegebenes
+`sha256-original`-Profil zusätzlich `bundleExecutable` nennen. Dieses muss dem
+originalen CFBundleExecutable entsprechen und vollständig mitgehasht sein;
+`executable` bezeichnet weiterhin das tatsächlich geprüfte native Programm.
+Optionale `workingDirectory` und `libraryDirectory` sind relative, existierende
+Verzeichnisse innerhalb des Bundles, auch nach Symlinkauflösung. Letzteres liefert
+den originalen Bibliothekssuchpfad. Der Host prüft vor beiden Startwegen zusätzlich
+den tatsächlichen Executable-Pfad laufender Prozesse, auch ohne App-Registrierung.
+
 ## Neues Modul anlegen
 
 ### Versionierte Auswahl
