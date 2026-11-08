@@ -107,7 +107,7 @@ def write_json(path, value):
 
 
 def get_json(url, token=None):
-    headers = {"Accept": "application/vnd.github+json", "User-Agent": "TrainerDock-distribution"}
+    headers = {"Accept": "application/vnd.github+json", "Cache-Control": "no-cache", "User-Agent": "TrainerDock-distribution"}
     if token and url.startswith(API_URL + "/"):
         headers["Authorization"] = "Bearer " + token
     with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=60) as response:
@@ -115,6 +115,41 @@ def get_json(url, token=None):
     if len(data) > 8 * 1024 * 1024:
         raise ValueError("GitHub-Metadaten überschreiten die erlaubte Größe.")
     return json.loads(data)
+
+
+class AssetRedirect(urllib.request.HTTPRedirectHandler):
+    """Release redirects must not forward the repository access token."""
+    def redirect_request(self, request, response, code, message, headers, newurl):
+        target = urllib.parse.urlsplit(newurl)
+        if target.scheme != "https" or target.hostname not in (
+                "api.github.com", "github.com", "release-assets.githubusercontent.com", "objects.githubusercontent.com"):
+            raise ValueError("Fremdes GitHub-Assetziel.")
+        redirected = super().redirect_request(request, response, code, message, headers, newurl)
+        if redirected:
+            for name in list(redirected.headers):
+                if name.lower() == "authorization":
+                    del redirected.headers[name]
+            for name in list(redirected.unredirected_hdrs):
+                if name.lower() == "authorization":
+                    del redirected.unredirected_hdrs[name]
+        return redirected
+
+
+def download_catalog_asset(asset, token=None):
+    """Confirm immutable asset identity; the renamed canonical CDN URL may lag."""
+    identifier, size, digest = asset.get("id"), asset.get("size"), asset.get("digest", "")
+    if type(identifier) is not int or identifier <= 0 or type(size) is not int or not 0 < size <= 8 * 1024 * 1024 or not re.fullmatch(r"sha256:[a-f0-9]{64}", digest):
+        raise ValueError("Ungültige bestätigte GitHub-Katalogdatei.")
+    request = urllib.request.Request(API_URL + "/releases/assets/" + str(identifier), headers={
+        "Accept": "application/octet-stream", "Cache-Control": "no-cache",
+        "X-GitHub-Api-Version": "2022-11-28", "User-Agent": "TrainerDock-distribution"})
+    if token:
+        request.add_unredirected_header("Authorization", "Bearer " + token)
+    with urllib.request.build_opener(AssetRedirect()).open(request, timeout=60) as response:
+        data = response.read(size + 1)
+    if len(data) != size or "sha256:" + hashlib.sha256(data).hexdigest() != digest:
+        raise ValueError("GitHub-Katalogbytes stimmen nicht mit der unveränderlichen Asset-ID überein.")
+    return validate_catalog(json.loads(data))
 
 
 def fetch_catalog(token=None):
@@ -137,7 +172,7 @@ def fetch_catalog(token=None):
             else:
                 raise ValueError("Katalogrelease vorhanden, aber kein bestätigter Katalog abrufbar.")
         else:
-            result = validate_catalog(get_json(asset["browser_download_url"]))
+            result = download_catalog_asset(asset, token)
     # If the stable App release succeeded but updating the index failed, its
     # verified asset metadata remains a confirmed build baseline on the retry.
     try:
@@ -364,7 +399,7 @@ class GitHub:
         url = path if path.startswith("https://") else API_URL + path
         if not (url.startswith(API_URL + "/") or url.startswith("https://uploads.github.com/repos/" + REPOSITORY + "/")):
             raise ValueError("Fremdes GitHub-Ziel.")
-        headers = {"Authorization": "Bearer " + self.token, "Accept": "application/vnd.github+json",
+        headers = {"Authorization": "Bearer " + self.token, "Accept": "application/vnd.github+json", "Cache-Control": "no-cache",
                    "X-GitHub-Api-Version": "2022-11-28", "User-Agent": "TrainerDock-distribution"}
         data = binary if binary is not None else json.dumps(payload).encode() if payload is not None else None
         if data is not None:
@@ -436,7 +471,12 @@ class GitHub:
             self.request("/releases/assets/" + str(staged["id"]), "PATCH", {"name": "catalog.json"})
             if release["draft"]:
                 self.request("/releases/" + str(release["id"]), "PATCH", {"draft": False, "prerelease": True, "make_latest": "false"})
-            confirmed = validate_catalog(get_json(CATALOG_URL))
+            # The asset keeps its immutable ID through both renames. The public
+            # canonical name can still serve the previous CDN object temporarily.
+            fresh = self.request("/releases/assets/" + str(staged["id"]))
+            if fresh.get("name") != "catalog.json" or fresh.get("digest") != digest or fresh.get("size") != len(data):
+                raise ValueError("Veröffentlichte Katalogidentität stimmt nicht mit dem Upload überein.")
+            confirmed = download_catalog_asset(fresh, self.token)
             if json_bytes(confirmed) != data:
                 raise ValueError("Veröffentlichter Katalog stimmt nicht mit den geprüften Bytes überein.")
         except Exception:

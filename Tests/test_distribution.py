@@ -9,6 +9,7 @@ import sys
 import tempfile
 import unittest
 from unittest.mock import patch
+from unittest.mock import MagicMock
 import urllib.error
 import zipfile
 
@@ -221,6 +222,8 @@ class DistributionTests(unittest.TestCase):
             if path == "/releases/tags/trainer-catalog":
                 return dict(release,assets=[dict(item) for item in assets.values()])
             asset_id = int(path.rsplit("/",1)[1])
+            if method == "GET":
+                return dict(assets[asset_id])
             if method == "PATCH":
                 assets[asset_id].update(payload); return dict(assets[asset_id])
             if method == "DELETE":
@@ -233,14 +236,31 @@ class DistributionTests(unittest.TestCase):
         def download(_url):
             item=next(item for item in assets.values() if item["name"]=="catalog.json")
             return payloads[item["id"]]
-        with patch.object(github,"release",return_value=release), patch.object(github,"request",side_effect=request), patch.object(github,"upload",side_effect=upload), patch.object(distribution,"get_json",side_effect=ValueError("interrupted confirmation")):
+        with patch.object(github,"release",return_value=release), patch.object(github,"request",side_effect=request), patch.object(github,"upload",side_effect=upload), patch.object(distribution,"download_catalog_asset",side_effect=ValueError("interrupted confirmation")):
             with self.assertRaises(ValueError): github.publish_catalog(updated)
         self.assertEqual([item["name"] for item in assets.values()],["catalog.json"])
         self.assertEqual(download(None),previous)
-        with patch.object(github,"release",side_effect=lambda *args:dict(release,assets=list(assets.values()))), patch.object(github,"request",side_effect=request), patch.object(github,"upload",side_effect=upload), patch.object(distribution,"get_json",side_effect=download):
+        with patch.object(github,"release",side_effect=lambda *args:dict(release,assets=list(assets.values()))), patch.object(github,"request",side_effect=request), patch.object(github,"upload",side_effect=upload), patch.object(distribution,"download_catalog_asset",side_effect=lambda asset,token:payloads[asset["id"]]), patch.object(distribution,"get_json",return_value=previous) as stale_cdn:
             github.publish_catalog(updated)
+            stale_cdn.assert_not_called()
         self.assertEqual(download(None),updated)
         self.assertEqual([item["name"] for item in assets.values()],["catalog.json"])
+
+    def test_asset_identity_verifies_bytes_and_scopes_auth_before_redirect(self):
+        data=distribution.json_bytes(distribution.empty_catalog())
+        asset=dict(id=42,name="catalog.json",size=len(data),digest="sha256:"+hashlib.sha256(data).hexdigest())
+        opener=MagicMock(); opener.open.return_value.__enter__.return_value.read.return_value=data
+        with patch.object(distribution.urllib.request,"build_opener",return_value=opener):
+            self.assertEqual(distribution.download_catalog_asset(asset,"private-fixture-token"),distribution.empty_catalog())
+        request=opener.open.call_args.args[0]
+        self.assertEqual(request.full_url,distribution.API_URL+"/releases/assets/42")
+        self.assertEqual(request.get_header("Accept"),"application/octet-stream")
+        self.assertEqual(request.get_header("Authorization"),"Bearer private-fixture-token")
+        redirected=distribution.AssetRedirect().redirect_request(request,None,302,"Found",{},"https://release-assets.githubusercontent.com/test")
+        self.assertIsNone(redirected.get_header("Authorization"))
+        opener.open.return_value.__enter__.return_value.read.return_value=b"stale canonical CDN bytes"
+        with patch.object(distribution.urllib.request,"build_opener",return_value=opener):
+            with self.assertRaises(ValueError): distribution.download_catalog_asset(asset,"private-fixture-token")
 
 
 if __name__ == "__main__":
