@@ -4,6 +4,8 @@
 #import <sys/mman.h>
 #import <unistd.h>
 #import "RoboCopAdapter.h"
+#define MHT_OVERLAY_WINDOW_CHECKS_ONLY 1
+#import "../OverlayRuntimeWindowTests.m"
 // Matches the private data-lease descriptor's ABI, not a game structure.
 typedef struct {size_t offset;uint8_t kind,mode;double value;} LeaseField;
 @interface RCRoboCopAdapter (LeaseContract)
@@ -31,4 +33,5 @@ int main(void){@autoreleasepool{
  NSCAssert(![adapter modify:MTFeatureMovement owner:fixture fields:&field count:1]&&*(float *)fixture==23,@"Foreign writes are rejected and preserved");
  munmap(fixture,page);fixture=NULL;
  puts("PASS: 1,000 stable native leases without writes, changed targets, off restoration and foreign edits. Synthetic page only; no game started.");
+ MHTCheckRuntimeWindows();
 }}

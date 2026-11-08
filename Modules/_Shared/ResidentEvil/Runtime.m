@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 #import "Overlay.h"
+#import "MHTOverlayHost.h"
 #import "MHTRuntimeBridge.h"
 #import "CheatPreferences.h"
 #import "LocalControl.h"
@@ -13,6 +14,8 @@
 
 static os_log_t runtimeLog;
 static NSMutableArray<RE2OverlayRoot *> *roots;
+static NSMutableArray<MHTOverlayHost *> *overlayHosts;
+static NSMutableArray *windowObservers;
 static NSString *sessionToken;
 static id monitor;
 static NSTimer *attachmentTimer;
@@ -33,8 +36,8 @@ static RE2OverlayRoot *shortcutRoot(NSWindow *eventWindow, BOOL fallback) {
     for (RE2OverlayRoot *root in roots) {
         NSWindow *window=root.window;
         if (!window || !window.isVisible || window.isMiniaturized) continue;
-        if (window==eventWindow || window.isKeyWindow) return root;
-        if (fallback && (!best || window==NSApp.mainWindow
+        if (window==eventWindow || window.parentWindow==eventWindow || window.parentWindow.isKeyWindow) return root;
+        if (fallback && (!best || window.parentWindow==NSApp.mainWindow
             || root.bounds.size.width*root.bounds.size.height>best.bounds.size.width*best.bounds.size.height)) best=root;
     }
     return best;
@@ -48,8 +51,10 @@ static void updateKeyboardShortcuts(void) {
 }
 static void updateOverlayInput(void) {
     updateKeyboardShortcuts();
-    BOOL wanted=NO;
-    for (RE2OverlayRoot *root in roots) if (NSApp.isActive && root.window.isKeyWindow && root.wantsMouseInteraction) { wanted=YES; break; }
+    RE2OverlayRoot *root=NSApp.isActive ? shortcutRoot(nil,YES) : nil;
+    BOOL wanted=root.wantsMouseInteraction;
+    for (MHTOverlayHost *host in overlayHosts)
+        host.mouseInteractionEnabled=wanted && host.overlay==root;
     if (inputRequested!=wanted) { inputRequested=wanted; [gameplay setOverlayInteraction:wanted]; }
 }
 
@@ -71,10 +76,11 @@ static BOOL supportedProcess(void) {
 
 static void attachToGameWindow(void) {
     if (!NSApp || ![NSThread isMainThread]) return;
-    // Keep only live roots; moving/recreated game windows are discovered again.
-    for (RE2OverlayRoot *root in roots.copy) {
-        if (!root.window || !root.superview || root.window.contentView != root.superview) {
-            [root removeFromSuperview]; [roots removeObjectIdenticalTo:root];
+    // The engine's content tree must never acquire native glass or constraints.
+    for (MHTOverlayHost *host in overlayHosts.copy) {
+        if (![NSApp.windows containsObject:host.gameWindow] || !host.gameWindow.contentView) {
+            [host close]; [roots removeObjectIdenticalTo:(RE2OverlayRoot *)host.overlay];
+            [overlayHosts removeObjectIdenticalTo:host];
         }
     }
     NSWindow *candidate = nil;
@@ -88,11 +94,8 @@ static void attachToGameWindow(void) {
     }
     if (!candidate) return;
     NSView *content = candidate.contentView;
-    for (RE2OverlayRoot *root in roots) {
-        if (root.superview == content) {
-            root.frame = content.bounds;
-            return;
-        }
+    for (MHTOverlayHost *host in overlayHosts) {
+        if (host.gameWindow==candidate) { [host synchronize]; return; }
     }
     NSString *version=[NSBundle.mainBundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"] ?: @"?";
     RE2OverlayRoot *root = [[RE2OverlayRoot alloc] initWithFrame:content.bounds version:version];
@@ -108,12 +111,33 @@ static void attachToGameWindow(void) {
     root.featureHandler = ^(RE2Feature feature) { [gameplay performFeature:feature]; };
     root.valueHandler = ^(RE2Feature feature, double value) { [gameplay setValue:value forFeature:feature]; };
     [root updateState:gameplay.state];
-    [content addSubview:root positioned:NSWindowAbove relativeTo:nil];
+    MHTOverlayHost *host=[[MHTOverlayHost alloc]initWithGameWindow:candidate overlay:root];
+    host.mouseHandler=^BOOL(NSEvent *event) {
+        RE2OverlayRoot *owner=weakRoot; return owner && [owner handleMouseEvent:event];
+    };
+    [overlayHosts addObject:host];
     [roots addObject:root];
     updateOverlayInput();
     os_log(runtimeLog, "Overlay attached in game process pid=%{public}d window=%{public}s class=%{public}s",
         getpid(), (candidate.title ?: @"").UTF8String, NSStringFromClass(content.class).UTF8String);
     postOverlayOptions();
+}
+
+static void observeWindowGeometry(void) {
+    windowObservers=[NSMutableArray new];
+    __block BOOL pending=NO; // Accessed only in the main-queue blocks below.
+    for(NSNotificationName name in @[NSWindowDidResizeNotification,NSWindowDidMoveNotification,
+        NSWindowDidChangeScreenNotification,NSWindowDidEnterFullScreenNotification,NSWindowDidExitFullScreenNotification]) {
+        id observer=[NSNotificationCenter.defaultCenter addObserverForName:name object:nil queue:nil usingBlock:^(NSNotification *event){
+            if(![event.object isKindOfClass:NSWindow.class] || [event.object isKindOfClass:NSPanel.class])return;
+            // Never synchronously wait for AppKit from an engine notification.
+            dispatch_async(dispatch_get_main_queue(),^{
+                if(pending)return;pending=YES;
+                dispatch_async(dispatch_get_main_queue(),^{pending=NO;attachToGameWindow();updateOverlayInput();});
+            });
+        }];
+        [windowObservers addObject:observer];
+    }
 }
 
 static void startOverlayImplementation(BOOL development) {
@@ -138,15 +162,16 @@ static void startOverlayImplementation(BOOL development) {
         os_log(runtimeLog, "Trainer overlay library loaded in pid=%{public}d inspection=%{public}d", getpid(),inspection);
         dispatch_async(dispatch_get_main_queue(), ^{
             roots = [NSMutableArray new];
+            overlayHosts = [NSMutableArray new];
             shortcuts=[RE2OverlayShortcuts new];
             shortcuts.handler=^(RE2OverlayShortcut action) {
                 RE2OverlayRoot *root=NSApp.isActive ? shortcutRoot(nil,YES) : nil;
                 if (action==RE2ShortcutPanel) [root togglePanel:nil];
             };
             activeObserver=[NSNotificationCenter.defaultCenter addObserverForName:NSApplicationDidBecomeActiveNotification
-                object:NSApp queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification *event) { (void)event; updateKeyboardShortcuts(); }];
+                object:NSApp queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification *event) { (void)event; updateOverlayInput(); }];
             inactiveObserver=[NSNotificationCenter.defaultCenter addObserverForName:NSApplicationDidResignActiveNotification
-                object:NSApp queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification *event) { (void)event; updateKeyboardShortcuts(); }];
+                object:NSApp queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification *event) { (void)event; updateOverlayInput(); }];
             if (sessionToken.length) settingsObserver=[NSDistributedNotificationCenter.defaultCenter
                 addObserverForName:RE2OverlaySettingsNotification object:nil queue:NSOperationQueue.mainQueue
                 usingBlock:^(NSNotification *event) {
@@ -208,7 +233,7 @@ static void startOverlayImplementation(BOOL development) {
             [NSRunLoop.mainRunLoop addTimer:gameplayTimer forMode:NSRunLoopCommonModes];
             inputTimer=[NSTimer timerWithTimeInterval:0.1 repeats:YES block:^(NSTimer *timer) { (void)timer; updateOverlayInput(); }];
             [NSRunLoop.mainRunLoop addTimer:inputTimer forMode:NSRunLoopCommonModes];
-            attachToGameWindow();
+            observeWindowGeometry();attachToGameWindow();
         });
     }
 }

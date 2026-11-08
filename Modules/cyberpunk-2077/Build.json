@@ -25,6 +25,8 @@
   "sourceRoot": "Sources",
   "family": "Cyberpunk2077",
   "sdkSources": [
-    "MHTGlassIntensity.m"
-  ]
+    "MHTGlassIntensity.m",
+    "MHTOverlayHost.m"
+  ],
+  "nativeContractTests": "Tests/OverlayRuntimeWindowTests.m"
 }

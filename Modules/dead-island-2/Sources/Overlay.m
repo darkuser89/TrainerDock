@@ -8,6 +8,8 @@
 #include <math.h>
 
 // Keep all geometry manual: the game's window can be resized from its GameThread.
+// Game identity is local to this complete trainer, never the launcher bundle name.
+static NSString *gameTitle(void) { return @"Dead Island 2"; }
 static NSColor *orange(void) { return [NSColor colorWithRed:1 green:0.52 blue:0.18 alpha:1]; }
 static NSColor *green(void) { return [NSColor colorWithRed:0.35 green:0.84 blue:0.56 alpha:1]; }
 static void label(NSString *value, NSRect box, CGFloat size, NSColor *color, BOOL bold, BOOL wrap) {
@@ -242,8 +244,7 @@ static NSString *number(double value, BOOL integer) { return integer ? [NSString
 }
 - (void)drawPanel:(NSRect)bounds {
     (void)bounds; // The shared native material owns the background and edge.
-    label(@"DEAD ISLAND 2",NSMakeRect(10,7,112,18),12,orange(),YES,NO);
-    label(@"TRAINER",NSMakeRect(126,9,55,14),9,NSColor.whiteColor,YES,NO);
+    label(gameTitle(),NSMakeRect(10,7,420,18),12,orange(),YES,NO);
     label(@"−",NSMakeRect(438,6,18,19),13,NSColor.whiteColor,YES,NO);
     label(@"+",NSMakeRect(468,6,18,19),13,NSColor.whiteColor,YES,NO);
     label(_folded ? @"▸" : @"▾",NSMakeRect(493,6,18,19),13,NSColor.whiteColor,YES,NO);

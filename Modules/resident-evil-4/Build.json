@@ -42,6 +42,8 @@
   "family": "ResidentEvil",
   "catalogGame": "4",
   "sdkSources": [
-    "MHTGlassIntensity.m"
-  ]
+    "MHTGlassIntensity.m",
+    "MHTOverlayHost.m"
+  ],
+  "nativeContractTests": "Tests/OverlayRuntimeWindowTests.m"
 }

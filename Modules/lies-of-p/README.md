@@ -21,6 +21,23 @@ Regressionstests prüfen direkte Schalter, Einmalaktionen bei ausgeschalteter
 erster Funktion, Altkatalog-Zuordnung und weiterhin abgewiesene fremde Prozesse.
 Die Änderung wurde gebaut und synthetisch geprüft; dafür wurde kein Spiel gestartet.
 
+## Fenster- und Vollbildwechsel
+
+Das Glasoverlay liegt in einem eigenen, nicht fokussierenden `MHTOverlayHost`.
+Das ursprüngliche Spielfenster erhält keine Trainer-Subviews oder Constraints.
+Größen-, Monitor- und Vollbildmeldungen werden asynchron auf AppKits Hauptthread
+verarbeitet; die ursprüngliche GameThread-Zustellung der Cheats bleibt erhalten.
+Shortcuts beziehen das Elternfenster ein, Mausereignisse werden in die Koordinaten
+des Trainerpanels umgerechnet.
+
+Der native Regressionstest verwendet den tatsächlichen Runtime-Anbindungscode:
+120 Fensterabfragen außerhalb des Hauptthreads, 24 Größen-/Vollbildmeldungen,
+Glaswechsel, unveränderte Engine-Views, Klickzuordnung und saubere Rücknahme.
+Zusätzlich wurde genau eine Instanz mit der korrigierten Bibliothek gestartet:
+Der Vollbildwechsel am Titelmenü und die anschließende Menübedienung funktionierten.
+Der Nutzer bestätigte danach „funktioniert alles“. Dafür wurde von uns kein
+Spielstand geladen; ein gesonderter Vollbildtest während des Gameplays erfolgte nicht.
+
 ```sh
 python3 -B script/build.py --module lies-of-p
 ```

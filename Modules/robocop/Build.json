@@ -21,7 +21,8 @@
   "sourceRoot": "Sources",
   "family": "RoboCop",
   "sdkSources": [
-    "MHTGlassIntensity.m"
+    "MHTGlassIntensity.m",
+    "MHTOverlayHost.m"
   ],
   "nativeContractTests": "Tests/RoboCop/LeaseWriteTests.m"
 }

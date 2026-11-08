@@ -40,6 +40,12 @@ melden.
 - Glas und Auto Layout im isolierten `MHTOverlayHost` halten. Keine Trainer-Views
   oder Constraints ins Enginefenster einbauen. `MHTOverlayMouseEvent` für die
   Fensterumrechnung nutzen; Tastaturfokus beim Spiel belassen.
+- Größen-, Bildschirm- und Vollbildmeldungen ausschließlich asynchron auf den
+  Hauptthread zustellen. Bei erneuter Erkennung dasselbe `MHTOverlayHost` synchronisieren,
+  statt weitere Glas-Views einzuhängen. Shortcuts über das Elternfenster auflösen;
+  native Cursorfreigaben bleiben an die originale Spielansicht gebunden.
+  `Tests/OverlayRuntimeWindowTests.m` prüft die realen Runtimepfade von Cyberpunk,
+  Crimson Desert, RoboCop und den fünf Resident-Evil-Trainern ohne Spielstart.
 - Die angeforderte Overlay-/Cursor-Sichtbarkeit an Bedienwunsch und App-Fokus
   binden. Einzelne verspätete Capture-Rückmeldungen dürfen sie nicht fortlaufend
   ein-/ausschalten. Den tatsächlichen Freigabestatus separat und ehrlich anzeigen.

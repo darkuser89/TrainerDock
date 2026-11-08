@@ -24,7 +24,8 @@
   "sourceRoot": "Sources",
   "family": "LiesOfP",
   "sdkSources": [
-    "MHTGlassIntensity.m"
+    "MHTGlassIntensity.m",
+    "MHTOverlayHost.m"
   ],
   "nativeContractTests": "Tests/LiesOfP/NativeContractTests.m"
 }

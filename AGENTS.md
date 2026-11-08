@@ -166,6 +166,13 @@ niemals auswerten, speichern oder loggen. Kein Ersatzstart ohne Trainer.
 
 ## Bei neuen Modulen
 
+Die Überschrift oben links im Ingame-Trainer zeigt den vollständigen Spielnamen,
+niemals „TrainerDock“ oder einen technischen Bundle-Namen. `gameTitle()` im Modul
+ist die gemeinsame Quelle für Zeichnung und Bedienhilfe. Der Generator setzt den
+angegebenen Spielnamen auch bei Verwendung eines bestehenden Moduls als Vorlage.
+Den Titelbereich vor den rechten Fensteraktionen halten; lange Namen dürfen diese
+nicht überdecken. Der Launcher behält seinen Produktnamen TrainerDock.
+
 HiDPI: In Punkten layouten, Original-Iconrepräsentationen erhalten und AppKit die
 Backing-Layer-Auflösung verwalten lassen. Für eigene Overlayzeichnungen
 `ModuleSDK/MHTHiDPI.h` verwenden; bei Zoom- und Backing-Wechseln neu zeichnen.
@@ -197,7 +204,16 @@ Native Glas-/Auto-Layout-Views nicht direkt in Enginefenster einbauen, deren
 Fensterabfragen oder Größenwechsel auf einem GameThread stattfinden. Dafür den
 isolierten `ModuleSDK/MHTOverlayHost` verwenden; das Spielfenster selbst bleibt
 ohne zusätzliche Trainer-Views oder Constraints. Eingaben in die Overlaykoordinaten
-umrechnen und den Fokus beim Spiel belassen. DI2 besitzt dafür einen Regressionstest.
+umrechnen und den Fokus beim Spiel belassen. DI2 und Lies of P besitzen dafür
+Regressionstests. `Tests/OverlayRuntimeWindowTests.m` prüft außerdem den tatsächlichen
+Runtime-Anbindungscode von Cyberpunk 2077, Crimson Desert, RoboCop und allen fünf
+Resident-Evil-Trainern: parallele Fensterabfragen, Größen-/Vollbildmeldungen,
+erneuerte Content-Views und Klickkoordinaten. Diese synthetischen Prüfungen ersetzen
+keinen Ingame-Test. Shortcuts müssen bei einem isolierten Panel dessen Elternfenster
+als Spielfenster berücksichtigen. Geometriemeldungen auch vom Engine-Thread nur
+asynchron auf den Hauptthread zustellen; nie synchron auf AppKit warten.
+Spielspezifische Cursorfreigaben weiterhin auf der originalen Eingabeansicht ausführen,
+nicht auf der Content-View des Overlaypanels.
 
 ## Mausprobleme früh abfangen, Spielstarts bündeln
 

@@ -47,6 +47,10 @@ dienen als Muster; ihre Spieladressen und nativen Signaturen bleiben spielgebund
 
 ## Spielabhängige Arbeit
 
+Die Überschrift oben links nennt das Spiel. `script/new_module.py` setzt dafür
+`gameTitle()` auf den angegebenen Spielnamen; Zeichnung und Bedienhilfe nutzen
+diesen Wert. Keine Launcher- oder technischen Bundle-Namen als Spieltitel einsetzen.
+
 Der Glasregler unten rechts ist Teil der Vorlage und gehört in jeden neuen
 Trainer. `glassIntensity` wird auf 0…1 begrenzt und über den bestehenden
 Optionskanal pro Modul gespeichert. 0 ist transparent, 0,5 natives Glas und 1

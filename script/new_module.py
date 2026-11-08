@@ -40,9 +40,14 @@ def create_module(identifier,name,store,template='trainer',profile_path=None,out
         profile['launchEnvironment']={'SteamAppId':app_id,'SteamGameId':app_id}
     config.update(sourceRoot='Sources',developmentOnly=True)
     module=dict(schemaVersion=1,id=identifier,name=name,version='0.1.0',profiles=[profile])
+    overlay=(source/'Overlay.m').read_text()
+    title_pattern=r'^static NSString \*gameTitle\(void\) \{ return [^\n]+; \}$'
+    overlay,count=re.subn(title_pattern,lambda _: 'static NSString *gameTitle(void) { return @'+json.dumps(name,ensure_ascii=False)+'; }',overlay,flags=re.M)
+    if count!=1:raise ValueError('Template needs exactly one gameTitle declaration for the trainer heading.')
     target=(Path(output_root) if output_root else ROOT/'Modules')/identifier
     target.mkdir()  # Never overwrite any existing source or module.
     shutil.copytree(source,target/'Sources')
+    (target/'Sources/Overlay.m').write_text(overlay)
     for file in ('AGENTS.md','README.md','CHAT_START.md'):
         shutil.copyfile(ROOT/'Templates/Trainer'/file,target/file)
     (target/'Module.json').write_text(json.dumps(module,ensure_ascii=False,indent=2)+'\n')

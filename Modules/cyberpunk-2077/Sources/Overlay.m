@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 #import "Overlay.h"
+#import "MHTOverlayHost.h"
 #import "TrainerMaterial.h"
 #import "MHTGlassIntensity.h"
 #import "MHTHiDPI.h"
@@ -7,6 +8,8 @@
 #include <math.h>
 
 // Keep all geometry manual: the game's window can be resized from its GameThread.
+// Game identity is local to this complete trainer, never the launcher bundle name.
+static NSString *gameTitle(void) { return @"Cyberpunk 2077"; }
 static NSColor *orange(void) { return [NSColor colorWithRed:1 green:0.52 blue:0.18 alpha:1]; }
 static NSColor *green(void) { return [NSColor colorWithRed:0.35 green:0.84 blue:0.56 alpha:1]; }
 static void label(NSString *value, NSRect box, CGFloat size, NSColor *color, BOOL bold, BOOL wrap) {
@@ -163,7 +166,7 @@ static NSString *number(double value, BOOL integer) { return integer ? [NSString
     self.identifier=@"MTTrainerOverlay"; self.autoresizingMask=NSViewWidthSizable|NSViewHeightSizable;
     self.wantsLayer=YES; self.layer.backgroundColor=NSColor.clearColor.CGColor; self.layer.zPosition=100000;
     self.accessibilityElement=YES; self.accessibilityRole=NSAccessibilityGroupRole;
-    self.accessibilityLabel=@"Cyberpunk Trainer. Befehl und Zirkumflex: Trainerfenster. F12: alle Schalter aus.";
+    self.accessibilityLabel=[gameTitle() stringByAppendingString:@". F12: alle Schalter aus."];
     _panel=[[MTOverlaySurface alloc] initWithFrame:NSZeroRect]; _panel.owner=self; _panel.wantsLayer=YES;
     _panel.toolTip=@"Titelleiste ziehen: Trainerfenster verschieben. ⌘ + ^: verbergen/anzeigen; Funktionen bleiben aktiv.";
     _material=[[MTTrainerMaterial alloc]initWithContentView:_panel cornerRadius:14];
@@ -212,8 +215,7 @@ static NSString *number(double value, BOOL integer) { return integer ? [NSString
 }
 - (void)drawPanel:(NSRect)bounds {
     (void)bounds; // Native material owns the background and its edge.
-    label(@"CYBERPUNK 2077",NSMakeRect(10,7,112,18),12,orange(),YES,NO);
-    label(@"TRAINER",NSMakeRect(126,9,55,14),9,NSColor.whiteColor,YES,NO);
+    label(gameTitle(),NSMakeRect(10,7,420,18),12,orange(),YES,NO);
     label(@"−",NSMakeRect(438,6,18,19),13,NSColor.whiteColor,YES,NO);
     label(@"+",NSMakeRect(468,6,18,19),13,NSColor.whiteColor,YES,NO);
     label(_folded ? @"▸" : @"▾",NSMakeRect(493,6,18,19),13,NSColor.whiteColor,YES,NO);
@@ -398,7 +400,8 @@ static NSString *number(double value, BOOL integer) { return integer ? [NSString
 }
 - (BOOL)handleMouseEvent:(NSEvent *)event {
     if(!self.mouseInteractionSupported)return NO;
-    if (!self.window || event.window!=self.window) return NO;
+    event=MHTOverlayMouseEvent(event,self.window);
+    if (!event) return NO;
     if (event.type==NSEventTypeLeftMouseDown) {
         _mouseTarget=nil; _mouseSequence=NO;
         NSPoint point=[self convertPoint:event.locationInWindow fromView:nil];

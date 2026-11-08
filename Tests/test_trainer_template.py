@@ -26,6 +26,16 @@ class TemplateTests(unittest.TestCase):
             with self.assertRaises(FileExistsError):
                 generator.create_module('new-game','Another game','Steam',output_root=temp)
             self.assertEqual(json.loads((target/'Module.json').read_text())['name'],'Neues Spiel')
+            overlay=(target/'Sources/Overlay.m').read_text()
+            self.assertIn('return @"Neues Spiel";',overlay)
+            self.assertNotIn('label(@"TrainerDock"',overlay)
+
+    def test_game_heading_escapes_the_requested_name(self):
+        with tempfile.TemporaryDirectory(prefix='mht-template-') as temp:
+            name='Spiel "Edition" \\ Bonus'
+            target=generator.create_module('named-game',name,'Steam',output_root=temp)
+            overlay=(target/'Sources/Overlay.m').read_text()
+            self.assertIn('return @'+json.dumps(name,ensure_ascii=False)+';',overlay)
 
     def test_provided_enabled_profile_is_always_deactivated(self):
         with tempfile.TemporaryDirectory(prefix='mht-template-') as temp:
