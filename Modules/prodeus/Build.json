@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "sourceRoot": "Sources",
+  "family": "Prodeus",
+  "developmentOnly": false,
+  "sources": [
+    "TrainerFeatures.m",
+    "GameAdapter.m",
+    "NativeAdapter.m",
+    "GameBridge.m",
+    "SelectionSettings.m",
+    "GameProfile.m",
+    "MemoryAccess.m",
+    "TrainerMaterial.m",
+    "Overlay.m",
+    "OverlaySettings.m",
+    "OverlayShortcuts.m",
+    "Runtime.m",
+    "ProdeusEngine.mm",
+    "ProdeusLoop.mm",
+    "ProdeusEffects.mm"
+  ],
+  "defines": [
+    "MT_GLASS_ALWAYS_ON=1"
+  ],
+  "catalogSources": [
+    "TrainerFeatures.m"
+  ],
+  "sdkSources": [
+    "MHTOverlayHost.m",
+    "MHTGlassIntensity.m"
+  ],
+  "nativeContractTests": "Tests/Prodeus/NativeContractTests.mm"
+}

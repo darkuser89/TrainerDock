@@ -129,6 +129,22 @@ Paketversion (`MAJOR.MINOR.PATCH`), Spielversion und Store getrennt halten.
 Bei inkompatibel geänderten Funktions-IDs zusätzlich `selectionVersion` ändern.
 Eine neue Paketversion ist keine automatische Freigabe eines neuen Spielbuilds.
 
+Vor dem Build `python3 -B script/trainer_distribution.py plan` gegen den letzten
+bestätigten Onlinekatalog ausführen. Nur neue oder inhaltlich geänderte Trainer
+unter `modules` bauen und veröffentlichen; eine leere Liste bedeutet keine
+Trainerbuilds und keine neuen Trainerversionen. Reine Buildskript-, Test-, Doku-,
+Appversions- oder Buildpfadänderungen erzeugen keine Trainerupdates. Echte Änderungen
+gemeinsamer Runtimequellen treffen nur deren tatsächliche Abhängigkeiten.
+Beispiel: Eine Änderung nur an DREDGE veröffentlicht nur DREDGE; eine reine
+Launcher-UI-Änderung veröffentlicht keinen Trainer. Bei unerwartet vielen Einträgen
+zuerst den Plan und seine Abhängigkeiten korrigieren, nicht pauschal alle bauen.
+
+`module_content_fingerprint` entscheidet über den Trainerinhalt;
+`module_fingerprint` bindet weiterhin den strengen Build-/Bytebeleg für neue Pakete.
+Ein Fingerabdruck-Formatwechsel ist kein Funktionsupdate: nur mit bestätigten
+Altbelegen migrieren. Bestätigte reine Neubauten unter `buildOnlyVersions` bleiben
+auf GitHub erhalten, dürfen aber nicht erneut als Updates angeboten werden.
+
 Den einzelnen Trainer mit `script/build.py --module <id> --configuration Release`
 bauen. Bei beauftragter Veröffentlichung Quellen, Tests, Profile und regeneriertes
 Xcode-Projekt zusammen auf `main` bringen. CI baut nur tatsächlich geänderte

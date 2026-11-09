@@ -128,6 +128,7 @@
     for(MHTModule *m in installed){
         BOOL chosen=[m.directory isEqual:selected.directory];
         NSTextField *title=MHTLabel([NSString stringWithFormat:@"Version %@",m.version],13,NSFontWeightSemibold);title.identifier=@"MHT.TrainerVersion.Title";
+        [title setContentCompressionResistancePriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationHorizontal];
         NSTextField *origin=MHTLabel([m.installRevision isEqual:m.version] ? @"GitHub-Paket" : @"Übernommener Trainer",11,NSFontWeightRegular);origin.textColor=NSColor.secondaryLabelColor;
         NSMutableOrderedSet *stores=[NSMutableOrderedSet new];for(NSDictionary *p in m.profiles)[stores addObject:[NSString stringWithFormat:@"%@ · Spiel %@",p[@"store"],p[@"gameVersion"] ?: p[@"version"]]];
         NSTextField *subtitle=MHTLabel([stores.array componentsJoinedByString:@" / "],10,NSFontWeightRegular);subtitle.textColor=NSColor.secondaryLabelColor;subtitle.toolTip=subtitle.stringValue;
@@ -143,10 +144,19 @@
     for(NSDictionary *v in versions){
         BOOL present=NO;for(MHTModule *m in installed)if([m.version isEqual:v[@"version"]] && [m.installRevision isEqual:m.version])present=YES;
         NSTextField *title=MHTLabel([NSString stringWithFormat:@"Version %@",v[@"version"]],13,NSFontWeightSemibold);
+        title.identifier=@"MHT.TrainerVersion.Title";
+        [title setContentCompressionResistancePriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationHorizontal];
         BOOL downloadable=[v[@"downloadAvailable"] boolValue];NSString *state=present?@"Bereits installiert":downloadable?[NSByteCountFormatter stringFromByteCount:[v[@"size"] longLongValue] countStyle:NSByteCountFormatterCountStyleFile]:@"Noch nicht veröffentlicht";
         NSTextField *subtitle=MHTLabel(state,10,NSFontWeightRegular);subtitle.textColor=NSColor.secondaryLabelColor;
         MHTTrainerLibraryAction *load=[self action:present?@"Geladen":busy?@"Wird geladen …":@"Herunterladen" selector:@selector(installVersion:)];load.version=v;load.moduleID=selected.identifier;load.enabled=downloadable&&!present&&!busy;load.identifier=@"MHT.TrainerVersion.Download";
-        NSBox *card=MHTCard(MHTStack(@[MHTStack(@[title,subtitle],YES,5),MHTSpacer(),load],NO,10),14);card.identifier=@"MHT.TrainerVersion.Available";[self addDetail:card];
+        // Let the text column take the spare width, rather than competing
+        // with a spacer while its truncating labels collapse to a few pixels.
+        NSStackView *labels=MHTStack(@[title,subtitle],YES,5);
+        [labels setHuggingPriority:1 forOrientation:NSLayoutConstraintOrientationHorizontal];
+        for(NSTextField *label in @[title,subtitle]){[label.widthAnchor constraintEqualToAnchor:labels.widthAnchor].active=YES;label.toolTip=label.stringValue;}
+        [load setContentHuggingPriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationHorizontal];
+        [load setContentCompressionResistancePriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationHorizontal];
+        NSBox *card=MHTCard(MHTStack(@[labels,load],NO,10),14);card.identifier=@"MHT.TrainerVersion.Available";[self addDetail:card];
     }
     if(!versions.count)[self addDetail:MHTLabel(@"Keine Downloadversion im aktuellen Katalog.",12,NSFontWeightRegular)];
     if(running)[self addDetail:MHTLabel(@"Spiel läuft · Versionswechsel nach dem regulären Spielende möglich.",11,NSFontWeightRegular)];

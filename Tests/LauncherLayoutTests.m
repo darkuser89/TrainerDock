@@ -247,7 +247,8 @@ static void checkTrainerManagerLayout(MHTTrainerLibrary *manager,MHTLayoutStore 
     require(legacy.packageMigrationAvailable && !download.packageMigrationAvailable,"same-version legacy conversion is distinct from a trainer version update");
     NSMutableDictionary *newer=[metadata.catalogVersion mutableCopy];newer[@"version"]=@"1.0.1";legacy.catalogVersion=newer;
     require(!legacy.packageMigrationAvailable,"a newer trainer version remains a real update");legacy.catalogVersion=metadata.catalogVersion;
-    store.layoutVersions=@[download,legacy];[manager reloadForIdentifier:metadata.identifier];
+    for(NSNumber *hasInstalled in @[@YES,@NO]){
+    store.layoutVersions=hasInstalled.boolValue ? @[download,legacy] : nil;[manager reloadForIdentifier:metadata.identifier];
     for(NSValue *value in @[[NSValue valueWithSize:NSMakeSize(840,540)],[NSValue valueWithSize:NSMakeSize(1000,680)],[NSValue valueWithSize:NSMakeSize(1160,1000)]]){
         NSSize size=value.sizeValue;[manager.window setContentSize:size];layout(manager.window);
         NSView *content=manager.window.contentView,*body=nil,*footer=nil;NSScrollView *list=nil;
@@ -268,7 +269,9 @@ static void checkTrainerManagerLayout(MHTTrainerLibrary *manager,MHTLayoutStore 
         require(NSWidth(updateAll.bounds)>=updateAll.intrinsicContentSize.width-1,"bulk-update button retains its complete German title");
         require(NSHeight(body.bounds)>=NSHeight(content.bounds)-81,"manager body fills the available window instead of ending halfway down");
         require(NSHeight(list.bounds)>NSHeight(content.bounds)*0.5,"game list viewport grows with tall windows");
-        require(titles==2 && imported && github,"installed cards separate the complete version number from its legacy/GitHub origin");
+        require(titles==(hasInstalled.boolValue ? 3u : 1u),"installed and download-only cards expose every version title");
+        if(hasInstalled.boolValue)require(imported && github,"installed cards separate version numbers from their legacy/GitHub origin");
+    }
     }
     store.layoutVersions=nil;[manager reloadForIdentifier:metadata.identifier];
 }

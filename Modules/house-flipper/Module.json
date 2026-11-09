@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "id": "house-flipper",
+  "name": "House Flipper",
+  "version": "0.1.0",
+  "profiles": [
+    {
+      "id": "steam-x86_64-25247477",
+      "name": "Steam · 1.26252 · Rosetta",
+      "enabled": true,
+      "bundleIdentifier": "unity.Empyrean.Unity-HouseFlipper",
+      "executable": "House Flipper Game",
+      "uuids": [
+        "6D82BA8C-38A6-3A10-8CDE-BDD368B8F4CF"
+      ],
+      "teamIdentifier": "",
+      "version": "[release] 1.26252 (ab1aa)",
+      "gameVersion": "1.26252",
+      "store": "Steam",
+      "architecture": "x86_64",
+      "steamAppId": "613100",
+      "steamBuildId": "25247477",
+      "signatureScope": "sha256-original",
+      "integrityFiles": [
+        "Contents/Info.plist",
+        "Contents/MacOS/House Flipper Game",
+        "Contents/Frameworks/UnityPlayer.dylib",
+        "Contents/Frameworks/libmonobdwgc-2.0.dylib",
+        "Contents/Resources/Data/Managed/Assembly-CSharp.dll",
+        "Contents/Resources/Data/Managed/Assembly-CSharp-firstpass.dll",
+        "Contents/Resources/Data/Managed/UnityEngine.CoreModule.dll",
+        "Contents/Resources/Data/Managed/UnityEngine.InputLegacyModule.dll",
+        "Contents/Resources/Data/Managed/mscorlib.dll",
+        "Contents/PlugIns/CSteamworks.bundle/Contents/MacOS/CSteamworks",
+        "Contents/PlugIns/CSteamworks.bundle/Contents/MacOS/libsteam_api.dylib"
+      ],
+      "fileChecks": [
+        {
+          "path": "Contents/Info.plist",
+          "fileSize": 1560,
+          "offset": 0,
+          "length": 1560,
+          "sha256": "c0718f07c67fce7e70a9789ea49d161dd773ef68b8379097f829e64c9244bd9d"
+        },
+        {
+          "path": "Contents/MacOS/House Flipper Game",
+          "fileSize": 8776,
+          "offset": 0,
+          "length": 8776,
+          "sha256": "a79e6abae1e986913b32257a24c3b7d0d0bbe110a9053eaf785fba7cae0a1eb3"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 26649967,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "59bdf79014cfaad0fd6c675ad87450d1aa6f09ba3fb31fbd45c6cb008b92c36c"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 26649967,
+          "offset": 8388608,
+          "length": 8388608,
+          "sha256": "cd99aa454434316172f6d63fbc2745ed2c765c0f1bee8cf90e8c7bed3fdea960"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 26649967,
+          "offset": 16777216,
+          "length": 8388608,
+          "sha256": "ec6f04efa3802ce765292183f27293c9828a623efe585709809f1c634ab4f7f0"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 26649967,
+          "offset": 25165824,
+          "length": 1484143,
+          "sha256": "d71459180bf48efa384193a07916dfc86be03b780f99281b58601c13967a26bf"
+        },
+        {
+          "path": "Contents/Frameworks/libmonobdwgc-2.0.dylib",
+          "fileSize": 4704538,
+          "offset": 0,
+          "length": 4704538,
+          "sha256": "fc5d05267752a86e3a448a16166afa2f436e40307744d93cd98eeb0daec58164"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/Assembly-CSharp.dll",
+          "fileSize": 25271296,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "1a9a8a223aa3377fecf289c36c3f67ff38007a88a1621d47975316cc8a38ad1e"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/Assembly-CSharp.dll",
+          "fileSize": 25271296,
+          "offset": 8388608,
+          "length": 8388608,
+          "sha256": "c61d4568c5fb6ef17b1b1c5b299169e50994b6308ec7f8240e91620d52513fea"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/Assembly-CSharp.dll",
+          "fileSize": 25271296,
+          "offset": 16777216,
+          "length": 8388608,
+          "sha256": "593577a3949f6147ed0d71346cd2ac8f8687f6eacdf24de82fa66b738e643ae5"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/Assembly-CSharp.dll",
+          "fileSize": 25271296,
+          "offset": 25165824,
+          "length": 105472,
+          "sha256": "9c79fca52bf5bddcd2dbad053c25e623eba7b77ffddf36a9de2a97a58629bc7e"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/Assembly-CSharp-firstpass.dll",
+          "fileSize": 483840,
+          "offset": 0,
+          "length": 483840,
+          "sha256": "d4db25adc97d10c16971a729c9746445be93dea6f2dd0f76c20cd41439f2eb18"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/UnityEngine.CoreModule.dll",
+          "fileSize": 1013760,
+          "offset": 0,
+          "length": 1013760,
+          "sha256": "dc6cf9bcef0e6b82d4d6658b59821caa33b606f42c1d8f7805fdbe2f0cb893cb"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/UnityEngine.InputLegacyModule.dll",
+          "fileSize": 25600,
+          "offset": 0,
+          "length": 25600,
+          "sha256": "21112725fd32dc6f3c2c3632e8332477609e16db4b7b2b9a5d6d8cc1d9bf3b76"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/mscorlib.dll",
+          "fileSize": 4072960,
+          "offset": 0,
+          "length": 4072960,
+          "sha256": "6b226d4b6bc520438f81a45cb478b0d13d2187ed679936bf9a2b82978198511c"
+        },
+        {
+          "path": "Contents/PlugIns/CSteamworks.bundle/Contents/MacOS/CSteamworks",
+          "fileSize": 481823,
+          "offset": 0,
+          "length": 481823,
+          "sha256": "9435412ff63c67a1de04abbe78f016cb74077a8eb5736d8c74ac132a2e246b4c"
+        },
+        {
+          "path": "Contents/PlugIns/CSteamworks.bundle/Contents/MacOS/libsteam_api.dylib",
+          "fileSize": 553808,
+          "offset": 0,
+          "length": 553808,
+          "sha256": "cc088fccdd0c8d7129905f683fd80e38405d6ed332b65f3e9b4604e557d902c5"
+        }
+      ],
+      "integrityApproval": "user-confirmed-steam-original"
+    }
+  ],
+  "groups": [
+    {
+      "id": "finance",
+      "title": "Geld & Fähigkeiten",
+      "symbol": "banknote",
+      "features": [
+        0,
+        1
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "sourceRoot": "Sources",
+  "family": "HouseFlipper",
+  "developmentOnly": false,
+  "sources": [
+    "TrainerFeatures.m",
+    "GameAdapter.m",
+    "NativeAdapter.m",
+    "GameBridge.m",
+    "SelectionSettings.m",
+    "GameProfile.m",
+    "MemoryAccess.m",
+    "TrainerMaterial.m",
+    "Overlay.m",
+    "OverlaySettings.m",
+    "OverlayShortcuts.m",
+    "Runtime.m",
+    "HouseFlipperMono.mm",
+    "HouseFlipperLoop.mm",
+    "HouseFlipperEffects.mm"
+  ],
+  "defines": [
+    "MT_GLASS_ALWAYS_ON=1"
+  ],
+  "catalogSources": [
+    "TrainerFeatures.m"
+  ],
+  "sdkSources": [
+    "MHTOverlayHost.m",
+    "MHTGlassIntensity.m"
+  ],
+  "architectures": [
+    "x86_64"
+  ],
+  "testSuite": "mt",
+  "nativeContractTests": "Tests/HouseFlipper/NativeContractTests.mm"
+}

@@ -108,6 +108,30 @@ Regelung nicht als abwählbares Liquid-Glass-Feature ersetzen. Vertrag und Tests
 Lies bei Releasevorbereitung den kanonischen Ablauf
 [Neue Trainer und Spielupdates veröffentlichen](/Users/jbw/Documents/MHT/docs/RELEASING.md#neue-trainer-und-spielupdates-veröffentlichen).
 
+### Nur tatsächlich geänderte Trainer bauen und veröffentlichen
+
+Vor Build und Veröffentlichung `python3 -B script/trainer_distribution.py plan`
+gegen den letzten bestätigten Onlinekatalog ausführen und die Liste `modules`
+prüfen. Nur neue oder inhaltlich geänderte Trainer dieser Liste bauen und
+veröffentlichen. Bei `modules: []` keine Trainer bauen, keine Trainerversionen
+erhöhen und keine Trainer-Releases erzeugen. Ein Auftrag für einen Trainer
+rechtfertigt keinen pauschalen Neubau oder Versionssprung der übrigen Trainer.
+
+Maßgeblich ist `module_content_fingerprint`: Trainerquellen, Profile, tatsächlich
+benutzte SDK-/Headerdateien, eigene Managed-Eingaben und wirksame Release-Optionen.
+Reine Buildskript-, Test-, Dokumentations-, Appversions- oder Buildpfadänderungen
+sind keine Trainerupdates. Echte gemeinsame Runtimeänderungen betreffen nur deren
+tatsächliche Nutzer. Enthält der Plan unerwartet weitere Trainer, zuerst die
+Abhängigkeiten und die Planung prüfen und korrigieren, bevor Pakete gebaut werden.
+
+Den strengeren `module_fingerprint` und die Buildbelege weiterhin für neue Pakete
+prüfen; ein gleicher Inhaltshash ersetzt keinen gültigen Build-/Bytebeleg.
+Fingerabdruck-Formatwechsel anhand bestätigter Altbelege über `contentBaseline`
+migrieren, niemals durch neue Versionen aller Trainer. Als reine Neubauten
+bestätigte Einträge in `buildOnlyVersions` nicht erneut als Updates anbieten;
+vorhandene Releases und installierte Versionen erhalten. Details und
+Migrationsgrenzen stehen in `docs/RELEASING.md`.
+
 Bei beauftragter Veröffentlichung Quellen, Profile, Tests und regeneriertes
 Xcode-Projekt gemeinsam auf `main` bringen. CI plant gegen den letzten bestätigten
 Katalog, baut nur geänderte Produkte samt tatsächlich betroffenen Abhängigkeiten

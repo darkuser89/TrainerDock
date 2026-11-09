@@ -29,6 +29,17 @@ selbst nur bei einem Auftrag zur Verbesserung der Vorlage verändern.
   verwenden. Alte Releases und installierte Versionen erhalten; keine Binaries
   in Git oder die App kopieren, keine veröffentlichten Bytes/Prüfsummen ersetzen.
   Lokale Buildprodukte werden nicht automatisch im Launcher installiert.
+- Vor Builds/Veröffentlichungen `python3 -B script/trainer_distribution.py plan`
+  gegen den bestätigten Onlinekatalog prüfen. Nur neue oder tatsächlich inhaltlich
+  geänderte Trainer aus `modules` bauen und veröffentlichen; bei leerer Liste
+  weder Trainerbuilds noch Versionssprünge oder Trainer-Releases erzeugen.
+  Reine Buildskript-, Test-, Doku-, Appversions- und Buildpfadänderungen zählen
+  nicht als Trainerupdates. Gemeinsame Runtimeänderungen treffen ausschließlich
+  tatsächliche Abhängigkeiten. Unerwartete Masseneinträge im Plan vor dem Build
+  untersuchen und die Ursache korrigieren; nicht pauschal alle Versionen erhöhen.
+  Inhaltsprüfung und strengen Build-/Bytebeleg getrennt erhalten. Fingerabdruck-
+  Formatwechsel nur mit bestätigten Altbelegen migrieren; `buildOnlyVersions`
+  nicht wieder als Updates anbieten. Maßgeblich ist `docs/RELEASING.md`.
 - Spielstarts und Tests im Originalprozess benötigen einen entsprechenden
   Nutzerauftrag. Builds und synthetische Tests starten keine Spiele.
 - Vor der ersten Ingame-Prüfung die projektweite Anleitung

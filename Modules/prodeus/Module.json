@@ -1,0 +1,220 @@
+{
+  "schemaVersion": 1,
+  "id": "prodeus",
+  "name": "Prodeus",
+  "version": "0.1.0",
+  "profiles": [
+    {
+      "id": "steam-arm64-1.0.2",
+      "name": "Steam · 1.0.2 · Einzelspieler",
+      "enabled": true,
+      "bundleIdentifier": "com.BoundingBoxSoftware.Prodeus",
+      "executable": "Prodeus",
+      "uuids": [
+        "DEF4DD2F-8142-39D2-8BD8-BEB64BACC720"
+      ],
+      "teamIdentifier": "",
+      "version": "1.0.2",
+      "gameVersion": "1.0.2",
+      "store": "Steam",
+      "architecture": "arm64",
+      "steamAppId": "964800",
+      "steamBuildId": "9679369",
+      "signatureScope": "sha256-original",
+      "integrityFiles": [
+        "Contents/Info.plist",
+        "Contents/MacOS/Prodeus",
+        "Contents/Frameworks/GameAssembly.dylib",
+        "Contents/Frameworks/UnityPlayer.dylib",
+        "Contents/Resources/Data/il2cpp_data/Metadata/global-metadata.dat",
+        "Contents/PlugIns/steam_api.bundle/Contents/MacOS/libsteam_api.dylib"
+      ],
+      "fileChecks": [
+        {
+          "path": "Contents/Info.plist",
+          "fileSize": 1517,
+          "offset": 0,
+          "length": 1517,
+          "sha256": "c328ca0ad8b66756075b01e3decc7198f9cdb2df7e39709468e03d74bd46d035"
+        },
+        {
+          "path": "Contents/MacOS/Prodeus",
+          "fileSize": 115648,
+          "offset": 0,
+          "length": 115648,
+          "sha256": "643cca3f001928a4a0cd10a91afdb003a491f431d677d123e43ef554aa52b022"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 70006416,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "f181fef2eb01861ea87dc88dea531a685532e094e5a48c50b3e23f2e7ea53ed4"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 70006416,
+          "offset": 8388608,
+          "length": 8388608,
+          "sha256": "aa865e2de8c45415eda01e7a871266980187e49b63925cd04cbfbbe34f6545ed"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 70006416,
+          "offset": 16777216,
+          "length": 8388608,
+          "sha256": "dcaa2d6a45f6635c7d70bff022cbf5101374f86267dc220bb714178f72b8f7c5"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 70006416,
+          "offset": 25165824,
+          "length": 8388608,
+          "sha256": "418187f2d40212e5d41ea4df1e8497685c7486cb187baac914feba7726595cc4"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 70006416,
+          "offset": 33554432,
+          "length": 8388608,
+          "sha256": "dacd70a297c6d6fc217407fea1866aa05f182bfad6927a3576a5bdb4118e99d3"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 70006416,
+          "offset": 41943040,
+          "length": 8388608,
+          "sha256": "eb054738d3e1e3a174a2a458959c56e1ff566185e7621c3e83705cc37f072464"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 70006416,
+          "offset": 50331648,
+          "length": 8388608,
+          "sha256": "d2ad94ea52773df4361eca57f441a13e14885f5fd3457b210796ed6aa4ef0e74"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 70006416,
+          "offset": 58720256,
+          "length": 8388608,
+          "sha256": "0d3b55061d914b18ee83d947238dc49ed6bc59ead6e7ac59c6e6e7c5e38c7860"
+        },
+        {
+          "path": "Contents/Frameworks/GameAssembly.dylib",
+          "fileSize": 70006416,
+          "offset": 67108864,
+          "length": 2897552,
+          "sha256": "89f1bc005fe1284fc80b8884642cb6dcca91164dcf6353da34830b46a0b61a72"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 52111344,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "401f92b66137576824a4aa569cd35ae36d5add86b92e8ecd9da951b60241aa6b"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 52111344,
+          "offset": 8388608,
+          "length": 8388608,
+          "sha256": "086351330d91230ff4d5b1bfab48b91a1510e86d6929733e86f4ab07c6cb5c06"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 52111344,
+          "offset": 16777216,
+          "length": 8388608,
+          "sha256": "f2e9c3896e052d04b8ab0fec98b2c7d33b31f1d895fe415f16fae8ffcd87e8ca"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 52111344,
+          "offset": 25165824,
+          "length": 8388608,
+          "sha256": "a70a33bb436f021d1453d533bbadda7acb5a73986ee6d4489bf2522d8dfdd5be"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 52111344,
+          "offset": 33554432,
+          "length": 8388608,
+          "sha256": "3fe8332a3186e8b1ed0db9ab40b9c6cedc26a083e08eb01d65c30258f4126dda"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 52111344,
+          "offset": 41943040,
+          "length": 8388608,
+          "sha256": "e58b59372900a72ff23427f4cf6a8e7ea1af17f85bf793b838ac99ec60cd9f06"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 52111344,
+          "offset": 50331648,
+          "length": 1779696,
+          "sha256": "80380299bde5759c52e627be33e6807afdf37f0019c604c251cbb9b084666c7d"
+        },
+        {
+          "path": "Contents/Resources/Data/il2cpp_data/Metadata/global-metadata.dat",
+          "fileSize": 7859012,
+          "offset": 0,
+          "length": 7859012,
+          "sha256": "80a0ff940f3a34d49458c39b1618cb9dce54bdf91abd256006394596bef16c78"
+        },
+        {
+          "path": "Contents/PlugIns/steam_api.bundle/Contents/MacOS/libsteam_api.dylib",
+          "fileSize": 609584,
+          "offset": 0,
+          "length": 609584,
+          "sha256": "162b0c71e1e724582a884c95f2748cb20944a003e858c017dc6bdd10c18e1536"
+        }
+      ],
+      "integrityApproval": "user-confirmed-steam-original"
+    }
+  ],
+  "groups": [
+    {
+      "id": "player",
+      "title": "Spieler",
+      "symbol": "person",
+      "features": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "equipment",
+      "title": "Schlüssel & Fähigkeiten",
+      "symbol": "key",
+      "features": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "id": "weapons",
+      "title": "Waffen",
+      "symbol": "scope",
+      "features": [
+        10,
+        11
+      ]
+    },
+    {
+      "id": "game",
+      "title": "Spiel",
+      "symbol": "speedometer",
+      "features": [
+        12
+      ]
+    }
+  ]
+}

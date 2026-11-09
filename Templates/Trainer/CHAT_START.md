@@ -29,6 +29,11 @@ script/build.py --module <id> --configuration Release. Wenn die Veröffentlichun
 beauftragt ist, Quellen, Tests, Profile und das regenerierte Xcode-Projekt gemeinsam
 auf main bringen und Paket/Katalog bis zum bestätigten Download prüfen.
 Keine Trainerbibliotheken in den Launcher einbauen oder alte Releases ersetzen.
+Prüfe vor Builds und Veröffentlichung script/trainer_distribution.py plan gegen
+den letzten bestätigten Onlinekatalog. Nur neue oder tatsächlich geänderte Trainer
+unter modules bauen und veröffentlichen; bei leerer Liste keine Trainerversionen
+erhöhen. Reine Buildskript-, Test-, Doku- oder Appänderungen erzeugen keine
+Trainerupdates. Unerwartete Masseneinträge zuerst untersuchen und korrigieren.
 ```
 
 Im Auftrag Spielname, Store und gewünschte Funktionen konkret nennen. Einen
@@ -47,4 +52,9 @@ gegebenenfalls tatsächlich betroffene gemeinsame Abhängigkeiten. Unterscheide
 Paketversion, Spielbuild und Store. Bereite eine neue unveränderliche Einzelversion
 mit geprüftem Katalogeintrag vor; veröffentliche sie im Umfang meines Auftrags.
 Keine Spielstarts oder Ingame-Prüfungen ohne entsprechenden Auftrag ableiten.
+Vorher script/trainer_distribution.py plan prüfen: Nur neue oder inhaltlich
+geänderte Trainer unter modules bauen/veröffentlichen, bei leerer Liste keine.
+Reine Buildskript-/Test-/Doku-/Appversionsänderungen und Fingerabdruck-Formatwechsel
+dürfen nicht zu neuen Versionen aller Trainer führen. Inhalts- und Buildbeleg
+getrennt erhalten; Migration nur anhand bestätigter Altbelege durchführen.
 ```

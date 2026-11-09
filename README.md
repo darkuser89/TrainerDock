@@ -4,40 +4,57 @@ Ein gemeinsamer macOS-Launcher für die bereitgestellten Trainer. Installierte S
 stehen links, die jeweiligen Trainerfunktionen und der Startknopf rechts. Unter
 „Trainer & Spielpfade“ lässt sich jede Spiele-App einzeln auswählen.
 
-Enthalten sind siebzehn Trainer:
+Der aktuelle Projektstand enthält **28 eigenständige Trainer**. Die Liste basiert
+auf den freigegebenen Profilen unter `Modules/`; die Versionsangaben bezeichnen
+das Spiel, nicht die separat versionierten Trainerpakete. Bereits veröffentlichte
+Pakete findest du im Trainerkatalog der App.
 
-| Spiel | Unterstützter Store | Profilversion |
-|---|---|---|
-| Balatro | Steam | 1.0.1o-FULL (Build 17459173) |
-| Dome Keeper | Steam | 5.0.8.14 (Build 25038893) |
-| Escape from Duckov | Steam | 2.3.30 (Build 24013657) |
-| Dead Island 2 | Steam / Mac App Store | 0.6.4 |
-| Resident Evil 2 | Mac App Store | 1.0.2 |
-| Resident Evil 3 | Mac App Store | 1.0.0 |
-| Resident Evil 4 | Mac App Store | 1.0.7 |
-| Resident Evil 7 | Mac App Store | 1.0.4 |
-| Resident Evil Village | Mac App Store | 1.1.8 |
-| Lies of P | Steam | 1.14.0 |
-| Cyberpunk 2077 | Steam | 2.5.0 |
-| RoboCop: Rogue City | Steam | 0.0.1 |
-| Crimson Desert | Steam | Bundle 1.0.35 (450) / Anzeige 2.04.08 |
-| Vampire Crawlers | Steam | 1.6.1 (11), Build 25304267 |
-| No Man’s Sky | Steam | Bundle 4.70, Build 26386568 |
-| Vampire Survivors | Steam | 1.16.111 (Build 25984009) |
-| Control Ultimate Edition | Steam / Mac App Store | Steam 1.34 (Build 3), MAS 1.33.1 (Build 27) / 1.371 (Build 28) |
+| Spiel | Unterstützter Store | Spiel-/Profilversion | Hinweise |
+|---|---|---|---|
+| Balatro | Steam | 1.0.1o-FULL (Build 17459173) | |
+| Control Ultimate Edition | Steam / Mac App Store | Steam 1.34; MAS 1.33.1 / 1.371 | |
+| Crimson Desert | Steam | Bundle 1.0.35 (Build 450) | |
+| Cyberpunk 2077 | Steam | 2.5.0 | |
+| Dead Island 2 | Steam / Mac App Store | 0.6.4 | **Steam: nur Uncut-Version; MAS: nur German-Cut-Version** |
+| Death Stranding Director’s Cut | Mac App Store | 1.004 (Bundle 1.1.4) | |
+| Dome Keeper | Steam | 5.0.8.14 | |
+| DREDGE | Epic Games Store / GOG | Epic 1.5.5; GOG 1.5.3 | GOG unter Rosetta |
+| Escape from Duckov | Steam | 2.3.30 | |
+| Frostpunk 2 | Steam | 1.6.1 (Bundle 0.5.591, Build 24037022) | |
+| House Flipper | Steam | 1.26252 (Build 25247477) | Rosetta |
+| inZOI | Steam | Bundle 5.4.95 (Build 26264076) | |
+| Lies of P | Steam | 1.14.0 | |
+| No Man’s Sky | Steam | Bundle 4.70 (Build 26386568) | |
+| Prodeus | Steam | 1.0.2 (Build 9679369) | **Nur Einzelspieler** |
+| Resident Evil 2 | Mac App Store | 1.0.2 | |
+| Resident Evil 3 | Mac App Store | 1.0.0 | |
+| Resident Evil 4 | Mac App Store | 1.0.7 | |
+| Resident Evil 7 | Mac App Store | 1.0.4 | |
+| Resident Evil Village | Mac App Store | 1.1.8 | |
+| RoboCop: Rogue City | Steam | 0.0.1 | |
+| Stray (WIP) | Steam | 1.5 (Build 12863654) | **Unfertig; vier Funktionen deaktiviert** |
+| Terraria | Steam | 1.4.5.8 (Build 24893155) | |
+| The Long Dark | Steam / Epic Games Store | Steam 2.60 (Build 26450964); Epic 2.55 | |
+| Turok | Steam | 2.0 (Build 18198095) | Rosetta |
+| Turok 2: Seeds of Evil | Steam | 2.0 (Build 20961743) | Rosetta |
+| Vampire Crawlers | Steam | 1.6.1 (Build 25304267) | |
+| Vampire Survivors | Steam / Epic Games Store | 1.16.111 | |
 
 Control enthält alle zwölf angeforderten Funktionen. Native Grenzen und
 Prüfumfang: [Control-Modul](Modules/control/README.md).
 
-Die Trainer übernehmen die konkreten arm64-Buildidentitäten der gelieferten Projekte.
-Weitere Stores und Spielupdates werden dadurch nicht automatisch unterstützt.
+Die Trainer sind an die konkret geprüften Originalbuilds gebunden. Der Launcher
+läuft auf Apple Silicon; ausdrücklich ausgewiesene Intelprofile verwenden Rosetta.
+Weitere Stores und Spielupdates werden nicht automatisch unterstützt.
 
 ## Benutzen
 
-1. TrainerDock öffnen. Fehlende Spiele unter „Trainer & Spielpfade“ einrichten.
+1. TrainerDock öffnen. Gewünschte Trainer unter „Trainer laden & verwalten“ herunterladen
+   und fehlende Spielpfade unter „Trainer & Spielpfade“ einrichten.
 2. Links das Spiel und gegebenenfalls rechts die Storeversion auswählen.
-3. Steam für Steamprofile regulär öffnen. Eine bereits laufende Spielinstanz vorher
-   regulär beenden. „Spiel mit Trainer starten“ anklicken.
+3. Steam für Steamprofile regulär öffnen. Für Epic-Profile den Epic Games Launcher
+   vorher regulär beenden. Eine bereits laufende Spielinstanz regulär beenden und
+   in TrainerDock auf „Spielen“ klicken.
 4. Funktionen rechts bedienen oder das Ingame-Overlay mit **⌘ ^** öffnen.
    Die spielbezogenen Kürzel stehen bei den Funktionen. „Alles aus“ löst eigene
    Dauereffekte; Einmaländerungen werden dadurch nicht rückgängig gemacht.
@@ -57,7 +74,7 @@ transparent bis undurchsichtig. Der Wert bleibt pro Trainer gespeichert.
 Installationspfade stehen in „Trainer & Spielpfade“ und im Tooltip von „Spielpfad …“;
 die Hauptansicht zeigt keine lange Pfadzeile.
 
-„Mit letzter Cheat-Auswahl starten“ ist standardmäßig ausgeschaltet. Vorgemerkte
+„Auswahl beim Start laden“ ist standardmäßig ausgeschaltet. Vorgemerkte
 Dauerschalter werden nur bei eingeschalteter Option und gültigem Spielkontext
 wiederhergestellt. Einmalaktionen werden nie automatisch ausgeführt. Die gespeicherte
 Auswahl und Pfade liegen in den Benutzereinstellungen der Anwendung.
@@ -69,14 +86,18 @@ Apple Silicon, **macOS 27 oder neuer**, Xcode mit macOS-27-SDK oder neuer.
 ## GitHub-Builds und Downloads
 
 [GitHub Actions](https://github.com/darkuser89/TrainerDock/actions/workflows/build-release.yml)
-baut bei Pushes auf `main`, Pull Requests und manuellem Start den Launcher und alle
-17 nativen Trainer mit Xcode 27. Synthetische Tests und Signaturprüfungen müssen
-bestehen. Das geprüfte ZIP steht sieben Tage als Workflow-Artefakt bereit.
+baut mit Xcode 27 ausschließlich neue oder tatsächlich geänderte Produkte.
+Grundlage ist der zuletzt erfolgreich veröffentlichte Trainerkatalog. Reine
+Launcher-, Dokumentations- oder Buildskriptänderungen erzeugen keine Trainerupdates.
+Synthetische Tests und Signaturprüfungen müssen bestehen; Pull Requests veröffentlichen nichts.
 
-Ein Versions-Tag wie `v1.0.0` baut zusätzlich einen öffentlichen
+Ein geänderter Launcher erhält einen eigenen stabilen
 [GitHub Release](https://github.com/darkuser89/TrainerDock/releases/latest)
-mit `TrainerDock-macOS-arm64.zip` und `SHA256SUMS`. Das ZIP enthält
-**TrainerDock.app einschließlich aller Trainer**.
+mit `TrainerDock-macOS-arm64.zip` und `SHA256SUMS`. Das ZIP enthält die
+**TrainerDock.app mit Katalogmetadaten**. Trainer werden einzeln als
+`trainer-<spiel-id>-v<version>` veröffentlicht und über die App heruntergeladen.
+Frühere Trainerversionen bleiben verfügbar. „Alle installierten Trainer aktualisieren“
+lädt die fehlenden neuen Pakete bereits installierter Trainer; alte Versionen bleiben erhalten.
 Die Downloads sind ad-hoc signiert, nicht Developer-ID-signiert oder notarisiert.
 
 Zwei C#-Trainer verwenden im Cloud-Build ausschließlich unsere eigenen kompilierten
@@ -92,9 +113,9 @@ erfolgreichen automatischen Abfrage pro Tag. Im Menü **TrainerDock → Nach Upd
 suchen …** jederzeit manuell prüfen; automatische Prüfungen lassen sich dort
 abschalten. Eine neue Version wird angezeigt und erst nach „Laden und installieren“
 installiert. Die SHA-256-Prüfsumme kommt direkt aus den GitHub-Release-Metadaten.
-App und mitgelieferte Trainer werden gemeinsam ersetzt und TrainerDock neu gestartet.
-Laufende Spiele verzögern die Installation; Spielstände, Pfade und Einstellungen
-bleiben erhalten. Zusätzliche Benutzermodule werden nicht ersetzt.
+Nur die App wird ersetzt und TrainerDock neu gestartet. Installierte Trainer
+werden separat über die Trainerverwaltung aktualisiert. Laufende Spiele verzögern
+die App-Installation; Trainerversionen, Spielstände, Pfade und Einstellungen bleiben erhalten.
 
 Keine zusätzliche Update-Signierung, Apple-Zertifikate oder Schlüsselbundabfragen.
 macOS-Schutzmechanismen bleiben unverändert. Die erste Version mit integriertem
@@ -117,10 +138,10 @@ Alternativ denselben Xcode-Build über das vorhandene Skript ausführen:
 ./script/build_and_run.sh --verify       # zusätzlich den Launcher öffnen
 ```
 
-Die aktuelle App liegt unter `~/Library/Developer/TrainerDock/TrainerDock.app`. Sie enthält
-unter `Contents/Resources/Modules` siebzehn eigenständige Trainerpakete. Der Build
-verwendet daneben `Modules` für inkrementelle Modulbauten. Der Launcher lädt nur
-Metadaten; Trainerbibliotheken werden erst im ausgewählten Spielprozess geladen.
+Die aktuelle App liegt unter `~/Library/Developer/TrainerDock/TrainerDock.app` und
+enthält ausschließlich Katalogmetadaten. Vollständige lokale Trainermodule entstehen
+unter `~/Library/Developer/TrainerDock/Modules`; sie werden nicht automatisch installiert.
+Der Launcher liest nur Metadaten; Trainerbibliotheken werden erst im ausgewählten Spielprozess geladen.
 Weitere Module können ohne Neukompilieren der App ergänzt werden; siehe die Modulanleitung. `TRAINERDOCK_BUILD_DIR`
 kann einen anderen separaten Buildordner bestimmen. Code und Audit sind als
 Buildziel ausgeschlossen. Die App ist ad-hoc signiert, nicht notarisiert.
