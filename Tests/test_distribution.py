@@ -62,7 +62,8 @@ class DistributionTests(unittest.TestCase):
         for item in initial["modules"]:
             records[item["id"]]["contentFingerprint"] = item["contentFingerprint"]
         catalog = distribution.merged_catalog(distribution.empty_catalog(), records)
-        catalog["launcher"] = dict(version="1.0.0",fingerprint=initial["launcher"]["fingerprint"])
+        catalog["launcher"] = dict(version="1.0.0",fingerprint=initial["launcher"]["fingerprint"], sha256="d"*64, size=10)
+        catalog["launcher"]["contentBaseline"] = distribution.launcher_baseline(catalog["launcher"], initial["launcher"]["contentFingerprint"])
         return catalog
 
     def changed(self, catalog):
@@ -91,6 +92,71 @@ class DistributionTests(unittest.TestCase):
             self.write("script/" + name, "# refactored build orchestration\n")
         self.assertNotEqual(old_build, distribution.module_fingerprint(self.root / "Modules/one", self.root))
         self.assertEqual(self.changed(catalog)["modules"], [])
+        self.assertFalse(self.changed(catalog)["launcher"]["changed"])
+
+    def test_new_trainer_is_downloadable_without_launcher_release(self):
+        catalog = self.confirmed()
+        self.write("Modules/new-game/Sources/Main.m", "// new independent trainer")
+        self.write("Modules/new-game/Sources/LICENSE", "license")
+        self.write("Modules/new-game/Build.json", json.dumps(dict(sources=["Main.m"])))
+        self.write("Modules/new-game/Module.json", json.dumps(dict(id="new-game",name="New game",version="1.0.0")))
+        self.write("README.md", "new trainer in list")
+        self.write("script/xcode_project.py", "# generator supports another trainer family")
+        result = self.changed(catalog)
+        self.assertEqual([m["id"] for m in result["modules"]], ["new-game"])
+        self.assertFalse(result["launcher"]["changed"])
+        merged = distribution.merged_catalog(catalog, {"new-game":record("new-game")})
+        self.assertEqual(merged["launcher"], catalog["launcher"])
+        self.assertIn("new-game", [m["id"] for m in merged["modules"]])
+
+    def test_launcher_content_migration_preserves_exact_release_and_survives_refactoring(self):
+        catalog = self.confirmed()
+        catalog["launcher"].pop("contentBaseline")
+        plan = self.changed(catalog)
+        self.assertTrue(plan["catalogChanged"])
+        self.assertFalse(plan["launcher"]["changed"])
+        seeded = distribution.seed_launcher_content_baseline(catalog, self.root)
+        self.assertEqual(seeded["launcher"]["version"], catalog["launcher"]["version"])
+        self.assertEqual(seeded["launcher"]["sha256"], catalog["launcher"]["sha256"])
+        confirmed = dict(catalog["launcher"])
+        merged = distribution.merge_confirmed_launcher(seeded["launcher"], confirmed)
+        self.assertEqual(merged, seeded["launcher"])
+        self.write("script/build.py", "# orchestration refactor")
+        self.assertFalse(self.changed(seeded)["launcher"]["changed"])
+        self.assertFalse(self.changed(seeded)["catalogChanged"])
+        self.assertTrue(self.changed(catalog)["launcher"]["changed"], "unproven old build cannot be migrated")
+        self.write("App/Main.h", "// real application change")
+        self.assertTrue(self.changed(seeded)["launcher"]["changed"])
+        bad = copy.deepcopy(seeded);bad["launcher"]["sha256"] = "e"*64
+        with self.assertRaises(ValueError):distribution.validate_catalog(bad)
+        confirmed["sha256"] = "f"*64
+        self.assertNotIn("contentBaseline", distribution.merge_confirmed_launcher(seeded["launcher"], confirmed))
+
+    def test_app_versions_paths_and_test_changes_do_not_publish_app(self):
+        catalog = self.confirmed()
+        self.write("Config/TrainerDock.xcconfig", "FRAMEWORKS = AppKit\nMARKETING_VERSION = 9.9.9\nCURRENT_PROJECT_VERSION = 99\nSYMROOT = /different/build\n")
+        self.write("Tests/NewTest.m", "// test")
+        self.write("script/release.py", "# packaging orchestration")
+        self.assertFalse(self.changed(catalog)["launcher"]["changed"])
+        self.write("ModuleSDK/Protocol.h", "// actual host protocol change")
+        self.assertTrue(self.changed(catalog)["launcher"]["changed"])
+
+    def test_effective_launcher_and_broker_options_change_app_content(self):
+        import plistlib
+        objects = {}
+        for name in ("TrainerDock", "TrainerDockEpicBroker"):
+            objects[name] = dict(isa="PBXNativeTarget",name=name,buildConfigurationList=name+"-list",buildPhases=[])
+            objects[name+"-list"] = dict(buildConfigurations=[name+"-release"])
+            objects[name+"-release"] = dict(name="Release",buildSettings={"OTHER_LDFLAGS":["-framework","AppKit"]})
+        path = self.root/"TrainerDock.xcodeproj/project.pbxproj";path.parent.mkdir()
+        path.write_bytes(plistlib.dumps(dict(objects=objects)))
+        before = distribution.launcher_content_fingerprint(self.root)
+        objects["unrelated-trainer"] = dict(isa="PBXNativeTarget",name="Trainer-new-game",buildConfigurationList="unrelated-config",buildPhases=[])
+        path.write_bytes(plistlib.dumps(dict(objects=objects)))
+        self.assertEqual(before, distribution.launcher_content_fingerprint(self.root), "adding a trainer target never changes the shipped host")
+        objects["TrainerDockEpicBroker-release"]["buildSettings"]["OTHER_LDFLAGS"].append("-lc++")
+        path.write_bytes(plistlib.dumps(dict(objects=objects)))
+        self.assertNotEqual(before, distribution.launcher_content_fingerprint(self.root))
 
     def test_app_version_and_build_paths_do_not_release_trainers(self):
         catalog = self.confirmed()
@@ -295,6 +361,18 @@ class DistributionTests(unittest.TestCase):
         with patch.object(distribution,"fetch_catalog",return_value=newer), patch.object(github,"request") as request:
             with self.assertRaises(ValueError): github.publish_trainers(previous,{},self.root)
             request.assert_not_called()
+
+    def test_launcher_baseline_migration_publishes_catalog_only(self):
+        previous = self.confirmed();previous["launcher"].pop("contentBaseline")
+        expected = distribution.seed_launcher_content_baseline(previous, self.root)
+        seed = distribution.seed_launcher_content_baseline
+        github = distribution.GitHub("fixture", "commit")
+        with patch.object(distribution,"fetch_catalog",return_value=previous), patch.object(distribution,"seed_launcher_content_baseline",side_effect=lambda value:seed(value,self.root)), patch.object(github,"request") as request, patch.object(github,"publish_catalog") as publish:
+            result = github.publish_trainers(previous, {}, self.root)
+        request.assert_not_called()
+        publish.assert_called_once_with(expected)
+        self.assertEqual(result["modules"], previous["modules"])
+        self.assertEqual(result["launcher"]["version"], previous["launcher"]["version"])
 
     def test_catalog_transaction_rolls_back_and_retries(self):
         previous = distribution.empty_catalog()

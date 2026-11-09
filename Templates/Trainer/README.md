@@ -119,6 +119,11 @@ eigene Klicks; Tastaturfokus und geschlossene Mausbedienung bleiben beim Spiel.
 
 ## Einzelne Downloads und Spielupdates
 
+Neue Spiele über den Onlinekatalog veröffentlichen. Eine kompatible bestehende
+TrainerDock-App zeigt und lädt neue Trainer ohne App-Update. Neue Modul-/Xcode-Ziele,
+Katalogmetadaten oder Buildskripte allein rechtfertigen keinen App-Release. Die
+App-Inhaltsprüfung und eng begrenzte Altbeleg-Migration stehen in docs/RELEASING.md.
+
 TrainerDock enthält keine gebündelten Trainerbibliotheken. Für ein **neues Spiel**
 eine neue Modul-ID anlegen; bei **Spielupdates, weiteren Stores und Korrekturen**
 das vorhandene `Modules/<id>` weiterentwickeln. Bisherige geprüfte Profile und IDs

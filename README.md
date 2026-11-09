@@ -8,6 +8,8 @@ Der aktuelle Projektstand enthält **28 eigenständige Trainer**. Die Liste basi
 auf den freigegebenen Profilen unter `Modules/`; die Versionsangaben bezeichnen
 das Spiel, nicht die separat versionierten Trainerpakete. Bereits veröffentlichte
 Pakete findest du im Trainerkatalog der App.
+Neue Trainer erscheinen dort ohne App-Update; „Nach Trainerupdates suchen“ lädt
+den aktuellen Katalog. Eine kompatible vorhandene App genügt.
 
 | Spiel | Unterstützter Store | Spiel-/Profilversion | Hinweise |
 |---|---|---|---|

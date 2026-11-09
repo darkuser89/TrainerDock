@@ -319,6 +319,19 @@ ohne eigene Prüfung und Freigabe gesperrt.
 
 ## App-Updates ohne zusätzliche Signierung
 
+Neue Trainer erscheinen ausschließlich über den Onlinekatalog und sind mit einer
+bereits installierten kompatiblen App herunterladbar. Weder neue Module/Ziele noch
+Katalog-, Test-, Doku-, Buildskript- oder Versionsnummernänderungen allein verlangen
+einen App-Release. `launcher_content_fingerprint` prüft tatsächliche App-/Core-/SDK-
+Quellen, Icon, Lizenz und wirksame Release-Optionen von Launcher und Epic-Helfer;
+der strengere `launcher_fingerprint` bleibt als Buildbeleg erhalten. Die einmalige
+Inhaltsbeleg-Migration darf nur einen exakt passenden veröffentlichten App-Build
+mit bestätigtem Paket-SHA-256 verwenden und aktualisiert ausschließlich den Katalog.
+Alte Releases nicht ändern und keinen App-Neubau für den Fingerabdruckwechsel
+auslösen. Nur echte Hoständerungen oder eine benötigte neue Schnittstelle
+rechtfertigen ein App-Update.
+
+
 Der Nutzer wünscht Updates direkt über GitHub Releases ohne zusätzliche
 Update-Signierung, Zertifikate, Schlüsselbundabfragen oder Signing-Secrets.
 `App/MHTUpdater.*` und `MHTUpdatePackage.*` verwenden ausschließlich stabile neuere

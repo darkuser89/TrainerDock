@@ -99,6 +99,21 @@ benötigen keine neue App-Veröffentlichung.
 
 ## Neue Trainer und Spielupdates veröffentlichen
 
+### Neue Trainer ohne App-Update
+
+Neue Trainer erscheinen ausschließlich über den Onlinekatalog und sind mit einer
+bereits installierten kompatiblen App herunterladbar. Weder neue Module/Ziele noch
+Katalog-, Test-, Doku-, Buildskript- oder Versionsnummernänderungen allein verlangen
+einen App-Release. `launcher_content_fingerprint` prüft tatsächliche App-/Core-/SDK-
+Quellen, Icon, Lizenz und wirksame Release-Optionen von Launcher und Epic-Helfer;
+der strengere `launcher_fingerprint` bleibt als Buildbeleg erhalten. Die einmalige
+Inhaltsbeleg-Migration darf nur einen exakt passenden veröffentlichten App-Build
+mit bestätigtem Paket-SHA-256 verwenden und aktualisiert ausschließlich den Katalog.
+Alte Releases nicht ändern und keinen App-Neubau für den Fingerabdruckwechsel
+auslösen. Nur echte Hoständerungen oder eine benötigte neue Schnittstelle
+rechtfertigen ein App-Update.
+
+
 ### Neues Spiel oder vorhandener Trainer
 
 Für ein neues Spiel mit `script/new_module.py` eine neue stabile ID anlegen.

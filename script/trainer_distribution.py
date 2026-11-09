@@ -58,6 +58,7 @@ def validate_catalog(catalog):
     modules = catalog.get("modules")
     if not isinstance(modules, list) or len(modules) > 512:
         raise ValueError("Ungültige Trainerliste.")
+    launcher_content_baseline(catalog.get("launcher", {}))
     seen = set()
     for module in modules:
         identifier = module.get("id", "")
@@ -200,7 +201,7 @@ def fetch_catalog(token=None):
     else:
         launcher = confirmed_launcher(latest)
         if launcher:
-            result["launcher"] = launcher
+            result["launcher"] = merge_confirmed_launcher(result.get("launcher", {}), launcher)
     return result
 
 
@@ -214,7 +215,42 @@ def confirmed_launcher(release):
         asset = assets.get(name, {})
         if not re.fullmatch(r"sha256:[a-f0-9]{64}", asset.get("digest", "")) or type(asset.get("size")) is not int or asset["size"] <= 0:
             return None
-    return {"version": tag[1:], "fingerprint": marker[1]}
+    archive = assets["TrainerDock-macOS-arm64.zip"]
+    launcher = {"version": tag[1:], "fingerprint": marker[1],
+                "sha256": archive["digest"][7:], "size": archive["size"]}
+    content = re.search(r"<!-- trainerdock-launcher-content:([a-f0-9]{64}) -->", release.get("body") or "")
+    if content:
+        launcher["contentBaseline"] = launcher_baseline(launcher, content[1])
+    return launcher
+
+
+def launcher_baseline(launcher, fingerprint):
+    return dict(algorithm=1, version=launcher["version"], sha256=launcher["sha256"],
+                buildFingerprint=launcher["fingerprint"], fingerprint=fingerprint)
+
+
+def launcher_content_baseline(launcher):
+    if not isinstance(launcher, dict):
+        raise ValueError("Ungültiger App-Inhaltsbeleg.")
+    baseline = launcher.get("contentBaseline")
+    if baseline is None:
+        return None
+    if (not isinstance(baseline, dict) or baseline.get("algorithm") != 1
+            or not SHA.fullmatch(str(baseline.get("fingerprint", "")))
+            or not SHA.fullmatch(str(launcher.get("sha256", "")))
+            or baseline.get("version") != launcher.get("version")
+            or baseline.get("sha256") != launcher.get("sha256")
+            or baseline.get("buildFingerprint") != launcher.get("fingerprint")):
+        raise ValueError("App-Inhaltsbeleg gehört nicht zum bestätigten App-Paket.")
+    return baseline["fingerprint"]
+
+
+def merge_confirmed_launcher(cached, confirmed):
+    result = copy.deepcopy(confirmed)
+    if (not launcher_content_baseline(result) and launcher_content_baseline(cached)
+            and all(cached.get(key) == confirmed.get(key) for key in ("version", "fingerprint", "sha256"))):
+        result["contentBaseline"] = copy.deepcopy(cached["contentBaseline"])
+    return result
 
 
 def source_closure(paths, root=ROOT, include_roots=()):
@@ -278,7 +314,7 @@ def project_objects(data):
     return json.loads(result.stdout)["objects"]
 
 
-def product_settings(root, identifier):
+def product_settings(root, identifier, prefix="Trainer-"):
     settings = {}
     configuration = Path(root) / "Config/TrainerDock.xcconfig"
     for raw in configuration.read_text().splitlines():
@@ -295,7 +331,7 @@ def product_settings(root, identifier):
     if project.is_file():
         objects = project_objects(project.read_bytes())
         targets = [item for item in objects.values() if item.get("isa") == "PBXNativeTarget"
-                   and item.get("name") == "Trainer-" + identifier]
+                   and item.get("name") == prefix + identifier]
         if len(targets) != 1:
             raise ValueError("Trainerziel nicht eindeutig im Xcode-Projekt.")
         target = targets[0]
@@ -416,6 +452,28 @@ def launcher_fingerprint(root=ROOT):
     return digest_inputs(source_closure(starts, root, (root / "App", root / "Core", root / "ModuleSDK")), {"launcherABI": 1}, root)
 
 
+def launcher_content_fingerprint(root=ROOT):
+    """Shipped host inputs only: online trainer lists and build orchestration are independent."""
+    root = Path(root)
+    starts = [p for folder in ("App", "Core") for p in (root / folder).glob("*.m")]
+    starts += [root / "ModuleSDK/MHTProtocol.m", root / "Config/Info.plist",
+               root / "App/Resources/TrainerDock.png", root / "LICENSE"]
+    settings = {name: product_settings(root, name, prefix="")
+                for name in ("TrainerDock", "TrainerDockEpicBroker")}
+    return digest_inputs(source_closure(starts, root, (root / "App", root / "Core", root / "ModuleSDK")),
+                         {"launcherContentAlgorithm": 1, "settings": settings, "moduleABI": 1}, root)
+
+
+def seed_launcher_content_baseline(catalog, root=ROOT):
+    """Migrate only an exactly matching published build, without rebuilding the app."""
+    result = copy.deepcopy(validate_catalog(catalog))
+    launcher = result.get("launcher", {})
+    if (not launcher_content_baseline(launcher) and SHA.fullmatch(str(launcher.get("sha256", "")))
+            and launcher.get("fingerprint") == launcher_fingerprint(root)):
+        launcher["contentBaseline"] = launcher_baseline(launcher, launcher_content_fingerprint(root))
+    return result
+
+
 def next_version(configured, versions, reserved=()):
     base = version(configured)
     old = max([version(item["version"]) for item in versions] + [version(item) for item in reserved], default=(-1, -1, -1))
@@ -446,8 +504,13 @@ def plan(catalog, root=ROOT, reserved=None):
                         "contentFingerprint": content,
                         "version": next_version(manifest["version"], catalog_versions(by_id.get(identifier, {})), (reserved or {}).get(identifier, ()))})
     fingerprint = launcher_fingerprint(root)
-    return {"schemaVersion": 1, "launcher": {"changed": catalog.get("launcher", {}).get("fingerprint") != fingerprint,
-                                             "fingerprint": fingerprint}, "modules": changed,
+    content = launcher_content_fingerprint(root)
+    migrated = seed_launcher_content_baseline(catalog, root)
+    baseline = launcher_content_baseline(migrated.get("launcher", {}))
+    launcher_changed = baseline != content if baseline else catalog.get("launcher", {}).get("fingerprint") != fingerprint
+    return {"schemaVersion": 1, "launcher": {"changed": launcher_changed, "fingerprint": fingerprint,
+                                             "contentFingerprint": content}, "modules": changed,
+            "catalogChanged": migrated != catalog,
             "allModules": all_modules, "baselineSHA256": hashlib.sha256(json_bytes(catalog)).hexdigest()}
 
 
@@ -606,7 +669,7 @@ class GitHub:
             self.upload(release, archive.name, data)
             if release["draft"]:
                 self.request("/releases/" + str(release["id"]), "PATCH", {"draft": False, "prerelease": True, "make_latest": "false"})
-        result = merged_catalog(previous, records)
+        result = seed_launcher_content_baseline(merged_catalog(previous, records))
         self.publish_catalog(result)
         return result
 
@@ -718,7 +781,7 @@ def main():
             with open(output, "a") as stream:
                 stream.write("launcher_changed=" + str(result["launcher"]["changed"]).lower() + "\n")
                 stream.write("modules=" + json.dumps([item["id"] for item in result["modules"]], separators=(",", ":")) + "\n")
-                stream.write("any_changed=" + str(result["launcher"]["changed"] or bool(result["modules"])).lower() + "\n")
+                stream.write("any_changed=" + str(result["launcher"]["changed"] or bool(result["modules"]) or result["catalogChanged"]).lower() + "\n")
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return
     previous = read_catalog(baseline_file)
@@ -745,6 +808,7 @@ def main():
         raise ValueError("Launcherpaket nach Prüfung geändert.")
     tag = "v" + metadata["version"]
     body = "TrainerDock ohne gebündelte Trainer. Einzelne Trainer in der App laden.\n\n<!-- trainerdock-launcher-fingerprint:" + result["launcher"]["fingerprint"] + " -->"
+    body += "\n<!-- trainerdock-launcher-content:" + result["launcher"]["contentFingerprint"] + " -->"
     release = github.release(tag, body)
     if release.get("body") != body:
         raise ValueError("Bestehendes App-Release gehört zu einem anderen Quellstand.")
@@ -752,7 +816,9 @@ def main():
     github.upload(release, "SHA256SUMS", (distribution / "SHA256SUMS").read_bytes())
     github.request("/releases/" + str(release["id"]), "PATCH", {"draft": False, "prerelease": False, "make_latest": "true"})
     updated = fetch_catalog(token)
-    updated["launcher"] = {"version": metadata["version"], "fingerprint": result["launcher"]["fingerprint"]}
+    updated["launcher"] = {"version": metadata["version"], "fingerprint": result["launcher"]["fingerprint"],
+                           "sha256": metadata["sha256"], "size": metadata["size"]}
+    updated["launcher"]["contentBaseline"] = launcher_baseline(updated["launcher"], result["launcher"]["contentFingerprint"])
     github.publish_catalog(updated)
     write_json(root / "Catalog/catalog.json", updated)
 
