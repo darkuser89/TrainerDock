@@ -20,6 +20,9 @@ FOUNDATION_EXPORT NSComparisonResult MHTCompareTrainerVersions(NSString *a,NSStr
 - (NSArray<MHTModule *> *)modulesWithErrors:(NSMutableArray<NSString *> *)errors;
 - (NSArray<NSDictionary *> *)versionsForIdentifier:(NSString *)identifier;
 - (NSArray<MHTModule *> *)installedVersionsForIdentifier:(NSString *)identifier;
+// Latest downloads for installed trainers only; never reinstall an existing
+// release or downgrade a newer local version. Legacy conversion is included.
+- (NSArray<NSDictionary *> *)updatesForInstalledTrainers;
 - (void)refreshCatalogWithCompletion:(void (^)(NSError *error))completion;
 - (void)installVersion:(NSDictionary *)version forIdentifier:(NSString *)identifier completion:(void (^)(MHTModule *module,NSError *error))completion;
 // Synchronous local archive boundary for reproducible integration/security tests.

@@ -204,13 +204,31 @@ static void checkIcons(void) {
 @interface MHTLayoutStore : MHTTrainerStore
 @property(nonatomic) NSUInteger downloadRequests;
 @property(nonatomic) NSArray<MHTModule *> *layoutVersions;
+@property(nonatomic) NSArray<MHTModule *> *batchModules;
+@property(nonatomic) NSArray<NSDictionary *> *batchCandidates;
+@property(nonatomic) NSMutableArray<NSDictionary *> *batchCalls;
+@property(nonatomic) NSMutableArray *batchCompletions;
+@property(nonatomic) NSUInteger batchRefreshes;
+@property(nonatomic) NSError *batchRefreshError;
 @end
 @implementation MHTLayoutStore
+- (NSArray<MHTModule *> *)modules {return self.batchModules ?: super.modules;}
+- (NSArray<NSDictionary *> *)updatesForInstalledTrainers {return self.batchModules ? self.batchCandidates : super.updatesForInstalledTrainers;}
+- (void)refreshCatalogWithCompletion:(void (^)(NSError *))completion {
+    if(!self.batchModules){[super refreshCatalogWithCompletion:completion];return;}
+    self.batchRefreshes++;dispatch_async(dispatch_get_main_queue(),^{completion(self.batchRefreshError);});
+}
+- (NSArray<NSDictionary *> *)versionsForIdentifier:(NSString *)identifier {
+    for(MHTModule *module in self.batchModules)if([module.identifier isEqual:identifier])return @[module.catalogVersion];
+    return [super versionsForIdentifier:identifier];
+}
 - (NSArray<MHTModule *> *)installedVersionsForIdentifier:(NSString *)identifier {
+    for(MHTModule *module in self.batchModules)if([module.identifier isEqual:identifier])return @[module];
     if(self.layoutVersions && [self.layoutVersions.firstObject.identifier isEqual:identifier])return self.layoutVersions;
     return [super installedVersionsForIdentifier:identifier];
 }
 - (void)installVersion:(NSDictionary *)version forIdentifier:(NSString *)identifier completion:(void (^)(MHTModule *,NSError *))completion {
+    if(self.batchModules){[self.batchCalls addObject:@{@"id":identifier,@"version":version}];[self.batchCompletions addObject:[completion copy]];return;}
     (void)version;(void)identifier;self.downloadRequests++;
     completion(nil,[NSError errorWithDomain:@"MHT.Layout" code:1 userInfo:@{NSLocalizedDescriptionKey:@"Absichtlicher Downloadfehler im UI-Test"}]);
 }
@@ -244,11 +262,56 @@ static void checkTrainerManagerLayout(MHTTrainerLibrary *manager,MHTLayoutStore 
         require(body && footer && list,"manager exposes both window regions and its game viewport");
         NSRect bounds=[footer convertRect:footer.bounds toView:content];CGFloat edge=content.isFlipped?NSHeight(content.bounds)-NSMaxY(bounds):NSMinY(bounds);
         require(fabs(edge-16)<1 && fabs(NSHeight(footer.bounds)-32)<1,"manager footer stays at the actual bottom edge at every height");
+        NSButton *updateAll=[manager valueForKey:@"updateAll"],*refresh=[manager valueForKey:@"refresh"];
+        NSRect updateFrame=[updateAll convertRect:updateAll.bounds toView:content],refreshFrame=[refresh convertRect:refresh.bounds toView:content];
+        require(NSContainsRect(content.bounds,updateFrame) && NSContainsRect(content.bounds,refreshFrame) && !NSIntersectsRect(updateFrame,refreshFrame),"both update actions remain inside the smallest manager window without overlap");
+        require(NSWidth(updateAll.bounds)>=updateAll.intrinsicContentSize.width-1,"bulk-update button retains its complete German title");
         require(NSHeight(body.bounds)>=NSHeight(content.bounds)-81,"manager body fills the available window instead of ending halfway down");
         require(NSHeight(list.bounds)>NSHeight(content.bounds)*0.5,"game list viewport grows with tall windows");
         require(titles==2 && imported && github,"installed cards separate the complete version number from its legacy/GitHub origin");
     }
     store.layoutVersions=nil;[manager reloadForIdentifier:metadata.identifier];
+}
+static void awaitBatch(BOOL (^condition)(void)) {
+    NSDate *deadline=[NSDate dateWithTimeIntervalSinceNow:5];
+    while(!condition() && deadline.timeIntervalSinceNow>0)[NSRunLoop.mainRunLoop runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.005]];
+    require(condition(),"bulk update reaches its expected asynchronous state");
+}
+static void checkBatchUpdates(MHTTrainerLibrary *manager,MHTLayoutStore *store) {
+    NSDictionary *manifest=store.modules.firstObject.manifest;NSMutableArray *modules=[NSMutableArray new],*candidates=[NSMutableArray new];
+    for(NSString *identifier in @[@"batch-alpha",@"batch-beta",@"batch-gamma"]){
+        MHTModule *module=[MHTInstalledLayoutModule new];NSMutableDictionary *copy=[manifest mutableCopy];copy[@"id"]=identifier;copy[@"name"]=identifier;
+        module.manifest=copy;module.directory=[@"/private/tmp/ui-only/1.0.0/" stringByAppendingString:[identifier stringByAppendingString:@".mhtmodule"]];
+        NSMutableDictionary *next=[copy mutableCopy];next[@"version"]=@"1.0.1";
+        module.catalogVersion=@{@"version":@"1.0.1",@"manifest":next,@"downloadAvailable":@YES};module.updateAvailable=YES;
+        [modules addObject:module];[candidates addObject:@{@"id":identifier,@"name":identifier,@"version":module.catalogVersion}];
+    }
+    store.batchModules=modules;store.batchCandidates=candidates;store.batchCalls=[NSMutableArray new];store.batchCompletions=[NSMutableArray new];
+    // An empty visible filter must not narrow "all installed" to visible rows.
+    NSSearchField *search=[manager valueForKey:@"search"];search.stringValue=@"not-visible";[manager reloadForIdentifier:nil];
+    NSButton *button=[manager valueForKey:@"updateAll"],*refresh=[manager valueForKey:@"refresh"];
+    require(button.enabled,"installed trainers enable the bulk update action");[button performClick:nil];
+    require(!button.enabled && !refresh.enabled,"bulk operation disables duplicate starts and catalog races");
+    [NSApp sendAction:button.action to:button.target from:button];
+    for(NSUInteger i=0;i<3;i++){
+        awaitBatch(^BOOL{return store.batchCalls.count==i+1;});
+        require(store.batchRefreshes==1 && store.batchCompletions.count==1,"one catalog refresh and one download at a time");
+        require([store.batchCalls[i][@"id"] isEqual:candidates[i][@"id"]],"batch uses all installed candidates independently of filters");
+        require([[(NSTextField *)[manager valueForKey:@"status"] stringValue] containsString:[NSString stringWithFormat:@"%lu von 3",(unsigned long)i+1]],"batch reports current item and total");
+        void (^completion)(MHTModule *,NSError *)=store.batchCompletions.firstObject;[store.batchCompletions removeObjectAtIndex:0];
+        completion(i?modules[i]:nil,i?nil:[NSError errorWithDomain:@"MHT.Layout" code:1 userInfo:@{NSLocalizedDescriptionKey:@"Absichtlicher Sammeldownloadfehler"}]);
+    }
+    awaitBatch(^BOOL{return ![[manager valueForKey:@"updatingAll"] boolValue];});
+    NSTextField *status=[manager valueForKey:@"status"];
+    require([status.stringValue containsString:@"2 aktualisiert"] && [status.stringValue containsString:@"1 fehlgeschlagen"] && [status.toolTip containsString:@"batch-alpha"],"failed download is reported with details while subsequent updates finish");
+    store.batchCandidates=@[];[button performClick:nil];awaitBatch(^BOOL{return ![[manager valueForKey:@"updatingAll"] boolValue];});
+    require(store.batchCalls.count==3 && [status.stringValue isEqual:@"Alle installierten Trainer sind aktuell."],"current installed trainers cause no download");
+    store.batchRefreshError=[NSError errorWithDomain:@"MHT.Layout" code:2 userInfo:@{NSLocalizedDescriptionKey:@"Absichtlicher Katalogfehler"}];
+    store.batchCandidates=candidates;[button performClick:nil];awaitBatch(^BOOL{return ![[manager valueForKey:@"updatingAll"] boolValue];});
+    require(store.batchCalls.count==3 && [status.stringValue containsString:@"Katalog nicht erreichbar"],"failed refresh stops the batch instead of using stale metadata");
+    store.batchModules=nil;store.batchRefreshError=nil;store.batchCompletions=nil;search.stringValue=@"";[manager reloadForIdentifier:nil];
+    require(!button.enabled,"without installed trainers the bulk button is disabled");
+    puts("PASS: sequential updates of all installed trainers, filter independence, progress, duplicate guard, continued partial failures and catalog/no-update cases. No network or games.");
 }
 static MHTLayoutStore *fixtureStore(NSString *root) {
     NSMutableArray *modules=[NSMutableArray new];
@@ -288,6 +351,7 @@ static void checkTrainerDistribution(MHTApp *app) {
     NSSegmentedControl *scope=[manager valueForKey:@"scope"];scope.selectedSegment=1;[scope sendAction:scope.action to:scope.target];require(table.numberOfRows==0,"downloaded filter is empty without installed trainer packages");
     NSSize expected=manager.window.frame.size;scope.selectedSegment=0;[scope sendAction:scope.action to:scope.target];layout(manager.window);require(sameSize(expected,manager.window.frame.size),"trainer filtering preserves user window size");
     checkTrainerManagerLayout(manager,store);
+    checkBatchUpdates(manager,store);
     NSMutableDictionary *sessions=[app valueForKey:@"sessions"];MHTModule *bound=[app valueForKey:@"selected"];
     id session=[NSClassFromString(@"MHTSession") new];[session setValue:bound forKey:@"module"];[session setValue:@YES forKey:@"launching"];[session setValue:@"/private/tmp/layout-only-bound-runtime" forKey:@"runtimePath"];sessions[bound.identifier]=session;
     [app reloadTrainerModules];require([app valueForKey:@"selected"]==bound,"catalog refresh retains the exact module and feature catalog of an active launch");require([[app protectedRuntimePaths] containsObject:@"/private/tmp/layout-only-bound-runtime"],"running session exposes its exact runtime path to deletion protection");
@@ -310,7 +374,9 @@ static void checkTrainerDistribution(MHTApp *app) {
     self.fixtureRoot=[NSTemporaryDirectory() stringByAppendingPathComponent:[@"TrainerDockUILayout-" stringByAppendingString:NSUUID.UUID.UUIDString]];
     [self setValue:fixtureStore(self.fixtureRoot) forKey:@"trainerStore"];
     [super applicationDidFinishLaunching:notification];
-    checkAsyncInspection(^{dispatch_async(dispatch_get_main_queue(),^{
+    // Run the checks from a run-loop callback so nested asynchronous waits can
+    // drain the main queue; libdispatch does not reenter its own main callback.
+    checkAsyncInspection(^{[NSTimer scheduledTimerWithTimeInterval:.001 repeats:NO block:^(NSTimer *timer){(void)timer;
         checkIcons();checkGlassToggle();
         NSWindow *window=[self valueForKey:@"window"];[window orderOut:nil];
         NSGlassEffectView *glass=[self valueForKey:@"libraryGlass"];
@@ -385,7 +451,7 @@ static void checkTrainerDistribution(MHTApp *app) {
         checkSettings(self);checkTrainerDistribution(self);
         printf("PASS: 1x/2x icon representation selection, pixel border, %lu module selections at two window widths and empty search preserve window size. No games launched.\n",(unsigned long)checked);
         self.checksFinished=YES;[NSApp terminate:nil];
-    });});
+    }];});
 }
 @end
 int main(void){@autoreleasepool {

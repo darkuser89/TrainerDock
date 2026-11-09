@@ -100,6 +100,26 @@ static NSComparisonResult SModuleOrder(MHTModule *a,MHTModule *b){NSComparisonRe
     NSMutableArray *result=[NSMutableArray new];for(MHTModule *module in [self allInstalled:nil])if([module.identifier isEqual:identifier])[result addObject:module];
     [result sortUsingComparator:^NSComparisonResult(MHTModule *a,MHTModule *b){return SModuleOrder(a,b);}];return result;
 }
+- (NSArray<NSDictionary *> *)updatesForInstalledTrainers {
+    NSMutableDictionary<NSString *,NSMutableArray<MHTModule *> *> *installed=[NSMutableDictionary new];
+    for(MHTModule *module in [self allInstalled:nil]){
+        if(!installed[module.identifier])installed[module.identifier]=[NSMutableArray new];
+        [installed[module.identifier] addObject:module];
+    }
+    NSMutableArray *updates=[NSMutableArray new];
+    for(NSDictionary *entry in self.catalog[@"modules"]){
+        NSDictionary *latest=[entry[@"versions"] firstObject];NSArray *versions=installed[entry[@"id"]];
+        if(!versions.count || ![latest[@"downloadAvailable"] boolValue])continue;
+        BOOL needed=YES;
+        for(MHTModule *module in versions){
+            NSComparisonResult order=MHTCompareTrainerVersions(module.version,latest[@"version"]);
+            if(order==NSOrderedDescending || (order==NSOrderedSame && [module.installRevision isEqual:module.version])){needed=NO;break;}
+        }
+        if(needed)[updates addObject:@{@"id":entry[@"id"],@"name":entry[@"name"],@"version":latest}];
+    }
+    [updates sortUsingComparator:^NSComparisonResult(NSDictionary *a,NSDictionary *b){return [a[@"name"] localizedCaseInsensitiveCompare:b[@"name"]];}];
+    return updates;
+}
 - (NSArray<MHTModule *> *)modulesWithErrors:(NSMutableArray<NSString *> *)errors {
     NSMutableDictionary *byID=[NSMutableDictionary new];for(MHTModule *module in [[self allInstalled:errors] sortedArrayUsingComparator:^NSComparisonResult(MHTModule *a,MHTModule *b){return SModuleOrder(a,b);}]){
         MHTModule *old=byID[module.identifier];NSString *selected=[NSUserDefaults.standardUserDefaults stringForKey:[@"MHT.TrainerVersion." stringByAppendingString:module.identifier]];

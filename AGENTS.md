@@ -86,6 +86,12 @@ die ursprüngliche Trainerversion bleibt erhalten. Alte flache TrainerDock-/MHT-
 Ordner werden weiterhin gelesen. Laufende Sitzungen behalten ihre genaue
 Modulinstanz und ihren Runtimepfad. Versionen niemals überschreiben oder automatisch
 löschen; Löschungen schützen aktive Sitzungen, Spielprozesse und gemappte Dateien.
+Die ausdrückliche Sammelaktion „Alle installierten Trainer aktualisieren“ prüft zuerst
+den Onlinekatalog und lädt nur fehlende neueste Pakete bereits installierter Trainer.
+Suchfilter grenzen diese Aktion nicht ein. Downloads erfolgen nacheinander mit
+Fortschritt und Fehlerübersicht; ein Teilfehler stoppt die übrigen Updates nicht.
+Keine Downgrades, erneuten Downloads vorhandener Releases oder automatischen Löschungen.
+Laufende Sitzungen behalten auch während dieser Aktion ihre bisherige Runtime.
 Der Launcher enthält keine Spiellogik.
 Native Runtime-
 Bibliotheken werden erst beim ausdrücklich angeforderten Spielstart im ausgewählten
