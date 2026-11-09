@@ -16,6 +16,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import functools
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -32,6 +33,11 @@ TOKEN = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*\Z")
 SHA = re.compile(r"[a-f0-9]{64}\Z")
 FILES = ("Module.json", "TrainerConfig.json", "Trainer.dylib", "LICENSE")
 TEST_KEYS = {"testSuite", "nativeContractTests", "rendererTests", "testSupportSources"}
+BUILD_ONLY_SETTINGS = {"TRAINERDOCK_BUILD_ROOT", "SYMROOT", "OBJROOT", "SHARED_PRECOMPS_DIR",
+                       "TRAINERDOCK_ARCHIVE_INCLUDE", "MARKETING_VERSION", "CURRENT_PROJECT_VERSION",
+                       "GCC_TREAT_WARNINGS_AS_ERRORS", "WARNING_CFLAGS", "GCC_PRECOMPILE_PREFIX_HEADER",
+                       "DEBUG_INFORMATION_FORMAT", "ENABLE_USER_SCRIPT_SANDBOXING", "SKIP_INSTALL",
+                       "CONFIGURATION_BUILD_DIR"}
 INCLUDE = re.compile(r'^\s*#\s*(?:include|import)\s*"([^"\n]+)"', re.M)
 
 
@@ -61,8 +67,16 @@ def validate_catalog(catalog):
         versions = module.get("versions")
         if not isinstance(versions, list) or not versions or len(versions) > 256:
             raise ValueError("Ungültige Trainerversionen.")
+        history = module.get("buildOnlyVersions", [])
+        if not isinstance(history, list) or len(history) + len(versions) > 256:
+            raise ValueError("Ungültige Neubauhistorie.")
+        for item in history:
+            if not isinstance(item, dict) or item.get("equivalentTo") not in [v.get("version") for v in versions] or not isinstance(item.get("release"), dict):
+                raise ValueError("Neubau ohne bestätigte bisherige Trainerversion.")
+            if not isinstance(item.get("sourceCommit"), str) or not re.fullmatch(r"[a-f0-9]{40}", item["sourceCommit"]) or version(item["release"].get("version")) <= version(item["equivalentTo"]):
+                raise ValueError("Unbestätigte Neubauzuordnung.")
         used = set()
-        for item in versions:
+        for item in catalog_versions(module):
             current = item.get("version")
             version(current)
             if current in used:
@@ -75,12 +89,15 @@ def validate_catalog(catalog):
                 raise ValueError("Ungültige Trainerpaketgröße.")
             if item.get("moduleABI") != 1:
                 raise ValueError("Unbekannte Trainerschnittstelle.")
+            if "contentFingerprint" in item and (not isinstance(item["contentFingerprint"], str) or not SHA.fullmatch(item["contentFingerprint"])):
+                raise ValueError("Ungültiger Trainerinhaltshash.")
             version(item.get("minimumLauncherVersion"))
             manifest = item.get("manifest")
             if not isinstance(manifest, dict) or manifest.get("id") != identifier or manifest.get("version") != current:
                 raise ValueError("Trainerpaket und Katalog stimmen nicht überein.")
             if not isinstance(manifest.get("features"), list) or not manifest["features"] or not isinstance(manifest.get("profiles"), list) or not manifest["profiles"]:
                 raise ValueError("Kein vollständiger echter Trainerkatalog.")
+        content_baseline(module)
     return catalog
 
 
@@ -253,6 +270,143 @@ def module_fingerprint(module, root=ROOT):
     return digest_inputs(source_closure(starts, root, (source, root / "ModuleSDK")), metadata, root)
 
 
+@functools.lru_cache(maxsize=4)
+def project_objects(data):
+    """Read the actual versioned target settings, not the generator's source text."""
+    result = subprocess.run(["plutil", "-convert", "json", "-o", "-", "--", "-"],
+                            input=data, capture_output=True, check=True)
+    return json.loads(result.stdout)["objects"]
+
+
+def product_settings(root, identifier):
+    settings = {}
+    configuration = Path(root) / "Config/TrainerDock.xcconfig"
+    for raw in configuration.read_text().splitlines():
+        line = raw.split("//", 1)[0].strip()
+        if not line:
+            continue
+        match = re.fullmatch(r"([A-Za-z_][A-Za-z_0-9]*(?:\[[^]]+\])*)\s*([+?]?=)\s*(.*)", line)
+        if not match:
+            raise ValueError("Unbekannte Buildoption; Trainerinhalt nicht sicher bestimmbar: " + line)
+        key, operator, value = match.groups()
+        if key.split("[", 1)[0] not in BUILD_ONLY_SETTINGS:
+            settings[key] = [operator, value]
+    project = Path(root) / "TrainerDock.xcodeproj/project.pbxproj"
+    if project.is_file():
+        objects = project_objects(project.read_bytes())
+        targets = [item for item in objects.values() if item.get("isa") == "PBXNativeTarget"
+                   and item.get("name") == "Trainer-" + identifier]
+        if len(targets) != 1:
+            raise ValueError("Trainerziel nicht eindeutig im Xcode-Projekt.")
+        target = targets[0]
+        configurations = objects[target["buildConfigurationList"]]["buildConfigurations"]
+        release = [objects[key] for key in configurations if objects[key]["name"] == "Release"]
+        if len(release) != 1:
+            raise ValueError("Release-Buildoptionen fehlen.")
+        for key, value in release[0]["buildSettings"].items():
+            if key not in BUILD_ONLY_SETTINGS:
+                settings[key] = {"inherited": settings.get(key), "target": value} if "$(inherited)" in json.dumps(value) else value
+        files = {}
+        for phase in target["buildPhases"]:
+            phase = objects[phase]
+            if phase["isa"] != "PBXSourcesBuildPhase":
+                continue
+            for key in phase["files"]:
+                item = objects[key]
+                if item.get("settings"):
+                    files[objects[item["fileRef"]]["path"]] = item["settings"]
+        settings["sourceOptions"] = files
+    return settings
+
+
+def package_requirements(config):
+    architectures = config.get("architectures", [config.get("architecture", "arm64")])
+    return {"minimumLauncherVersion": "1.2.6" if len(architectures) > 1 else "1.0.0",
+            "moduleABI": 1, "architecture": "universal" if len(architectures) > 1 else architectures[0]}
+
+
+def module_content_fingerprint(module, root=ROOT):
+    """Only shipped trainer inputs/effective options; build receipts stay stricter."""
+    module, root = Path(module), Path(root)
+    config = json.loads((module / "Build.json").read_text())
+    source = (module / config.get("sourceRoot", "Sources")).resolve()
+    starts = [source / name for name in config["sources"]]
+    starts += [root / "ModuleSDK" / name for name in config.get("sdkSources", [])]
+    starts += [root / "ModuleSDK/MHTProtocol.m", source / "LICENSE"]
+    manifest = json.loads((module / "Module.json").read_text())
+    manifest.pop("version", None)
+    metadata = {"contentAlgorithm": 1, "module": manifest,
+                "build": {key: value for key, value in config.items() if key not in TEST_KEYS},
+                "settings": product_settings(root, manifest["id"]), "package": package_requirements(config)}
+    if config.get("managed"):
+        starts += [module / name for name in config["managed"]["sources"]]
+        metadata["managedImage"] = json.loads((root / "Config/ManagedImages.json").read_text())["modules"][module.name]
+    return digest_inputs(source_closure(starts, root, (source, root / "ModuleSDK")), metadata, root)
+
+
+def catalog_versions(module):
+    return module.get("versions", []) + [item["release"] for item in module.get("buildOnlyVersions", [])]
+
+
+def content_baseline(module):
+    baseline = module.get("contentBaseline")
+    if not baseline:
+        return None
+    if not isinstance(baseline, dict) or baseline.get("algorithm") != 1 or not isinstance(baseline.get("fingerprint"), str) or not SHA.fullmatch(baseline["fingerprint"]):
+        raise ValueError("Ungültiger Trainer-Inhaltsbeleg.")
+    release = next((item for item in catalog_versions(module) if item["version"] == baseline.get("version")), None)
+    if not release or release["sha256"] != baseline.get("sha256") or release["fingerprint"] != baseline.get("buildFingerprint"):
+        raise ValueError("Trainer-Inhaltsbeleg gehört nicht zum bestätigten Paket.")
+    if release.get("contentFingerprint", baseline["fingerprint"]) != baseline["fingerprint"]:
+        raise ValueError("Widersprüchliche Trainer-Inhaltsbelege.")
+    return baseline["fingerprint"]
+
+
+def seed_content_baselines(catalog, root=ROOT):
+    """One-time migration only when the old, strict build proof matches exactly."""
+    result = copy.deepcopy(validate_catalog(catalog))
+    for module in result["modules"]:
+        if content_baseline(module):
+            continue
+        source = Path(root) / "Modules" / module["id"]
+        latest = max(module["versions"], key=lambda item: version(item["version"]))
+        if module_fingerprint(source, root) != latest["fingerprint"]:
+            raise ValueError("Altbeleg passt nicht zu den Quellen: " + module["id"])
+        module["contentBaseline"] = dict(algorithm=1, version=latest["version"], sha256=latest["sha256"],
+                                         buildFingerprint=latest["fingerprint"],
+                                         fingerprint=module_content_fingerprint(source, root))
+    return validate_catalog(result)
+
+
+def demote_build_only_versions(catalog, identifiers, source_commit):
+    """Explicitly reviewed equivalent rebuilds stay downloadable on GitHub.
+
+    Never called by the automatic planner: equal manifests alone do not prove
+    equal trainer behavior. The caller must first review the source comparison.
+    """
+    if not re.fullmatch(r"[a-f0-9]{40}", source_commit):
+        raise ValueError("Bestätigter Quellcommit fehlt.")
+    result = copy.deepcopy(validate_catalog(catalog))
+    pending = set(identifiers)
+    for module in result["modules"]:
+        if module["id"] not in pending:
+            continue
+        ordered = sorted(module["versions"], key=lambda item: version(item["version"]), reverse=True)
+        if len(ordered) < 2 or not content_baseline(module) or module["contentBaseline"]["version"] != ordered[0]["version"]:
+            raise ValueError("Neubau ohne überprüfbaren Vorgänger: " + module["id"])
+        current, previous = ordered[:2]
+        normalize = lambda item: {k: v for k, v in item["manifest"].items() if k != "version"}
+        if normalize(current) != normalize(previous):
+            raise ValueError("Geänderte Trainerprofile/Funktionen dürfen nicht zurückgestuft werden.")
+        module["versions"].remove(current)
+        module.setdefault("buildOnlyVersions", []).append(dict(release=current, equivalentTo=previous["version"],
+                                                                 sourceCommit=source_commit))
+        pending.remove(module["id"])
+    if pending:
+        raise ValueError("Unbekannte Trainer in der Korrektur.")
+    return validate_catalog(result)
+
+
 def launcher_fingerprint(root=ROOT):
     root = Path(root)
     starts = [p for folder in ("App", "Core") for p in (root / folder).glob("*.m")]
@@ -281,13 +435,16 @@ def plan(catalog, root=ROOT, reserved=None):
         manifest = json.loads(path.read_text())
         identifier = manifest["id"]
         fingerprint = module_fingerprint(path.parent, root)
+        content = module_content_fingerprint(path.parent, root)
         previous = by_id.get(identifier, {}).get("versions", [])
         latest = max(previous, key=lambda item: version(item["version"]), default=None)
+        baseline = content_baseline(by_id.get(identifier, {})) or (latest or {}).get("contentFingerprint")
         all_modules.append(identifier)
-        if latest and latest["fingerprint"] == fingerprint:
+        if baseline == content or (not baseline and latest and latest["fingerprint"] == fingerprint):
             continue
         changed.append({"id": identifier, "name": manifest["name"], "fingerprint": fingerprint,
-                        "version": next_version(manifest["version"], previous, (reserved or {}).get(identifier, ()))})
+                        "contentFingerprint": content,
+                        "version": next_version(manifest["version"], catalog_versions(by_id.get(identifier, {})), (reserved or {}).get(identifier, ()))})
     fingerprint = launcher_fingerprint(root)
     return {"schemaVersion": 1, "launcher": {"changed": catalog.get("launcher", {}).get("fingerprint") != fingerprint,
                                              "fingerprint": fingerprint}, "modules": changed,
@@ -306,6 +463,9 @@ def package_module(build_root, item):
     source = ROOT / "Modules" / identifier
     if module_fingerprint(source) != item["fingerprint"]:
         raise ValueError("Trainerquellen haben sich seit der Planung geändert.")
+    content = module_content_fingerprint(source, ROOT)
+    if item.get("contentFingerprint", content) != content:
+        raise ValueError("Trainerinhalt hat sich seit der Planung geändert.")
     verify_products(build_root, identifier)
     package = build_root / "Modules" / (identifier + ".mhtmodule")
     for name in FILES:
@@ -350,11 +510,10 @@ def package_module(build_root, item):
     finally:
         temporary.unlink(missing_ok=True)
     config = json.loads((source / "Build.json").read_text())
-    record = dict(version=current, fingerprint=item["fingerprint"],
+    record = dict(version=current, fingerprint=item["fingerprint"], contentFingerprint=content,
                   url=BASE_URL + f"trainer-{identifier}-v{current}/{archive.name}",
                   sha256=hashlib.sha256(archive.read_bytes()).hexdigest(), size=archive.stat().st_size,
-                  minimumLauncherVersion="1.2.6" if len(config.get("architectures",[]))>1 else "1.0.0", moduleABI=1,
-                  architecture="universal" if len(config.get("architectures",[]))>1 else config.get("architecture", "arm64"), manifest=manifest)
+                  **package_requirements(config), manifest=manifest)
     write_json(destination / (archive.stem + ".json"), record)
     return record
 
@@ -378,12 +537,15 @@ def merged_catalog(previous, records):
             module = {"id": identifier, "name": record["manifest"]["name"], "versions": []}
             result["modules"].append(module)
             by_id[identifier] = module
-        same = next((item for item in module["versions"] if item["version"] == record["version"]), None)
+        same = next((item for item in catalog_versions(module) if item["version"] == record["version"]), None)
         if same and same != record:
             raise ValueError("Eine veröffentlichte Trainerversion darf nicht ersetzt werden.")
         if not same:
             module["versions"].append(record)
         module["name"] = record["manifest"]["name"]
+        if record.get("contentFingerprint"):
+            module["contentBaseline"] = dict(algorithm=1, version=record["version"], sha256=record["sha256"],
+                                              buildFingerprint=record["fingerprint"], fingerprint=record["contentFingerprint"])
         module["versions"].sort(key=lambda item: version(item["version"]), reverse=True)
     result["modules"].sort(key=lambda item: item["id"])
     return validate_catalog(result)

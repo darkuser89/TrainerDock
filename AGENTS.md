@@ -112,8 +112,13 @@ Buildbaum und werden nicht automatisch installiert. Bestätigte Veröffentlichun
 
 GitHub Actions plant über `.github/workflows/build-release.yml` auf `xcode-27`
 gegen den zuletzt erfolgreich veröffentlichten Trainerkatalog. Nur geänderte
-Quell-Fingerabdrücke werden gebaut; gemeinsame Header, SDK, Buildoptionen und eigene
-Managed-Abhängigkeiten zählen mit. App-Änderungen erfordern keinen Trainerbuild.
+Trainerinhalte werden gebaut: eigene Quellen/Profile, tatsächlich eingebundene Header,
+SDK-Dateien, wirksame Release-Compiler-/Linkeroptionen und eigene Managed-Abhängigkeiten
+zählen mit. Reine Buildskript-, Test-, Appversions- oder Buildpfadänderungen erzeugen
+keine neuen Trainerversionen. Der separate strenge Buildbeleg bindet weiterhin
+Werkzeuge, Quellen und tatsächliche Bibliotheksbytes. Inhaltsbelege niemals erfinden;
+Formatwechsel nur anhand bestätigter alter Buildbelege migrieren. App-Änderungen
+erfordern keinen Trainerbuild.
 `script/trainer_distribution.py` plant, paketiert und veröffentlicht getrennt.
 Trainer-Releases `trainer-<id>-v<version>` sind unveränderliche Prereleases;
 `trainer-catalog/catalog.json` verweist erst nach Paketprüfung darauf. Frühere

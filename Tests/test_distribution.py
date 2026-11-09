@@ -59,6 +59,8 @@ class DistributionTests(unittest.TestCase):
     def confirmed(self):
         initial = distribution.plan(distribution.empty_catalog(), self.root)
         records = {item["id"]: record(item["id"], item["version"], item["fingerprint"]) for item in initial["modules"]}
+        for item in initial["modules"]:
+            records[item["id"]]["contentFingerprint"] = item["contentFingerprint"]
         catalog = distribution.merged_catalog(distribution.empty_catalog(), records)
         catalog["launcher"] = dict(version="1.0.0",fingerprint=initial["launcher"]["fingerprint"])
         return catalog
@@ -81,6 +83,89 @@ class DistributionTests(unittest.TestCase):
         updated = self.changed(catalog)
         self.assertEqual([item["id"] for item in updated["modules"]], ["one", "two"])
         self.assertFalse(updated["launcher"]["changed"])
+
+    def test_build_script_refactoring_never_releases_trainers(self):
+        catalog = self.confirmed()
+        old_build = distribution.module_fingerprint(self.root / "Modules/one", self.root)
+        for name in ("build.py", "xcode_project.py", "xcode_support.py"):
+            self.write("script/" + name, "# refactored build orchestration\n")
+        self.assertNotEqual(old_build, distribution.module_fingerprint(self.root / "Modules/one", self.root))
+        self.assertEqual(self.changed(catalog)["modules"], [])
+
+    def test_app_version_and_build_paths_do_not_release_trainers(self):
+        catalog = self.confirmed()
+        self.write("Config/TrainerDock.xcconfig", "FRAMEWORKS = AppKit\nMARKETING_VERSION = 99.0.0\nSYMROOT = /different/build\nWARNING_CFLAGS = -Wall\n")
+        self.assertEqual(self.changed(catalog)["modules"], [])
+        self.write("Config/TrainerDock.xcconfig", "FRAMEWORKS = AppKit\nOTHER_CFLAGS = -fno-objc-arc\n")
+        self.assertEqual(len(self.changed(catalog)["modules"]), 3)
+
+    def test_only_changed_module_and_profiles_are_released(self):
+        catalog = self.confirmed()
+        self.write("Modules/three/Sources/Main.m", "int actual_effect = 1;")
+        self.assertEqual([x["id"] for x in self.changed(catalog)["modules"]], ["three"])
+        manifest = json.loads((self.root / "Modules/one/Module.json").read_text())
+        manifest["profiles"] = [{"id": "new-build", "enabled": True}]
+        self.write("Modules/one/Module.json", json.dumps(manifest))
+        self.assertEqual([x["id"] for x in self.changed(catalog)["modules"]], ["one", "three"])
+
+    def test_release_number_alone_is_not_a_content_update(self):
+        catalog = self.confirmed()
+        manifest = json.loads((self.root / "Modules/one/Module.json").read_text())
+        manifest["version"] = "9.0.0"
+        self.write("Modules/one/Module.json", json.dumps(manifest))
+        self.assertEqual(self.changed(catalog)["modules"], [])
+
+    def test_effective_xcode_flags_are_product_inputs(self):
+        import plistlib
+        objects = {"target": dict(isa="PBXNativeTarget", name="Trainer-one", buildConfigurationList="list", buildPhases=[]),
+                   "list": dict(buildConfigurations=["release"]),
+                   "release": dict(name="Release", buildSettings={"OTHER_LDFLAGS": ["-framework", "AppKit"]})}
+        path = self.root / "TrainerDock.xcodeproj/project.pbxproj"
+        path.parent.mkdir()
+        path.write_bytes(plistlib.dumps(dict(objects=objects)))
+        before = distribution.module_content_fingerprint(self.root / "Modules/one", self.root)
+        objects["release"]["buildSettings"]["OTHER_LDFLAGS"].append("-lc++")
+        path.write_bytes(plistlib.dumps(dict(objects=objects)))
+        self.assertNotEqual(before, distribution.module_content_fingerprint(self.root / "Modules/one", self.root))
+        objects["release"]["buildSettings"]["GCC_PREPROCESSOR_DEFINITIONS"] = ["$(inherited)"]
+        objects["release"]["buildSettings"]["ARCHS"] = "arm64"
+        path.write_bytes(plistlib.dumps(dict(objects=objects)))
+        self.write("Config/TrainerDock.xcconfig", "FRAMEWORKS = AppKit\nARCHS = arm64\nGCC_PREPROCESSOR_DEFINITIONS = EFFECT=1")
+        before = distribution.module_content_fingerprint(self.root / "Modules/one", self.root)
+        self.write("Config/TrainerDock.xcconfig", "FRAMEWORKS = AppKit\nARCHS = x86_64\nGCC_PREPROCESSOR_DEFINITIONS = EFFECT=1")
+        self.assertEqual(before, distribution.module_content_fingerprint(self.root / "Modules/one", self.root), "target overrides an app-only architecture change")
+        self.write("Config/TrainerDock.xcconfig", "FRAMEWORKS = AppKit\nARCHS = x86_64\nGCC_PREPROCESSOR_DEFINITIONS = EFFECT=2")
+        self.assertNotEqual(before, distribution.module_content_fingerprint(self.root / "Modules/one", self.root), "inherited real compiler options remain product inputs")
+
+    def test_migration_requires_real_old_proof_and_retains_rebuild_history(self):
+        catalog = self.confirmed()
+        for item in catalog["modules"]:
+            item.pop("contentBaseline", None)
+            item["versions"][0].pop("contentFingerprint", None)
+        seeded = distribution.seed_content_baselines(catalog, self.root)
+        new = copy.deepcopy(seeded["modules"][0]["versions"][0])
+        new["version"] = new["manifest"]["version"] = "1.0.1"
+        new["url"] = distribution.BASE_URL + "trainer-one-v1.0.1/one-1.0.1.zip"
+        seeded["modules"][0]["versions"].insert(0, new)
+        seeded["modules"][0]["contentBaseline"]["version"] = "1.0.1"
+        fixed = distribution.demote_build_only_versions(seeded, ["one"], "c" * 40)
+        self.assertEqual(fixed["modules"][0]["versions"][0]["version"], "1.0.0")
+        self.assertEqual(fixed["modules"][0]["buildOnlyVersions"][0]["release"], new)
+        self.assertEqual(self.changed(fixed)["modules"], [])
+        self.write("Modules/one/Sources/Main.m", "int real_update = 1;")
+        update = self.changed(fixed)["modules"][0]
+        self.assertEqual(update["id"], "one")
+        self.assertEqual(update["version"], "1.0.2")
+        with self.assertRaises(ValueError):
+            distribution.seed_content_baselines(catalog, self.root)
+        malformed = copy.deepcopy(fixed)
+        malformed["modules"][0]["contentBaseline"]["sha256"] = "f" * 64
+        with self.assertRaises(ValueError):
+            distribution.validate_catalog(malformed)
+        changed = copy.deepcopy(seeded)
+        changed["modules"][0]["versions"][0]["manifest"]["profiles"].append({"id": "actual-new-store"})
+        with self.assertRaises(ValueError):
+            distribution.demote_build_only_versions(changed, ["one"], "c" * 40)
 
     def test_sdk_and_actual_flags_rebuild_affected_products(self):
         catalog = self.confirmed()

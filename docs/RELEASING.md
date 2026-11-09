@@ -38,9 +38,34 @@ Git-Commit. Pro Trainer werden dessen Builddefinition, Profilmetadaten, Quellen,
 rekursive lokale Header, verwendete SDK-Quellen und Buildflags gehasht. Geteilte
 Resident-Evil-/Kex-Quellen treffen ihre abhängigen Trainer. Ein Managed-Lockeintrag
 betrifft ausschließlich seinen Trainer. Reine App-/UI-Änderungen bauen keine
-Trainer neu. Gemeinsame Buildinfrastruktur darf beide Produktarten invalidieren.
+Trainer neu. Buildwerkzeuge bleiben Teil des strengen Buildbelegs; ihre Änderung
+allein vergibt jedoch keine neue Trainerversion.
 Testdateien sind keine Produkt-Eingaben; die passenden synthetischen Grenzprüfungen
 laufen weiterhin bei betroffenen Produktänderungen.
+
+**Trainerinhalt und Buildbeleg getrennt halten.** `module_content_fingerprint`
+bestimmt, ob ein Trainer tatsächlich ein neues Paket braucht. Er enthält Quellen,
+Profile, benutzte SDK-/Headerdateien, eigene Managed-Eingaben und die wirksamen
+Release-Optionen des versionierten Xcode-Ziels. App-Versionsnummern, Ausgabepfade,
+Warnungsdarstellung und der Text der Buildskripte gehören nicht zum Trainerinhalt.
+Eine Skriptüberarbeitung allein baut und veröffentlicht keine Trainer. Wirklich
+geänderte gemeinsame Runtimequellen oder Compiler-/Linkeroptionen treffen weiterhin
+die tatsächlichen abhängigen Trainer.
+
+`module_fingerprint` bleibt der strengere Buildbeleg: Paketierung verlangt weiterhin
+genau den bestätigten Quell-/Werkzeugstand und die nach finalem CodeSign gemessenen
+Bibliotheksbytes. Ein gleicher Inhaltshash erlaubt niemals, einen fehlenden oder
+veralteten Buildbeleg für ein **neues** Paket zu umgehen.
+
+Der Katalog bindet `contentBaseline` an Version, Paket-SHA-256 und ursprünglichen
+Buildfingerabdruck; neue Paketdatensätze tragen zusätzlich `contentFingerprint`.
+Alte Belege dürfen nur bei exakt passendem bisherigem Buildfingerabdruck auf diesen
+Vertrag migriert werden. Ein Fingerabdruck-Formatwechsel ist kein Trainerupdate.
+Ausdrücklich anhand der Quellen als funktionsgleich geprüfte reine Neubauten dürfen
+unter `buildOnlyVersions` erhalten bleiben. Ihre Releases/ZIPs bleiben unverändert
+auf GitHub, erscheinen aber nicht als Funktionsupdates. Diese Rückstufung erfolgt
+niemals automatisch nur wegen gleicher Profile oder Funktionsnamen. Echte Updates
+behalten neue Versionsnummern oberhalb sämtlicher veröffentlichter/reservierter Tags.
 
 - Push auf `main` oder manueller Workflow auf `main`: nur geänderte Produkte
   bauen, prüfen und veröffentlichen. Unveränderte Produkte behalten ihren Download.
