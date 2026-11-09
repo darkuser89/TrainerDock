@@ -48,11 +48,12 @@ class XcodeProjectTests(unittest.TestCase):
         for name,target in self.targets.items():
             expected="arm64"
             if name.startswith("Trainer-"):
-                expected=json.loads((ROOT/"Modules"/name.removeprefix("Trainer-")/"Build.json").read_text()).get("architecture","arm64")
+                config=json.loads((ROOT/"Modules"/name.removeprefix("Trainer-")/"Build.json").read_text())
+                expected=" ".join(a for a in ("arm64","x86_64") if a in config.get("architectures",[config.get("architecture","arm64")]))
             for uid in self.objects[target["buildConfigurationList"]]["buildConfigurations"]:
                 settings=self.objects[uid]["buildSettings"]
                 self.assertEqual(settings.get("ARCHS","arm64"),expected)
-                if expected=="x86_64":self.assertEqual(settings["ONLY_ACTIVE_ARCH"],"NO")
+                if "x86_64" in expected:self.assertEqual(settings["ONLY_ACTIVE_ARCH"],"NO")
 
     def test_launcher_embeds_its_own_signed_broker_dependency(self):
         app = self.targets["TrainerDock"]

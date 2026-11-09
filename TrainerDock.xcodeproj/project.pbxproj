@@ -2063,6 +2063,242 @@
 			"productReference" = "96E0801C832166B4B9D6BAD1";
 			"productType" = "com.apple.product-type.library.dynamic";
 		};
+		"B8922DA3953627AB53420C69" = {
+			"isa" = "PBXShellScriptBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/dredge/Module.json", "$(SRCROOT)/Modules/dredge/Build.json", "$(SRCROOT)/Modules/dredge/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/Dredge/NativeContractTests.mm", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
+			"name" = "Catalog, bridge, native and HiDPI checks";
+			"shellPath" = "/bin/bash";
+			"shellScript" = "set -euo pipefail\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nexport PYTHONDONTWRITEBYTECODE=1\n/usr/bin/python3 -B \"$SRCROOT/script/xcode_support.py\" module dredge\n";
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"FD085C08C269549220C440E3" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/dredge/Sources/TrainerFeatures.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"C2A784F4613CA2EE765F8E2B" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "FD085C08C269549220C440E3";
+		};
+		"828486359EEDDE9C3455623E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/dredge/Sources/GameAdapter.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"BF153DBECD5C3A53CAD13291" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "828486359EEDDE9C3455623E";
+		};
+		"2FB00497043909E309989155" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/dredge/Sources/NativeAdapter.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"96C26DD47C2E055318854EBD" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "2FB00497043909E309989155";
+		};
+		"8010052E9B5F3A36681BA61E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/dredge/Sources/GameBridge.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"AE77EB2BB90532E7F2597D51" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "8010052E9B5F3A36681BA61E";
+		};
+		"77F33001E69714B833059F31" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/dredge/Sources/SelectionSettings.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"A9402DCAFA15F7D192D5C451" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "77F33001E69714B833059F31";
+		};
+		"1466728896501BD124184D2D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/dredge/Sources/GameProfile.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"DA90FEA603459C1EEC4D732E" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "1466728896501BD124184D2D";
+		};
+		"8E816514D2DBFD5D4446FB04" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/dredge/Sources/MemoryAccess.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"DC5807129C5D99E826D1E2D8" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "8E816514D2DBFD5D4446FB04";
+		};
+		"EF649847D7A8096F95989E0D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/dredge/Sources/TrainerMaterial.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"63259459BA35B4EDAF0F00AF" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "EF649847D7A8096F95989E0D";
+		};
+		"EC657F766CB7A80CE6F565FE" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/dredge/Sources/Overlay.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"7AE483805D38B0067C28FE34" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "EC657F766CB7A80CE6F565FE";
+		};
+		"85B627742F7B2B839B9D8F53" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/dredge/Sources/OverlaySettings.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"411069934D5EE4EE8A9CB4F9" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "85B627742F7B2B839B9D8F53";
+		};
+		"B376EB06069D06EE2C096B51" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/dredge/Sources/OverlayShortcuts.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"1E1720CDADEEBBC3A5127EAA" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "B376EB06069D06EE2C096B51";
+		};
+		"5960D94F05D45129DC150DBB" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Modules/dredge/Sources/Runtime.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"62C8412DB723064135D7A822" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "5960D94F05D45129DC150DBB";
+		};
+		"E871E1C8F9C31EBBE7E01E4E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/dredge/Sources/DredgeNative.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"516E8042BA391B44CABE3921" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "E871E1C8F9C31EBBE7E01E4E";
+		};
+		"47177432BC44DAC10E7B5D4E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Modules/dredge/Sources/DredgeAdapter.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"78E65CE06782083249CA9BD8" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "47177432BC44DAC10E7B5D4E";
+		};
+		"223A8DFC8AE306550E78A7C9" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "22F60203652AD2078DD0A34C";
+		};
+		"B3B6427AB1F1A0EAC6B7B8F2" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "A0AEEDF4F51BB81D82826C2B";
+		};
+		"59F67CD902649E59E50E6B27" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "71A295E05EF3AAF22670B173";
+		};
+		"69E49ADFA74566FF9AECBFAC" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ("C2A784F4613CA2EE765F8E2B", "BF153DBECD5C3A53CAD13291", "96C26DD47C2E055318854EBD", "AE77EB2BB90532E7F2597D51", "A9402DCAFA15F7D192D5C451", "DA90FEA603459C1EEC4D732E", "DC5807129C5D99E826D1E2D8", "63259459BA35B4EDAF0F00AF", "7AE483805D38B0067C28FE34", "411069934D5EE4EE8A9CB4F9", "1E1720CDADEEBBC3A5127EAA", "62C8412DB723064135D7A822", "516E8042BA391B44CABE3921", "78E65CE06782083249CA9BD8", "223A8DFC8AE306550E78A7C9", "B3B6427AB1F1A0EAC6B7B8F2", "59F67CD902649E59E50E6B27");
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"47589164E0F7EABAAD0598BC" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"FEB3F09AF3FE6BF8717876B5" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "compiled.mach-o.dylib";
+			"path" = "Trainer.dylib";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"BD6DE9E914991C78B148E752" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "F4DEF456225CDD06E427CB99";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "Trainer";
+				"EXECUTABLE_PREFIX" = "";
+				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64 x86_64";
+				"ONLY_ACTIVE_ARCH" = "NO";
+				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
+				"SKIP_INSTALL" = "YES";
+				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/dredge.mhtmodule";
+				"HEADER_SEARCH_PATHS" = ("$(SRCROOT)/Modules/dredge/Sources", "$(SRCROOT)/ModuleSDK", "$(DERIVED_FILE_DIR)");
+				"GCC_PREPROCESSOR_DEFINITIONS" = ("$(inherited)");
+				"OTHER_LDFLAGS" = ("$(inherited)", "-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++");
+				"ENABLE_HARDENED_RUNTIME" = "NO";
+			};
+			"name" = "Debug";
+		};
+		"6CFB46398BF6B0D3BEA65956" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "F4DEF456225CDD06E427CB99";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "Trainer";
+				"EXECUTABLE_PREFIX" = "";
+				"MACH_O_TYPE" = "mh_dylib";
+				"ARCHS" = "arm64 x86_64";
+				"ONLY_ACTIVE_ARCH" = "NO";
+				"LD_DYLIB_INSTALL_NAME" = "@rpath/Trainer.dylib";
+				"SKIP_INSTALL" = "YES";
+				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)/Modules/dredge.mhtmodule";
+				"HEADER_SEARCH_PATHS" = ("$(SRCROOT)/Modules/dredge/Sources", "$(SRCROOT)/ModuleSDK", "$(DERIVED_FILE_DIR)");
+				"GCC_PREPROCESSOR_DEFINITIONS" = ("$(inherited)");
+				"OTHER_LDFLAGS" = ("$(inherited)", "-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++");
+				"ENABLE_HARDENED_RUNTIME" = "NO";
+			};
+			"name" = "Release";
+		};
+		"5B117721BA2981DF49D62852" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = ("BD6DE9E914991C78B148E752", "6CFB46398BF6B0D3BEA65956");
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Debug";
+		};
+		"33DA2C8F954777C6A25883DD" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = "5B117721BA2981DF49D62852";
+			"buildPhases" = ("69E49ADFA74566FF9AECBFAC", "47589164E0F7EABAAD0598BC", "B8922DA3953627AB53420C69");
+			"buildRules" = ();
+			"dependencies" = ();
+			"name" = "Trainer-dredge";
+			"productName" = "Trainer";
+			"productReference" = "FEB3F09AF3FE6BF8717876B5";
+			"productType" = "com.apple.product-type.library.dynamic";
+		};
 		"3C915CC30E87577F2ECA1598" = {
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
@@ -6539,6 +6775,10 @@
 			"isa" = "PBXTargetDependency";
 			"target" = "0ED9D04802E14338851CEA76";
 		};
+		"422815FC03968B9FFFE4380F" = {
+			"isa" = "PBXTargetDependency";
+			"target" = "33DA2C8F954777C6A25883DD";
+		};
 		"7449C3F3C34131FD0EB3A421" = {
 			"isa" = "PBXTargetDependency";
 			"target" = "240D569859218DE346C7B099";
@@ -6615,7 +6855,7 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDockEpicBroker", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/UpdaterTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/Tests/EpicLaunch/MHTEpicLaunchTests.m", "$(SRCROOT)/Core/MHTEpicLaunch.m", "$(SRCROOT)/Core/MHTEpicLaunch.h", "$(SRCROOT)/script/xcode_project.py", "$(TRAINERDOCK_BUILD_ROOT)/Modules/balatro.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/control.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/crimson-desert.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/cyberpunk-2077.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dead-island-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/death-stranding.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dome-keeper.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/escape-from-duckov.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/frostpunk-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/inzoi.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/lies-of-p.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/no-mans-sky.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-3.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-4.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-7.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-village.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/robocop.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/stray.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/terraria.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/the-long-dark.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/turok.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/turok-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-crawlers.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-survivors.mhtmodule/Module.json");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDockEpicBroker", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/UpdaterTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/Tests/EpicLaunch/MHTEpicLaunchTests.m", "$(SRCROOT)/Core/MHTEpicLaunch.m", "$(SRCROOT)/Core/MHTEpicLaunch.h", "$(SRCROOT)/script/xcode_project.py", "$(TRAINERDOCK_BUILD_ROOT)/Modules/balatro.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/control.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/crimson-desert.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/cyberpunk-2077.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dead-island-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/death-stranding.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dome-keeper.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dredge.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/escape-from-duckov.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/frostpunk-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/inzoi.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/lies-of-p.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/no-mans-sky.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-3.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-4.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-7.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-village.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/robocop.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/stray.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/terraria.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/the-long-dark.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/turok.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/turok-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-crawlers.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-survivors.mhtmodule/Module.json");
 			"outputPaths" = ("$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Verify launcher, module signatures and layout";
 			"shellPath" = "/bin/bash";
@@ -6646,7 +6886,7 @@
 			"isa" = "PBXAggregateTarget";
 			"buildConfigurationList" = "E22F6C63F7B2C5E22B06EE00";
 			"buildPhases" = ("0B57929311D45D24D41D5FCE");
-			"dependencies" = ("01D96416F6F93BF1DC10B9D8", "A28C28D74AE9FBAEC53CE198", "36013B31F45A59B7C8CB0888", "A0FDF4B37C707111CB32E1A5", "CF6BE48E68C0E99F81083648", "A7BDF65D7E105531D1DC649D", "B92277F24CD027F727D4514F", "34342D799653556E620628DA", "7449C3F3C34131FD0EB3A421", "C02F4B177F39822F92EA5213", "106D4641E71DA6C778CF4CBF", "6561344919C7BF6BE1F42743", "AC1F7B583FE6A11E281B8BDE", "60F380C2074288C6460BFD85", "6DBA4DB370D5F75917CA806D", "995596E49E9F6DA0E42E2708", "336BD94A1A522E8AA5F7397F", "84E408AA69E0E4CB94910C1D", "A9CDD78B45897AE592EEDDB8", "21A4186840C2B0F717A64412", "6BA2211DF3C25CAA7F9A92DF", "7DD50E27EA90517EE995A488", "864915CAAE5596B03686F391", "6C9EB4A8984D09AEA39A42C2", "1D62A35B9498B42A1E93A9B5", "07878358E7EDB489DBD1E15B");
+			"dependencies" = ("01D96416F6F93BF1DC10B9D8", "A28C28D74AE9FBAEC53CE198", "36013B31F45A59B7C8CB0888", "A0FDF4B37C707111CB32E1A5", "CF6BE48E68C0E99F81083648", "A7BDF65D7E105531D1DC649D", "B92277F24CD027F727D4514F", "34342D799653556E620628DA", "422815FC03968B9FFFE4380F", "7449C3F3C34131FD0EB3A421", "C02F4B177F39822F92EA5213", "106D4641E71DA6C778CF4CBF", "6561344919C7BF6BE1F42743", "AC1F7B583FE6A11E281B8BDE", "60F380C2074288C6460BFD85", "6DBA4DB370D5F75917CA806D", "995596E49E9F6DA0E42E2708", "336BD94A1A522E8AA5F7397F", "84E408AA69E0E4CB94910C1D", "A9CDD78B45897AE592EEDDB8", "21A4186840C2B0F717A64412", "6BA2211DF3C25CAA7F9A92DF", "7DD50E27EA90517EE995A488", "864915CAAE5596B03686F391", "6C9EB4A8984D09AEA39A42C2", "1D62A35B9498B42A1E93A9B5", "07878358E7EDB489DBD1E15B");
 			"name" = "TrainerDock-Verified";
 			"productName" = "TrainerDock-Verified";
 		};
@@ -8047,6 +8287,156 @@
 			"isa" = "PBXGroup";
 			"children" = ("EEC06E8B16612955806FB11A", "21926CF4FA7C6E541CAD4906", "FE8613D2BF41B8FBE9E2AE9C", "B93529553FE712D350D535B6", "B6571917278590EC7D8ACB9B", "0DED515CC615C5C7A01540EA");
 			"name" = "dome-keeper";
+			"sourceTree" = "<group>";
+		};
+		"D0FC474965AD099C1F6732CA" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/dredge/Sources/DredgeAdapter.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"76FEFDDAF4B100EE253E4FC4" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/dredge/Sources/DredgeBuild.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"EC20C5EA86494A4B4DE2E362" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/dredge/Sources/DredgeHarvestTypes.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"2F806AC4F00E37161AC6CEAE" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/dredge/Sources/DredgeMono.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"4B48F84F15A327C3241E05E2" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/dredge/Sources/DredgeNative.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"80D45A3589DD2AB3EA08A04E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Modules/dredge/Sources/DredgeSalePrice.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"9442C6781115B3846632140F" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/dredge/Sources/GameAdapter.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"FD83C89402099FF032B6DBFE" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/dredge/Sources/GameBridge.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"C0D5C9F0489D76DD9D7E2F17" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/dredge/Sources/GameProfile.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"E78C58836828803C291B9B33" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/dredge/Sources/LICENSE";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"3C85417BA682BA784FB54252" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/dredge/Sources/MemoryAccess.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"59CF9F20215A3DC3ECC2E3EA" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/dredge/Sources/NativeAdapter.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"7A7A26CDC099F782A9163237" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/dredge/Sources/Overlay.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"655BD853B6B135C13B02943E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/dredge/Sources/OverlaySettings.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"969DDAE61AFE21F9BD6752FC" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/dredge/Sources/OverlayShortcuts.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"48CBF521AAB135B92806B7F0" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/dredge/Sources/SelectionSettings.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"6B359785FE928821FA2E081D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/dredge/Sources/TrainerFeatures.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"04F6EE21C991553B78A2EC81" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/dredge/Sources/TrainerMaterial.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"C05E6B3F820506D3DEC62BC9" = {
+			"isa" = "PBXGroup";
+			"children" = ("D0FC474965AD099C1F6732CA", "47177432BC44DAC10E7B5D4E", "76FEFDDAF4B100EE253E4FC4", "EC20C5EA86494A4B4DE2E362", "2F806AC4F00E37161AC6CEAE", "4B48F84F15A327C3241E05E2", "E871E1C8F9C31EBBE7E01E4E", "80D45A3589DD2AB3EA08A04E", "9442C6781115B3846632140F", "828486359EEDDE9C3455623E", "FD83C89402099FF032B6DBFE", "8010052E9B5F3A36681BA61E", "C0D5C9F0489D76DD9D7E2F17", "1466728896501BD124184D2D", "E78C58836828803C291B9B33", "3C85417BA682BA784FB54252", "8E816514D2DBFD5D4446FB04", "59CF9F20215A3DC3ECC2E3EA", "2FB00497043909E309989155", "7A7A26CDC099F782A9163237", "EC657F766CB7A80CE6F565FE", "655BD853B6B135C13B02943E", "85B627742F7B2B839B9D8F53", "969DDAE61AFE21F9BD6752FC", "B376EB06069D06EE2C096B51", "5960D94F05D45129DC150DBB", "48CBF521AAB135B92806B7F0", "77F33001E69714B833059F31", "6B359785FE928821FA2E081D", "FD085C08C269549220C440E3", "04F6EE21C991553B78A2EC81", "EF649847D7A8096F95989E0D");
+			"name" = "Sources";
+			"sourceTree" = "<group>";
+		};
+		"920A6578C211F7C93C03B974" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/dredge/AGENTS.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"A91F810EF261AD18DB81F9D4" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/dredge/Build.json";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"84C383AAF810829693690D02" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/dredge/CHAT_START.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"7F39184A4D71D0A23F3B55B9" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/dredge/Module.json";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"9ABA56FA336A4F856BCD552D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Modules/dredge/README.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"37FFFF960B2A06F711D82E30" = {
+			"isa" = "PBXGroup";
+			"children" = ("C05E6B3F820506D3DEC62BC9", "920A6578C211F7C93C03B974", "A91F810EF261AD18DB81F9D4", "84C383AAF810829693690D02", "7F39184A4D71D0A23F3B55B9", "9ABA56FA336A4F856BCD552D");
+			"name" = "dredge";
 			"sourceTree" = "<group>";
 		};
 		"6702F38B5F2E439B9FA1ED41" = {
@@ -9947,7 +10337,7 @@
 		};
 		"3797E64238CADC23F937DE2E" = {
 			"isa" = "PBXGroup";
-			"children" = ("F5CD0D66BBAACE9BD02FC0DA", "062F91E27C907B63C78F7073", "F29A61C506744D62FFB58934", "1F9595D298B0BD4FF2FF13AE", "FDFA05E8490CAC3E37AE63AF", "898B94E7AC7DB70258FD2A01", "68C7961B65B1794F4BF28196", "50E4DE60874E10233AA7AFC8", "98439BD32F5C169B43BE76B6", "0AF43817911FFDCB111070D9", "4EC81F2EB8C383AA17DF6AE5", "027A2B1713B83CD8FE2CBA30", "D0394ED0C36569BFD589E21B", "660D1D64EB32477DA11A088A", "4F86B9E2458B5BE159E75394", "173345CF9A59DE6320E20C81", "3838914CEA3D824168E88C24", "378A4E09183E2A1D8A7D4C55", "5808CBF31DC8F0ED68AE438C", "E44D1C1848AD6A203FDB1CD5", "5D681153DFF38506792EA780", "7B5AAD514B418ABABE7D686E", "610AA1E9AF73168D94F702C1", "3577637F891C0A404F721F5C", "430F7067714B7904EBD099D9", "D77FA87A6E6576CD5A0AE202");
+			"children" = ("F5CD0D66BBAACE9BD02FC0DA", "062F91E27C907B63C78F7073", "F29A61C506744D62FFB58934", "1F9595D298B0BD4FF2FF13AE", "FDFA05E8490CAC3E37AE63AF", "898B94E7AC7DB70258FD2A01", "68C7961B65B1794F4BF28196", "50E4DE60874E10233AA7AFC8", "37FFFF960B2A06F711D82E30", "98439BD32F5C169B43BE76B6", "0AF43817911FFDCB111070D9", "4EC81F2EB8C383AA17DF6AE5", "027A2B1713B83CD8FE2CBA30", "D0394ED0C36569BFD589E21B", "660D1D64EB32477DA11A088A", "4F86B9E2458B5BE159E75394", "173345CF9A59DE6320E20C81", "3838914CEA3D824168E88C24", "378A4E09183E2A1D8A7D4C55", "5808CBF31DC8F0ED68AE438C", "E44D1C1848AD6A203FDB1CD5", "5D681153DFF38506792EA780", "7B5AAD514B418ABABE7D686E", "610AA1E9AF73168D94F702C1", "3577637F891C0A404F721F5C", "430F7067714B7904EBD099D9", "D77FA87A6E6576CD5A0AE202");
 			"name" = "Modules";
 			"sourceTree" = "<group>";
 		};
@@ -10315,6 +10705,60 @@
 			"isa" = "PBXGroup";
 			"children" = ("52267E550A0625B6DE52B257");
 			"name" = "DomeKeeper";
+			"sourceTree" = "<group>";
+		};
+		"68253DA2A87E4B19CA4DE934" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Dredge/BuildCandidate.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"0965B57C9AF1C9E8CA131108" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/Dredge/CandidateChecks.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"2072FA7F9EDE35D31A27FC3E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Dredge/Control.swift";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"621EB413E7006C621EF7739E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.h";
+			"path" = "Tests/Dredge/EquipmentLeaseTests.hpp";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"3434E70B0D3B954B42779311" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/Dredge/Launch.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"841638A475C8F9B0F0CCCBAE" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/Dredge/NativeContractTests.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"A9152A0526E5A74A6FD62658" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/Dredge/ProfileCheck.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"0FA1B5B762E4DD5A309F38AD" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/Dredge/Query.swift";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"7C8B042B8ED93392153A6649" = {
+			"isa" = "PBXGroup";
+			"children" = ("68253DA2A87E4B19CA4DE934", "0965B57C9AF1C9E8CA131108", "2072FA7F9EDE35D31A27FC3E", "621EB413E7006C621EF7739E", "3434E70B0D3B954B42779311", "841638A475C8F9B0F0CCCBAE", "A9152A0526E5A74A6FD62658", "0FA1B5B762E4DD5A309F38AD");
+			"name" = "Dredge";
 			"sourceTree" = "<group>";
 		};
 		"E9C965B814ACD3AC7AEE6B9D" = {
@@ -11309,7 +11753,7 @@
 		};
 		"6DC4FAD667A85B8567F612FB" = {
 			"isa" = "PBXGroup";
-			"children" = ("95B85911D95C09F76077731D", "C558322C90F7C824EA333596", "9681BA565B80261048F375D6", "578887ED95FE266FE7E3C8CC", "774BF8DD634424BA7BD916BA", "3C9AA7F0D72E39A723213356", "9ABCB2D9903EA261D4B7675F", "5AF284A3CC275F9661B07490", "AAA2EB948E4ACFEE43FAC82B", "D462BEEFAEB93437D38C2C9F", "47F172D0BD1D471CF0388A64", "C8438F0955C23E64B24CBFF4", "414BA22E27DAEE16828FD8D3", "2028435DB50D71B9AC2D9152", "C7937F2CF58FBDC42DD73A82", "E23C8F9FADE485BB2413FC4D", "70352AD347BDDCBB3E9C2D71", "A0B8D4F7790FF0A7CD35B821", "453BCC9F40C25129A11AFE42", "66C06B56AC0DB42568B2CB8C", "9F9A7451392F18218D813F04", "E664071C6F2BCF7EE1084992", "0AB8D325CA82C5A2F0E18B6F", "C3BD1762E47CFABFCD557C0D", "8959DF4A9F4735B4184ED876", "92DBD7E0020F60B671F92774", "FE179AB05960397A0672CCDC", "272738046A71249570292AA4", "DAB207F704FDB6B20BDD3AA5", "92301B6E4315211EDE150A05", "EE99C02AC506535CD0888494", "30F4F96B94531703CD468051", "EE7A8D448A4C0FE99920A155", "46494363C1164468D58AC7DD", "619756B388236A8F9381AE69", "7392DD52806320306589C2A7", "DB9AF736CFC1402AD48660C4", "54F9CF01D24044637CF3D68C", "8B873C8801208A32F871EEF6", "C10871D3BA468B9911412563", "3D3477CCF699C841A7E9A36D", "C20FA7C518ADBFC4CFB3FE75");
+			"children" = ("95B85911D95C09F76077731D", "C558322C90F7C824EA333596", "9681BA565B80261048F375D6", "578887ED95FE266FE7E3C8CC", "774BF8DD634424BA7BD916BA", "3C9AA7F0D72E39A723213356", "7C8B042B8ED93392153A6649", "9ABCB2D9903EA261D4B7675F", "5AF284A3CC275F9661B07490", "AAA2EB948E4ACFEE43FAC82B", "D462BEEFAEB93437D38C2C9F", "47F172D0BD1D471CF0388A64", "C8438F0955C23E64B24CBFF4", "414BA22E27DAEE16828FD8D3", "2028435DB50D71B9AC2D9152", "C7937F2CF58FBDC42DD73A82", "E23C8F9FADE485BB2413FC4D", "70352AD347BDDCBB3E9C2D71", "A0B8D4F7790FF0A7CD35B821", "453BCC9F40C25129A11AFE42", "66C06B56AC0DB42568B2CB8C", "9F9A7451392F18218D813F04", "E664071C6F2BCF7EE1084992", "0AB8D325CA82C5A2F0E18B6F", "C3BD1762E47CFABFCD557C0D", "8959DF4A9F4735B4184ED876", "92DBD7E0020F60B671F92774", "FE179AB05960397A0672CCDC", "272738046A71249570292AA4", "DAB207F704FDB6B20BDD3AA5", "92301B6E4315211EDE150A05", "EE99C02AC506535CD0888494", "30F4F96B94531703CD468051", "EE7A8D448A4C0FE99920A155", "46494363C1164468D58AC7DD", "619756B388236A8F9381AE69", "7392DD52806320306589C2A7", "DB9AF736CFC1402AD48660C4", "54F9CF01D24044637CF3D68C", "8B873C8801208A32F871EEF6", "C10871D3BA468B9911412563", "3D3477CCF699C841A7E9A36D", "C20FA7C518ADBFC4CFB3FE75");
 			"name" = "Tests";
 			"sourceTree" = "<group>";
 		};
@@ -11627,7 +12071,7 @@
 		};
 		"0A3E27B8CA818264D75C8D81" = {
 			"isa" = "PBXGroup";
-			"children" = ("18FF5A37EC6215B0C548A632", "A4EA575B674B3360A1567417", "0C54B35A036A6A5F66500870", "8514A5005905E7AC966AA13D", "ABC009279859D95948608A7B", "DAE68E039F16F762988438F5", "B4C2EC0A318F35C0C0F88CC3", "F36F43EECD8C85A9C338A275", "96E0801C832166B4B9D6BAD1", "FBCB12816DDC187D9622F973", "9CBC248AE6CBF096D8AAD3DD", "90B2896427AD88F06AEE44DA", "D662E4D0C40E51E0943D2A8C", "8DD27ED101D41C973ED3B0C2", "01A159395358FF6CA61C1BDC", "FF06EF98D1125FEFFB9F65F4", "D16E45F13555F4C93C52D080", "A6158DD26712C538D5C34682", "F3C7869E35D9A1879E8D484B", "9CB3948BF8BF35F41F0822D4", "6C29D5AE5836C1CB4E8DE2C8", "A2AF556B254194350707E231", "72ECF1D380F962AA039CB4A1", "454B0AF300D7EB5DCFEB0A57", "D13E33385F8F44CE6DBF726C", "F049A51994C694CFB36F118F", "4E14C6621731AC7373885BE2");
+			"children" = ("18FF5A37EC6215B0C548A632", "A4EA575B674B3360A1567417", "0C54B35A036A6A5F66500870", "8514A5005905E7AC966AA13D", "ABC009279859D95948608A7B", "DAE68E039F16F762988438F5", "B4C2EC0A318F35C0C0F88CC3", "F36F43EECD8C85A9C338A275", "96E0801C832166B4B9D6BAD1", "FEB3F09AF3FE6BF8717876B5", "FBCB12816DDC187D9622F973", "9CBC248AE6CBF096D8AAD3DD", "90B2896427AD88F06AEE44DA", "D662E4D0C40E51E0943D2A8C", "8DD27ED101D41C973ED3B0C2", "01A159395358FF6CA61C1BDC", "FF06EF98D1125FEFFB9F65F4", "D16E45F13555F4C93C52D080", "A6158DD26712C538D5C34682", "F3C7869E35D9A1879E8D484B", "9CB3948BF8BF35F41F0822D4", "6C29D5AE5836C1CB4E8DE2C8", "A2AF556B254194350707E231", "72ECF1D380F962AA039CB4A1", "454B0AF300D7EB5DCFEB0A57", "D13E33385F8F44CE6DBF726C", "F049A51994C694CFB36F118F", "4E14C6621731AC7373885BE2");
 			"name" = "Products";
 			"sourceTree" = "<group>";
 		};
@@ -11671,7 +12115,7 @@
 			"productRefGroup" = "0A3E27B8CA818264D75C8D81";
 			"projectDirPath" = "";
 			"projectRoot" = "";
-			"targets" = ("280950CF6AC5C31930FDD3EB", "9B492FD0BF085E3B7DBB21E0", "6B7CD1EF17007936405E1B6E", "92849A14EE4AD84BE6FBDA13", "1366DF5032A73C177DC2C81B", "6FD9A6562490373088E0BC39", "57169098A783799C3FAC2923", "84C3752285C773770659C886", "0ED9D04802E14338851CEA76", "240D569859218DE346C7B099", "F568D9165AED75AB55C883D5", "730DB787C419314C2E3C8E0F", "C13F7F8275A3CCFB57EEE43D", "EB68ABF763C47B3B66CB5AA9", "1F6B84363E2CB0E012842A18", "C8AF616DA5CACC5B35BBD736", "789CA890B287F8D8E55DECD9", "F5F2131170E5FCF56D851C7A", "8404F0B645EEB966D7E6C7F6", "6B5C6172466F2377029931F4", "676956BF6355DD6A1E7ABB91", "002D7C436B072E071D56EBB8", "544C2AD9AD77B34E7C6D7F06", "AE17FDFF55D04DE26EC32CB4", "762A8D915C4EDF302A25639A", "AB37692E9208AD9A947631C4", "E4E236468DD5CC8D45F3FA82", "5826C760A6B14C431B64B1F3", "E8D25D95B7BEC2D17E3D01C9");
+			"targets" = ("280950CF6AC5C31930FDD3EB", "9B492FD0BF085E3B7DBB21E0", "6B7CD1EF17007936405E1B6E", "92849A14EE4AD84BE6FBDA13", "1366DF5032A73C177DC2C81B", "6FD9A6562490373088E0BC39", "57169098A783799C3FAC2923", "84C3752285C773770659C886", "0ED9D04802E14338851CEA76", "33DA2C8F954777C6A25883DD", "240D569859218DE346C7B099", "F568D9165AED75AB55C883D5", "730DB787C419314C2E3C8E0F", "C13F7F8275A3CCFB57EEE43D", "EB68ABF763C47B3B66CB5AA9", "1F6B84363E2CB0E012842A18", "C8AF616DA5CACC5B35BBD736", "789CA890B287F8D8E55DECD9", "F5F2131170E5FCF56D851C7A", "8404F0B645EEB966D7E6C7F6", "6B5C6172466F2377029931F4", "676956BF6355DD6A1E7ABB91", "002D7C436B072E071D56EBB8", "544C2AD9AD77B34E7C6D7F06", "AE17FDFF55D04DE26EC32CB4", "762A8D915C4EDF302A25639A", "AB37692E9208AD9A947631C4", "E4E236468DD5CC8D45F3FA82", "5826C760A6B14C431B64B1F3", "E8D25D95B7BEC2D17E3D01C9");
 		};
 	};
 	"rootObject" = "244210E48437B6556980A702";

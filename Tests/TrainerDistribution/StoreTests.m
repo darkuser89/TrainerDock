@@ -54,7 +54,7 @@ int main(int argc,const char *argv[]){@autoreleasepool{
  NSString *extra=[imported.directory.stringByDeletingLastPathComponent stringByAppendingPathComponent:@"Foreign.txt"];[@"user data" writeToFile:extra atomically:YES encoding:NSUTF8StringEncoding error:NULL];
  check(![store removeModule:imported protectedRuntimePaths:[NSSet set] error:&error],@"foreign files in version container remain protected");[NSFileManager.defaultManager removeItemAtPath:extra error:NULL];
  check([store removeModule:imported protectedRuntimePaths:[NSSet set] error:&error]&&new.installed,@"delete imported version preserves current numeric version");
- for(NSDictionary *bad in fixtures[@"badArchives"]){NSError *failure=nil;check(![store installArchive:[NSURL fileURLWithPath:[base stringByAppendingPathComponent:bad[@"file"]]] version:bad[@"entry"] forIdentifier:identifier error:&failure]&&failure,[NSString stringWithFormat:@"malicious archive rejected: %@",bad[@"file"]]);}
+ for(NSDictionary *bad in fixtures[@"badArchives"]){NSError *failure=nil;check(![store installArchive:[NSURL fileURLWithPath:[base stringByAppendingPathComponent:bad[@"file"]]] version:bad[@"entry"] forIdentifier:identifier error:&failure]&&failure,[NSString stringWithFormat:@"malicious archive rejected: %@",bad[@"file"]]);if(bad[@"expectedError"])check([failure.localizedDescription containsString:bad[@"expectedError"]],[NSString stringWithFormat:@"Mach-O parser rejected the exact malformed boundary: %@ (%@)",bad[@"file"],failure]);}
  check(new.installed&&[store installedVersionsForIdentifier:identifier].count==1,@"failed downloads/installations never replace existing versions");
  for(id bad in fixtures[@"badCatalogs"])check(![MHTTrainerStore validatedCatalog:bad requireDownloads:YES error:&error],@"malformed/foreign catalog rejected");
  NSDictionary *metadata=fixtures[@"metadataOnly"];check([MHTTrainerStore validatedCatalog:metadata requireDownloads:NO error:&error]&&![MHTTrainerStore validatedCatalog:metadata requireDownloads:YES error:&error],@"unpublished local metadata is not a fabricated download");
@@ -64,6 +64,9 @@ int main(int argc,const char *argv[]){@autoreleasepool{
  __block BOOL refreshed=NO;[store refreshCatalogWithCompletion:^(NSError *failure){check(failure!=nil,@"invalid source refresh fails safely");refreshed=YES;}];
  NSDate *deadline=[NSDate dateWithTimeIntervalSinceNow:5];while(!refreshed&&deadline.timeIntervalSinceNow>0)[NSRunLoop.currentRunLoop runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.01]];
  check(refreshed&&store.modules.count==1&&new.installed,@"refresh failure retains existing offline catalog and trainer");
+ MHTTrainerStore *universalStore=[[MHTTrainerStore alloc]initWithRootDirectory:[base stringByAppendingPathComponent:@"UniversalOnly/Modules"] catalogURL:nil bundledCatalogURL:nil];
+ check([universalStore installArchive:[NSURL fileURLWithPath:[base stringByAppendingPathComponent:@"universal.zip"]] version:fixtures[@"validUniversal"] forIdentifier:identifier error:&error]!=nil,[NSString stringWithFormat:@"signed universal runtime satisfies both explicit profiles: %@",error]);
+ check([universalStore installArchive:[NSURL fileURLWithPath:[base stringByAppendingPathComponent:@"intel.zip"]] version:fixtures[@"validIntel"] forIdentifier:identifier error:&error]!=nil,[NSString stringWithFormat:@"signed Intel-only runtime remains accepted: %@",error]);
  [NSUserDefaults.standardUserDefaults removeObjectForKey:[@"MHT.TrainerVersion." stringByAppendingString:identifier]];
  puts("PASS: signed versioned packages, offline metadata, old/new build resolution, retained versions, legacy collisions, mapped/session deletion guards, archive/catalog attacks and failure rollback. No games started or runtime code loaded.");
 }return 0;}

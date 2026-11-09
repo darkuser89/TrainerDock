@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: GPL-3.0-only
 """Real signed synthetic files; no installed game or trainer runtime is executed."""
-import copy, hashlib, json, plistlib, re, stat, subprocess, tempfile, zipfile, warnings
+import copy, hashlib, json, plistlib, re, stat, struct, subprocess, tempfile, zipfile, warnings
 warnings.filterwarnings("ignore", message="Duplicate name:", category=UserWarning)
 from pathlib import Path
 from BuildTools import ROOT, compile_tool
@@ -26,7 +26,7 @@ def main():
    uuid=re.search(r'UUID: ([0-9A-F-]+)',run('xcrun','dwarfdump','--uuid',mac/'Game').decode())[1]
    profiles.append({'id':'steam-'+label.lower()+'.1.0','name':'Steam-Test','store':'Steam','enabled':True,'bundleIdentifier':'local.trainerdock.fixture.game','executable':'Game','uuids':[uuid],'version':'1.0','architecture':'arm64'})
   def files(version,profile=None):
-   manifest={'schemaVersion':1,'moduleABI':1,'id':identifier,'name':'Testtrainer','version':version,'profiles':[profile or profiles[1]],'features':[{'id':0,'title':'Testfunktion','binding':'fixture','shortcut':'F1','detail':'Nur synthetischer Test','implemented':False,'numeric':False,'oneShot':False,'integer':False,'initial':0,'minimum':0,'maximum':0,'step':0}]}
+   manifest={'schemaVersion':1,'moduleABI':1,'id':identifier,'name':'Testtrainer','version':version,'profiles':profile if isinstance(profile,list) else [profile or profiles[1]],'features':[{'id':0,'title':'Testfunktion','binding':'fixture','shortcut':'F1','detail':'Nur synthetischer Test','implemented':False,'numeric':False,'oneShot':False,'integer':False,'initial':0,'minimum':0,'maximum':0,'step':0}]}
    config={'schemaVersion':1,'app':{'name':'Testtrainer','bundleIdentifier':'local.mht.module.'+identifier,'version':version,'build':'1'},'profiles':manifest['profiles']}
    return manifest,{'Module.json':json.dumps(manifest).encode(),'TrainerConfig.json':json.dumps(config).encode(),'Trainer.dylib':dylib.read_bytes(),'LICENSE':b'Synthetic fixture only\n'}
   def package(name,version,profile=None,mutate=None):
@@ -55,13 +55,43 @@ def main():
   old_runtime=base/'OldRuntime.dylib';run('xcrun','clang','-arch','arm64','-mmacosx-version-min=26.0','-dynamiclib',code,'-o',old_runtime);run('codesign','--force','--sign','-',old_runtime)
   entry=package('bad-os.zip','1.1.1',mutate=lambda c:c.update({'Trainer.dylib':old_runtime.read_bytes()}));bad_archives.append({'file':'bad-os.zip','entry':entry})
   entry=copy.deepcopy(new);entry['sha256']='0'*64;bad_archives.append({'file':'new.zip','entry':entry})
+  # Real signed CPU slices; none is executed. Validate both profiles together.
+  intel=base/'Intel.dylib';run('xcrun','clang','-arch','x86_64','-mmacosx-version-min=27.0','-dynamiclib',code,'-o',intel);run('codesign','--force','--sign','-',intel)
+  universal=base/'Universal.dylib';run('xcrun','lipo','-create',dylib,intel,'-output',universal);run('codesign','--force','--sign','-',universal)
+  intel_profile=copy.deepcopy(profiles[1]);intel_profile.update(id='gog-intel.1.0',store='GOG',architecture='x86_64')
+  both=[profiles[1],intel_profile];fat=universal.read_bytes();assert struct.unpack_from('>I',fat)[0]==0xcafebabe
+  valid_universal=package('universal.zip','2.0.0',both,lambda c:c.update({'Trainer.dylib':fat}))
+  valid_intel=package('intel.zip','2.0.1',intel_profile,lambda c:c.update({'Trainer.dylib':intel.read_bytes()}))
+  wide=bytearray(fat);struct.pack_into('>II',wide,0,0xcafebabf,2)
+  for i in range(2):
+   cpu,sub,offset,length,align=struct.unpack_from('>IIIII',fat,8+i*20)
+   struct.pack_into('>IIQQII',wide,8+i*32,cpu,sub,offset,length,align,0)
+  fat64=base/'Universal64.dylib';fat64.write_bytes(wide);run('codesign','--force','--sign','-',fat64)
+  wide_entry=package('universal64.zip','2.0.2',both,lambda c:c.update({'Trainer.dylib':fat64.read_bytes()}));bad_archives.append({'file':'universal64.zip','entry':wide_entry,'expectedError':'Code-Siegel'})
+  for name,offset,value in [('fat64-outside.zip',16,len(wide)+16384),('fat64-reserved.zip',36,1)]:
+   raw=bytearray(fat64.read_bytes());struct.pack_into('>Q' if offset==16 else '>I',raw,offset,value)
+   entry=package(name,'4.0.'+str(offset),both,lambda c:c.update({'Trainer.dylib':bytes(raw)}));bad_archives.append({'file':name,'entry':entry,'expectedError':'Slicegrenzen'})
+  def malformed(name,offset,value,expected):
+   raw=bytearray(fat);struct.pack_into('>I',raw,offset,value)
+   entry=package(name,'3.0.'+str(len(bad_archives)),both,lambda c:c.update({'Trainer.dylib':bytes(raw)}));bad_archives.append({'file':name,'entry':entry,'expectedError':expected})
+  malformed('fat-extra-cpu.zip',4,3,'Universal-Architekturen')
+  malformed('fat-duplicate-cpu.zip',28,struct.unpack_from('>I',fat,8)[0],'Slicegrenzen')
+  malformed('fat-overlap.zip',36,struct.unpack_from('>I',fat,16)[0],'Überlappende')
+  malformed('fat-outside.zip',16,len(fat)+16384,'Slicegrenzen')
+  malformed('fat-alignment.zip',24,31,'Slicegrenzen')
+  malformed('fat-slice-cpu.zip',8,struct.unpack_from('>I',fat,28)[0],'Trainerarchitektur')
+  for name,profile,blob in [('fat-extra-profile.zip',profiles[1],fat),('fat-missing-slice.zip',both,dylib.read_bytes())]:
+   entry=package(name,'3.0.'+str(len(bad_archives)),profile,lambda c:c.update({'Trainer.dylib':blob}));bad_archives.append({'file':name,'entry':entry})
+  old_intel=base/'OldIntel.dylib';run('xcrun','clang','-arch','x86_64','-mmacosx-version-min=26.0','-dynamiclib',code,'-o',old_intel)
+  old_fat=base/'OldUniversal.dylib';run('xcrun','lipo','-create',dylib,old_intel,'-output',old_fat);run('codesign','--force','--sign','-',old_fat)
+  entry=package('fat-old-os.zip','3.1.0',both,lambda c:c.update({'Trainer.dylib':old_fat.read_bytes()}));bad_archives.append({'file':'fat-old-os.zip','entry':entry,'expectedError':'macOS-Version'})
   bad_catalogs=[]
   for mutate in [lambda c:c.update({'moduleABI':2}),lambda c:c['modules'][0]['versions'].append(copy.deepcopy(old)),lambda c:c['modules'][0]['versions'][0].update({'url':'https://github.com/other/repo/file.zip'}),lambda c:c['modules'][0]['versions'][0].update({'version':'1.0.0\n'}),lambda c:c['modules'][0]['versions'][0].update({'sha256':'z'*64}),lambda c:c['modules'][0]['versions'][0]['manifest']['profiles'][0].update({'name':12}),lambda c:c['modules'][0]['versions'][0]['manifest'].update({'id':'wrong'}),lambda c:c['modules'][0]['versions'][0]['manifest']['profiles'][0].update({'enabled':None}),lambda c:c['modules'][0]['versions'][0]['manifest']['features'][0].update({'numeric':True,'minimum':None})]:
    invalid=copy.deepcopy(catalog);mutate(invalid);bad_catalogs.append(invalid)
   metadata=copy.deepcopy(catalog)
   for entry in metadata['modules'][0]['versions']:
    for key in ['url','sha256','size','fingerprint']:entry.pop(key)
-  write_json(base/'MetadataOnly.json',metadata);write_json(base/'Fixtures.json',{'id':identifier,'catalog':catalog,'badArchives':bad_archives,'badCatalogs':bad_catalogs,'metadataOnly':metadata})
+  write_json(base/'MetadataOnly.json',metadata);write_json(base/'Fixtures.json',{'id':identifier,'catalog':catalog,'badArchives':bad_archives,'badCatalogs':bad_catalogs,'metadataOnly':metadata,'validUniversal':valid_universal,'validIntel':valid_intel})
   executable=base/'StoreTests';compile_tool('Tests/TrainerDistribution/StoreTests.m',executable)
   print(run(executable,base).decode().strip())
 if __name__=='__main__':main()

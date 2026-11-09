@@ -124,7 +124,9 @@ static BOOL checkResources(NSString *bundle,NSDictionary *profile) {
     if(exact){
         // An explicit per-profile exception requires whole files, including the
         // original executable and Info.plist. Partial sampling is insufficient.
-        if(![profile[@"integrityApproval"] isEqual:@"user-confirmed-steam-original"]
+        BOOL approved=[profile[@"integrityApproval"] isEqual:@"user-confirmed-steam-original"] ||
+            ([profile[@"integrityApproval"] isEqual:@"user-confirmed-gog-original"] && [profile[@"store"] isEqual:@"GOG"]);
+        if(!approved
            || ![profile[@"integrityFiles"] isKindOfClass:NSArray.class]
            || [profile[@"integrityFiles"] count]<2 || [profile[@"integrityFiles"] count]>32)return NO;
         NSSet *required=[NSSet setWithArray:profile[@"integrityFiles"]];

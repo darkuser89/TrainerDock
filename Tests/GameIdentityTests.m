@@ -67,6 +67,10 @@ static void originalIntegrity(NSString *directory){
         @"signatureScope":@"sha256-original",@"integrityApproval":@"user-confirmed-steam-original",@"integrityFiles":@[exe,plist],@"fileChecks":@[last,first,wholeInfo]} mutableCopy];
     check([MTInspectGame(bundle,profile,nil)[@"integrityMode"] isEqual:@"sha256-original"],"approved original with complete unordered chunks accepted");
     NSDictionary *valid=[profile copy];
+    profile[@"store"]=@"GOG";profile[@"integrityApproval"]=@"user-confirmed-gog-original";
+    check(MTInspectGame(bundle,profile,nil)!=nil,"explicit complete GOG original approval accepted");
+    profile[@"store"]=@"Steam";check(!MTInspectGame(bundle,profile,nil),"GOG approval cannot authorize a different store");
+    [profile setDictionary:valid];
     NSMutableArray *many=[NSMutableArray arrayWithObject:chunk(exe,binary,0,binary.length)];
     for(NSUInteger i=0;i<77;i++){NSUInteger begin=metadata.length*i/77,end=metadata.length*(i+1)/77;[many addObject:chunk(plist,metadata,begin,end-begin)];}
     profile[@"fileChecks"]=many;check(MTInspectGame(bundle,profile,nil)!=nil,"78 complete original chunks accepted for large original executables");

@@ -14,6 +14,10 @@ from managed import compile_managed
 
 ROOT = Path(__file__).resolve().parent.parent
 
+def module_architectures(config):
+    from xcode_project import module_architectures as resolve
+    return resolve(config)
+
 def run(args, **kwargs):
     return subprocess.run([str(x) for x in args], check=True, **kwargs)
 
@@ -90,13 +94,14 @@ def catalog_source(backend, config):
     }}return 0;}}
     '''
 
-def trainer(module_dir, modules_dir, stage, common, native_objects=None):
+def trainer(module_dir, modules_dir, stage, common, native_objects=None, architecture=None):
     manifest=json.loads((module_dir/"Module.json").read_text())
     config=json.loads((module_dir/"Build.json").read_text())
     if config.get("developmentOnly"):
         raise ValueError(f"{manifest['id']}: Entwicklungs-Vorlage, kein fertiger Trainer. Native Anbindung zuerst implementieren.")
     family=config.get("family",module_dir.name)
-    architecture=config.get("architecture","arm64")
+    architecture=architecture or module_architectures(config)[0]
+    if architecture not in module_architectures(config):raise ValueError("Ungeprüfte Trainerarchitektur.")
     def compile_arch(*args,**kwargs):return compile_object(*args,**kwargs,architecture=architecture)
     module_links=[]
     for framework in config.get("frameworks",[]):

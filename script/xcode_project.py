@@ -15,6 +15,15 @@ ROOT = Path(__file__).resolve().parent.parent
 PROJECT = ROOT / "TrainerDock.xcodeproj"
 
 
+def module_architectures(config):
+    values=config.get("architectures",[config.get("architecture","arm64")])
+    if (not isinstance(values,list) or not values or len(values)>2 or
+        any(value not in ("arm64","x86_64") for value in values) or len(set(values))!=len(values) or
+        ("architectures" in config and "architecture" in config)):
+        raise ValueError("Ungültige explizite Trainerarchitekturen.")
+    return [value for value in ("arm64","x86_64") if value in values]
+
+
 def released_modules():
     return [p.parent for p in sorted((ROOT / "Modules").glob("*/Module.json"))
             if not json.loads((p.parent / "Build.json").read_text()).get("developmentOnly")]
@@ -140,8 +149,7 @@ def generate():
     checks = ["$(SRCROOT)/script/" + p for p in ("build.py", "managed.py", "xcode_support.py")]
     for module in released_modules():
         config_data = json.loads((module / "Build.json").read_text())
-        architecture=config_data.get("architecture","arm64")
-        if architecture not in ("arm64","x86_64"):raise ValueError("Unbekannte Trainerarchitektur.")
+        architecture=" ".join(module_architectures(config_data))
         name = "Trainer-" + module.name
         source = (module / config_data.get("sourceRoot", "Sources")).resolve()
         sources = [str((source / p).relative_to(ROOT)) for p in config_data["sources"]]

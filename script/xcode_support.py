@@ -114,12 +114,18 @@ def package_module(module_id):
     # create, a receipt claiming that the resulting runtime bytes are final.
     (root / "BuildFingerprints" / (module_id + ".json")).unlink(missing_ok=True)
     _, _, config = module_data(module_id)
-    folder = environment_path("OBJECT_FILE_DIR_normal") / config.get("architecture", "arm64")
     names = config["sources"] + config.get("sdkSources", [])
-    objects = {name: object_file(folder, name) for name in names}
-    common = object_file(folder, "MHTProtocol.m")
-    with tempfile.TemporaryDirectory(prefix="checks-", dir=environment_path("TARGET_TEMP_DIR")) as temp:
-        build.trainer(ROOT / "Modules" / module_id, root / "Modules", Path(temp), common, native_objects=objects)
+    metadata=None
+    for architecture in build.module_architectures(config):
+        folder = environment_path("OBJECT_FILE_DIR_normal") / architecture
+        objects = {name: object_file(folder, name) for name in names}
+        common = object_file(folder, "MHTProtocol.m")
+        with tempfile.TemporaryDirectory(prefix="checks-", dir=environment_path("TARGET_TEMP_DIR")) as temp:
+            product=build.trainer(ROOT / "Modules" / module_id, root / "Modules", Path(temp), common,
+                                  native_objects=objects,architecture=architecture)
+            current=(product/"Module.json").read_bytes()
+            if metadata is not None and current!=metadata:raise ValueError("Architekturen liefern unterschiedliche Trainerkataloge.")
+            metadata=current
     stamp()
 
 
@@ -185,11 +191,11 @@ def verify_products(root, module_id=None, modules=True):
         build.run(["codesign", "--verify", "--strict", binary])
         verify_minimum(binary)
         source=ROOT/"Modules"/module.name.removesuffix(".mhtmodule")
-        config=json.loads((source/"Build.json").read_text());expected=config.get("architecture","arm64")
-        if subprocess.check_output(["xcrun","lipo","-archs",binary],text=True).strip()!=expected:
+        config=json.loads((source/"Build.json").read_text());expected=build.module_architectures(config)
+        if set(subprocess.check_output(["xcrun","lipo","-archs",binary],text=True).split())!=set(expected):
             raise ValueError(f"Trainerarchitektur passt nicht zum Modulvertrag: {binary}")
         manifest=json.loads((module/"Module.json").read_text())
-        if any(profile.get("architecture","arm64")!=expected for profile in manifest["profiles"]):
+        if set(profile.get("architecture","arm64") for profile in manifest["profiles"])!=set(expected):
             raise ValueError(f"Profilarchitektur passt nicht zur Trainerbibliothek: {module}")
     if module_id is None:
         app = root / "TrainerDock.app"
@@ -218,7 +224,7 @@ def verify_products(root, module_id=None, modules=True):
 def verify_minimum(binary):
     output = subprocess.check_output(["xcrun", "vtool", "-show-build", str(binary)], text=True)
     minimum = [line.split()[1] for line in output.splitlines() if line.strip().startswith("minos ")]
-    if minimum != ["27.0"]:
+    if not minimum or any(value!="27.0" for value in minimum):
         raise ValueError(f"Unerwartetes Deploymentziel {minimum}: {binary}")
 
 

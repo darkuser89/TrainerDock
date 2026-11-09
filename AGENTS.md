@@ -49,7 +49,8 @@ der bisherige MHT-Ordner wird weiterhin gelesen.
 
 - `TrainerDock.xcodeproj`: echtes natives Xcode-Projekt. Scheme `TrainerDock` baut und prüft alle
   Produkte; `TrainerDock-Launcher` nur den Launcher, `Trainer-<id>` ein Trainermodul.
-  Mindestversion für App und Trainer: macOS 27.0, Architektur arm64.
+  Mindestversion für App und Trainer: macOS 27.0. Der Launcher bleibt arm64;
+  Trainerarchitekturen werden ausdrücklich durch ihre Profile und `Build.json` gebunden.
   `Config/TrainerDock.xcconfig` ist die gemeinsame Buildkonfiguration.
 - `App/`: gemeinsames AppKit-Fenster, native Seitenleiste, Suche, Spielicons,
   Pfade und Bedienung. Icons nur aus tatsächlich installierten Spiele-Apps lesen.
@@ -402,3 +403,20 @@ Die originale `LuaPrint`-Diagnose hat einen Stackschutz-Abbruch verursacht;
 eigene Runtime-Skripte dürfen diesen Ausgabepfad nicht nutzen. Native
 Strukturpuffer über `GetRef` statt Strukturkopien verändern und originale
 Missionsdefinitionen auf B1 laden. Einzelheiten: `Modules/inzoi/AGENTS.md`.
+
+## DREDGE GOG: eng begrenzte Originalfreigabe
+
+Nach fehlerfreier GOG-Dateiprüfung hat der Nutzer ausschließlich GOG-Build
+**59048070897032907**, Version **1.5.3**, Produkt **1744110647**, x86_64-UUID
+`E18E02EE-BE72-3DC3-A3AD-C6B11B6CF6A2` für `sha256-original` freigegeben.
+Die 18 im GOG-Profil erfassten Originaldateien müssen vollständig ihren
+25 lückenlosen SHA-256-Abschnitten entsprechen. Keine stillen Hashupdates,
+Signaturänderungen oder Freigaben weiterer Builds. Der GOG-Marker
+`user-confirmed-gog-original` gilt ausschließlich für Store `GOG`.
+
+DREDGE liefert ein gemeinsames Universal-Modul für Epic arm64 und GOG x86_64.
+`Build.json` darf dafür explizit `architectures: ["arm64", "x86_64"]` statt des
+bisherigen einzelnen `architecture` verwenden. Alle Profilarchitekturen müssen
+exakt den versiegelten Mach-O-Slices entsprechen; jede Slice bleibt macOS 27+.
+Prüfungen pro CPU und übereinstimmende Kataloge sind Pflicht. Solche Pakete benötigen
+mindestens TrainerDock 1.2.6; der Launcher selbst bleibt arm64.

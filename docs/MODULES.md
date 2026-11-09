@@ -60,6 +60,16 @@ Transaktionsjournal gesichert und anschließend exakt zurückgenommen; fremde
 Änderungen bleiben erhalten. Keine Authargumente lesen, speichern oder loggen.
 Fehler und Timeouts lösen weder Direktstarts noch automatische Wiederholungen aus.
 
+Epic kann die temporäre Zuordnung im Speicher behalten und beim Beenden erneut
+auf die Platte schreiben. Deshalb Originalbytes nach dem Start sofort
+wiederherstellen, aber Journal, Helfer und Transaktionssperre bis zum regulären
+Clientende erhalten. Danach nur die exakt eigene, noncegebundene Rückschreibung
+zurücknehmen. Eine dabei von Epic gesetzte Reparaturmarkierung darf ausschließlich
+im nachgewiesenen eigenen Replay zurückgesetzt werden; sonstige Änderungen bleiben
+geschützt. Endet TrainerDock vorher, übernimmt die nächste Wiederherstellung das
+persistente Journal nach dem Clientende. Die nativen Prüfungen unter
+`Tests/EpicLaunch/` sichern diese Reihenfolge und fremde Änderungen ab.
+
 `launchMode: "executable"` startet das validierte Originalprogramm direkt, wenn
 dessen ursprünglicher Installationsordner nicht als `.app` registriert ist.
 Ohne dieses Feld verwendet TrainerDock den normalen macOS-Appstart. Beide Wege übergeben
@@ -284,3 +294,25 @@ Architektur. `testSupportSources` darf ausschließlich Dateien unter `Tests/`
 enthalten; diese werden nur an Prüfprogramme gelinkt, niemals an Trainer.dylib.
 Rosetta ist zum Ausführen von Intelspielen und dieser Intelprüfprogramme nötig.
 Der komplette native Trainer und das Ingame-Overlay bleiben im eigenen Modul.
+
+## Gemeinsames ARM-/Intel-Paket
+
+Ein Trainer mit tatsächlich bestätigten Profilen für beide CPUs verwendet
+`architectures: ["arm64", "x86_64"]` in `Build.json`. Das einzelne `architecture`
+entfällt dabei. Ohne beide Schlüssel gilt weiterhin arm64; pro Profil ist die
+jeweilige Architektur einzeln festgelegt. Der Xcode-Generator baut ein gemeinsames
+`Trainer.dylib`, und die Paketphase prüft beide CPU-Objektsätze mit den echten
+Bridge-, Native- und HiDPI-Tests. Unterschiedliche Kataloge werden abgewiesen.
+
+Die App akzeptiert nur exakt die in den Profilen enthaltenen CPU-Slices mit
+macOS-27-Mindestziel und gültigem Code-Siegel aller Architekturen. Unbekannte,
+doppelte, überlappende oder fehlende Slices sowie ungültige Fat-Tabellen bleiben
+abgewiesen. Bisherige einzelne ARM-/Intel-Pakete bleiben gültig. Downloads solcher
+Universal-Pakete nennen mindestens TrainerDock 1.2.6, damit ältere Apps sie nicht
+als kompatibel anbieten. App und Broker bleiben arm64.
+
+Eine ausdrücklich genehmigte GOG-Originalfreigabe verwendet
+`integrityApproval: "user-confirmed-gog-original"` und Store `GOG`; dieselben
+lückenlosen Dateihashes und Identitätsprüfungen gelten. Der Marker allein ersetzt
+keine konkrete Nutzerfreigabe oder Originalprüfung. DREDGE bindet ausschließlich
+GOG 1.5.3, Build 59048070897032907; Epic bleibt ein eigenes Profil.

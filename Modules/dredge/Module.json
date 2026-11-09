@@ -1,0 +1,425 @@
+{
+  "schemaVersion": 1,
+  "id": "dredge",
+  "name": "DREDGE",
+  "version": "0.2.0",
+  "profiles": [
+    {
+      "id": "epic-arm64-1.5.5",
+      "name": "Epic Games Store · 1.5.5",
+      "enabled": true,
+      "bundleIdentifier": "com.blacksaltgames.dredge",
+      "executable": "DREDGE",
+      "uuids": [
+        "8EB11154-7DB4-3EB3-8A41-B9BC859DEFED"
+      ],
+      "teamIdentifier": "",
+      "version": "1.5.5",
+      "store": "Epic Games Store",
+      "architecture": "arm64",
+      "epicAppName": "65c25644a2e0444d8766967a008b1d69",
+      "epicNamespace": "8b454b47f5544fc6829cf0fed42ebae0",
+      "epicBuildVersion": "prod-osx-2994.1",
+      "launchMode": "epic",
+      "signatureScope": "arm64-executable",
+      "signatureIdentifier": "com.blacksaltgames.dredge",
+      "signatureCDHash": "b9458e723ca2b1847a0702782fba573e5ad64092",
+      "fileChecks": [
+        {
+          "path": "Contents/MacOS/DREDGE",
+          "fileSize": 151024,
+          "offset": 0,
+          "length": 151024,
+          "sha256": "7413d06bc76159e7bdf3c81b9687cce1a29b3883595196e40459a95269643221"
+        },
+        {
+          "path": "Contents/Info.plist",
+          "fileSize": 1849,
+          "offset": 0,
+          "length": 1849,
+          "sha256": "5ce4caef32f4c518fd73e321a8b09649974d206d9214e78ec6aceccf4709bbd6"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 53216335,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "9f25af5e0e91e380ddb5784fd67fef06c7758f6719313f1fe6ce137949cfc1f0"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 53216335,
+          "offset": 8388608,
+          "length": 8388608,
+          "sha256": "63f131c98fc5dbe59a2d2f84d5826bd95fa3ecd7ecbc727425b78869098de952"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 53216335,
+          "offset": 16777216,
+          "length": 8388608,
+          "sha256": "88fe0cfe8470ad718bf8efb8988ae6df921a99e84043a00f1a54edfeebaea766"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 53216335,
+          "offset": 25165824,
+          "length": 8388608,
+          "sha256": "89de171fce281a0c5517dbc1cc6dda6683f79e39e93696e9863f0b135e941687"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 53216335,
+          "offset": 33554432,
+          "length": 8388608,
+          "sha256": "daccfa2bea606ae6748743f365b54d2cae25fdde765a69758d6059f4116d4817"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 53216335,
+          "offset": 41943040,
+          "length": 8388608,
+          "sha256": "3a01837f2debdf75dff75c0dc32158fc4d843ece3dfdcd6ce5d24d693397a13c"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 53216335,
+          "offset": 50331648,
+          "length": 2884687,
+          "sha256": "94f540d87a605598199c9315431b3a8b3fad8d13fe174dde4e1b141a1913811c"
+        },
+        {
+          "path": "Contents/Frameworks/libmonobdwgc-2.0.dylib",
+          "fileSize": 7051728,
+          "offset": 0,
+          "length": 7051728,
+          "sha256": "b7cb48cebdf18e767483c915ff15b878c7f9cec7b66e911e248195e5fd686843"
+        },
+        {
+          "path": "Contents/PlugIns/InControlNative.bundle/Contents/MacOS/InControlNative",
+          "fileSize": 307856,
+          "offset": 0,
+          "length": 307856,
+          "sha256": "68bdfaca2e20c57547526ad187104925a9ec42cd886d8ffa709296159438d588"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/Assembly-CSharp.dll",
+          "fileSize": 1475072,
+          "offset": 0,
+          "length": 1475072,
+          "sha256": "45cf4da376f7942ed51c298673a5129f8ddc51e5329e3b8383678ec930a9bfa9"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/UnityEngine.CoreModule.dll",
+          "fileSize": 1253376,
+          "offset": 0,
+          "length": 1253376,
+          "sha256": "5d755181dd82a2d731012d5d8e03eb70912321db264db0f99c66bd53b389425c"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/UnityEngine.InputLegacyModule.dll",
+          "fileSize": 26624,
+          "offset": 0,
+          "length": 26624,
+          "sha256": "ee0242cf3f9057ff546d26eec3fd5fa0555126bdd212d12d56393b3caedea76f"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/UnityEngine.InputModule.dll",
+          "fileSize": 12800,
+          "offset": 0,
+          "length": 12800,
+          "sha256": "39f7074021a25f5dccfc0534482b2f2b06e6a35308e60d6ceb1a19b52f07658b"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/UnityEngine.PhysicsModule.dll",
+          "fileSize": 104448,
+          "offset": 0,
+          "length": 104448,
+          "sha256": "08f221eea58f2d05bbd2e7165e7510c26d946fbdd5dd7d73b6e5fe2b5ad02439"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/UnityEngine.Physics2DModule.dll",
+          "fileSize": 123392,
+          "offset": 0,
+          "length": 123392,
+          "sha256": "4ee46c8f29e77622438c179b82400344c54aebfb236e7aa3063fdd9b63b3b311"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/InControl.dll",
+          "fileSize": 575488,
+          "offset": 0,
+          "length": 575488,
+          "sha256": "77fa4a908e9a950b8d9f8a027bccbbac09df64e525d330a63c4d0d90ea54467d"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/mscorlib.dll",
+          "fileSize": 4624384,
+          "offset": 0,
+          "length": 4624384,
+          "sha256": "09028381dfd2cad28d33c0076f5a4d7d15323998ffa3106fba24b511e4a54325"
+        }
+      ]
+    },
+    {
+      "id": "gog-x86_64-1.5.3-59048070897032907",
+      "name": "GOG · 1.5.3",
+      "enabled": true,
+      "bundleIdentifier": "com.blacksaltgames.dredge",
+      "executable": "DREDGE",
+      "uuids": [
+        "E18E02EE-BE72-3DC3-A3AD-C6B11B6CF6A2"
+      ],
+      "version": "1.5.3",
+      "bundleVersion": "0",
+      "store": "GOG",
+      "architecture": "x86_64",
+      "signatureScope": "sha256-original",
+      "integrityFiles": [
+        "Contents/MacOS/DREDGE",
+        "Contents/Info.plist",
+        "Contents/Frameworks/UnityPlayer.dylib",
+        "Contents/Frameworks/libmonobdwgc-2.0.dylib",
+        "Contents/PlugIns/InControlNative.bundle/Contents/MacOS/InControlNative",
+        "Contents/Resources/Data/Managed/Assembly-CSharp.dll",
+        "Contents/Resources/Data/Managed/UnityEngine.CoreModule.dll",
+        "Contents/Resources/Data/Managed/UnityEngine.InputLegacyModule.dll",
+        "Contents/Resources/Data/Managed/UnityEngine.InputModule.dll",
+        "Contents/Resources/Data/Managed/UnityEngine.PhysicsModule.dll",
+        "Contents/Resources/Data/Managed/UnityEngine.Physics2DModule.dll",
+        "Contents/Resources/Data/Managed/InControl.dll",
+        "Contents/Resources/Data/Managed/mscorlib.dll",
+        "Contents/Resources/goggame-1744110647.info",
+        "Contents/PlugIns/libDynamicLibraryLoaderHelper.dylib",
+        "Contents/PlugIns/x86_64/libGalaxyCSharpGlue.dylib",
+        "Contents/PlugIns/x86_64/libGalaxy64.dylib",
+        "Contents/Resources/Data/Managed/GalaxyCSharp.dll"
+      ],
+      "fileChecks": [
+        {
+          "path": "Contents/MacOS/DREDGE",
+          "fileSize": 52592,
+          "offset": 0,
+          "length": 52592,
+          "sha256": "46ac9b0106a8d5dab58669080ec6b2197f22b2948e4da170601d40253303fc5a"
+        },
+        {
+          "path": "Contents/Info.plist",
+          "fileSize": 1849,
+          "offset": 0,
+          "length": 1849,
+          "sha256": "51071c25a9f995b40939f830a94f1939a353be4f404fe0eceed14c30f051801d"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 28196079,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "9a8897cd5c3ba6fb66c3e5f222fa3d56fb07d08c6608619329e7e6fdb658d7f3"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 28196079,
+          "offset": 8388608,
+          "length": 8388608,
+          "sha256": "802a4bc2bc6714d6e567820c11701c12b26435ce45909e4c8b4f31c32544de23"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 28196079,
+          "offset": 16777216,
+          "length": 8388608,
+          "sha256": "6903aaf5930e554fb44f7da2f06eb2b1d6c4038f145ce1f6aeb76c9c3e5c493d"
+        },
+        {
+          "path": "Contents/Frameworks/UnityPlayer.dylib",
+          "fileSize": 28196079,
+          "offset": 25165824,
+          "length": 3030255,
+          "sha256": "c0312443bfeb43ac661f658498f15b409ef22ccf5b9106d10d32109389c41cd5"
+        },
+        {
+          "path": "Contents/Frameworks/libmonobdwgc-2.0.dylib",
+          "fileSize": 3561648,
+          "offset": 0,
+          "length": 3561648,
+          "sha256": "7aaa101b249734e15672d80605befde358cdf92b17648beb3b1ae92e7de8d0ea"
+        },
+        {
+          "path": "Contents/PlugIns/InControlNative.bundle/Contents/MacOS/InControlNative",
+          "fileSize": 307856,
+          "offset": 0,
+          "length": 307856,
+          "sha256": "f324e8644c54ca0bee4ad0d740531c7e332503b6cf00305979a5abe97e3544ff"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/Assembly-CSharp.dll",
+          "fileSize": 1457664,
+          "offset": 0,
+          "length": 1457664,
+          "sha256": "e9cba9660bec7c700b93d99a5cc48d23dc7d25d8cd35ee3623d7ac7a15f1d35e"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/UnityEngine.CoreModule.dll",
+          "fileSize": 1253376,
+          "offset": 0,
+          "length": 1253376,
+          "sha256": "5d755181dd82a2d731012d5d8e03eb70912321db264db0f99c66bd53b389425c"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/UnityEngine.InputLegacyModule.dll",
+          "fileSize": 26624,
+          "offset": 0,
+          "length": 26624,
+          "sha256": "ee0242cf3f9057ff546d26eec3fd5fa0555126bdd212d12d56393b3caedea76f"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/UnityEngine.InputModule.dll",
+          "fileSize": 12800,
+          "offset": 0,
+          "length": 12800,
+          "sha256": "39f7074021a25f5dccfc0534482b2f2b06e6a35308e60d6ceb1a19b52f07658b"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/UnityEngine.PhysicsModule.dll",
+          "fileSize": 104448,
+          "offset": 0,
+          "length": 104448,
+          "sha256": "08f221eea58f2d05bbd2e7165e7510c26d946fbdd5dd7d73b6e5fe2b5ad02439"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/UnityEngine.Physics2DModule.dll",
+          "fileSize": 123392,
+          "offset": 0,
+          "length": 123392,
+          "sha256": "4ee46c8f29e77622438c179b82400344c54aebfb236e7aa3063fdd9b63b3b311"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/InControl.dll",
+          "fileSize": 575488,
+          "offset": 0,
+          "length": 575488,
+          "sha256": "01062a260d2238d263b1083f99cec3d3d4bf6ef11c27389894bb820c2aa4f411"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/mscorlib.dll",
+          "fileSize": 4624384,
+          "offset": 0,
+          "length": 4624384,
+          "sha256": "09028381dfd2cad28d33c0076f5a4d7d15323998ffa3106fba24b511e4a54325"
+        },
+        {
+          "path": "Contents/Resources/goggame-1744110647.info",
+          "fileSize": 511,
+          "offset": 0,
+          "length": 511,
+          "sha256": "80c4c102d3e530097d75c177656feb0edcf7b1fe70853606cac7ffee23fc78d5"
+        },
+        {
+          "path": "Contents/PlugIns/libDynamicLibraryLoaderHelper.dylib",
+          "fileSize": 263120,
+          "offset": 0,
+          "length": 263120,
+          "sha256": "9f57c695e9f1d3ed4356f351e110bfa61959f0bc20b4edaf1c0ea4065052d4cf"
+        },
+        {
+          "path": "Contents/PlugIns/x86_64/libGalaxyCSharpGlue.dylib",
+          "fileSize": 1520064,
+          "offset": 0,
+          "length": 1520064,
+          "sha256": "8dfc5ff9366f445ef9fdbe3af47be728c1cba803611f8e609f51854d744dfc86"
+        },
+        {
+          "path": "Contents/PlugIns/x86_64/libGalaxy64.dylib",
+          "fileSize": 37964288,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "798434a41acf73873f5081d298829f0f7c910c40275fe34ff792c9dba6ab6eb4"
+        },
+        {
+          "path": "Contents/PlugIns/x86_64/libGalaxy64.dylib",
+          "fileSize": 37964288,
+          "offset": 8388608,
+          "length": 8388608,
+          "sha256": "3e0ad16ebd8ce2b065824acbcb4a7455b56c8041c548a339aca49ff176c0704d"
+        },
+        {
+          "path": "Contents/PlugIns/x86_64/libGalaxy64.dylib",
+          "fileSize": 37964288,
+          "offset": 16777216,
+          "length": 8388608,
+          "sha256": "9d0f2aa3a298c1a2a0e8e6e2c00081aa831d84fcce6b32b395fb462f7780b543"
+        },
+        {
+          "path": "Contents/PlugIns/x86_64/libGalaxy64.dylib",
+          "fileSize": 37964288,
+          "offset": 25165824,
+          "length": 8388608,
+          "sha256": "fe8d42e9f85721a9298dc0443dbfb88168cd5e349184a4d15c7d83e45396bc17"
+        },
+        {
+          "path": "Contents/PlugIns/x86_64/libGalaxy64.dylib",
+          "fileSize": 37964288,
+          "offset": 33554432,
+          "length": 4409856,
+          "sha256": "aea8e166660b80af04941a6a10db25243c065341ac152389b30ac8ed9b8b764a"
+        },
+        {
+          "path": "Contents/Resources/Data/Managed/GalaxyCSharp.dll",
+          "fileSize": 423936,
+          "offset": 0,
+          "length": 423936,
+          "sha256": "00b146a38857abea1f87ff4a2d68f26814b0ba4cb1143bb5b022b8343d59befd"
+        }
+      ],
+      "integrityApproval": "user-confirmed-gog-original",
+      "gogGameId": "1744110647",
+      "gogBuildId": "59048070897032907"
+    }
+  ],
+  "selectionVersion": "dredge-15-v1",
+  "groups": [
+    {
+      "id": "boat",
+      "title": "Boot",
+      "symbol": "sailboat",
+      "features": [
+        0,
+        3,
+        11
+      ]
+    },
+    {
+      "id": "inventory",
+      "title": "Geld & Ausrüstung",
+      "symbol": "shippingbox",
+      "features": [
+        1,
+        2,
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    {
+      "id": "fishing",
+      "title": "Fischen & Bergen",
+      "symbol": "fish",
+      "features": [
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "id": "time",
+      "title": "Spiel & Zeit",
+      "symbol": "clock",
+      "features": [
+        12,
+        13,
+        14
+      ]
+    }
+  ]
+}

@@ -353,8 +353,8 @@ def package_module(build_root, item):
     record = dict(version=current, fingerprint=item["fingerprint"],
                   url=BASE_URL + f"trainer-{identifier}-v{current}/{archive.name}",
                   sha256=hashlib.sha256(archive.read_bytes()).hexdigest(), size=archive.stat().st_size,
-                  minimumLauncherVersion="1.0.0", moduleABI=1,
-                  architecture=config.get("architecture", "arm64"), manifest=manifest)
+                  minimumLauncherVersion="1.2.6" if len(config.get("architectures",[]))>1 else "1.0.0", moduleABI=1,
+                  architecture="universal" if len(config.get("architectures",[]))>1 else config.get("architecture", "arm64"), manifest=manifest)
     write_json(destination / (archive.stem + ".json"), record)
     return record
 
