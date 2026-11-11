@@ -124,6 +124,14 @@ TrainerDock-App zeigt und lädt neue Trainer ohne App-Update. Neue Modul-/Xcode-
 Katalogmetadaten oder Buildskripte allein rechtfertigen keinen App-Release. Die
 App-Inhaltsprüfung und eng begrenzte Altbeleg-Migration stehen in docs/RELEASING.md.
 
+Veröffentlichungsbuilds übernimmt standardmäßig GitHub Actions. Im Plan
+`launcher.changed` prüfen: Bei `false` keine App-Version erhöhen, keinen App-Tag
+setzen und weder Launcherbuild noch `publish-launcher`/`script/release.py` ausführen.
+Unerwartetes `true` anhand der tatsächlichen Hoständerungen untersuchen. Nur echte
+Appänderungen oder eine benötigte neue Hostschnittstelle rechtfertigen ein
+App-Update. `catalogChanged` allein kann eine reine Beleg-Migration sein und
+erfordert ebenfalls keinen Produktneubau.
+
 TrainerDock enthält keine gebündelten Trainerbibliotheken. Für ein **neues Spiel**
 eine neue Modul-ID anlegen; bei **Spielupdates, weiteren Stores und Korrekturen**
 das vorhandene `Modules/<id>` weiterentwickeln. Bisherige geprüfte Profile und IDs

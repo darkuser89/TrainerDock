@@ -317,6 +317,14 @@ korrekt meldete. Nur die erfassten Originaldateien und Hashes freigeben.
 Keine Spielsignaturen oder Schutzmechanismen verändern; weitere Builds bleiben
 ohne eigene Prüfung und Freigabe gesperrt.
 
+Nach erneut fehlerfreier Steam-Dateiprüfung hat der Nutzer zusätzlich ausschließlich
+Steam-Build **26540391**, Bundle **4.70**, arm64-UUID
+`90ACDF11-4B80-34A5-B802-4F09782742CF` für `sha256-original` genehmigt.
+Das eigene Profil bindet Hauptdatei und Info.plist in 28 lückenlosen Abschnitten.
+Die bisherige Buildfreigabe bleibt unverändert. `NMSBuilds.h` trennt alle 23
+nativen Einstiege/Adressen; unbekannte UUIDs oder Bindungen dürfen nie auf den
+anderen Build zurückfallen.
+
 ## App-Updates ohne zusätzliche Signierung
 
 Neue Trainer erscheinen ausschließlich über den Onlinekatalog und sind mit einer

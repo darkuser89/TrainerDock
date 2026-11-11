@@ -6,11 +6,18 @@ Frame-Zustellung, TrainerDock-Steuerprotokoll und HiDPI-Overlay im isolierten Pa
 
 ## Buildbindung
 
-Steam Build-ID 26386568, Bundle 4.70, arm64-UUID
-`1FABCC98-D6B6-3905-BF1B-823BD5033DA9`. Die Originalsignatur ist ungültig; der Nutzer
-hat nach positiver Steam-Dateiprüfung ausschließlich diesen Build für vollständige
-SHA-256-Prüfungen von Hauptdatei und Info.plist freigegeben. Keine Originaldatei wird
-verändert. Andere Store- oder Buildvarianten werden nicht freigegeben.
+| Steam-Build | Bundle | arm64-UUID | Profil |
+| --- | --- | --- | --- |
+| 26386568 | 4.70 | `1FABCC98-D6B6-3905-BF1B-823BD5033DA9` | `steam-arm64` |
+| 26540391 | 4.70 | `90ACDF11-4B80-34A5-B802-4F09782742CF` | `steam-arm64-26540391` |
+
+Der Nutzer hat nach jeweils positiver Steam-Dateiprüfung genau diese Originale
+für vollständige SHA-256-Prüfungen von Hauptdatei und Info.plist freigegeben.
+Das neue Profil bindet beide Dateien lückenlos in 28 Abschnitten. Die Spielsignaturen
+bleiben unverändert. Andere Store- oder Buildvarianten werden nicht freigegeben.
+`Sources/NMSBuilds.h` hält die 23 unabhängig aufgelösten Einstiege, Eingabe-Globals
+und VTable-Adressen beider Builds getrennt; unbekannte UUIDs oder Bindungen liefern
+keine Adresse. Das ursprüngliche Profil und seine Prüfsummen bleiben erhalten.
 
 ## Laufzeitvertrag
 
@@ -29,10 +36,10 @@ Overlayanforderung gebunden und flackert nicht mit einzelnen Capture-Rückmeldun
 Bildschirmposition, fängt keine Klicks ab und verschwindet beim Schließen oder
 Fokusverlust. Keine globalen Cursor-hide/unhide-Zähler werden durch den Overlaycursor verändert.
 
-## Prüfung
+## Prüfung: Steam-Build 26386568
 
 Die native Zustellung über `MetalKitApplication -update` und die Metadatenbindung
-wurden im aktuellen Originalprozess bestätigt. In einem gebündelten Test wurden
+wurden damals im freigegebenen Originalprozess bestätigt. In einem gebündelten Test wurden
 elf rücknehmbare native Schalter/Faktoren gesetzt und zurückgelesen: Gesundheit,
 Ausdauer, Lebenserhaltung, Sprintfaktor, Gefahrenschutz, Sprachdarstellung,
 Herstellungsfreigabe, Schaden, Schiffsüberhitzung, Spielgeschwindigkeit und
@@ -51,3 +58,28 @@ Spielstarts oder Funktionsprüfungen nach dieser Bestätigung durchgeführt.
 
 Synthetische Tests prüfen Speicher-Rücklesen, Baselines, fremde Änderungen,
 GameThread-Grenzen, Einmalaktionen und Netzwerk-unabhängige Bedienung.
+
+## Updateprüfung: Steam-Build 26540391
+
+In genau einer freigegebenen Spielinstanz mit vorhandenem Spielstand wurden der
+originale Update-Rückruf, gültiger APPVIEW-/Save-UID-Kontext und die Metadatenbindung
+bestätigt. Dieselben elf rücknehmbaren Schalter/Faktoren wurden nativ gesetzt und
+zurückgelesen. Die eigenen skalaren Baselines wurden bytegenau nach dem Ausschalten
+verglichen; Atlas-Kosten wurden über ihren nativen Rücknahmepfad bestätigt.
+Der Steuerkanal meldete alle 30 Funktionen. Schalter und Glasregler (50 → 81 → 50 %)
+wurden mit echten UI-Eingaben bedient; ein sichtbarer Vektormauszeiger wurde beobachtet.
+Alle Testschalter waren vor dem vom Nutzer genehmigten regulären Beenden aus.
+
+Währungen und Inventargegenstände wurden bei diesem Update-Test nicht vergeben.
+Sämtliche 23 gebundenen Adressen wurden unabhängig am neuen Original aufgelöst;
+Spieler-, Inventar-, Scanner-, Schwierigkeits- und Eingabelayouts wurden anhand
+der originalen Aufrufer/Konstruktoren abgeglichen. Das ersetzt keinen erneuten
+vollständigen Kampf-, Quest- oder Ausrüstungstest und keinen FPS-Nachweis.
+Der alte Build wurde nicht erneut gestartet.
+
+Der private Builder `Tests/NoMansSky/BuildCandidate.py` prüft vor einem Spielstart
+Originalidentität, sämtliche Symboladressen, Buildisolation, Speicherleases,
+Bridge, 1×/2×-Overlay und 40.000 Leerlauf-/Pollframes. Er startet kein Spiel.
+Der Diagnosehelfer verwendet den tatsächlich laufenden Runtime-Adapter statt eine
+zweite Instanz anzulegen; Aufträge sind an Sitzung, Prozess, Anfrage und Frist gebunden.
+Diese Prüfer sind keine Produktquellen und werden nicht ausgeliefert.

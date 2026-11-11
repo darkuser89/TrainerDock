@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 // Synthetic memory/queue checks; never linked into the delivered trainer.
 #import "NMSAdapter.h"
+#import "NMSBuilds.h"
 #import "GameBridge.h"
 #import "OverlayCursor.h"
 #import <objc/runtime.h>
@@ -57,6 +58,16 @@ int main(void){@autoreleasepool{
         check(a && (!a->numeric || (isfinite(a->initial) && a->minimum<=a->initial && a->initial<=a->maximum)),"catalog bounds");
         for(NSInteger j=i+1;j<MTFeatureCount;j++){const MTFeatureInfo *b=MTFeatureInfoAt(j);check(a->key!=b->key || a->modifiers!=b->modifiers,"unique hotkeys");}
     }
+    check(MTNMSBuildUUIDSupported(MTNMSOriginalUUID) && MTNMSBuildUUIDSupported(MTNMSUpdatedUUID),"only both explicitly bound original builds accepted");
+    check(!MTNMSBuildUUIDSupported(nil) && !MTNMSBuildUUIDSupported(@"00000000-0000-0000-0000-000000000000"),"unknown UUID rejected");
+    for(NSUInteger i=0;i<sizeof(MTNMSNativeBindings)/sizeof(*MTNMSNativeBindings);i++){
+        const MTNMSNativeBinding *b=&MTNMSNativeBindings[i];
+        check(MTNMSPreferredAddress(MTNMSOriginalUUID,b->original)==b->original,"old build retains its original binding");
+        check(MTNMSPreferredAddress(MTNMSUpdatedUUID,b->original)==b->updated && b->updated!=b->original,"updated build selects its independently resolved binding");
+        check(!MTNMSPreferredAddress(@"unknown",b->original),"a known key cannot bypass build identity");
+        for(NSUInteger j=0;j<i;j++)check(MTNMSNativeBindings[j].original!=b->original,"binding keys unique");
+    }
+    check(!MTNMSPreferredAddress(MTNMSOriginalUUID,0x100000000) && !MTNMSPreferredAddress(MTNMSUpdatedUUID,0x100000000),"unlisted native address never falls back across builds");
     check(!MTNMSProcessBuildMatches(),"test process cannot bind the original game");
     MTNMSAdapter *native=[MTNMSAdapter new];
     check(![native applyFeature:MTFeatureHealth wanted:YES value:0].active,"off-frame writes rejected");

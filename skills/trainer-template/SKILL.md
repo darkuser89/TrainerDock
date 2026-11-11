@@ -108,6 +108,26 @@ Regelung nicht als abwählbares Liquid-Glass-Feature ersetzen. Vertrag und Tests
 Lies bei Releasevorbereitung den kanonischen Ablauf
 [Neue Trainer und Spielupdates veröffentlichen](/Users/jbw/Documents/MHT/docs/RELEASING.md#neue-trainer-und-spielupdates-veröffentlichen).
 
+### Neue Trainer ohne neue App-Version
+
+Neue Trainer und Trainerupdates über eigene `trainer-<id>-v<version>`-Releases und
+den Onlinekatalog veröffentlichen. Eine kompatible installierte TrainerDock-App
+findet und lädt sie ohne App-Update. Veröffentlichungsbuilds standardmäßig durch
+GitHub Actions ausführen lassen; lokal nur bei entsprechendem Auftrag.
+
+Im Plan `launcher.changed` prüfen: Bei `false` keine App-Version erhöhen, keinen
+`vX.Y.Z`-Tag setzen und weder Launcher bauen noch `publish-launcher` oder
+`script/release.py` für das Trainerrelease ausführen. Neue Spiele, Modul-/Xcode-Ziele,
+Katalogeinträge, Tests, Dokumentation oder Buildskripte allein sind kein App-Update.
+Bei unerwartetem `true` zuerst die tatsächlichen Hoständerungen prüfen. Nur echte
+Appänderungen oder eine benötigte neue Hostschnittstelle rechtfertigen eine neue
+App-Version; eine notwendige Kompatibilitätsänderung ausdrücklich benennen.
+
+`catalogChanged: true` kann ausschließlich eine bestätigte Beleg-Migration bedeuten.
+Das verlangt keinen Produktneubau. Die Inhaltsprüfung `launcher_content_fingerprint`
+und ihre an Paket-SHA-256 und Buildfingerabdruck gebundene Migration erhalten;
+keine Belege erfinden oder alte Releases ändern. Details stehen in docs/RELEASING.md.
+
 ### Nur tatsächlich geänderte Trainer bauen und veröffentlichen
 
 Vor Build und Veröffentlichung `python3 -B script/trainer_distribution.py plan`
@@ -139,7 +159,8 @@ und veröffentlicht unveränderliche Prereleases `trainer-<id>-v<version>`.
 Keinen App-Tag und keinen Launcher-Gesamtbuild für ein reines Trainerupdate erzwingen.
 `script/release.py` erstellt ausschließlich das App-Paket.
 
-Lokal aus dem vollständig committeten Quellstand veröffentlichen. Zuerst
+Nur bei beauftragter lokaler Veröffentlichung aus dem vollständig committeten
+Quellstand arbeiten. Zuerst
 `script/trainer_distribution.py plan`, dann
 alle im Bauplan genannten Trainer über den Release-Buildwrapper bauen; anschließend
 `package` und `publish-trainers --commit <vollständiger-quellcommit>`. Das Skript hat

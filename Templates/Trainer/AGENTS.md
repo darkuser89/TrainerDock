@@ -29,6 +29,16 @@ selbst nur bei einem Auftrag zur Verbesserung der Vorlage verändern.
   verwenden. Alte Releases und installierte Versionen erhalten; keine Binaries
   in Git oder die App kopieren, keine veröffentlichten Bytes/Prüfsummen ersetzen.
   Lokale Buildprodukte werden nicht automatisch im Launcher installiert.
+- Neue Trainer und Trainerupdates über Einzelreleases und den Onlinekatalog für
+  die kompatible vorhandene App bereitstellen. Veröffentlichungsbuilds durch
+  GitHub Actions ausführen lassen, sofern kein lokaler Build beauftragt ist.
+  Bei `launcher.changed: false` keine App-Version erhöhen, keinen `vX.Y.Z`-Tag
+  setzen und keinen Launcher bauen oder veröffentlichen. Neue Modul-/Xcode-Ziele,
+  Katalogeinträge, Tests, Doku und Buildskripte allein sind kein App-Update.
+  Unerwartetes `true` vor der Veröffentlichung untersuchen. Nur echte Hoständerungen
+  oder eine benötigte neue Schnittstelle rechtfertigen eine neue App-Version.
+  `catalogChanged` allein darf keinen Produktneubau erzwingen; bestätigte
+  App-Inhaltsbelege gemäß `docs/RELEASING.md` erhalten.
 - Vor Builds/Veröffentlichungen `python3 -B script/trainer_distribution.py plan`
   gegen den bestätigten Onlinekatalog prüfen. Nur neue oder tatsächlich inhaltlich
   geänderte Trainer aus `modules` bauen und veröffentlichen; bei leerer Liste

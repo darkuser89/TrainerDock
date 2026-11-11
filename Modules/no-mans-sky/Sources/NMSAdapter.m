@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 #import "NMSAdapter.h"
+#import "NMSBuilds.h"
 #import "MemoryAccess.h"
 #import <AppKit/AppKit.h>
 #import <objc/runtime.h>
@@ -10,9 +11,8 @@
 #import <os/log.h>
 #include <math.h>
 
-// Every engine-specific constant below belongs ONLY to this arm64 UUID.
-// A Steam update changes the UUID and is rejected before any engine access.
-static NSString *const buildUUID=@"1FABCC98-D6B6-3905-BF1B-823BD5033DA9";
+// Build selection precedes every native access; unlisted original UUIDs fail closed.
+static NSString *selectedBuildUUID;
 static NSMutableArray<dispatch_block_t> *pending;
 static IMP originalUpdate;
 static BOOL hookInstalled;
@@ -42,13 +42,17 @@ BOOL MTNMSProcessBuildMatches(void){
             if(c.cmdsize<sizeof(c) || c.cmdsize>h->sizeofcmds-pos)return NO;
             if(c.cmd==LC_UUID && c.cmdsize==sizeof(struct uuid_command)){
                 struct uuid_command u;memcpy(&u,bytes+pos,sizeof(u));
-                if(![[[NSUUID alloc]initWithUUIDBytes:u.uuid].UUIDString isEqual:buildUUID])return NO;
-                imageBase=(uintptr_t)h;return YES;
+                NSString *uuid=[[NSUUID alloc]initWithUUIDBytes:u.uuid].UUIDString;
+                if(!MTNMSBuildUUIDSupported(uuid))return NO;
+                selectedBuildUUID=uuid;imageBase=(uintptr_t)h;return YES;
             }pos+=c.cmdsize;
         }
     }return NO;
 }
-static uintptr_t address(uintptr_t preferred){return imageBase+(preferred-UINT64_C(0x100000000));}
+static uintptr_t address(uintptr_t preferred){
+    uintptr_t bound=MTNMSPreferredAddress(selectedBuildUUID,preferred);
+    return imageBase && bound ? imageBase+(bound-UINT64_C(0x100000000)) : 0;
+}
 ptrdiff_t MTNMSCaptureIvarOffset(Class viewClass){
     Ivar field=viewClass ? class_getInstanceVariable(viewClass,"isMouseCaptured") : NULL;
     if(!field)return -1;
@@ -91,7 +95,7 @@ MTSessionKind MTNMSSessionKind(BOOL playing,BOOL enabled,const uint32_t sessions
 @end
 
 // The game's MetalKitApplication -update invokes IApp Update and Draw synchronously
-// (arm64 0x102f1ec38, vtable slots 0x20 and 0x28). Drain AFTER the original update.
+// (per-build entry in NMSBuilds.h, vtable slots 0x20 and 0x28). Drain AFTER the original update.
 // No executable page, game vtable, or game file is patched.
 static void frame(id self,SEL cmd){
     onFrame=YES;[inputAdapter maintainOverlayInput];onFrame=NO;

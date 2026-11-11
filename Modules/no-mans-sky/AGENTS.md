@@ -4,10 +4,20 @@ Root-AGENTS.md und docs/MODULES.md beachten. Der vollständige Trainer bleibt in
 diesem Modul. Nur echte native Funktionen; keine Demoquellen im Produkt.
 Die alte Referenz unter Documents/Codex bleibt unverändert.
 
-Native Adressen gehören ausschließlich zur dokumentierten arm64-UUID des Steam-
-Builds 26386568. Vor weiteren Updates Originalfunktionen und Layouts erneut prüfen;
-keine automatische UUID- oder Hashfreigabe. Der Nutzer genehmigte für genau diesen
-Build sha256-original. Keine Netzwerksperre einbauen.
+Native Adressen sind getrennt in `Sources/NMSBuilds.h` gebunden:
+Steam-Build 26386568 (`1FABCC98-D6B6-3905-BF1B-823BD5033DA9`) und 26540391
+(`90ACDF11-4B80-34A5-B802-4F09782742CF`), jeweils arm64 und Bundle 4.70.
+Der Nutzer genehmigte nach positiver Steam-Dateiprüfung beide exakten Builds
+für sha256-original. Alte Profile, IDs und Hashes erhalten. Vor weiteren Updates
+Originalfunktionen, GameThread, Layouts und Eingabe erneut prüfen; keine
+UUID-/Hashfreigabe oder pauschale Adressverschiebung. Keine Netzwerksperre einbauen.
+
+`Tests/NoMansSky/BuildCandidate.py <Spiel.app> --profile <id>` baut nur einen
+privaten Entwicklungskandidaten und führt Original-, Native-, Bridge-, HiDPI-
+und Leerlaufprüfungen aus. Kein Spielstart. Der Prüfer nutzt den echten Runtime-
+Adapter; eine zweite Adapterinstanz würde dessen Frame-Maintenance verdrängen.
+Geladene Prüfbibliotheken nicht überschreiben. Veröffentlichungsbuilds übernimmt
+GitHub Actions nur für dieses tatsächlich geänderte Modul.
 
 Build: python3 -B script/build.py --module no-mans-sky. macOS 27+ und arm64.
 Native Wirkungsprüfungen und offene Grenzen in README.md dokumentieren.

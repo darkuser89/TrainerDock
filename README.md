@@ -26,7 +26,7 @@ den aktuellen Katalog. Eine kompatible vorhandene App genügt.
 | House Flipper | Steam | 1.26252 (Build 25247477) | Rosetta |
 | inZOI | Steam | Bundle 5.4.95 (Build 26264076) | |
 | Lies of P | Steam | 1.14.0 | |
-| No Man’s Sky | Steam | Bundle 4.70 (Build 26386568) | |
+| No Man’s Sky | Steam | Bundle 4.70 (Builds 26386568, 26540391) | |
 | Prodeus | Steam | 1.0.2 (Build 9679369) | **Nur Einzelspieler** |
 | Resident Evil 2 | Mac App Store | 1.0.2 | |
 | Resident Evil 3 | Mac App Store | 1.0.0 | |

@@ -29,6 +29,11 @@ script/build.py --module <id> --configuration Release. Wenn die Veröffentlichun
 beauftragt ist, Quellen, Tests, Profile und das regenerierte Xcode-Projekt gemeinsam
 auf main bringen und Paket/Katalog bis zum bestätigten Download prüfen.
 Keine Trainerbibliotheken in den Launcher einbauen oder alte Releases ersetzen.
+Neue Trainer über Einzelreleases und Onlinekatalog für die vorhandene kompatible
+App veröffentlichen. GitHub Actions baut die Veröffentlichungsprodukte. Bei
+launcher.changed: false keine App-Version erhöhen, keinen App-Tag setzen und keinen
+Launcher bauen/veröffentlichen. Bei unerwartetem true erst die Hoständerungen prüfen;
+neue Trainer, Xcode-Ziele oder Katalogeinträge allein sind kein App-Update.
 Prüfe vor Builds und Veröffentlichung script/trainer_distribution.py plan gegen
 den letzten bestätigten Onlinekatalog. Nur neue oder tatsächlich geänderte Trainer
 unter modules bauen und veröffentlichen; bei leerer Liste keine Trainerversionen
@@ -52,6 +57,11 @@ gegebenenfalls tatsächlich betroffene gemeinsame Abhängigkeiten. Unterscheide
 Paketversion, Spielbuild und Store. Bereite eine neue unveränderliche Einzelversion
 mit geprüftem Katalogeintrag vor; veröffentliche sie im Umfang meines Auftrags.
 Keine Spielstarts oder Ingame-Prüfungen ohne entsprechenden Auftrag ableiten.
+Trainerupdates über den Onlinekatalog ohne neue App-Version veröffentlichen.
+GitHub Actions baut die Veröffentlichungsprodukte. Bei launcher.changed: false
+keinen Launcher bauen oder veröffentlichen und keine App-Version/Tags erhöhen.
+Nur tatsächliche Hoständerungen oder eine benötigte neue Schnittstelle rechtfertigen
+ein App-Update; den konkreten Grund benennen.
 Vorher script/trainer_distribution.py plan prüfen: Nur neue oder inhaltlich
 geänderte Trainer unter modules bauen/veröffentlichen, bei leerer Liste keine.
 Reine Buildskript-/Test-/Doku-/Appversionsänderungen und Fingerabdruck-Formatwechsel
