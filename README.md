@@ -1,5 +1,10 @@
 # TrainerDock · Mac Game Trainers
 
+**Deutsch** · [English](README.en.md) · [Română](README.ro.md)
+
+[App herunterladen](https://github.com/darkuser89/TrainerDock/releases/latest) ·
+[Ausführliche Bedienungsanleitung](docs/USER_GUIDE.de.md)
+
 Ein gemeinsamer macOS-Launcher für die bereitgestellten Trainer. Installierte Spiele
 stehen links, die jeweiligen Trainerfunktionen und der Startknopf rechts. Unter
 „Trainer & Spielpfade“ lässt sich jede Spiele-App einzeln auswählen.
@@ -73,6 +78,8 @@ folgt sie der primären macOS-Sprache; alle anderen Sprachen verwenden Englisch.
 Unter „Trainer & Spielpfade → App-Sprache“ lässt sich die Sprache selbst wählen
 oder wieder „Systemsprache“ einstellen. Die Auswahl bleibt gespeichert und wird
 nach einem Neustart von TrainerDock übernommen.
+Die Sprachwahl betrifft die Launcher-Oberfläche; die Funktionskataloge und
+Ingame-Trainer haben weiterhin ihre eigenen deutschen Texte.
 
 Liquid Glass ist dauerhaft aktiviert, auch im Ingame-Overlay. TrainerDock benötigt
 macOS 27 oder neuer und verwendet natives AppKit-Glas.
@@ -89,7 +96,10 @@ Auswahl und Pfade liegen in den Benutzereinstellungen der Anwendung.
 
 ## Voraussetzungen
 
-Apple Silicon, **macOS 27 oder neuer**, Xcode mit macOS-27-SDK oder neuer.
+Zum Benutzen: Apple Silicon und **macOS 27 oder neuer** sowie ein unterstützter
+Originalbuild des jeweiligen Spiels. Internet wird für Katalog und Downloads benötigt.
+Intel-Spielprofile benötigen zusätzlich Rosetta. Xcode mit macOS-27-SDK oder neuer
+ist nur für die Entwicklung nötig, nicht für die heruntergeladene App.
 
 ## GitHub-Builds und Downloads
 
@@ -98,6 +108,8 @@ baut mit Xcode 27 ausschließlich neue oder tatsächlich geänderte Produkte.
 Grundlage ist der zuletzt erfolgreich veröffentlichte Trainerkatalog. Reine
 Launcher-, Dokumentations- oder Buildskriptänderungen erzeugen keine Trainerupdates.
 Synthetische Tests und Signaturprüfungen müssen bestehen; Pull Requests veröffentlichen nichts.
+App und Trainer haben getrennte Buildjobs; geänderte Trainer werden mit höchstens
+drei parallelen Jobs gebaut. Nur erfolgreich geprüfte Pakete werden veröffentlicht.
 
 Ein geänderter Launcher erhält einen eigenen stabilen
 [GitHub Release](https://github.com/darkuser89/TrainerDock/releases/latest)
@@ -134,7 +146,7 @@ Updater muss einmal manuell aus dem GitHub Release installiert werden.
 `TrainerDock.xcodeproj` in Xcode öffnen, Scheme **TrainerDock** wählen und mit **⌘ R** bauen
 und den Launcher starten. Das Projekt enthält ein natives App-Target und für jeden
 Trainer ein eigenes natives Dylib-Target. **TrainerDock-Launcher** baut nur die Oberfläche;
-**Trainer-<spiel-id>** baut ausschließlich den jeweiligen vollständigen Trainer.
+`Trainer-<spiel-id>` baut ausschließlich den jeweiligen vollständigen Trainer.
 Synthetische Prüfungen gehören zum Build; Spiele werden dabei nicht gestartet.
 
 Vor dem ersten lokalen Build `brew install libarchive` ausführen. Nur die Header
@@ -167,6 +179,9 @@ Spieladressen oder simulierte Cheatwirkungen.
 
 Entwicklung und neue Module: [AGENTS.md](AGENTS.md),
 [Modulanleitung](docs/MODULES.md), [Architektur](docs/ARCHITECTURE.md).
+
+Die drei README-Fassungen und Bedienungsanleitungen beschreiben denselben Stand.
+Bei Änderungen an Bedienung, Voraussetzungen oder Spieleliste alle Sprachen mitpflegen.
 
 Build- und synthetische Tests sind keine Ingame-Nachweise. Konkrete native
 Prüfungen und offene Grenzen stehen in den README-Dateien der jeweiligen Module.

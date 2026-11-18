@@ -13032,9 +13032,27 @@
 			"path" = "docs/RELEASING.md";
 			"sourceTree" = "SOURCE_ROOT";
 		};
+		"162D5A2ACCEB7203508C36D5" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "docs/USER_GUIDE.de.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"E11EBA5B5C1E3217DB150EE0" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "docs/USER_GUIDE.en.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"908C4C2E1ACF0FF2BDA8D6A0" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "docs/USER_GUIDE.ro.md";
+			"sourceTree" = "SOURCE_ROOT";
+		};
 		"558FBFC0D83238F684619786" = {
 			"isa" = "PBXGroup";
-			"children" = ("FFC40CC4C7B0F65453EE472A", "C1F4313CBF72C17CE422C84C", "C774F91E36F30ADBA46834E9", "6CA737CBAF5098916D5D7EF5", "0366CCF11E008425F124F1FC");
+			"children" = ("FFC40CC4C7B0F65453EE472A", "C1F4313CBF72C17CE422C84C", "C774F91E36F30ADBA46834E9", "6CA737CBAF5098916D5D7EF5", "0366CCF11E008425F124F1FC", "162D5A2ACCEB7203508C36D5", "E11EBA5B5C1E3217DB150EE0", "908C4C2E1ACF0FF2BDA8D6A0");
 			"name" = "docs";
 			"sourceTree" = "<group>";
 		};
