@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "sourceRoot": "Sources",
+  "family": "Frostpunk",
+  "developmentOnly": false,
+  "sources": [
+    "TrainerFeatures.m",
+    "GameAdapter.m",
+    "NativeAdapter.m",
+    "GameBridge.m",
+    "SelectionSettings.m",
+    "GameProfile.m",
+    "MemoryAccess.m",
+    "TrainerMaterial.m",
+    "Overlay.m",
+    "OverlaySettings.m",
+    "OverlayShortcuts.m",
+    "Runtime.m",
+    "FrostpunkEngine.m",
+    "FrostpunkResources.m",
+    "OverlayCursor.m"
+  ],
+  "defines": [
+    "MT_GLASS_ALWAYS_ON=1"
+  ],
+  "catalogSources": [
+    "TrainerFeatures.m"
+  ],
+  "sdkSources": [
+    "MHTOverlayHost.m",
+    "MHTGlassIntensity.m"
+  ],
+  "architecture": "x86_64",
+  "testSuite": "mt",
+  "undefinedSymbols": [
+    "_SDL_PollEvent",
+    "_SDL_ShowCursor",
+    "_SDL_GetMouseFocus",
+    "_SDL_SetWindowGrab",
+    "_SDL_GetWindowGrab",
+    "_SDL_WarpMouseInWindow",
+    "_SDL_GetKeyboardFocus",
+    "_SDL_GetWindowID",
+    "_SDL_GetWindowFromID"
+  ],
+  "nativeContractTests": "Tests/Frostpunk/NativeContractTests.m",
+  "testSupportSources": [
+    "Tests/Frostpunk/EngineContractTests.m",
+    "Tests/Frostpunk/ResourceContractTests.m",
+    "Tests/Frostpunk/SDLFixture.m"
+  ]
+}

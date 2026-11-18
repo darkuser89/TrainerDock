@@ -9,7 +9,7 @@ Un lansator nativ pentru macOS, cu trainere independente pentru jocuri. Jocurile
 instalate apar în stânga, iar funcțiile trainerului și butonul de pornire în dreapta.
 Poți alege aplicația fiecărui joc în **Trainere și căi de instalare**.
 
-Proiectul conține în prezent **28 de trainere independente**. Tabelul prezintă
+Proiectul conține în prezent **29 de trainere independente**. Tabelul prezintă
 profilurile disponibile din `Modules/`; versiunile se referă la **joc**, nu la
 pachetele trainerelor, care au versiuni separate. Pachetele publicate sunt disponibile
 în catalogul din aplicație. Trainerele noi apar fără actualizarea aplicației:
@@ -26,6 +26,7 @@ folosește **Caută actualizări pentru trainere** într-o versiune compatibilă
 | Dome Keeper | Steam | 5.0.8.14 | |
 | DREDGE | Epic Games Store / GOG | Epic 1.5.5; GOG 1.5.3 | GOG folosește Rosetta |
 | Escape from Duckov | Steam | 2.3.30 | |
+| Frostpunk | Steam | 1.6.1 (Bundle 1.1.1, Build 15262773) | Rosetta |
 | Frostpunk 2 | Steam | 1.6.1 (Bundle 0.5.591, Build 24037022) | |
 | House Flipper | Steam | 1.26252 (Build 25247477) | Rosetta |
 | inZOI | Steam | Bundle 5.4.95 (Build 26264076) | |

@@ -365,6 +365,21 @@ zurücknehmen. Benutzermodule und Einstellungen bleiben außerhalb der App.
 Die vorhandene technische Ad-hoc-Codeversiegelung der arm64-Produkte bleibt bestehen;
 macOS-Schutzmechanismen nicht verändern. Keine privaten Schlüssel verwenden.
 
+## Frostpunk: eng begrenzte Originalfreigabe
+
+Der Nutzer hat nach fehlerfreier Steam-Dateiprüfung ausschließlich Steam-Build
+**15262773**, Bundle-Version **1.1.1 (20201216.0)**, für die vollständige
+Prüfung `sha256-original` ausdrücklich genehmigt. Die erneut gelesene
+x86_64-UUID ist `381A9DB7-5849-39B1-85BC-208861544E41`; das Hauptmenü zeigt
+Spielversion 1.6.1. Alle zwölf im Frostpunk-Profil erfassten Originaldateien mit ihren
+19 lückenlosen SHA-256-Prüfabschnitten vollständig prüfen. Dazu gehören neben den
+Framework-Linkmarkern die vier tatsächlich geladenen Bibliotheken unter
+`Contents/Frameworks/{SDL2,Ogg,Theora,Vorbis}.framework/Versions/A/` sowie SDLs
+geladene verschachtelte `hidapi.framework/Versions/A/hidapi`-Bibliothek.
+Keine stillen Hashupdates oder Freigaben weiterer Builds; Originaldateien,
+Signaturen und macOS-Schutz bleiben unverändert. Das Intelprofil verwendet Rosetta.
+Diese Freigabe gilt ausschließlich für Frostpunk, nicht für Frostpunk 2.
+
 ## Frostpunk 2: eng begrenzte Originalfreigabe
 
 Der Nutzer hat nach erfolgreicher Steam-Dateiprüfung ausschließlich Steam-Build

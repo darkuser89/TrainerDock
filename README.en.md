@@ -9,7 +9,7 @@ A native macOS launcher with independent game trainers. Installed games appear
 on the left; trainer controls and the launch button appear on the right.
 Choose each game’s application in **Trainers & Game Paths**.
 
-The current source tree contains **28 independent trainers**. The table lists
+The current source tree contains **29 independent trainers**. The table lists
 released profiles under `Modules/`; these are **game versions**, separate from
 trainer package versions. Published packages are available through the app’s
 trainer catalog. New trainers appear without updating the app: use **Check for
@@ -26,6 +26,7 @@ Trainer Updates** in a compatible installed version of TrainerDock.
 | Dome Keeper | Steam | 5.0.8.14 | |
 | DREDGE | Epic Games Store / GOG | Epic 1.5.5; GOG 1.5.3 | GOG uses Rosetta |
 | Escape from Duckov | Steam | 2.3.30 | |
+| Frostpunk | Steam | 1.6.1 (Bundle 1.1.1, Build 15262773) | Rosetta |
 | Frostpunk 2 | Steam | 1.6.1 (Bundle 0.5.591, Build 24037022) | |
 | House Flipper | Steam | 1.26252 (Build 25247477) | Rosetta |
 | inZOI | Steam | Bundle 5.4.95 (Build 26264076) | |

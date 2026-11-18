@@ -1,0 +1,221 @@
+{
+  "schemaVersion": 1,
+  "id": "frostpunk",
+  "name": "Frostpunk",
+  "version": "0.1.0",
+  "profiles": [
+    {
+      "id": "steam-x86_64-15262773",
+      "name": "Steam · 1.6.1",
+      "enabled": true,
+      "bundleIdentifier": "com.11bitstudios.frostpunk",
+      "executable": "Frostpunk",
+      "uuids": [
+        "381A9DB7-5849-39B1-85BC-208861544E41"
+      ],
+      "teamIdentifier": "",
+      "version": "1.1.1",
+      "store": "Steam",
+      "gameVersion": "1.6.1",
+      "architecture": "x86_64",
+      "steamAppId": "323190",
+      "steamBuildId": "15262773",
+      "signatureScope": "sha256-original",
+      "integrityApproval": "user-confirmed-steam-original",
+      "integrityFiles": [
+        "Contents/Info.plist",
+        "Contents/MacOS/Frostpunk",
+        "Contents/MacOS/libsteam_api.dylib",
+        "Contents/Frameworks/SDL2.framework/SDL2",
+        "Contents/Frameworks/Ogg.framework/Ogg",
+        "Contents/Frameworks/Theora.framework/Theora",
+        "Contents/Frameworks/Vorbis.framework/Vorbis",
+        "Contents/Frameworks/SDL2.framework/Versions/A/SDL2",
+        "Contents/Frameworks/Ogg.framework/Versions/A/Ogg",
+        "Contents/Frameworks/Theora.framework/Versions/A/Theora",
+        "Contents/Frameworks/Vorbis.framework/Versions/A/Vorbis",
+        "Contents/Frameworks/SDL2.framework/Versions/A/Frameworks/hidapi.framework/Versions/A/hidapi"
+      ],
+      "fileChecks": [
+        {
+          "path": "Contents/Info.plist",
+          "fileSize": 1960,
+          "offset": 0,
+          "length": 1960,
+          "sha256": "0fac98686a123394e994e34427b853e7f64925cd411ff267df50d5da35330bbb"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk",
+          "fileSize": 62393760,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "3ef3334d50d89de3642f536acf8e57bde660808f1b0355d587e56c9e9a71c11d"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk",
+          "fileSize": 62393760,
+          "offset": 8388608,
+          "length": 8388608,
+          "sha256": "1fddb03918d39a7c270ea1ab231a6b2d5cacb5b4a93f93a660a77e55695e049a"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk",
+          "fileSize": 62393760,
+          "offset": 16777216,
+          "length": 8388608,
+          "sha256": "daf991a7a30cdbfc6d4e014addc86db7d017129352e4be50ba0c203704443a0c"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk",
+          "fileSize": 62393760,
+          "offset": 25165824,
+          "length": 8388608,
+          "sha256": "9687ea8c197a9f2699c07681f9cf02fdd4cced98258a69dfe294ab7a13c86afc"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk",
+          "fileSize": 62393760,
+          "offset": 33554432,
+          "length": 8388608,
+          "sha256": "6b2b75bf4bf9205a650c9db0f84777a25a1292d22cb844f25bb15c78d63dc0a2"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk",
+          "fileSize": 62393760,
+          "offset": 41943040,
+          "length": 8388608,
+          "sha256": "6cb9b3912ca1ec70831e510cc9934b6083306b2e7c93053f6b4aad66f519b446"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk",
+          "fileSize": 62393760,
+          "offset": 50331648,
+          "length": 8388608,
+          "sha256": "c38ea5b0e7ee7025df13cb884866208cef25d66bb6fb132bfc4c55d56755e5bf"
+        },
+        {
+          "path": "Contents/MacOS/Frostpunk",
+          "fileSize": 62393760,
+          "offset": 58720256,
+          "length": 3673504,
+          "sha256": "1fcfa4fc5184405ef9ba7062658b62d8f69d3f949d36416a3866eb227985d6ca"
+        },
+        {
+          "path": "Contents/MacOS/libsteam_api.dylib",
+          "fileSize": 468896,
+          "offset": 0,
+          "length": 468896,
+          "sha256": "5c2c8d2c7d8ef33b834eeb6c7304a97db6718746e0ca70cfc64d40847e915fda"
+        },
+        {
+          "path": "Contents/Frameworks/SDL2.framework/SDL2",
+          "fileSize": 1067,
+          "offset": 0,
+          "length": 1067,
+          "sha256": "3fe3143e0f73aec22346589038070b52d158f1d2d120a10653d1f81198f75f86"
+        },
+        {
+          "path": "Contents/Frameworks/Ogg.framework/Ogg",
+          "fileSize": 1067,
+          "offset": 0,
+          "length": 1067,
+          "sha256": "c1147fe570a87c362987e755a1a3632f7890e1718e75b218fb7313626bbd53bc"
+        },
+        {
+          "path": "Contents/Frameworks/Theora.framework/Theora",
+          "fileSize": 1067,
+          "offset": 0,
+          "length": 1067,
+          "sha256": "98635abd72f21136ee98d167f9877c4c31936fa2a6caf67e332b83869531feea"
+        },
+        {
+          "path": "Contents/Frameworks/Vorbis.framework/Vorbis",
+          "fileSize": 1067,
+          "offset": 0,
+          "length": 1067,
+          "sha256": "ff8e52467c74bcb6a8af005d00b68a849cb61ab1e2a6bf8e014a2b1e1d8d01a5"
+        },
+        {
+          "path": "Contents/Frameworks/SDL2.framework/Versions/A/SDL2",
+          "fileSize": 2389504,
+          "offset": 0,
+          "length": 2389504,
+          "sha256": "ca51ba37958b4ce049caa47543628e52ee5b8d57292ec768112e9a7fb63cf23f"
+        },
+        {
+          "path": "Contents/Frameworks/Ogg.framework/Versions/A/Ogg",
+          "fileSize": 137760,
+          "offset": 0,
+          "length": 137760,
+          "sha256": "8287f75dbc55ce962a8058f8cc769101adf85baa84ded474fcbd6dfe0f1551f5"
+        },
+        {
+          "path": "Contents/Frameworks/Theora.framework/Versions/A/Theora",
+          "fileSize": 616816,
+          "offset": 0,
+          "length": 616816,
+          "sha256": "323e7d9cbd048236d1f8f247b102abb63f7266d357e628b88d271c3c19d5c9f7"
+        },
+        {
+          "path": "Contents/Frameworks/Vorbis.framework/Versions/A/Vorbis",
+          "fileSize": 6609968,
+          "offset": 0,
+          "length": 6609968,
+          "sha256": "c44130cb6b5dd94b72e86dd89f1dc9c95c936a6d8219ac1b03b56918a3f9256f"
+        },
+        {
+          "path": "Contents/Frameworks/SDL2.framework/Versions/A/Frameworks/hidapi.framework/Versions/A/hidapi",
+          "fileSize": 138864,
+          "offset": 0,
+          "length": 138864,
+          "sha256": "b65491c5662c45d0f1e9ac594afd2058e4c522ab4630e506916b22e9de383386"
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "resources",
+      "title": "Ressourcen",
+      "symbol": "shippingbox",
+      "features": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "id": "last-autumn",
+      "title": "Der letzte Herbst",
+      "symbol": "hammer",
+      "features": [
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "id": "city",
+      "title": "Stadt und Forschung",
+      "symbol": "building.2",
+      "features": [
+        10,
+        11,
+        12,
+        13
+      ]
+    },
+    {
+      "id": "game",
+      "title": "Spiel",
+      "symbol": "speedometer",
+      "features": [
+        14
+      ]
+    }
+  ]
+}

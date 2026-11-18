@@ -9,7 +9,7 @@ Ein gemeinsamer macOS-Launcher für die bereitgestellten Trainer. Installierte S
 stehen links, die jeweiligen Trainerfunktionen und der Startknopf rechts. Unter
 „Trainer & Spielpfade“ lässt sich jede Spiele-App einzeln auswählen.
 
-Der aktuelle Projektstand enthält **28 eigenständige Trainer**. Die Liste basiert
+Der aktuelle Projektstand enthält **29 eigenständige Trainer**. Die Liste basiert
 auf den freigegebenen Profilen unter `Modules/`; die Versionsangaben bezeichnen
 das Spiel, nicht die separat versionierten Trainerpakete. Bereits veröffentlichte
 Pakete findest du im Trainerkatalog der App.
@@ -27,6 +27,7 @@ den aktuellen Katalog. Eine kompatible vorhandene App genügt.
 | Dome Keeper | Steam | 5.0.8.14 | |
 | DREDGE | Epic Games Store / GOG | Epic 1.5.5; GOG 1.5.3 | GOG unter Rosetta |
 | Escape from Duckov | Steam | 2.3.30 | |
+| Frostpunk | Steam | 1.6.1 (Bundle 1.1.1, Build 15262773) | Rosetta |
 | Frostpunk 2 | Steam | 1.6.1 (Bundle 0.5.591, Build 24037022) | |
 | House Flipper | Steam | 1.26252 (Build 25247477) | Rosetta |
 | inZOI | Steam | Bundle 5.4.95 (Build 26264076) | |
