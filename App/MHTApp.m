@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-only
+#import "MHTLocalization.h"
 #import "MHTApp.h"
 #import "MHTModule.h"
 #import "MHTDiscovery.h"
@@ -93,7 +94,7 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
     self.inspectionQueue=[NSOperationQueue new];self.inspectionQueue.maxConcurrentOperationCount=1;self.inspectionQueue.qualityOfService=NSQualityOfServiceUserInitiated;self.inspectionQueue.name=@"MHT.ProfilePreview";
     self.discoveryQueue=[NSOperationQueue new];self.discoveryQueue.maxConcurrentOperationCount=1;self.discoveryQueue.qualityOfService=NSQualityOfServiceUtility;self.discoveryQueue.name=@"MHT.Discovery";
     self.window=[[NSWindow alloc]initWithContentRect:NSMakeRect(0,0,1160,800) styleMask:NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskMiniaturizable|NSWindowStyleMaskResizable backing:NSBackingStoreBuffered defer:NO];
-    self.window.title=@"TrainerDock";self.window.subtitle=@"Spielebibliothek";self.window.minSize=NSMakeSize(980,680);self.window.releasedWhenClosed=NO;
+    self.window.title=@"TrainerDock";self.window.subtitle=MHTLocalized(@"Spielebibliothek");self.window.minSize=NSMakeSize(980,680);self.window.releasedWhenClosed=NO;
     self.window.toolbarStyle=NSWindowToolbarStyleUnified;self.window.appearance=[NSAppearance appearanceNamed:NSAppearanceNameDarkAqua];
     // Keep the system titlebar backing. A clear window background also clears
     // unified titlebar chrome and can make its title and traffic lights vanish.
@@ -112,15 +113,15 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
     [self.split addSplitViewItem:sidebarItem];[self.split addSplitViewItem:[NSSplitViewItem splitViewItemWithViewController:detailController]];
     self.window.contentViewController=self.split;
     NSToolbar *toolbar=[[NSToolbar alloc]initWithIdentifier:@"MHT.Library"];toolbar.delegate=self;toolbar.displayMode=NSToolbarDisplayModeIconOnly;toolbar.allowsUserCustomization=NO;self.window.toolbar=toolbar;
-    NSTextField *brand=MHTLabel(@"Bibliothek",23,NSFontWeightBold);
+    NSTextField *brand=MHTLabel(MHTLocalized(@"Bibliothek"),23,NSFontWeightBold);
     self.libraryCount=MHTLabel(@"",11,NSFontWeightRegular);self.libraryCount.textColor=NSColor.secondaryLabelColor;
-    self.trainerUpdates=button(@"Trainer laden & verwalten …",self,@selector(openTrainerLibrary:));self.trainerUpdates.bezelStyle=NSBezelStyleGlass;self.trainerUpdates.controlSize=NSControlSizeSmall;self.trainerUpdates.identifier=@"MHT.TrainerUpdates";
-    self.search=[NSSearchField new];self.search.placeholderString=@"Spiele suchen";self.search.delegate=self;self.search.controlSize=NSControlSizeRegular;
-    self.allModules=[NSButton checkboxWithTitle:@"Alle Trainer anzeigen" target:self action:@selector(filter:)];
-    self.libraryFilter=[NSSegmentedControl segmentedControlWithLabels:@[@"Installiert",@"Alle Trainer"] trackingMode:NSSegmentSwitchTrackingSelectOne target:self action:@selector(filter:)];self.libraryFilter.selectedSegment=0;self.libraryFilter.controlSize=NSControlSizeSmall;
+    self.trainerUpdates=button(MHTLocalized(@"Trainer laden & verwalten …"),self,@selector(openTrainerLibrary:));self.trainerUpdates.bezelStyle=NSBezelStyleGlass;self.trainerUpdates.controlSize=NSControlSizeSmall;self.trainerUpdates.identifier=@"MHT.TrainerUpdates";
+    self.search=[NSSearchField new];self.search.placeholderString=MHTLocalized(@"Spiele suchen");self.search.delegate=self;self.search.controlSize=NSControlSizeRegular;
+    self.allModules=[NSButton checkboxWithTitle:MHTLocalized(@"Alle Trainer anzeigen") target:self action:@selector(filter:)];
+    self.libraryFilter=[NSSegmentedControl segmentedControlWithLabels:@[MHTLocalized(@"Installiert"),MHTLocalized(@"Alle Trainer")] trackingMode:NSSegmentSwitchTrackingSelectOne target:self action:@selector(filter:)];self.libraryFilter.selectedSegment=0;self.libraryFilter.controlSize=NSControlSizeSmall;
     NSScrollView *list=[NSScrollView new];list.hasVerticalScroller=YES;list.drawsBackground=NO;list.translatesAutoresizingMaskIntoConstraints=NO;list.autohidesScrollers=YES;
     self.table=[[NSTableView alloc]initWithFrame:NSZeroRect];NSTableColumn *column=[[NSTableColumn alloc]initWithIdentifier:@"game"];[self.table addTableColumn:column];self.table.headerView=nil;self.table.rowHeight=62;self.table.intercellSpacing=NSMakeSize(0,4);self.table.backgroundColor=NSColor.clearColor;self.table.style=NSTableViewStyleSourceList;self.table.delegate=self;self.table.dataSource=self;self.table.columnAutoresizingStyle=NSTableViewUniformColumnAutoresizingStyle;list.documentView=self.table;
-    NSButton *settings=button(@"Trainer & Spielpfade …",self,@selector(openSettings:));settings.image=[NSImage imageWithSystemSymbolName:@"slider.horizontal.3" accessibilityDescription:nil];settings.imagePosition=NSImageLeading;settings.bordered=NO;settings.alignment=NSTextAlignmentLeft;
+    NSButton *settings=button(MHTLocalized(@"Trainer & Spielpfade …"),self,@selector(openSettings:));settings.image=[NSImage imageWithSystemSymbolName:@"slider.horizontal.3" accessibilityDescription:nil];settings.imagePosition=NSImageLeading;settings.bordered=NO;settings.alignment=NSTextAlignmentLeft;
     NSStackView *left=MHTStack(@[brand,self.libraryCount,self.trainerUpdates,self.search,self.libraryFilter,list,settings],YES,12);MHTFill(left,sidebar,16);
     for(NSView *view in @[self.trainerUpdates,self.search,self.libraryFilter,list,settings])[view.widthAnchor constraintEqualToAnchor:left.widthAnchor].active=YES;
     [list.heightAnchor constraintGreaterThanOrEqualToConstant:180].active=YES;[left setCustomSpacing:2 afterView:brand];[left setCustomSpacing:18 afterView:self.libraryCount];
@@ -132,7 +133,7 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
     BOOL hasInstalledGame=NO;for(MHTModule *module in self.modules)for(NSDictionary *profile in module.profiles)hasInstalledGame|=MHTIsInstalled(module,profile);
     if(!hasInstalledGame){self.allModules.state=NSControlStateValueOn;self.libraryFilter.selectedSegment=1;}
     [self filter:nil];[self.window center];[self.window makeKeyAndOrderFront:nil];[NSApp activateIgnoringOtherApps:YES];
-    if(errors.count){NSAlert *alert=[NSAlert new];alert.messageText=@"Einige Trainer konnten nicht geladen werden";alert.informativeText=[errors componentsJoinedByString:@"\n"];[alert beginSheetModalForWindow:self.window completionHandler:nil];}
+    if(errors.count){NSAlert *alert=[NSAlert new];alert.messageText=MHTLocalized(@"Einige Trainer konnten nicht geladen werden");alert.informativeText=[errors componentsJoinedByString:@"\n"];[alert beginSheetModalForWindow:self.window completionHandler:nil];}
     if(self.smokeTest){self.allModules.state=NSControlStateValueOn;self.libraryFilter.selectedSegment=1;[self filter:nil];}
     [self discoverInstallations];
     [self updateTrainerSummary];
@@ -143,10 +144,10 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSToolbarItemIdentifier)identifier willBeInsertedIntoToolbar:(BOOL)flag {
     (void)toolbar;(void)flag;NSToolbarItem *item=[[NSToolbarItem alloc]initWithItemIdentifier:identifier];
     NSString *symbol=@"slider.horizontal.3";
-    if([identifier isEqual:@"sidebar"]){symbol=@"sidebar.left";item.label=@"Seitenleiste";item.target=self.split;item.action=@selector(toggleSidebar:);}
-    else if([identifier isEqual:@"trainers"]){symbol=@"square.and.arrow.down";item.label=@"Trainer laden & verwalten";item.target=self;item.action=@selector(openTrainerLibrary:);}
-    else if([identifier isEqual:@"refresh"]){symbol=@"arrow.clockwise";item.label=@"Trainer & Spiele neu laden";item.target=self;item.action=@selector(rescan:);}
-    else {item.label=@"Trainer & Spielpfade";item.target=self;item.action=@selector(openSettings:);}
+    if([identifier isEqual:@"sidebar"]){symbol=@"sidebar.left";item.label=MHTLocalized(@"Seitenleiste");item.target=self.split;item.action=@selector(toggleSidebar:);}
+    else if([identifier isEqual:@"trainers"]){symbol=@"square.and.arrow.down";item.label=MHTLocalized(@"Trainer laden & verwalten");item.target=self;item.action=@selector(openTrainerLibrary:);}
+    else if([identifier isEqual:@"refresh"]){symbol=@"arrow.clockwise";item.label=MHTLocalized(@"Trainer & Spiele neu laden");item.target=self;item.action=@selector(rescan:);}
+    else {item.label=MHTLocalized(@"Trainer & Spielpfade");item.target=self;item.action=@selector(openSettings:);}
     item.image=[NSImage imageWithSystemSymbolName:symbol accessibilityDescription:item.label];item.toolTip=item.label;return item;
 }
 - (void)controlTextDidChange:(NSNotification *)notification {if(notification.object==self.search)[self filter:nil];}
@@ -156,7 +157,7 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
     NSUInteger installedCount=0;
     for(MHTModule *m in self.modules){BOOL installed=NO;for(NSDictionary *p in m.profiles)installed|=MHTIsInstalled(m,p);if(installed)installedCount++;
         if((installed || self.allModules.state==NSControlStateValueOn) && (!query.length || [m.name localizedStandardContainsString:query]))[visible addObject:m];}
-    self.libraryCount.stringValue=query.length ? [NSString stringWithFormat:@"%lu Treffer",(unsigned long)visible.count] : [NSString stringWithFormat:@"%lu Spiele · %lu Trainer",(unsigned long)installedCount,(unsigned long)self.modules.count];
+    self.libraryCount.stringValue=query.length ? [NSString stringWithFormat:MHTLocalized(@"%lu Treffer"),(unsigned long)visible.count] : [NSString stringWithFormat:MHTLocalized(@"%lu Spiele · %lu Trainer"),(unsigned long)installedCount,(unsigned long)self.modules.count];
     self.visibleModules=visible;[self.table reloadData];NSInteger index=0;
     for(NSUInteger i=0;i<visible.count;i++)if([[visible[i] identifier] isEqual:previous])index=(NSInteger)i;
     if(visible.count){[self.table selectRowIndexes:[NSIndexSet indexSetWithIndex:index] byExtendingSelection:NO];if(self.selected!=visible[index]){self.selected=visible[index];[self renderDetail];}}
@@ -165,11 +166,11 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView{(void)tableView;return self.visibleModules.count;}
 - (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)column row:(NSInteger)row {
     (void)tableView;(void)column;MHTModule *m=self.visibleModules[row];NSMutableOrderedSet *stores=[NSMutableOrderedSet new];BOOL installed=NO;
-    for(NSDictionary *p in m.profiles){[stores addObject:p[@"store"] ?: @"Unbekannt"];installed|=MHTIsInstalled(m,p);}
+    for(NSDictionary *p in m.profiles){[stores addObject:p[@"store"] ?: MHTLocalized(@"Unbekannt")];installed|=MHTIsInstalled(m,p);}
     NSTextField *name=MHTLabel(m.name,12,NSFontWeightSemibold);name.toolTip=m.name;
-    NSString *caption=installed ? [stores.array componentsJoinedByString:@" / "] : @"Spiel nicht installiert";
-    if(!m.installed)caption=[caption stringByAppendingString:@" · Trainer laden"];
-    else if(m.updateAvailable)caption=[caption stringByAppendingString:m.packageMigrationAvailable ? @" · GitHub-Paket" : @" · Trainerupdate"];
+    NSString *caption=installed ? [stores.array componentsJoinedByString:@" / "] : MHTLocalized(@"Spiel nicht installiert");
+    if(!m.installed)caption=[caption stringByAppendingString:MHTLocalized(@" · Trainer laden")];
+    else if(m.updateAvailable)caption=[caption stringByAppendingString:m.packageMigrationAvailable ? MHTLocalized(@" · GitHub-Paket") : MHTLocalized(@" · Trainerupdate")];
     NSTextField *small=MHTLabel(caption,10,NSFontWeightRegular);small.textColor=m.updateAvailable ? NSColor.systemCyanColor : NSColor.secondaryLabelColor;
     NSStackView *texts=MHTStack(@[name,small],YES,4);[texts setContentCompressionResistancePriority:249 forOrientation:NSLayoutConstraintOrientationHorizontal];
     [name.widthAnchor constraintEqualToAnchor:texts.widthAnchor].active=YES;[small.widthAnchor constraintEqualToAnchor:texts.widthAnchor].active=YES;
@@ -186,10 +187,10 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
     self.rows=[NSMutableArray new];self.groups=[NSMutableArray new];self.profiles=nil;self.gameIcon=nil;self.start=nil;self.status=nil;self.trainerVersionLabel=nil;self.trainerDownload=nil;self.trainerProgress=nil;
     if(!self.selected){
         BOOL searching=self.search.stringValue.length>0;
-        NSImageView *icon=MHTIconView([NSImage imageWithSystemSymbolName:searching ? @"magnifyingglass" : @"gamecontroller" accessibilityDescription:nil],56,@"Bibliothek");icon.contentTintColor=NSColor.tertiaryLabelColor;
-        NSTextField *empty=[NSTextField wrappingLabelWithString:searching ? @"Versuche einen anderen Spielnamen oder zeige alle Trainer an." : @"Wähle unter „Trainer & Spielpfade“ deine Spiele-Apps aus, um deine Bibliothek einzurichten."];empty.textColor=NSColor.secondaryLabelColor;
-        [self.detail addArrangedSubview:icon];[self.detail addArrangedSubview:MHTLabel(searching ? @"Keine Spiele gefunden" : @"Deine Spiele. Deine Trainer.",25,NSFontWeightBold)];
-        [self.detail addArrangedSubview:empty];[self.detail addArrangedSubview:button(@"Trainer laden & verwalten …",self,@selector(openTrainerLibrary:))];[self.detail addArrangedSubview:button(@"Spielpfade einrichten …",self,@selector(openSettings:))];return;
+        NSImageView *icon=MHTIconView([NSImage imageWithSystemSymbolName:searching ? @"magnifyingglass" : @"gamecontroller" accessibilityDescription:nil],56,MHTLocalized(@"Bibliothek"));icon.contentTintColor=NSColor.tertiaryLabelColor;
+        NSTextField *empty=[NSTextField wrappingLabelWithString:searching ? MHTLocalized(@"Versuche einen anderen Spielnamen oder zeige alle Trainer an.") : MHTLocalized(@"Wähle unter „Trainer & Spielpfade“ deine Spiele-Apps aus, um deine Bibliothek einzurichten.")];empty.textColor=NSColor.secondaryLabelColor;
+        [self.detail addArrangedSubview:icon];[self.detail addArrangedSubview:MHTLabel(searching ? MHTLocalized(@"Keine Spiele gefunden") : MHTLocalized(@"Deine Spiele. Deine Trainer."),25,NSFontWeightBold)];
+        [self.detail addArrangedSubview:empty];[self.detail addArrangedSubview:button(MHTLocalized(@"Trainer laden & verwalten …"),self,@selector(openTrainerLibrary:))];[self.detail addArrangedSubview:button(MHTLocalized(@"Spielpfade einrichten …"),self,@selector(openSettings:))];return;
     }
     self.titleLabel=MHTLabel(self.selected.name,28,NSFontWeightBold);self.titleLabel.toolTip=self.selected.name;
     self.subtitle=MHTLabel(@"",12,NSFontWeightRegular);self.subtitle.textColor=NSColor.secondaryLabelColor;
@@ -199,7 +200,7 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
     [self.titleLabel.widthAnchor constraintEqualToAnchor:titles.widthAnchor].active=YES;[self.subtitle.widthAnchor constraintEqualToAnchor:titles.widthAnchor].active=YES;
     [self.compatibilityNoteLabel.widthAnchor constraintEqualToAnchor:titles.widthAnchor].active=YES;
     self.gameIcon=MHTIconView(MHTGameIcon(self.selected,nil),76,self.selected.name);
-    self.start=button(@"Spielen",self,@selector(startGame:));self.start.bezelStyle=NSBezelStyleGlass;self.start.borderShape=NSControlBorderShapeCapsule;self.start.controlSize=NSControlSizeLarge;self.start.font=[NSFont systemFontOfSize:16 weight:NSFontWeightSemibold];self.start.bezelColor=NSColor.systemCyanColor;self.start.image=[NSImage imageWithSystemSymbolName:@"play.fill" accessibilityDescription:nil];self.start.imagePosition=NSImageLeading;self.start.accessibilityLabel=@"Spiel mit Trainer starten";self.start.toolTip=@"Das ausgewählte Spiel mit seinem Trainer starten";
+    self.start=button(MHTLocalized(@"Spielen"),self,@selector(startGame:));self.start.bezelStyle=NSBezelStyleGlass;self.start.borderShape=NSControlBorderShapeCapsule;self.start.controlSize=NSControlSizeLarge;self.start.font=[NSFont systemFontOfSize:16 weight:NSFontWeightSemibold];self.start.bezelColor=NSColor.systemCyanColor;self.start.image=[NSImage imageWithSystemSymbolName:@"play.fill" accessibilityDescription:nil];self.start.imagePosition=NSImageLeading;self.start.accessibilityLabel=MHTLocalized(@"Spiel mit Trainer starten");self.start.toolTip=MHTLocalized(@"Das ausgewählte Spiel mit seinem Trainer starten");
     [self.start.widthAnchor constraintEqualToConstant:164].active=YES;[self.start.heightAnchor constraintEqualToConstant:46].active=YES;
     NSStackView *hero=MHTStack(@[self.gameIcon,titles,self.start],NO,16);[self.detail addArrangedSubview:hero];[hero.widthAnchor constraintEqualToAnchor:self.detail.widthAnchor].active=YES;
     [self.detail setCustomSpacing:22 afterView:hero];
@@ -208,7 +209,7 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
     NSInteger selectedIndex=0;NSString *saved=[NSUserDefaults.standardUserDefaults stringForKey:[@"MHT.profile." stringByAppendingString:self.selected.identifier]];
     for(NSUInteger i=0;i<self.selected.profiles.count;i++){
         NSDictionary *profile=self.selected.profiles[i];
-        NSString *note=profile[@"compatibilityNote"],*caption=[NSString stringWithFormat:@"%@ · Version %@",profile[@"store"],profile[@"gameVersion"] ?: profile[@"version"]];
+        NSString *note=profile[@"compatibilityNote"],*caption=[NSString stringWithFormat:MHTLocalized(@"%@ · Version %@"),profile[@"store"],profile[@"gameVersion"] ?: profile[@"version"]];
         [self.profiles addItemWithTitle:note.length ? [caption stringByAppendingFormat:@" · %@",note] : caption];
         if(note.length){
             NSMenuItem *item=self.profiles.lastItem;NSMutableAttributedString *title=[[NSMutableAttributedString alloc]initWithString:item.title];
@@ -217,18 +218,18 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
         if([profile[@"id"] isEqual:saved] || (!saved && MHTIsInstalled(self.selected,profile)))selectedIndex=(NSInteger)i;
     }
     [self.profiles selectItemAtIndex:selectedIndex];
-    self.pathButton=button(@"Spielpfad …",self,@selector(chooseSelectedPath:));self.pathButton.controlSize=NSControlSizeSmall;
-    self.restore=[NSButton checkboxWithTitle:@"Auswahl beim Start laden" target:self action:@selector(settingsChanged:)];self.restore.state=[self.selected.settings[@"restore"] boolValue];self.restore.font=[NSFont systemFontOfSize:11];self.restore.toolTip=@"Dauerschalter nach dem Laden wiederherstellen. Einmalaktionen werden nie automatisch ausgeführt.";
+    self.pathButton=button(MHTLocalized(@"Spielpfad …"),self,@selector(chooseSelectedPath:));self.pathButton.controlSize=NSControlSizeSmall;
+    self.restore=[NSButton checkboxWithTitle:MHTLocalized(@"Auswahl beim Start laden") target:self action:@selector(settingsChanged:)];self.restore.state=[self.selected.settings[@"restore"] boolValue];self.restore.font=[NSFont systemFontOfSize:11];self.restore.toolTip=MHTLocalized(@"Dauerschalter nach dem Laden wiederherstellen. Einmalaktionen werden nie automatisch ausgeführt.");
     NSStackView *settings=MHTStack(@[self.profiles,MHTSpacer(),self.restore,self.pathButton],NO,12);
     NSBox *settingsCard=MHTCard(settings,14);settingsCard.fillColor=[NSColor colorWithWhite:0.08 alpha:0.8];[self.detail addArrangedSubview:settingsCard];[settingsCard.widthAnchor constraintEqualToAnchor:self.detail.widthAnchor].active=YES;
     self.trainerVersionLabel=MHTLabel(@"",11,NSFontWeightRegular);self.trainerVersionLabel.textColor=NSColor.secondaryLabelColor;
     self.trainerProgress=[NSProgressIndicator new];self.trainerProgress.style=NSProgressIndicatorStyleSpinning;self.trainerProgress.controlSize=NSControlSizeSmall;self.trainerProgress.displayedWhenStopped=NO;
-    self.trainerDownload=button(@"Trainer laden",self,@selector(downloadSelectedTrainer:));self.trainerDownload.bezelStyle=NSBezelStyleGlass;self.trainerDownload.controlSize=NSControlSizeSmall;self.trainerDownload.identifier=@"MHT.TrainerDownload";
-    NSButton *versions=button(@"Versionen …",self,@selector(openTrainerLibrary:));versions.bezelStyle=NSBezelStyleGlass;versions.controlSize=NSControlSizeSmall;versions.identifier=@"MHT.TrainerVersions";
+    self.trainerDownload=button(MHTLocalized(@"Trainer laden"),self,@selector(downloadSelectedTrainer:));self.trainerDownload.bezelStyle=NSBezelStyleGlass;self.trainerDownload.controlSize=NSControlSizeSmall;self.trainerDownload.identifier=@"MHT.TrainerDownload";
+    NSButton *versions=button(MHTLocalized(@"Versionen …"),self,@selector(openTrainerLibrary:));versions.bezelStyle=NSBezelStyleGlass;versions.controlSize=NSControlSizeSmall;versions.identifier=@"MHT.TrainerVersions";
     NSStackView *distribution=MHTStack(@[self.trainerVersionLabel,MHTSpacer(),self.trainerProgress,self.trainerDownload,versions],NO,10);[self.detail addArrangedSubview:distribution];[distribution.widthAnchor constraintEqualToAnchor:self.detail.widthAnchor].active=YES;
-    NSTextField *count=MHTLabel([NSString stringWithFormat:@"%lu Gruppen · %lu Funktionen",(unsigned long)self.selected.featureGroups.count,(unsigned long)self.selected.features.count],11,NSFontWeightRegular);count.textColor=NSColor.secondaryLabelColor;
-    NSButton *collapse=button(@"Gruppen ein-/ausklappen",self,@selector(toggleGroups:));collapse.bordered=NO;collapse.font=[NSFont systemFontOfSize:11];collapse.contentTintColor=NSColor.secondaryLabelColor;
-    NSStackView *featureHeading=MHTStack(@[MHTLabel(@"Trainer",16,NSFontWeightSemibold),count,MHTSpacer(),collapse],NO,10);[self.detail addArrangedSubview:featureHeading];[featureHeading.widthAnchor constraintEqualToAnchor:self.detail.widthAnchor].active=YES;
+    NSTextField *count=MHTLabel([NSString stringWithFormat:MHTLocalized(@"%lu Gruppen · %lu Funktionen"),(unsigned long)self.selected.featureGroups.count,(unsigned long)self.selected.features.count],11,NSFontWeightRegular);count.textColor=NSColor.secondaryLabelColor;
+    NSButton *collapse=button(MHTLocalized(@"Gruppen ein-/ausklappen"),self,@selector(toggleGroups:));collapse.bordered=NO;collapse.font=[NSFont systemFontOfSize:11];collapse.contentTintColor=NSColor.secondaryLabelColor;
+    NSStackView *featureHeading=MHTStack(@[MHTLabel(MHTLocalized(@"Trainer"),16,NSFontWeightSemibold),count,MHTSpacer(),collapse],NO,10);[self.detail addArrangedSubview:featureHeading];[featureHeading.widthAnchor constraintEqualToAnchor:self.detail.widthAnchor].active=YES;
     [self.detail setCustomSpacing:10 afterView:featureHeading];
     self.featureList=MHTStack(@[],YES,14);NSScrollView *scroll=MHTTrainerScroll(self.featureList);
     [self.detail addArrangedSubview:scroll];[scroll.widthAnchor constraintEqualToAnchor:self.detail.widthAnchor].active=YES;[scroll.heightAnchor constraintGreaterThanOrEqualToConstant:180].active=YES;
@@ -249,14 +250,14 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
         if([f[@"numeric"] boolValue]){
             row.value=[[NSTextField alloc]initWithFrame:NSZeroRect];row.value.font=[NSFont monospacedDigitSystemFontOfSize:12 weight:NSFontWeightMedium];row.value.alignment=NSTextAlignmentRight;row.value.tag=i;row.value.target=self;row.value.action=@selector(valueChanged:);row.value.controlSize=NSControlSizeSmall;row.value.bezelStyle=NSTextFieldRoundedBezel;
             NSNumberFormatter *formatter=[NSNumberFormatter new];formatter.numberStyle=NSNumberFormatterDecimalStyle;formatter.locale=NSLocale.currentLocale;formatter.maximumFractionDigits=[f[@"integer"] boolValue] ? 0 : 6;formatter.allowsFloats=![f[@"integer"] boolValue];formatter.lenient=NO;row.value.formatter=formatter;
-            row.value.doubleValue=[selection[[f[@"id"] stringValue]][@"value"] doubleValue];row.value.accessibilityLabel=[f[@"title"] stringByAppendingString:@" – Wert"];
-            row.value.toolTip=[NSString stringWithFormat:@"%@ bis %@ · Eingabe übernimmt",f[@"minimum"],f[@"maximum"]];
-            row.stepper=[NSStepper new];row.stepper.minValue=[f[@"minimum"] doubleValue];row.stepper.maxValue=[f[@"maximum"] doubleValue];row.stepper.increment=MAX(0.000001,[f[@"step"] doubleValue]);row.stepper.doubleValue=row.value.doubleValue;row.stepper.valueWraps=NO;row.stepper.controlSize=NSControlSizeSmall;row.stepper.tag=i;row.stepper.target=self;row.stepper.action=@selector(stepValue:);row.stepper.accessibilityLabel=[f[@"title"] stringByAppendingString:@" – Wert ändern"];
+            row.value.doubleValue=[selection[[f[@"id"] stringValue]][@"value"] doubleValue];row.value.accessibilityLabel=[f[@"title"] stringByAppendingString:MHTLocalized(@" – Wert")];
+            row.value.toolTip=[NSString stringWithFormat:MHTLocalized(@"%@ bis %@ · Eingabe übernimmt"),f[@"minimum"],f[@"maximum"]];
+            row.stepper=[NSStepper new];row.stepper.minValue=[f[@"minimum"] doubleValue];row.stepper.maxValue=[f[@"maximum"] doubleValue];row.stepper.increment=MAX(0.000001,[f[@"step"] doubleValue]);row.stepper.doubleValue=row.value.doubleValue;row.stepper.valueWraps=NO;row.stepper.controlSize=NSControlSizeSmall;row.stepper.tag=i;row.stepper.target=self;row.stepper.action=@selector(stepValue:);row.stepper.accessibilityLabel=[f[@"title"] stringByAppendingString:MHTLocalized(@" – Wert ändern")];
             NSStackView *editor=MHTStack(@[row.value,row.stepper],NO,5);MHTFill(editor,valueSlot,0);
         }
         [controls addObject:valueSlot];
         NSControl *action=nil;
-        if([f[@"oneShot"] boolValue]){row.run=button(@"Anwenden",self,@selector(featureAction:));row.run.controlSize=NSControlSizeSmall;row.run.tag=i;row.run.accessibilityLabel=[f[@"title"] stringByAppendingString:@" anwenden"];action=row.run;}
+        if([f[@"oneShot"] boolValue]){row.run=button(MHTLocalized(@"Anwenden"),self,@selector(featureAction:));row.run.controlSize=NSControlSizeSmall;row.run.tag=i;row.run.accessibilityLabel=[NSString stringWithFormat:MHTLocalized(@"%@ anwenden"),f[@"title"]];action=row.run;}
         else {row.toggle=[MHTGlassToggle new];row.toggle.target=self;row.toggle.action=@selector(featureAction:);row.toggle.tag=i;row.toggle.selectedSegment=0;row.toggle.accessibilityLabel=f[@"title"];action=row.toggle;}
         NSStackView *actionSlot=MHTStack(@[MHTSpacer(),action],NO,0);[actionSlot.widthAnchor constraintEqualToConstant:88].active=YES;[controls addObject:actionSlot];
         NSStackView *shortcutSlot=MHTStack(@[badge],NO,0);[shortcutSlot.widthAnchor constraintEqualToConstant:68].active=YES;[controls addObject:shortcutSlot];
@@ -273,8 +274,8 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
         [self.featureList addArrangedSubview:section];[section.widthAnchor constraintEqualToAnchor:self.featureList.widthAnchor].active=YES;[self.groups addObject:section];
     }
     self.status=MHTLabel(@"",11,NSFontWeightRegular);self.status.textColor=NSColor.secondaryLabelColor;
-    self.showOverlay=button(@"Trainer öffnen",self,@selector(showOverlay:));self.showOverlay.controlSize=NSControlSizeSmall;self.showOverlay.image=[NSImage imageWithSystemSymbolName:@"rectangle.on.rectangle" accessibilityDescription:nil];self.showOverlay.imagePosition=NSImageLeading;
-    self.allOff=button(@"Alles aus",self,@selector(disableAll:));self.allOff.controlSize=NSControlSizeSmall;
+    self.showOverlay=button(MHTLocalized(@"Trainer öffnen"),self,@selector(showOverlay:));self.showOverlay.controlSize=NSControlSizeSmall;self.showOverlay.image=[NSImage imageWithSystemSymbolName:@"rectangle.on.rectangle" accessibilityDescription:nil];self.showOverlay.imagePosition=NSImageLeading;
+    self.allOff=button(MHTLocalized(@"Alles aus"),self,@selector(disableAll:));self.allOff.controlSize=NSControlSizeSmall;
     NSStackView *footer=MHTStack(@[self.status,MHTSpacer(),self.showOverlay,self.allOff],NO,12);[self.detail addArrangedSubview:footer];[footer.widthAnchor constraintEqualToAnchor:self.detail.widthAnchor].active=YES;[self.status setContentCompressionResistancePriority:249 forOrientation:NSLayoutConstraintOrientationHorizontal];
     [self refreshInstallation];[self updateRows];[self updateTrainerSummary];
 }
@@ -309,17 +310,17 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
 }
 - (void)updateTrainerSummary {
     NSUInteger updates=0,migrations=0;for(MHTModule *module in self.modules){migrations+=module.packageMigrationAvailable;updates+=module.updateAvailable && !module.packageMigrationAvailable;}
-    self.trainerUpdates.title=updates ? [NSString stringWithFormat:@"%lu Trainerupdates verfügbar …",(unsigned long)updates] : migrations ? [NSString stringWithFormat:@"%lu GitHub-Pakete verfügbar …",(unsigned long)migrations] : @"Trainer laden & verwalten …";
+    self.trainerUpdates.title=updates ? [NSString stringWithFormat:MHTLocalized(@"%lu Trainerupdates verfügbar …"),(unsigned long)updates] : migrations ? [NSString stringWithFormat:MHTLocalized(@"%lu GitHub-Pakete verfügbar …"),(unsigned long)migrations] : MHTLocalized(@"Trainer laden & verwalten …");
     self.trainerUpdates.contentTintColor=updates || migrations ? NSColor.systemCyanColor : nil;
     MHTModule *module=self.selected;if(!module)return;
     BOOL busy=[self.trainerStore.installingIdentifiers containsObject:module.identifier];
     if(busy)[self.trainerProgress startAnimation:nil];else [self.trainerProgress stopAnimation:nil];
-    self.trainerVersionLabel.stringValue=busy ? @"Trainer wird geladen und geprüft …" : !module.installed ? @"Trainer noch nicht geladen" : module.packageMigrationAvailable ? [NSString stringWithFormat:@"Trainer %@ · GitHub-Paket zur Übernahme verfügbar",module.version] : module.updateAvailable ? [NSString stringWithFormat:@"Trainer %@ · Update %@ verfügbar",module.installationLabel,module.catalogVersion[@"version"]] : [NSString stringWithFormat:@"Trainer %@ · Installiert",module.installationLabel];
-    self.trainerVersionLabel.toolTip=self.trainerStore.lastError ? [@"Offline · " stringByAppendingString:self.trainerStore.lastError.localizedDescription] : @"Bisherige Trainerversionen bleiben bei Updates erhalten.";
+    self.trainerVersionLabel.stringValue=busy ? MHTLocalized(@"Trainer wird geladen und geprüft …") : !module.installed ? MHTLocalized(@"Trainer noch nicht geladen") : module.packageMigrationAvailable ? [NSString stringWithFormat:MHTLocalized(@"Trainer %@ · GitHub-Paket zur Übernahme verfügbar"),module.version] : module.updateAvailable ? [NSString stringWithFormat:MHTLocalized(@"Trainer %@ · Update %@ verfügbar"),module.installationLabel,module.catalogVersion[@"version"]] : [NSString stringWithFormat:MHTLocalized(@"Trainer %@ · Installiert"),module.installationLabel];
+    self.trainerVersionLabel.toolTip=self.trainerStore.lastError ? [MHTLocalized(@"Offline · ") stringByAppendingString:self.trainerStore.lastError.localizedDescription] : MHTLocalized(@"Bisherige Trainerversionen bleiben bei Updates erhalten.");
     self.trainerDownload.hidden=module.installed && !module.updateAvailable && !busy;
-    self.trainerDownload.title=busy ? @"Wird geladen …" : module.packageMigrationAvailable ? @"GitHub-Paket laden" : module.installed ? @"Update laden" : @"Trainer laden";
+    self.trainerDownload.title=busy ? MHTLocalized(@"Wird geladen …") : module.packageMigrationAvailable ? MHTLocalized(@"GitHub-Paket laden") : module.installed ? MHTLocalized(@"Update laden") : MHTLocalized(@"Trainer laden");
     self.trainerDownload.enabled=!busy && [module.catalogVersion[@"downloadAvailable"] boolValue];
-    if(!module.installed){self.start.title=busy ? @"Wird geladen …" : @"Trainer laden";self.start.accessibilityLabel=@"Nur Trainer herunterladen";self.start.toolTip=@"Lädt den Trainer. Das Spiel wird dabei nicht gestartet.";self.start.image=[NSImage imageWithSystemSymbolName:@"arrow.down.circle" accessibilityDescription:nil];}
+    if(!module.installed){self.start.title=busy ? MHTLocalized(@"Wird geladen …") : MHTLocalized(@"Trainer laden");self.start.accessibilityLabel=MHTLocalized(@"Nur Trainer herunterladen");self.start.toolTip=MHTLocalized(@"Lädt den Trainer. Das Spiel wird dabei nicht gestartet.");self.start.image=[NSImage imageWithSystemSymbolName:@"arrow.down.circle" accessibilityDescription:nil];}
 }
 - (void)reloadTrainerModules {
     NSMutableArray *errors=[NSMutableArray new],*modules=[NSMutableArray new];
@@ -340,35 +341,35 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
 }
 - (void)checkTrainerUpdates:(id)sender {
     (void)sender;__weak MHTApp *weakSelf=self;
-    [self.trainerStore refreshCatalogWithCompletion:^(NSError *error){MHTApp *app=weakSelf;if(!app)return;[app reloadTrainerModules];if(error && app.status)app.status.stringValue=@"Offline · Bereits geladene Trainer bleiben verfügbar.";}];
+    [self.trainerStore refreshCatalogWithCompletion:^(NSError *error){MHTApp *app=weakSelf;if(!app)return;[app reloadTrainerModules];if(error && app.status)app.status.stringValue=MHTLocalized(@"Offline · Bereits geladene Trainer bleiben verfügbar.");}];
     [self updateTrainerSummary];
 }
 - (void)downloadSelectedTrainer:(id)sender {
     (void)sender;MHTModule *module=self.selected;if(!module || [self.trainerStore.installingIdentifiers containsObject:module.identifier])return;
-    if(![module.catalogVersion[@"downloadAvailable"] boolValue]){self.status.stringValue=@"Dieser Trainer ist noch nicht zum Download veröffentlicht.";return;}
-    NSString *identifier=module.identifier;self.status.stringValue=@"Trainer wird heruntergeladen und geprüft …";__weak MHTApp *weakSelf=self;
-    [self.trainerStore installVersion:module.catalogVersion forIdentifier:identifier completion:^(MHTModule *installed,NSError *error){MHTApp *app=weakSelf;if(!app)return;[app reloadTrainerModules];if([app.selected.identifier isEqual:identifier])app.status.stringValue=error.localizedDescription ?: [NSString stringWithFormat:@"Trainer %@ ist bereit. Mit „Spielen“ startest du das Spiel.",installed.version];}];[self updateTrainerSummary];
+    if(![module.catalogVersion[@"downloadAvailable"] boolValue]){self.status.stringValue=MHTLocalized(@"Dieser Trainer ist noch nicht zum Download veröffentlicht.");return;}
+    NSString *identifier=module.identifier;self.status.stringValue=MHTLocalized(@"Trainer wird heruntergeladen und geprüft …");__weak MHTApp *weakSelf=self;
+    [self.trainerStore installVersion:module.catalogVersion forIdentifier:identifier completion:^(MHTModule *installed,NSError *error){MHTApp *app=weakSelf;if(!app)return;[app reloadTrainerModules];if([app.selected.identifier isEqual:identifier])app.status.stringValue=error.localizedDescription ?: [NSString stringWithFormat:MHTLocalized(@"Trainer %@ ist bereit. Mit „Spielen“ startest du das Spiel."),installed.version];}];[self updateTrainerSummary];
 }
 - (void)refreshInstallation {
     self.inspectionGeneration++;[self.inspectionQueue cancelAllOperations];
     if(!self.selected)return;
     MHTModule *module=self.selected;NSDictionary *profile=self.profile;NSString *path=[module pathForProfile:profile];
     self.gameIcon.image=MHTIconAtSize(MHTGameIcon(module,profile),76);
-    self.subtitle.stringValue=[NSString stringWithFormat:@"%@ · %@",profile[@"store"],MHTIsInstalled(module,profile) ? @"Installiert" : @"Nicht installiert"];
+    self.subtitle.stringValue=[NSString stringWithFormat:@"%@ · %@",profile[@"store"],MHTIsInstalled(module,profile) ? MHTLocalized(@"Installiert") : MHTLocalized(@"Nicht installiert")];
     NSString *note=profile[@"compatibilityNote"];
     self.compatibilityNoteLabel.stringValue=note ?: @"";self.compatibilityNoteLabel.hidden=!note.length;self.compatibilityNoteLabel.toolTip=note;
-    self.pathButton.toolTip=path ?: @"Spiele-App wählen";
+    self.pathButton.toolTip=path ?: MHTLocalized(@"Spiele-App wählen");
     BOOL running=self.session.running || [NSRunningApplication runningApplicationsWithBundleIdentifier:profile[@"bundleIdentifier"]].count>0;
-    self.start.title=module.installed ? @"Spielen" : @"Trainer laden";self.start.enabled=NO;self.profiles.enabled=!self.session.launching && !self.session.running;
+    self.start.title=module.installed ? MHTLocalized(@"Spielen") : MHTLocalized(@"Trainer laden");self.start.enabled=NO;self.profiles.enabled=!self.session.launching && !self.session.running;
     if(self.session.launching || running){
-        self.status.stringValue=self.session.launching ? @"Spielstart wird angefordert …" : [self live:self.session] ? self.session.state[@"message"] ?: @"Trainer verbunden." : @"Spiel läuft. Warte auf die Trainerverbindung …";
+        self.status.stringValue=self.session.launching ? MHTLocalized(@"Spielstart wird angefordert …") : [self live:self.session] ? self.session.state[@"message"] ?: MHTLocalized(@"Trainer verbunden.") : MHTLocalized(@"Spiel läuft. Warte auf die Trainerverbindung …");
         return;
     }
     if(!module.installed && self.trainerStore){
         self.start.enabled=![self.trainerStore.installingIdentifiers containsObject:module.identifier] && [module.catalogVersion[@"downloadAvailable"] boolValue];
-        self.status.stringValue=self.start.enabled ? @"Trainer laden · Das Spiel wird dabei nicht gestartet." : @"Dieser Trainer ist noch nicht zum Download veröffentlicht.";[self updateTrainerSummary];return;
+        self.status.stringValue=self.start.enabled ? MHTLocalized(@"Trainer laden · Das Spiel wird dabei nicht gestartet.") : MHTLocalized(@"Dieser Trainer ist noch nicht zum Download veröffentlicht.");[self updateTrainerSummary];return;
     }
-    self.status.stringValue=@"Spiel-Build wird geprüft …";
+    self.status.stringValue=MHTLocalized(@"Spiel-Build wird geprüft …");
     NSUInteger generation=self.inspectionGeneration;
     NSBlockOperation *operation=[NSBlockOperation new];__weak NSBlockOperation *weakOperation=operation;__weak MHTApp *weakSelf=self;
     [operation addExecutionBlock:^{@autoreleasepool {
@@ -382,17 +383,17 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
             if(!app || work.cancelled || generation!=app.inspectionGeneration || app.selected!=module || ![app.profile isEqual:profile])return;
             BOOL nowRunning=app.session.running || app.session.launching || [NSRunningApplication runningApplicationsWithBundleIdentifier:profile[@"bundleIdentifier"]].count>0;
             app.start.enabled=game && !nowRunning;
-            app.status.stringValue=nowRunning ? @"Spiel läuft. Warte auf die Trainerverbindung …" : game ? ![compatible.directory isEqual:module.directory] ? [NSString stringWithFormat:@"Bereit · Passende installierte Trainerversion %@ wird verwendet.",compatible.version] : @"Bereit · geprüfter Spiel-Build. ⌘ ^ öffnet den Trainer im Spiel." : error.localizedDescription ?: @"Bitte Spielpfad wählen.";
+            app.status.stringValue=nowRunning ? MHTLocalized(@"Spiel läuft. Warte auf die Trainerverbindung …") : game ? ![compatible.directory isEqual:module.directory] ? [NSString stringWithFormat:MHTLocalized(@"Bereit · Passende installierte Trainerversion %@ wird verwendet."),compatible.version] : MHTLocalized(@"Bereit · geprüfter Spiel-Build. ⌘ ^ öffnet den Trainer im Spiel.") : error.localizedDescription ?: MHTLocalized(@"Bitte Spielpfad wählen.");
         });
     }}];[self.inspectionQueue addOperation:operation];
 }
 - (void)choosePathForModule:(MHTModule *)module profile:(NSDictionary *)profile completion:(void (^)(void))completion {
-    NSOpenPanel *panel=[NSOpenPanel openPanel];panel.allowedContentTypes=@[UTTypeApplicationBundle,UTTypeFolder];panel.canChooseDirectories=YES;panel.canChooseFiles=YES;panel.allowsMultipleSelection=NO;panel.message=[NSString stringWithFormat:@"%@ · %@ · Spiele-App oder Installationsordner wählen",module.name,profile[@"store"]];
+    NSOpenPanel *panel=[NSOpenPanel openPanel];panel.allowedContentTypes=@[UTTypeApplicationBundle,UTTypeFolder];panel.canChooseDirectories=YES;panel.canChooseFiles=YES;panel.allowsMultipleSelection=NO;panel.message=[NSString stringWithFormat:MHTLocalized(@"%@ · %@ · Spiele-App oder Installationsordner wählen"),module.name,profile[@"store"]];
     [panel beginSheetModalForWindow:self.settingsWindow.isVisible ? self.settingsWindow : self.window completionHandler:^(NSModalResponse result){
         if(result==NSModalResponseOK){
             NSError *error=nil;
             if([module inspectPath:panel.URL.path profile:profile error:&error]){[module setPath:panel.URL.path forProfile:profile];completion();}
-            else {NSAlert *alert=[NSAlert new];alert.messageText=@"Diese Spiele-App passt nicht zum Trainer";alert.informativeText=error.localizedDescription;[alert runModal];}
+            else {NSAlert *alert=[NSAlert new];alert.messageText=MHTLocalized(@"Diese Spiele-App passt nicht zum Trainer");alert.informativeText=error.localizedDescription;[alert runModal];}
         }
     }];
 }
@@ -403,15 +404,15 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
 }
 - (void)startGame:(id)sender {
     (void)sender;if(!self.selected || self.session.launching)return;
-    if(self.session.running){self.status.stringValue=@"Das ausgewählte Spiel läuft bereits.";return;}
+    if(self.session.running){self.status.stringValue=MHTLocalized(@"Das ausgewählte Spiel läuft bereits.");return;}
     if(!self.selected.installed){[self downloadSelectedTrainer:sender];return;}
     MHTModule *module=self.selected;NSDictionary *profile=self.profile;NSError *error=nil;
     NSString *path=[module pathForProfile:profile];
     NSDictionary *game=nil;
     if(self.trainerStore){NSDictionary *matchingProfile=nil;MHTModule *compatible=[self.trainerStore moduleForIdentifier:module.identifier profile:profile path:path matchingProfile:&matchingProfile game:&game error:&error];
-        if(!compatible){self.status.stringValue=error.localizedDescription ?: @"Keine installierte Trainerversion passt zu diesem Spiel-Build.";return;}
+        if(!compatible){self.status.stringValue=error.localizedDescription ?: MHTLocalized(@"Keine installierte Trainerversion passt zu diesem Spiel-Build.");return;}
         profile=matchingProfile;module=compatible;
-        if(!profile){self.status.stringValue=@"Das Storeprofil fehlt in dieser Trainerversion.";return;}
+        if(!profile){self.status.stringValue=MHTLocalized(@"Das Storeprofil fehlt in dieser Trainerversion.");return;}
         if(![self.selected.directory isEqual:module.directory] && ![self.trainerStore selectModule:module error:&error]){self.status.stringValue=error.localizedDescription;return;}
         // Resolver instances are freshly validated even for the same disk path.
         // Bind displayed rows and all subsequent readback to that exact instance.
@@ -419,11 +420,11 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
     }
     if(!self.trainerStore)game=[module inspectPath:path profile:profile error:&error];
     if(!game){self.status.stringValue=error.localizedDescription;return;}
-    if(MTExecutableIsRunning(game[@"executable"])){self.status.stringValue=@"Bitte die laufende Spielinstanz regulär beenden.";return;}
+    if(MTExecutableIsRunning(game[@"executable"])){self.status.stringValue=MHTLocalized(@"Bitte die laufende Spielinstanz regulär beenden.");return;}
     for(NSRunningApplication *running in NSWorkspace.sharedWorkspace.runningApplications)
-        for(NSDictionary *p in module.profiles)if([running.bundleIdentifier isEqual:p[@"bundleIdentifier"]] || [running.bundleURL.URLByResolvingSymlinksInPath.path isEqual:game[@"path"]]){self.status.stringValue=@"Bitte die laufende Spielinstanz regulär beenden.";return;}
-    if([profile[@"store"] isEqual:@"Steam"] && ![NSRunningApplication runningApplicationsWithBundleIdentifier:@"com.valvesoftware.steam"].count){self.status.stringValue=@"Bitte Steam öffnen und dann erneut starten.";return;}
-    if(![NSFileManager.defaultManager isReadableFileAtPath:module.runtimePath]){self.status.stringValue=@"Die Trainerbibliothek fehlt. Bitte diese Trainerversion erneut herunterladen.";return;}
+        for(NSDictionary *p in module.profiles)if([running.bundleIdentifier isEqual:p[@"bundleIdentifier"]] || [running.bundleURL.URLByResolvingSymlinksInPath.path isEqual:game[@"path"]]){self.status.stringValue=MHTLocalized(@"Bitte die laufende Spielinstanz regulär beenden.");return;}
+    if([profile[@"store"] isEqual:@"Steam"] && ![NSRunningApplication runningApplicationsWithBundleIdentifier:@"com.valvesoftware.steam"].count){self.status.stringValue=MHTLocalized(@"Bitte Steam öffnen und dann erneut starten.");return;}
+    if(![NSFileManager.defaultManager isReadableFileAtPath:module.runtimePath]){self.status.stringValue=MHTLocalized(@"Die Trainerbibliothek fehlt. Bitte diese Trainerversion erneut herunterladen.");return;}
     MHTSession *session=[MHTSession new];session.module=module;session.runtimePath=module.runtimePath;session.token=NSUUID.UUID.UUIDString;session.profile=profile;session.launching=YES;session.startedAt=NSDate.date.timeIntervalSince1970;
     NSMutableDictionary *options=[module.settings mutableCopy];options[@"visible"]=@NO;session.options=options;self.sessions[module.identifier]=session;
     if([profile[@"launchMode"] isEqual:@"epic"]){
@@ -431,7 +432,7 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
         [self.epicLauncher launchGame:game profile:profile environment:[module environmentForGame:game profile:profile session:session.token] completion:^(NSRunningApplication *app,NSError *failure){
             if(self.sessions[module.identifier]!=session)return;
             session.launching=NO;session.app=app;session.startedAt=NSDate.date.timeIntervalSince1970;
-            if(!app){[self.sessions removeObjectForKey:module.identifier];if(self.selected==module){[self refreshInstallation];self.status.stringValue=failure.localizedDescription ?: @"Epic-Spielstart fehlgeschlagen.";}}
+            if(!app){[self.sessions removeObjectForKey:module.identifier];if(self.selected==module){[self refreshInstallation];self.status.stringValue=failure.localizedDescription ?: MHTLocalized(@"Epic-Spielstart fehlgeschlagen.");}}
             else if(self.selected==module){[self refreshInstallation];if(failure)self.status.stringValue=failure.localizedDescription;}
         }];
         return;
@@ -441,7 +442,7 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
         NSMutableDictionary *environment=[NSProcessInfo.processInfo.environment mutableCopy];[environment addEntriesFromDictionary:[module environmentForGame:game profile:profile session:session.token]];task.environment=environment;
         task.standardOutput=NSFileHandle.fileHandleWithNullDevice;task.standardError=NSFileHandle.fileHandleWithNullDevice;
         session.task=task;BOOL launched=[task launchAndReturnError:&error];session.launching=NO;
-        if(!launched){[self.sessions removeObjectForKey:module.identifier];[self refreshInstallation];self.status.stringValue=error.localizedDescription ?: @"Spielstart fehlgeschlagen.";}
+        if(!launched){[self.sessions removeObjectForKey:module.identifier];[self refreshInstallation];self.status.stringValue=error.localizedDescription ?: MHTLocalized(@"Spielstart fehlgeschlagen.");}
         else [self refreshInstallation];
         return;
     }
@@ -449,7 +450,7 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
     [self refreshInstallation];
     [NSWorkspace.sharedWorkspace openApplicationAtURL:[NSURL fileURLWithPath:game[@"path"]] configuration:config completionHandler:^(NSRunningApplication *app,NSError *failure){dispatch_async(dispatch_get_main_queue(),^{
         session.launching=NO;session.app=app;
-        if(!app || failure){[self.sessions removeObjectForKey:module.identifier];if(self.selected==module){[self refreshInstallation];self.status.stringValue=failure.localizedDescription ?: @"Spielstart fehlgeschlagen.";}}
+        if(!app || failure){[self.sessions removeObjectForKey:module.identifier];if(self.selected==module){[self refreshInstallation];self.status.stringValue=failure.localizedDescription ?: MHTLocalized(@"Spielstart fehlgeschlagen.");}}
         else if(self.selected==module)[self refreshInstallation];
     });}];
 }
@@ -472,7 +473,7 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
 - (void)valueChanged:(NSTextField *)sender {
     NSDictionary *f=self.selected.features[sender.tag];NSNumber *parsed=[sender.objectValue isKindOfClass:NSNumber.class] ? sender.objectValue : nil;double value=parsed ? parsed.doubleValue : NAN;
     if(!isfinite(value) || value<[f[@"minimum"] doubleValue] || value>[f[@"maximum"] doubleValue] || ([f[@"integer"] boolValue] && floor(value)!=value)){
-        self.status.stringValue=[NSString stringWithFormat:@"Gültiger Wert: %@ bis %@%@",f[@"minimum"],f[@"maximum"],[f[@"integer"] boolValue] ? @" (ganze Zahl)" : @""];NSBeep();return;
+        self.status.stringValue=[NSString stringWithFormat:MHTLocalized(@"Gültiger Wert: %@ bis %@%@"),f[@"minimum"],f[@"maximum"],[f[@"integer"] boolValue] ? MHTLocalized(@" (ganze Zahl)") : @""];NSBeep();return;
     }
     if([self live:self.session])[self send:@{@"action":@"value",@"feature":f[@"id"],@"value":@(value)}];
     else {NSMutableDictionary *selection=[self.selected.selection mutableCopy];NSString *key=[f[@"id"] stringValue];NSMutableDictionary *entry=[selection[key] mutableCopy];entry[@"value"]=@(value);selection[key]=entry;[self.selected saveSelection:selection];}
@@ -495,7 +496,7 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
     if([state[@"selectionWritable"] boolValue]){
         NSMutableDictionary *selection=[NSMutableDictionary new];for(NSDictionary *row in state[@"features"]){if(![row isKindOfClass:NSDictionary.class] || ![row[@"id"] isKindOfClass:NSNumber.class])return;selection[[row[@"id"] stringValue]]=@{@"wanted":row[@"wanted"] ?: @NO,@"value":row[@"value"] ?: @0};}[module saveSelection:selection];
     }
-    if(module==self.selected){self.status.stringValue=[message[@"error"] length] ? message[@"error"] : state[@"message"] ?: @"Trainer verbunden.";[self updateRows];}
+    if(module==self.selected){self.status.stringValue=[message[@"error"] length] ? message[@"error"] : state[@"message"] ?: MHTLocalized(@"Trainer verbunden.");[self updateRows];}
 }
 - (void)updateRows {
     if(!self.selected)return;MHTSession *s=self.session;BOOL live=[self live:s],running=s.launching || s.running,installed=self.selected.installed;
@@ -510,7 +511,7 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
         row.value.enabled=installed && [f[@"implemented"] boolValue] && !pending && (live ? available : !running);
         if(row.value && self.window.firstResponder!=row.value.currentEditor && row.value.doubleValue!=[state[@"value"] doubleValue])row.value.doubleValue=[state[@"value"] doubleValue];
         row.stepper.enabled=row.value.enabled;if(row.value && row.stepper.doubleValue!=row.value.doubleValue)row.stepper.doubleValue=row.value.doubleValue;
-        NSString *status=!installed ? @"Trainer laden" : ![f[@"implemented"] boolValue] ? @"Nicht verfügbar" : live ? [state[@"active"] boolValue] ? @"Aktiv" : [state[@"wanted"] boolValue] ? @"Wartet" : @"Aus" : running ? @"Verbinde …" : [state[@"wanted"] boolValue] ? @"Vorgemerkt" : @"Aus";
+        NSString *status=!installed ? MHTLocalized(@"Trainer laden") : ![f[@"implemented"] boolValue] ? MHTLocalized(@"Nicht verfügbar") : live ? [state[@"active"] boolValue] ? MHTLocalized(@"Aktiv") : [state[@"wanted"] boolValue] ? MHTLocalized(@"Wartet") : MHTLocalized(@"Aus") : running ? MHTLocalized(@"Verbinde …") : [state[@"wanted"] boolValue] ? MHTLocalized(@"Vorgemerkt") : MHTLocalized(@"Aus");
         if(![row.state.stringValue isEqual:status])row.state.stringValue=status;
         NSColor *color=live && [state[@"active"] boolValue] ? NSColor.systemGreenColor : NSColor.secondaryLabelColor;
         if(![row.state.textColor isEqual:color])row.state.textColor=color;
@@ -523,9 +524,9 @@ static NSButton *button(NSString *title,id target,SEL action) {return [NSButton 
     double now=NSDate.date.timeIntervalSince1970;
     for(NSString *key in self.sessions.allKeys.copy){MHTSession *s=self.sessions[key];
         if(!s.launching && !s.running){[self.sessions removeObjectForKey:key];if([key isEqual:self.selected.identifier]){[self reloadTrainerModules];}}
-        for(NSString *request in s.pending.allKeys.copy)if(now-[s.pending[request][@"sentAt"] doubleValue]>3){[s.pending removeObjectForKey:request];if([key isEqual:self.selected.identifier])self.status.stringValue=@"Keine Bestätigung. Einmalaktionen werden nicht automatisch wiederholt.";}
+        for(NSString *request in s.pending.allKeys.copy)if(now-[s.pending[request][@"sentAt"] doubleValue]>3){[s.pending removeObjectForKey:request];if([key isEqual:self.selected.identifier])self.status.stringValue=MHTLocalized(@"Keine Bestätigung. Einmalaktionen werden nicht automatisch wiederholt.");}
     }
-    MHTSession *s=self.session;if(s.running && ![self live:s] && now-s.startedAt>10)self.status.stringValue=@"Trainerverbindung fehlt. Spiel regulär beenden und mit TrainerDock neu starten.";
+    MHTSession *s=self.session;if(s.running && ![self live:s] && now-s.startedAt>10)self.status.stringValue=MHTLocalized(@"Trainerverbindung fehlt. Spiel regulär beenden und mit TrainerDock neu starten.");
     if(s)[self updateRows];
 }
 - (void)rescan:(id)sender {(void)sender;MHTResetGameIcons();[self reloadTrainerModules];[self discoverInstallations];[self checkTrainerUpdates:nil];}

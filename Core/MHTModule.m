@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-only
+#import "MHTLocalization.h"
 #import "MHTModule.h"
 #import "MHTTrainerStore.h"
 #import "MHTTrainerArchive.h"
@@ -15,7 +16,7 @@ static BOOL number(id v){return [v isKindOfClass:NSNumber.class] && isfinite([v 
 - (NSString *)version{return self.manifest[@"version"];}
 - (BOOL)installed{return self.directory.length && [NSFileManager.defaultManager isReadableFileAtPath:self.runtimePath];}
 - (NSString *)installRevision{return self.directory.stringByDeletingLastPathComponent.lastPathComponent;}
-- (NSString *)installationLabel{return [self.installRevision hasPrefix:@"legacy-"] ? [self.version stringByAppendingString:@" · übernommen"] : self.version;}
+- (NSString *)installationLabel{return [self.installRevision hasPrefix:@"legacy-"] ? [self.version stringByAppendingString:MHTLocalized(@" · übernommen")] : self.version;}
 - (BOOL)packageMigrationAvailable{return self.installed && self.updateAvailable && ![self.installRevision isEqual:self.version] && [self.version isEqual:self.catalogVersion[@"version"]];}
 - (NSArray *)profiles{return self.manifest[@"profiles"];}
 - (NSArray *)features{return self.manifest[@"features"];}
@@ -87,7 +88,7 @@ static BOOL number(id v){return [v isKindOfClass:NSNumber.class] && isfinite([v 
             }
         }
     if([m isKindOfClass:NSDictionary.class] && m[@"moduleABI"] && ![m[@"moduleABI"] isEqual:@1])valid=NO;
-    if(!valid && error)*error=[NSError errorWithDomain:@"local.trainerdock.modules" code:1 userInfo:@{NSLocalizedDescriptionKey:@"Ungültige Trainermetadaten oder nicht unterstützte Modulschnittstelle."}];
+    if(!valid && error)*error=[NSError errorWithDomain:@"local.trainerdock.modules" code:1 userInfo:@{NSLocalizedDescriptionKey:MHTLocalized(@"Ungültige Trainermetadaten oder nicht unterstützte Modulschnittstelle.")}];
     return valid;
 }
 + (NSArray<MHTModule *> *)loadModules:(NSString *)directory errors:(NSMutableArray<NSString *> *)errors {
@@ -105,7 +106,7 @@ static BOOL number(id v){return [v isKindOfClass:NSNumber.class] && isfinite([v 
         NSError *error=nil;NSDictionary *config=valid ? MTLoadConfiguration(module.configurationPath,&error) : nil;
         if(!valid || [ids containsObject:m[@"id"]] || !config || ![config[@"profiles"] isEqual:m[@"profiles"]]
            || ![NSFileManager.defaultManager isReadableFileAtPath:module.runtimePath]) {
-            [errors addObject:[NSString stringWithFormat:@"%@: ungültiger oder unvollständiger Trainer%@",file,error ? [@" · " stringByAppendingString:error.localizedDescription] : @""]];continue;
+            [errors addObject:[NSString stringWithFormat:MHTLocalized(@"%@: ungültiger oder unvollständiger Trainer%@"),file,error ? [@" · " stringByAppendingString:MHTLocalizedError(error).localizedDescription] : @""]];continue;
         }
         [ids addObject:module.identifier];[modules addObject:module];
     }
@@ -162,7 +163,9 @@ static BOOL number(id v){return [v isKindOfClass:NSNumber.class] && isfinite([v 
 }
 - (NSDictionary *)inspectPath:(NSString *)path profile:(NSDictionary *)profile error:(NSError **)error {
     if(self.installed && !MHTTrainerValidatePackage([NSURL fileURLWithPath:self.directory],@{@"version":self.version,@"manifest":self.manifest},self.identifier,error))return nil;
-    return MTInspectGame(path,profile,error);
+    NSDictionary *game=MTInspectGame(path,profile,error);
+    if(!game && error && *error)*error=MHTLocalizedError(*error);
+    return game;
 }
 - (NSDictionary *)environmentForGame:(NSDictionary *)game profile:(NSDictionary *)profile session:(NSString *)session {
     if(!self.directory.length)return nil;

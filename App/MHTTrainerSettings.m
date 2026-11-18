@@ -3,6 +3,7 @@
 #import "MHTAppearance.h"
 #import "MHTGameIcons.h"
 #import "MHTDiscovery.h"
+#import "MHTLocalization.h"
 
 @interface MHTSettingsDocument : NSView @end
 @implementation MHTSettingsDocument
@@ -31,23 +32,40 @@
         styleMask:NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskResizable
         backing:NSBackingStoreBuffered defer:NO];
     if((self=[super initWithWindow:window])){
-        window.title=@"Trainer & Spielpfade";window.minSize=NSMakeSize(680,500);window.releasedWhenClosed=NO;
+        window.title=MHTLocalized(@"Trainer & Spielpfade");window.minSize=NSMakeSize(680,500);window.releasedWhenClosed=NO;
         self.modules=modules;
-        NSTextField *title=MHTLabel(@"Deine Trainer",23,NSFontWeightBold);
-        NSTextField *description=MHTLabel(@"Wähle für jeden Store die passende Spiele-App.",12,NSFontWeightRegular);
+        NSTextField *title=MHTLabel(MHTLocalized(@"Deine Trainer"),23,NSFontWeightBold);
+        NSTextField *description=MHTLabel(MHTLocalized(@"Wähle für jeden Store die passende Spiele-App."),12,NSFontWeightRegular);
         description.textColor=NSColor.secondaryLabelColor;
         NSStackView *titles=MHTStack(@[title,description],YES,5);
         for(NSView *view in @[title,description])[view.widthAnchor constraintEqualToAnchor:titles.widthAnchor].active=YES;
-        NSImageView *symbol=MHTIconView([NSImage imageWithSystemSymbolName:@"slider.horizontal.3" accessibilityDescription:nil],36,@"Trainereinstellungen");
+        NSImageView *symbol=MHTIconView([NSImage imageWithSystemSymbolName:@"slider.horizontal.3" accessibilityDescription:nil],36,MHTLocalized(@"Trainereinstellungen"));
         symbol.contentTintColor=NSColor.controlAccentColor;
         NSStackView *heading=MHTStack(@[symbol,titles],NO,14);
+        NSPopUpButton *language = [[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO];
+        language.identifier = @"MHT.Settings.Language";
+        language.accessibilityLabel = MHTLocalized(@"App-Sprache");
+        language.target = self;
+        language.action = @selector(changeLanguage:);
+        NSArray<NSString *> *options = @[MHTLocalized(@"Systemsprache"), @"Deutsch", @"Română", @"English"];
+        NSArray<NSString *> *codes = @[@"", @"de", @"ro", @"en"];
+        NSString *selected = MHTLanguageOverride() ?: @"";
+        for (NSUInteger index = 0; index < options.count; index++) {
+            [language addItemWithTitle:options[index]];
+            language.lastItem.representedObject = codes[index];
+            if ([codes[index] isEqualToString:selected]) [language selectItem:language.lastItem];
+        }
+        NSTextField *languageHint = MHTLabel(MHTLocalized(@"Sprache wird nach dem Neustart von TrainerDock übernommen."), 11, NSFontWeightRegular);
+        languageHint.textColor = NSColor.secondaryLabelColor;
+        NSStackView *languageRow = MHTStack(@[MHTLabel(MHTLocalized(@"App-Sprache"), 12, NSFontWeightMedium),
+                                            language, languageHint, MHTSpacer()], NO, 10);
         self.summary=MHTLabel(@"",11,NSFontWeightRegular);self.summary.textColor=NSColor.secondaryLabelColor;
-        self.search=[NSSearchField new];self.search.placeholderString=@"Trainer suchen";self.search.delegate=self;
+        self.search=[NSSearchField new];self.search.placeholderString=MHTLocalized(@"Trainer suchen");self.search.delegate=self;
         self.search.identifier=@"MHT.Settings.Search";
         [self.search.widthAnchor constraintEqualToConstant:220].active=YES;
         NSStackView *tools=MHTStack(@[self.summary,MHTSpacer(),self.search],NO,14);
-        NSStackView *header=MHTStack(@[heading,tools],YES,20);
-        for(NSView *view in @[heading,tools])[view.widthAnchor constraintEqualToAnchor:header.widthAnchor].active=YES;
+        NSStackView *header=MHTStack(@[heading,languageRow,tools],YES,16);
+        for(NSView *view in @[heading,languageRow,tools])[view.widthAnchor constraintEqualToAnchor:header.widthAnchor].active=YES;
         NSView *headerContainer=[NSView new];MHTFill(header,headerContainer,24);
         self.scroll=[NSScrollView new];self.scroll.hasVerticalScroller=YES;self.scroll.autohidesScrollers=YES;
         self.scroll.drawsBackground=NO;self.scroll.identifier=@"MHT.Settings.Scroll";
@@ -60,8 +78,8 @@
             [document.leadingAnchor constraintEqualToAnchor:self.scroll.contentView.leadingAnchor],
             [document.topAnchor constraintEqualToAnchor:self.scroll.contentView.topAnchor],
             [document.heightAnchor constraintGreaterThanOrEqualToAnchor:self.scroll.contentView.heightAnchor]]];
-        NSTextField *hint=MHTLabel(@"Spielpfade werden automatisch gespeichert.",11,NSFontWeightRegular);hint.textColor=NSColor.secondaryLabelColor;
-        NSButton *done=[NSButton buttonWithTitle:@"Fertig" target:self action:@selector(finish:)];done.keyEquivalent=@"\r";
+        NSTextField *hint=MHTLabel(MHTLocalized(@"Spielpfade werden automatisch gespeichert."),11,NSFontWeightRegular);hint.textColor=NSColor.secondaryLabelColor;
+        NSButton *done=[NSButton buttonWithTitle:MHTLocalized(@"Fertig") target:self action:@selector(finish:)];done.keyEquivalent=@"\r";
         NSStackView *footer=MHTStack(@[hint,MHTSpacer(),done],NO,12);
         NSView *footerContainer=[NSView new];MHTFill(footer,footerContainer,16);
         NSStackView *body=MHTStack(@[headerContainer,MHTSeparator(),self.scroll,MHTSeparator(),footerContainer],YES,0);
@@ -71,13 +89,17 @@
         [self reloadModules:modules];[window center];
     }return self;
 }
+- (void)changeLanguage:(NSPopUpButton *)sender {
+    NSString *code = sender.selectedItem.representedObject;
+    MHTSetLanguageOverride(code.length ? code : nil);
+}
 - (void)finish:(id)sender{(void)sender;[self.window close];}
 - (NSView *)profileRow:(NSDictionary *)profile trainer:(MHTModule *)trainer {
     BOOL installed=MHTIsInstalled(trainer,profile);
     NSTextField *store=MHTLabel(profile[@"store"],12,NSFontWeightSemibold);
-    NSTextField *version=MHTLabel([NSString stringWithFormat:@"Version %@",profile[@"gameVersion"] ?: profile[@"version"]],11,NSFontWeightRegular);
+    NSTextField *version=MHTLabel([NSString stringWithFormat:MHTLocalized(@"Version %@"),profile[@"gameVersion"] ?: profile[@"version"]],11,NSFontWeightRegular);
     version.textColor=NSColor.secondaryLabelColor;
-    NSTextField *state=MHTLabel(installed ? @"Installiert" : @"Pfad fehlt",11,NSFontWeightMedium);
+    NSTextField *state=MHTLabel(installed ? MHTLocalized(@"Installiert") : MHTLocalized(@"Pfad fehlt"),11,NSFontWeightMedium);
     state.textColor=installed ? NSColor.systemGreenColor : NSColor.secondaryLabelColor;
     NSStackView *metadata=MHTStack(@[store,version,MHTSpacer(),state],NO,10);
     if([profile[@"compatibilityNote"] length]){
@@ -85,13 +107,13 @@
         [metadata insertArrangedSubview:note atIndex:2];
     }
     NSString *gamePath=[trainer pathForProfile:profile];
-    NSTextField *path=MHTLabel(gamePath.length ? gamePath : @"Noch keine Spiele-App ausgewählt",11,NSFontWeightRegular);
+    NSTextField *path=MHTLabel(gamePath.length ? gamePath : MHTLocalized(@"Noch keine Spiele-App ausgewählt"),11,NSFontWeightRegular);
     path.lineBreakMode=NSLineBreakByTruncatingMiddle;path.textColor=NSColor.secondaryLabelColor;path.toolTip=gamePath;
     NSStackView *information=MHTStack(@[metadata,path],YES,7);
     for(NSView *view in @[metadata,path])[view.widthAnchor constraintEqualToAnchor:information.widthAnchor].active=YES;
-    MHTPathButton *choose=[MHTPathButton buttonWithTitle:@"Spielpfad wählen …" target:self action:@selector(selectPath:)];
+    MHTPathButton *choose=[MHTPathButton buttonWithTitle:MHTLocalized(@"Spielpfad wählen …") target:self action:@selector(selectPath:)];
     choose.trainer=trainer;choose.profile=profile;choose.controlSize=NSControlSizeSmall;
-    choose.accessibilityLabel=[NSString stringWithFormat:@"%@ · %@: Spielpfad wählen",trainer.name,profile[@"store"]];
+    choose.accessibilityLabel=[NSString stringWithFormat:MHTLocalized(@"%@ · %@: Spielpfad wählen"),trainer.name,profile[@"store"]];
     [choose.widthAnchor constraintEqualToConstant:140].active=YES;
     NSStackView *row=MHTStack(@[information,choose],NO,20);
     row.identifier=[@"MHT.Profile." stringByAppendingString:profile[@"id"]];
@@ -99,7 +121,7 @@
 }
 - (NSView *)cardForTrainer:(MHTModule *)trainer {
     NSTextField *name=MHTLabel(trainer.name,16,NSFontWeightSemibold);name.toolTip=trainer.name;
-    NSString *details=[NSString stringWithFormat:@"%lu Funktionen · %@",(unsigned long)trainer.features.count,trainer.profiles.count==1 ? @"1 Store-Version" : [NSString stringWithFormat:@"%lu Store-Versionen",(unsigned long)trainer.profiles.count]];
+    NSString *details=[NSString stringWithFormat:MHTLocalized(@"%lu Funktionen · %@"),(unsigned long)trainer.features.count,trainer.profiles.count==1 ? MHTLocalized(@"1 Store-Version") : [NSString stringWithFormat:MHTLocalized(@"%lu Store-Versionen"),(unsigned long)trainer.profiles.count]];
     NSTextField *detail=MHTLabel(details,11,NSFontWeightRegular);detail.textColor=NSColor.secondaryLabelColor;
     NSStackView *titles=MHTStack(@[name,detail],YES,4);
     for(NSView *view in @[name,detail])[view.widthAnchor constraintEqualToAnchor:titles.widthAnchor].active=YES;
@@ -124,10 +146,10 @@
         NSView *card=[self cardForTrainer:trainer];[self.list addArrangedSubview:card];
         [card.widthAnchor constraintEqualToAnchor:self.list.widthAnchor].active=YES;shown++;
     }
-    self.summary.stringValue=query.length ? [NSString stringWithFormat:@"%lu von %lu Trainern",(unsigned long)shown,(unsigned long)modules.count] : [NSString stringWithFormat:@"%lu Trainer · %lu Installationen",(unsigned long)modules.count,(unsigned long)installed];
+    self.summary.stringValue=query.length ? [NSString stringWithFormat:MHTLocalized(@"%lu von %lu Trainern"),(unsigned long)shown,(unsigned long)modules.count] : [NSString stringWithFormat:MHTLocalized(@"%lu Trainer · %lu Installationen"),(unsigned long)modules.count,(unsigned long)installed];
     if(!shown){
-        NSTextField *empty=MHTLabel(@"Keine Trainer gefunden",16,NSFontWeightSemibold);
-        NSTextField *hint=MHTLabel(@"Versuche einen anderen Spielnamen.",12,NSFontWeightRegular);hint.textColor=NSColor.secondaryLabelColor;
+        NSTextField *empty=MHTLabel(MHTLocalized(@"Keine Trainer gefunden"),16,NSFontWeightSemibold);
+        NSTextField *hint=MHTLabel(MHTLocalized(@"Versuche einen anderen Spielnamen."),12,NSFontWeightRegular);hint.textColor=NSColor.secondaryLabelColor;
         [self.list addArrangedSubview:empty];[self.list addArrangedSubview:hint];
     }
     NSView *space=[NSView new];[space setContentHuggingPriority:1 forOrientation:NSLayoutConstraintOrientationVertical];

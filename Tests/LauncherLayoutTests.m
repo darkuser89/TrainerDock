@@ -6,6 +6,9 @@
 #import "MHTTrainerViews.h"
 #import "MHTTrainerStore.h"
 #import "MHTTrainerLibrary.h"
+#define MHT_LAUNCHER_LOCALIZATION 1
+#import "MHTLocalization.h"
+#import "MHTMenu.h"
 @interface MHTApp (LayoutChecks)
 - (void)filter:(id)sender;
 - (void)refreshInstallation;
@@ -457,7 +460,68 @@ static void checkTrainerDistribution(MHTApp *app) {
     }];});
 }
 @end
+static void checkLanguage(NSString *expected) {
+    NSDictionary *strings = @{
+        @"de": @[@"Einstellungen …", @"Trainer & Spielpfade", @"Systemsprache"],
+        @"ro": @[@"Configurări…", @"Trainere și căi de instalare", @"Limba sistemului"],
+        @"en": @[@"Settings…", @"Trainers & Game Paths", @"System Language"]
+    };
+    NSArray *labels = strings[expected];
+    require([MHTInterfaceLanguage() isEqual:expected], "regional preferences and unsupported language fallback");
+    require([NSBundle.mainBundle.preferredLocalizations.firstObject isEqual:expected], "native bundle language matches explicit English fallback");
+    NSError *identity = [NSError errorWithDomain:@"local.mactrainer.profile" code:1
+        userInfo:@{NSLocalizedDescriptionKey:@"Konfigurationspfad fehlt.", @"preserved":@YES}];
+    NSError *translated = MHTLocalizedError(identity);
+    require([translated.localizedDescription isEqual:MHTLocalized(@"Konfigurationspfad fehlt.")] &&
+        [translated.domain isEqual:identity.domain] && translated.code==identity.code && [translated.userInfo[@"preserved"] boolValue],
+        "host translates verifier errors without changing validation or trainer sources");
+    identity = [NSError errorWithDomain:@"local.mactrainer.profile" code:1 userInfo:@{NSLocalizedDescriptionKey:@"Originalsignatur nicht bestätigt (-67062)."}];
+    require([MHTLocalizedError(identity).localizedDescription isEqual:
+        [NSString stringWithFormat:MHTLocalized(@"Originalsignatur nicht bestätigt (%d)."),-67062]], "formatted verifier error keeps its original status");
+    MHTInstallMenus([MHTApp new]);
+    NSMenu *menu = [NSApp.mainMenu itemAtIndex:0].submenu;
+    require([menu itemWithTitle:labels[0]] != nil, "native app menu loads the expected translation");
+
+    NSString *previous = MHTLanguageOverride();
+    MHTSetLanguageOverride(nil);
+    @try {
+        MHTTrainerSettings *settings = [[MHTTrainerSettings alloc] initWithModules:@[]];
+        require([settings.window.title isEqual:labels[1]], "settings window loads the expected translation");
+        [settings.window setContentSize:NSMakeSize(680, 500)];
+        layout(settings.window);
+        NSPopUpButton *popup = nil;
+        for (NSView *view in descendants(settings.window.contentView)) {
+            if ([view.identifier isEqual:@"MHT.Settings.Language"]) popup = (NSPopUpButton *)view;
+        }
+        require(popup.numberOfItems == 4 && [popup.selectedItem.title isEqual:labels[2]], "system language is the default choice");
+        [popup selectItemWithTitle:@"Română"];
+        [popup sendAction:popup.action to:popup.target];
+        require([MHTLanguageOverride() isEqual:@"ro"] && [MHTInterfaceLanguage() isEqual:expected], "selection persists for the next launch");
+        [NSUserDefaults.standardUserDefaults synchronize];
+        NSTask *next = [NSTask new];next.executableURL = NSBundle.mainBundle.executableURL;
+        next.arguments = @[@"-MHTTestPersistedLanguage", @"ro"];
+        require([next launchAndReturnError:NULL], "launch isolated language persistence check");
+        [next waitUntilExit];require(next.terminationStatus==0, "saved Romanian preference is selected after restart");
+        MHTTrainerSettings *reopened = [[MHTTrainerSettings alloc] initWithModules:@[]];
+        for (NSView *view in descendants(reopened.window.contentView)) {
+            if ([view.identifier isEqual:@"MHT.Settings.Language"]) {
+                require([[(NSPopUpButton *)view selectedItem].title isEqual:@"Română"], "settings reflect the saved override");
+            }
+        }
+        [popup selectItemAtIndex:0];
+        [popup sendAction:popup.action to:popup.target];
+        require(MHTLanguageOverride() == nil, "system choice clears the app-specific preference");
+    } @finally {
+        MHTSetLanguageOverride(previous);
+    }
+    printf("PASS: localized menus, settings and manual override (%s).\n", expected.UTF8String);
+}
 int main(void){@autoreleasepool {
+    (void)MHTInterfaceLanguage();
+    NSString *persisted = [NSUserDefaults.standardUserDefaults stringForKey:@"MHTTestPersistedLanguage"];
+    if(persisted.length){require([MHTInterfaceLanguage() isEqual:persisted] && [MHTLanguageOverride() isEqual:persisted], "manual language survives a fresh process");return 0;}
     [NSApplication sharedApplication];[NSApp setActivationPolicy:NSApplicationActivationPolicyProhibited];
+    NSString *language = [NSUserDefaults.standardUserDefaults stringForKey:@"MHTTestLanguage"];
+    if (language.length) {checkLanguage(language);return 0;}
     MHTLayoutApp *app=[MHTLayoutApp new];app.smokeTest=YES;NSApp.delegate=app;[NSApp run];
 }return 0;}

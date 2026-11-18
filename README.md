@@ -15,7 +15,7 @@ den aktuellen Katalog. Eine kompatible vorhandene App genügt.
 |---|---|---|---|
 | Balatro | Steam | 1.0.1o-FULL (Build 17459173) | |
 | Control Ultimate Edition | Steam / Mac App Store | Steam 1.34; MAS 1.33.1 / 1.371 | |
-| Crimson Desert | Steam | Bundle 1.0.35 (Build 450) | |
+| Crimson Desert | Steam | Bundle 1.0.35 (Builds 450 und 466; Steam 26636972) | |
 | Cyberpunk 2077 | Steam | 2.5.0 | |
 | Dead Island 2 | Steam / Mac App Store | 0.6.4 | **Steam: nur Uncut-Version; MAS: nur German-Cut-Version** |
 | Death Stranding Director’s Cut | Mac App Store | 1.004 (Bundle 1.1.4) | |
@@ -67,6 +67,12 @@ eingrenzen. Fensterbreite und -höhe bleiben beim Spielwechsel erhalten.
 
 **⌘ ,** öffnet „Trainer & Spielpfade“ mit Suche, Spielkarten und separaten Pfaden
 pro Store. **⌘ R** lädt Trainer und Spiele neu, **⌘ 1** zeigt die Bibliothek.
+
+Die App-Oberfläche unterstützt Deutsch, Rumänisch und Englisch. Standardmäßig
+folgt sie der primären macOS-Sprache; alle anderen Sprachen verwenden Englisch.
+Unter „Trainer & Spielpfade → App-Sprache“ lässt sich die Sprache selbst wählen
+oder wieder „Systemsprache“ einstellen. Die Auswahl bleibt gespeichert und wird
+nach einem Neustart von TrainerDock übernommen.
 
 Liquid Glass ist dauerhaft aktiviert, auch im Ingame-Overlay. TrainerDock benötigt
 macOS 27 oder neuer und verwendet natives AppKit-Glas.

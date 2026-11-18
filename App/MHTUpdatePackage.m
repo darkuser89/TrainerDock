@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-only
+#import "MHTLocalization.h"
 #import "MHTUpdatePackage.h"
 #import "MHTTrainerStore.h"
 #import <CommonCrypto/CommonDigest.h>
@@ -18,7 +19,7 @@ NSDictionary *MHTNewRelease(NSDictionary *json,NSString *current,NSError **error
     if(![json isKindOfClass:NSDictionary.class] || ![json[@"assets"] isKindOfClass:NSArray.class] ||
        !matches(json[@"tag_name"],@"^v[0-9]{1,9}\\.[0-9]{1,9}\\.[0-9]{1,9}$") ||
        ![json[@"draft"] isKindOfClass:NSNumber.class] || ![json[@"prerelease"] isKindOfClass:NSNumber.class]){
-        fail(error,@"GitHub hat keine gültigen Release-Daten geliefert.");return nil;
+        fail(error,MHTLocalized(@"GitHub hat keine gültigen Release-Daten geliefert."));return nil;
     }
     if([json[@"draft"] boolValue] || [json[@"prerelease"] boolValue])return nil;
     NSString *version=[json[@"tag_name"] substringFromIndex:1];
@@ -29,23 +30,23 @@ NSDictionary *MHTNewRelease(NSDictionary *json,NSString *current,NSError **error
         if(![value isKindOfClass:NSDictionary.class] || ![value[@"name"] isEqual:assetName])continue;
         if(found || ![value[@"browser_download_url"] isEqual:expected] || !matches(value[@"digest"],@"^sha256:[a-fA-F0-9]{64}$") ||
            ![value[@"size"] isKindOfClass:NSNumber.class] || [value[@"size"] longLongValue]<=0 || [value[@"size"] longLongValue]>200*1024*1024){
-            fail(error,@"Das GitHub-Updatepaket oder seine SHA-256-Prüfsumme ist ungültig.");return nil;
+            fail(error,MHTLocalized(@"Das GitHub-Updatepaket oder seine SHA-256-Prüfsumme ist ungültig."));return nil;
         }
         found=@{@"version":version,@"url":expected,@"sha256":[[value[@"digest"] substringFromIndex:7] lowercaseString],@"size":value[@"size"]};
     }
-    if(!found)fail(error,@"Dieses Release enthält kein passendes Updatepaket.");
+    if(!found)fail(error,MHTLocalized(@"Dieses Release enthält kein passendes Updatepaket."));
     return found;
 }
 BOOL MHTVerifyUpdateArchive(NSURL *url,NSDictionary *release,NSError **error){
     NSDictionary *attributes=[NSFileManager.defaultManager attributesOfItemAtPath:url.path error:error];
     if(!attributes)return NO;
-    if(![attributes[NSFileType] isEqual:NSFileTypeRegular] || [attributes[NSFileSize] unsignedLongLongValue]!=[release[@"size"] unsignedLongLongValue])return fail(error,@"Die Größe des Updatepakets stimmt nicht.");
+    if(![attributes[NSFileType] isEqual:NSFileTypeRegular] || [attributes[NSFileSize] unsignedLongLongValue]!=[release[@"size"] unsignedLongLongValue])return fail(error,MHTLocalized(@"Die Größe des Updatepakets stimmt nicht."));
     NSInputStream *stream=[NSInputStream inputStreamWithURL:url];[stream open];CC_SHA256_CTX context;CC_SHA256_Init(&context);
     uint8_t buffer[65536],digest[CC_SHA256_DIGEST_LENGTH];NSInteger count;
     while((count=[stream read:buffer maxLength:sizeof(buffer)])>0)CC_SHA256_Update(&context,buffer,(CC_LONG)count);
-    [stream close];if(count<0)return fail(error,@"Das Updatepaket konnte nicht gelesen werden.");CC_SHA256_Final(digest,&context);
+    [stream close];if(count<0)return fail(error,MHTLocalized(@"Das Updatepaket konnte nicht gelesen werden."));CC_SHA256_Final(digest,&context);
     NSMutableString *hex=[NSMutableString new];for(NSUInteger i=0;i<sizeof(digest);i++)[hex appendFormat:@"%02x",digest[i]];
-    return [hex isEqual:release[@"sha256"]] || fail(error,@"SHA-256 stimmt nicht überein. Das Update wurde verworfen.");
+    return [hex isEqual:release[@"sha256"]] || fail(error,MHTLocalized(@"SHA-256 stimmt nicht überein. Das Update wurde verworfen."));
 }
 BOOL MHTExtractUpdate(NSURL *url,NSURL *directory,NSError **error){
     // Extract ourselves: no archive paths, links, special files or permissions are trusted.
@@ -77,22 +78,22 @@ BOOL MHTExtractUpdate(NSURL *url,NSURL *directory,NSError **error){
         close(fd);if(count<0 || actual!=(uint64_t)archive_entry_size(entry))ok=NO;
     }
     archive_read_free(reader);
-    if(!ok || status!=ARCHIVE_EOF)return fail(error,@"Das Updatearchiv enthält ungültige oder beschädigte Einträge.");
+    if(!ok || status!=ARCHIVE_EOF)return fail(error,MHTLocalized(@"Das Updatearchiv enthält ungültige oder beschädigte Einträge."));
     // Preserve any quarantine information attached by the download/system; never remove it.
     char quarantine[4096];ssize_t length=getxattr(url.fileSystemRepresentation,"com.apple.quarantine",quarantine,sizeof(quarantine),0,0);
-    if(length>0 && setxattr([[directory URLByAppendingPathComponent:@"TrainerDock.app"] fileSystemRepresentation],"com.apple.quarantine",quarantine,(size_t)length,0,0))return fail(error,@"Die Downloadattribute konnten nicht übernommen werden.");
+    if(length>0 && setxattr([[directory URLByAppendingPathComponent:@"TrainerDock.app"] fileSystemRepresentation],"com.apple.quarantine",quarantine,(size_t)length,0,0))return fail(error,MHTLocalized(@"Die Downloadattribute konnten nicht übernommen werden."));
     return YES;
 }
 BOOL MHTValidateUpdateApp(NSURL *app,NSString *version,NSError **error){
     NSDictionary *info=[NSDictionary dictionaryWithContentsOfURL:[app URLByAppendingPathComponent:@"Contents/Info.plist"]];
     if(![info[@"CFBundleIdentifier"] isEqual:@"local.trainerdock.launcher"] || ![info[@"CFBundleExecutable"] isEqual:@"TrainerDock"] ||
        ![info[@"CFBundleShortVersionString"] isEqual:version] || ![info[@"LSMinimumSystemVersion"] isEqual:@"27.0"] ||
-       ![NSFileManager.defaultManager isExecutableFileAtPath:[app URLByAppendingPathComponent:@"Contents/MacOS/TrainerDock"].path])return fail(error,@"Die heruntergeladene App passt nicht zu diesem Update.");
+       ![NSFileManager.defaultManager isExecutableFileAtPath:[app URLByAppendingPathComponent:@"Contents/MacOS/TrainerDock"].path])return fail(error,MHTLocalized(@"Die heruntergeladene App passt nicht zu diesem Update."));
     NSURL *catalogURL=[app URLByAppendingPathComponent:@"Contents/Resources/TrainerCatalog.json"];
     NSDictionary *attributes=[NSFileManager.defaultManager attributesOfItemAtPath:catalogURL.path error:NULL];
     if(attributes){
         if(![attributes[NSFileType] isEqual:NSFileTypeRegular] || [attributes[NSFileSize] unsignedLongLongValue]>8*1024*1024)
-            return fail(error,@"Der Trainerkatalog des Updates ist ungültig.");
+            return fail(error,MHTLocalized(@"Der Trainerkatalog des Updates ist ungültig."));
         NSData *data=[NSData dataWithContentsOfURL:catalogURL];
         id catalog=data ? [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL] : nil;
         // This is an app-update boundary, not the current host's trainer ABI
@@ -100,25 +101,25 @@ BOOL MHTValidateUpdateApp(NSURL *app,NSString *version,NSError **error){
         if(![catalog isKindOfClass:NSDictionary.class] || ![catalog[@"schemaVersion"] isEqual:@1]
            || ![catalog[@"moduleABI"] isKindOfClass:NSNumber.class] || [catalog[@"moduleABI"] integerValue]<1
            || ![catalog[@"modules"] isKindOfClass:NSArray.class] || [catalog[@"modules"] count]>512)
-            return fail(error,@"Der Trainerkatalog des Updates ist ungültig.");
+            return fail(error,MHTLocalized(@"Der Trainerkatalog des Updates ist ungültig."));
     }else{
         NSArray *modules=[NSFileManager.defaultManager contentsOfDirectoryAtURL:[app URLByAppendingPathComponent:@"Contents/Resources/Modules"] includingPropertiesForKeys:nil options:0 error:NULL];
         BOOL legacy=NO;for(NSURL *module in modules)if([module.pathExtension isEqual:@"mhtmodule"]){legacy=YES;break;}
-        if(!legacy)return fail(error,@"Das Update enthält weder Trainerkatalog noch gültige Altstruktur.");
+        if(!legacy)return fail(error,MHTLocalized(@"Das Update enthält weder Trainerkatalog noch gültige Altstruktur."));
     }
     SecStaticCodeRef code=NULL;OSStatus result=SecStaticCodeCreateWithPath((__bridge CFURLRef)app,kSecCSDefaultFlags,&code);
     if(result==errSecSuccess){result=SecStaticCodeCheckValidity(code,kSecCSStrictValidate|kSecCSCheckAllArchitectures|kSecCSCheckNestedCode,NULL);CFRelease(code);}
     // Only structural integrity of the existing ad-hoc code seal; no signing identity/key required.
-    return result==errSecSuccess || fail(error,@"Das Update ist unvollständig oder beschädigt.");
+    return result==errSecSuccess || fail(error,MHTLocalized(@"Das Update ist unvollständig oder beschädigt."));
 }
 BOOL MHTSwapUpdate(NSURL *current,NSURL *candidate,NSError **error){
     if(renameatx_np(AT_FDCWD,current.fileSystemRepresentation,AT_FDCWD,candidate.fileSystemRepresentation,RENAME_SWAP)==0)return YES;
-    return fail(error,@"Die App konnte nicht ausgetauscht werden. Bitte TrainerDock in einen beschreibbaren Ordner verschieben.");
+    return fail(error,MHTLocalized(@"Die App konnte nicht ausgetauscht werden. Bitte TrainerDock in einen beschreibbaren Ordner verschieben."));
 }
 BOOL MHTPreserveBundledTrainers(NSURL *current,NSString *storeDirectory,NSError **error){
     NSMutableArray *errors=[NSMutableArray new];
     NSArray<MHTModule *> *modules=[MHTModule loadModules:[current URLByAppendingPathComponent:@"Contents/Resources/Modules"].path errors:errors];
-    if(errors.count)return fail(error,@"Vorhandene Trainer konnten nicht sicher übernommen werden. Die bisherige App bleibt erhalten.");
+    if(errors.count)return fail(error,MHTLocalized(@"Vorhandene Trainer konnten nicht sicher übernommen werden. Die bisherige App bleibt erhalten."));
     MHTTrainerStore *store=[[MHTTrainerStore alloc]initWithRootDirectory:storeDirectory catalogURL:nil bundledCatalogURL:nil];
     for(MHTModule *module in modules)if(![store importLegacyModule:module error:error])return NO;
     return YES;

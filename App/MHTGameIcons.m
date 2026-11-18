@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-only
+#import "MHTLocalization.h"
 #import "MHTGameIcons.h"
 #import "MHTDiscovery.h"
 static NSCache<NSString *,NSImage *> *iconCache(void) {
@@ -28,6 +29,6 @@ NSImage *MHTGameIcon(MHTModule *module,NSDictionary *preferredProfile) {
         }
         if(icon)return icon;
     }
-    return [NSImage imageWithSystemSymbolName:@"gamecontroller" accessibilityDescription:@"Spiel nicht installiert"];
+    return [NSImage imageWithSystemSymbolName:@"gamecontroller" accessibilityDescription:MHTLocalized(@"Spiel nicht installiert")];
 }
 void MHTResetGameIcons(void){[iconCache() removeAllObjects];}

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-only
+#import "MHTLocalization.h"
 #import "MHTTrainerViews.h"
 #import "MHTAppearance.h"
 @interface MHTFeatureDocument : NSView @end
@@ -52,7 +53,7 @@ NSScrollView *MHTTrainerScroll(NSStackView *list) {
 - (instancetype)initWithFrame:(NSRect)frame {
     if((self=[super initWithFrame:frame])){
         NSMutableArray *buttons=[NSMutableArray new];
-        for(NSString *title in @[@"Aus",@"Ein"]){
+        for(NSString *title in @[MHTLocalized(@"Aus"),MHTLocalized(@"Ein")]){
             NSButton *button=[NSButton buttonWithTitle:title target:self action:@selector(choose:)];
             [button setButtonType:NSButtonTypePushOnPushOff];button.bezelStyle=NSBezelStyleGlass;
             button.borderShape=NSControlBorderShapeCapsule;button.controlSize=NSControlSizeSmall;
@@ -104,7 +105,7 @@ NSScrollView *MHTTrainerScroll(NSStackView *list) {
         NSImageView *icon=MHTIconView(symbol,18,group[@"title"]);icon.contentTintColor=NSColor.secondaryLabelColor;
         NSTextField *name=MHTLabel(group[@"title"],14,NSFontWeightSemibold);
         NSTextField *count=MHTLabel([NSString stringWithFormat:@"%lu",(unsigned long)[group[@"features"] count]],11,NSFontWeightMedium);count.textColor=NSColor.secondaryLabelColor;
-        _chevron=MHTIconView(nil,12,@"Gruppe auf- oder zuklappen");_chevron.contentTintColor=NSColor.secondaryLabelColor;
+        _chevron=MHTIconView(nil,12,MHTLocalized(@"Gruppe auf- oder zuklappen"));_chevron.contentTintColor=NSColor.secondaryLabelColor;
         NSStackView *heading=MHTStack(@[icon,name,count,MHTSpacer(),_chevron],NO,10);
         // Labels are siblings of the full-width button, so the entire heading is clickable.
         NSView *head=[NSView new];MHTFill(heading,head,16);_header.translatesAutoresizingMaskIntoConstraints=NO;[head addSubview:_header positioned:NSWindowAbove relativeTo:nil];
@@ -120,7 +121,7 @@ NSScrollView *MHTTrainerScroll(NSStackView *list) {
 - (void)setCollapsed:(BOOL)collapsed {
     _collapsed=collapsed;self.body.hidden=collapsed;
     self.chevron.image=[NSImage imageWithSystemSymbolName:collapsed ? @"chevron.right" : @"chevron.down" accessibilityDescription:nil];
-    self.header.accessibilityValue=collapsed ? @"Eingeklappt" : @"Ausgeklappt";
+    self.header.accessibilityValue=collapsed ? MHTLocalized(@"Eingeklappt") : MHTLocalized(@"Ausgeklappt");
 }
 - (void)toggle:(id)sender {
     (void)sender;self.collapsed=!self.collapsed;

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-only
+#import "MHTLocalization.h"
 #import "MHTTrainerArchive.h"
 #import "MHTModule.h"
 #import "GameIdentity.h"
@@ -18,12 +19,12 @@
 static BOOL AFail(NSError **error,NSString *message){if(error)*error=[NSError errorWithDomain:@"local.trainerdock.archive" code:1 userInfo:@{NSLocalizedDescriptionKey:message}];return NO;}
 static BOOL regular(NSString *path,uint64_t maximum){struct stat s;return !lstat(path.fileSystemRepresentation,&s)&&S_ISREG(s.st_mode)&&s.st_size>0&&(uint64_t)s.st_size<=maximum;}
 BOOL MHTTrainerVerifyArchive(NSURL *archive,NSDictionary *version,NSError **error){
-    struct stat s;if(lstat(archive.fileSystemRepresentation,&s)||!S_ISREG(s.st_mode)||s.st_size<=0||(uint64_t)s.st_size>64*1024*1024||(uint64_t)s.st_size!=[version[@"size"] unsignedLongLongValue])return AFail(error,@"Die Größe des Trainerpakets stimmt nicht.");
+    struct stat s;if(lstat(archive.fileSystemRepresentation,&s)||!S_ISREG(s.st_mode)||s.st_size<=0||(uint64_t)s.st_size>64*1024*1024||(uint64_t)s.st_size!=[version[@"size"] unsignedLongLongValue])return AFail(error,MHTLocalized(@"Die Größe des Trainerpakets stimmt nicht."));
     NSInputStream *stream=[NSInputStream inputStreamWithURL:archive];[stream open];CC_SHA256_CTX context;CC_SHA256_Init(&context);uint8_t bytes[65536],digest[CC_SHA256_DIGEST_LENGTH];NSInteger n;
     while((n=[stream read:bytes maxLength:sizeof(bytes)])>0)CC_SHA256_Update(&context,bytes,(CC_LONG)n);
-    [stream close];if(n<0)return AFail(error,@"Das Trainerpaket konnte nicht gelesen werden.");CC_SHA256_Final(digest,&context);
+    [stream close];if(n<0)return AFail(error,MHTLocalized(@"Das Trainerpaket konnte nicht gelesen werden."));CC_SHA256_Final(digest,&context);
     NSMutableString *hex=[NSMutableString new];for(NSUInteger i=0;i<sizeof(digest);i++)[hex appendFormat:@"%02x",digest[i]];
-    return [hex isEqual:version[@"sha256"]] || AFail(error,@"Die SHA-256-Prüfsumme des Trainerpakets stimmt nicht.");
+    return [hex isEqual:version[@"sha256"]] || AFail(error,MHTLocalized(@"Die SHA-256-Prüfsumme des Trainerpakets stimmt nicht."));
 }
 BOOL MHTTrainerExtractArchive(NSURL *archive,NSURL *destination,NSString *identifier,NSError **error){
     NSString *root=[identifier stringByAppendingString:@".mhtmodule"];
@@ -49,69 +50,69 @@ BOOL MHTTrainerExtractArchive(NSURL *archive,NSURL *destination,NSString *identi
         close(fd);if(n<0||written!=(uint64_t)size)ok=NO;
     }
     archive_read_free(reader);
-    if(!ok||status!=ARCHIVE_EOF)return AFail(error,@"Das Trainerarchiv enthält ungültige, doppelte oder beschädigte Einträge.");
+    if(!ok||status!=ARCHIVE_EOF)return AFail(error,MHTLocalized(@"Das Trainerarchiv enthält ungültige, doppelte oder beschädigte Einträge."));
     NSURL *package=[destination URLByAppendingPathComponent:root];NSArray *contents=[NSFileManager.defaultManager contentsOfDirectoryAtPath:package.path error:error];
-    if(![[NSSet setWithArray:contents ?: @[]] isEqual:allowed])return AFail(error,@"Das Trainerpaket ist unvollständig.");
+    if(![[NSSet setWithArray:contents ?: @[]] isEqual:allowed])return AFail(error,MHTLocalized(@"Das Trainerpaket ist unvollständig."));
     // Keep operating-system download attributes rather than stripping quarantine.
     char value[4096];ssize_t length=getxattr(archive.fileSystemRepresentation,"com.apple.quarantine",value,sizeof(value),0,0);
-    if(length>0&&setxattr(package.fileSystemRepresentation,"com.apple.quarantine",value,(size_t)length,0,0))return AFail(error,@"Die Downloadattribute konnten nicht übernommen werden.");
+    if(length>0&&setxattr(package.fileSystemRepresentation,"com.apple.quarantine",value,(size_t)length,0,0))return AFail(error,MHTLocalized(@"Die Downloadattribute konnten nicht übernommen werden."));
     return YES;
 }
 static BOOL runtimeSlice(NSData *data,uint64_t offset,uint64_t length,cpu_type_t cpu,cpu_subtype_t subtype,BOOL matchSubtype,NSError **error){
-    if(offset>data.length||length>data.length-offset||length<sizeof(struct mach_header_64))return AFail(error,@"Die Trainerbibliothek ist beschädigt.");
+    if(offset>data.length||length>data.length-offset||length<sizeof(struct mach_header_64))return AFail(error,MHTLocalized(@"Die Trainerbibliothek ist beschädigt."));
     const uint8_t *start=(const uint8_t *)data.bytes+(NSUInteger)offset;
     struct mach_header_64 h;memcpy(&h,start,sizeof(h));
-    if(h.magic!=MH_MAGIC_64||h.cputype!=cpu||(matchSubtype&&h.cpusubtype!=subtype)||h.filetype!=MH_DYLIB||!h.ncmds||h.ncmds>4096||h.sizeofcmds>1024*1024||h.sizeofcmds>length-sizeof(h))return AFail(error,@"Die Trainerarchitektur passt nicht zum Profil.");
+    if(h.magic!=MH_MAGIC_64||h.cputype!=cpu||(matchSubtype&&h.cpusubtype!=subtype)||h.filetype!=MH_DYLIB||!h.ncmds||h.ncmds>4096||h.sizeofcmds>1024*1024||h.sizeofcmds>length-sizeof(h))return AFail(error,MHTLocalized(@"Die Trainerarchitektur passt nicht zum Profil."));
     const uint8_t *at=start+sizeof(h),*end=at+h.sizeofcmds;BOOL minimum=NO,seenMinimum=NO;
     NSOperatingSystemVersion os=NSProcessInfo.processInfo.operatingSystemVersion;uint32_t host=((uint32_t)os.majorVersion<<16)|((uint32_t)os.minorVersion<<8)|(uint32_t)os.patchVersion;
     for(uint32_t i=0;i<h.ncmds;i++){
-        if((size_t)(end-at)<sizeof(struct load_command))return AFail(error,@"Ungültige Mach-O-Ladetabelle.");struct load_command c;memcpy(&c,at,sizeof(c));if(c.cmdsize<sizeof(c)||c.cmdsize>(size_t)(end-at))return AFail(error,@"Ungültige Mach-O-Ladetabelle.");
-        if(c.cmd==LC_BUILD_VERSION){if(c.cmdsize<sizeof(struct build_version_command)||seenMinimum)return AFail(error,@"Mehrdeutige Mindestversion im Trainer.");seenMinimum=YES;struct build_version_command b;memcpy(&b,at,sizeof(b));minimum=b.platform==PLATFORM_MACOS&&b.minos>=0x1b0000&&b.minos<=host;}
+        if((size_t)(end-at)<sizeof(struct load_command))return AFail(error,MHTLocalized(@"Ungültige Mach-O-Ladetabelle."));struct load_command c;memcpy(&c,at,sizeof(c));if(c.cmdsize<sizeof(c)||c.cmdsize>(size_t)(end-at))return AFail(error,MHTLocalized(@"Ungültige Mach-O-Ladetabelle."));
+        if(c.cmd==LC_BUILD_VERSION){if(c.cmdsize<sizeof(struct build_version_command)||seenMinimum)return AFail(error,MHTLocalized(@"Mehrdeutige Mindestversion im Trainer."));seenMinimum=YES;struct build_version_command b;memcpy(&b,at,sizeof(b));minimum=b.platform==PLATFORM_MACOS&&b.minos>=0x1b0000&&b.minos<=host;}
         at+=c.cmdsize;
     }
-    return (at==end&&minimum)||AFail(error,@"Der Trainer benötigt eine andere macOS-Version.");
+    return (at==end&&minimum)||AFail(error,MHTLocalized(@"Der Trainer benötigt eine andere macOS-Version."));
 }
 static BOOL runtime(NSString *path,NSSet<NSString *> *architectures,NSError **error){
-    if(!regular(path,64*1024*1024))return AFail(error,@"Die Trainerbibliothek fehlt oder ist ungültig.");
-    NSData *data=[NSData dataWithContentsOfFile:path options:NSDataReadingUncached error:error];if(data.length<sizeof(struct mach_header_64))return AFail(error,@"Die Trainerbibliothek ist beschädigt.");
+    if(!regular(path,64*1024*1024))return AFail(error,MHTLocalized(@"Die Trainerbibliothek fehlt oder ist ungültig."));
+    NSData *data=[NSData dataWithContentsOfFile:path options:NSDataReadingUncached error:error];if(data.length<sizeof(struct mach_header_64))return AFail(error,MHTLocalized(@"Die Trainerbibliothek ist beschädigt."));
     uint32_t magic;memcpy(&magic,data.bytes,sizeof(magic));
     NSMutableSet *expected=[NSMutableSet new];for(NSString *architecture in architectures){
-        if(![@[@"arm64",@"x86_64"] containsObject:architecture])return AFail(error,@"Unbekannte Trainerarchitektur.");
+        if(![@[@"arm64",@"x86_64"] containsObject:architecture])return AFail(error,MHTLocalized(@"Unbekannte Trainerarchitektur."));
         [expected addObject:@([architecture isEqual:@"x86_64"]?CPU_TYPE_X86_64:CPU_TYPE_ARM64)];
     }
-    if(!expected.count||expected.count>2)return AFail(error,@"Ungültige Trainerarchitekturen.");
+    if(!expected.count||expected.count>2)return AFail(error,MHTLocalized(@"Ungültige Trainerarchitekturen."));
     if(magic==MH_MAGIC_64){
-        if(expected.count!=1||!runtimeSlice(data,0,data.length,[expected.anyObject intValue],0,NO,error))return AFail(error,@"Die Trainerarchitektur passt nicht zu allen Profilen.");
+        if(expected.count!=1||!runtimeSlice(data,0,data.length,[expected.anyObject intValue],0,NO,error))return AFail(error,MHTLocalized(@"Die Trainerarchitektur passt nicht zu allen Profilen."));
     }else{
-        BOOL wide=magic==FAT_CIGAM_64;if(magic!=FAT_CIGAM&&!wide)return AFail(error,@"Ungültige Universal-Trainerbibliothek.");
+        BOOL wide=magic==FAT_CIGAM_64;if(magic!=FAT_CIGAM&&!wide)return AFail(error,MHTLocalized(@"Ungültige Universal-Trainerbibliothek."));
         const uint8_t *bytes=data.bytes;uint32_t count=OSReadBigInt32(bytes,4);size_t stride=wide?sizeof(struct fat_arch_64):sizeof(struct fat_arch);
         uint64_t table=sizeof(struct fat_header)+(uint64_t)count*stride;
-        if(count!=expected.count||table>data.length)return AFail(error,@"Die Universal-Architekturen passen nicht zu den Profilen.");
+        if(count!=expected.count||table>data.length)return AFail(error,MHTLocalized(@"Die Universal-Architekturen passen nicht zu den Profilen."));
         NSMutableSet *seen=[NSMutableSet new];uint64_t offsets[2]={0},lengths[2]={0};
         for(uint32_t i=0;i<count;i++){
             const uint8_t *entry=bytes+sizeof(struct fat_header)+i*stride;
             cpu_type_t cpu=(cpu_type_t)OSReadBigInt32(entry,0);cpu_subtype_t subtype=(cpu_subtype_t)OSReadBigInt32(entry,4);
             uint64_t offset=wide?OSReadBigInt64(entry,8):OSReadBigInt32(entry,8),length=wide?OSReadBigInt64(entry,16):OSReadBigInt32(entry,12);
             uint32_t alignment=OSReadBigInt32(entry,wide?24:16);
-            if(![expected containsObject:@(cpu)]||[seen containsObject:@(cpu)]||offset<table||offset>data.length||length>data.length-offset||alignment>30||offset%((uint64_t)1<<alignment)||(wide&&OSReadBigInt32(entry,28)))return AFail(error,@"Ungültige Universal-Slicegrenzen oder Architektur.");
-            for(uint32_t j=0;j<i;j++)if(offset<offsets[j]+lengths[j]&&offsets[j]<offset+length)return AFail(error,@"Überlappende Universal-Slices.");
+            if(![expected containsObject:@(cpu)]||[seen containsObject:@(cpu)]||offset<table||offset>data.length||length>data.length-offset||alignment>30||offset%((uint64_t)1<<alignment)||(wide&&OSReadBigInt32(entry,28)))return AFail(error,MHTLocalized(@"Ungültige Universal-Slicegrenzen oder Architektur."));
+            for(uint32_t j=0;j<i;j++)if(offset<offsets[j]+lengths[j]&&offsets[j]<offset+length)return AFail(error,MHTLocalized(@"Überlappende Universal-Slices."));
             if(!runtimeSlice(data,offset,length,cpu,subtype,YES,error))return NO;
             offsets[i]=offset;lengths[i]=length;[seen addObject:@(cpu)];
         }
-        if(![seen isEqual:expected])return AFail(error,@"Eine benötigte Trainerarchitektur fehlt.");
+        if(![seen isEqual:expected])return AFail(error,MHTLocalized(@"Eine benötigte Trainerarchitektur fehlt."));
     }
     SecStaticCodeRef code=NULL;OSStatus result=SecStaticCodeCreateWithPath((__bridge CFURLRef)[NSURL fileURLWithPath:path],kSecCSDefaultFlags,&code);
     if(result==errSecSuccess){result=SecStaticCodeCheckValidity(code,kSecCSStrictValidate|kSecCSCheckAllArchitectures,NULL);CFRelease(code);}
-    return result==errSecSuccess||AFail(error,@"Das Code-Siegel der Trainerbibliothek ist beschädigt.");
+    return result==errSecSuccess||AFail(error,MHTLocalized(@"Das Code-Siegel der Trainerbibliothek ist beschädigt."));
 }
 BOOL MHTTrainerValidatePackage(NSURL *package,NSDictionary *version,NSString *identifier,NSError **error){
-    struct stat s;if(lstat(package.fileSystemRepresentation,&s)||!S_ISDIR(s.st_mode)||![package.lastPathComponent isEqual:[identifier stringByAppendingString:@".mhtmodule"]])return AFail(error,@"Ungültiger Trainerordner.");
-    NSSet *allowed=[NSSet setWithArray:@[@"Module.json",@"TrainerConfig.json",@"Trainer.dylib",@"LICENSE"]];NSArray *files=[NSFileManager.defaultManager contentsOfDirectoryAtPath:package.path error:error];if(![[NSSet setWithArray:files ?: @[]] isEqual:allowed])return AFail(error,@"Das Trainerpaket enthält unerwartete Dateien.");
-    for(NSString *file in allowed)if(!regular([package.path stringByAppendingPathComponent:file],[file isEqual:@"Trainer.dylib"]?64*1024*1024:1024*1024))return AFail(error,@"Ungültige Datei im Trainerpaket.");
+    struct stat s;if(lstat(package.fileSystemRepresentation,&s)||!S_ISDIR(s.st_mode)||![package.lastPathComponent isEqual:[identifier stringByAppendingString:@".mhtmodule"]])return AFail(error,MHTLocalized(@"Ungültiger Trainerordner."));
+    NSSet *allowed=[NSSet setWithArray:@[@"Module.json",@"TrainerConfig.json",@"Trainer.dylib",@"LICENSE"]];NSArray *files=[NSFileManager.defaultManager contentsOfDirectoryAtPath:package.path error:error];if(![[NSSet setWithArray:files ?: @[]] isEqual:allowed])return AFail(error,MHTLocalized(@"Das Trainerpaket enthält unerwartete Dateien."));
+    for(NSString *file in allowed)if(!regular([package.path stringByAppendingPathComponent:file],[file isEqual:@"Trainer.dylib"]?64*1024*1024:1024*1024))return AFail(error,MHTLocalized(@"Ungültige Datei im Trainerpaket."));
     NSDictionary *manifest=[NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfURL:[package URLByAppendingPathComponent:@"Module.json"]] options:0 error:error];
-    if(![MHTModule validManifest:manifest error:error]||![manifest[@"id"] isEqual:identifier]||![manifest[@"version"] isEqual:version[@"version"]]||(version[@"manifest"]&&![manifest isEqual:version[@"manifest"]]))return AFail(error,@"Das Trainerpaket passt nicht zu den Katalogmetadaten.");
+    if(![MHTModule validManifest:manifest error:error]||![manifest[@"id"] isEqual:identifier]||![manifest[@"version"] isEqual:version[@"version"]]||(version[@"manifest"]&&![manifest isEqual:version[@"manifest"]]))return AFail(error,MHTLocalized(@"Das Trainerpaket passt nicht zu den Katalogmetadaten."));
     NSDictionary *config=MTLoadConfiguration([package.path stringByAppendingPathComponent:@"TrainerConfig.json"],error);
-    if(!config||![config[@"profiles"] isEqual:manifest[@"profiles"]]||![config[@"app"][@"version"] isEqual:manifest[@"version"]])return AFail(error,@"Die Trainerkonfiguration passt nicht zum Paket.");
+    if(!config||![config[@"profiles"] isEqual:manifest[@"profiles"]]||![config[@"app"][@"version"] isEqual:manifest[@"version"]])return AFail(error,MHTLocalized(@"Die Trainerkonfiguration passt nicht zum Paket."));
     NSMutableSet *architectures=[NSMutableSet new];for(NSDictionary *profile in manifest[@"profiles"])[architectures addObject:profile[@"architecture"] ?: @"arm64"];
     return runtime([package.path stringByAppendingPathComponent:@"Trainer.dylib"],architectures,error);
 }

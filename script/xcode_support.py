@@ -160,7 +160,8 @@ def check_launcher():
         (contents / "MacOS").mkdir(parents=True)
         (contents / "Info.plist").write_bytes(plistlib.dumps(dict(
             CFBundleIdentifier="local.mht.layout-tests", CFBundleExecutable="LayoutTests",
-            CFBundlePackageType="APPL", LSMinimumSystemVersion="27.0")))
+            CFBundlePackageType="APPL", CFBundleDevelopmentRegion="en", LSMinimumSystemVersion="27.0")))
+        (contents / "Resources").symlink_to(root / "TrainerDock.app/Contents/Resources", target_is_directory=True)
         # ModuleDirectory resolves next to the test .app, just as it does in production.
         (stage / "Modules").symlink_to(root / "Modules", target_is_directory=True)
         obj = stage / "LauncherLayoutTests.o"
@@ -168,7 +169,9 @@ def check_launcher():
         exe = contents / "MacOS/LayoutTests"
         extra = ["-larchive.2"]
         build.link([obj, common, *core, *app], exe, extra_flags=extra)
-        build.run([exe])
+        build.run([exe, "-AppleLanguages", "(de)"])
+        for preferences, expected in (("(de-AT)", "de"), ("(ro-RO)", "ro"), ("(en-GB)", "en"), ("(fr-FR,de-DE)", "en")):
+            build.run([exe, "-AppleLanguages", preferences, "-MHTTestLanguage", expected])
         update_obj=stage/"UpdaterTests.o"
         build.compile_object(ROOT/"Tests/UpdaterTests.m",update_obj,includes)
         update_contents=stage/"UpdaterTests.app/Contents"

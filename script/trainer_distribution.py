@@ -448,6 +448,7 @@ def launcher_fingerprint(root=ROOT):
     starts = [p for folder in ("App", "Core") for p in (root / folder).glob("*.m")]
     starts += [root / "ModuleSDK/MHTProtocol.m", root / "Config/TrainerDock.xcconfig", root / "Config/Info.plist",
                root / "App/Resources/TrainerDock.png", root / "LICENSE"]
+    starts += list((root / "App/Resources").glob("*.lproj/Localizable.strings"))
     starts += [root / "script" / name for name in ("build.py", "xcode_project.py", "xcode_support.py", "release.py")]
     return digest_inputs(source_closure(starts, root, (root / "App", root / "Core", root / "ModuleSDK")), {"launcherABI": 1}, root)
 
@@ -458,6 +459,7 @@ def launcher_content_fingerprint(root=ROOT):
     starts = [p for folder in ("App", "Core") for p in (root / folder).glob("*.m")]
     starts += [root / "ModuleSDK/MHTProtocol.m", root / "Config/Info.plist",
                root / "App/Resources/TrainerDock.png", root / "LICENSE"]
+    starts += list((root / "App/Resources").glob("*.lproj/Localizable.strings"))
     settings = {name: product_settings(root, name, prefix="")
                 for name in ("TrainerDock", "TrainerDockEpicBroker")}
     return digest_inputs(source_closure(starts, root, (root / "App", root / "Core", root / "ModuleSDK")),

@@ -78,6 +78,14 @@ class DistributionTests(unittest.TestCase):
         self.assertEqual(updated["modules"], [])
         self.assertTrue(updated["launcher"]["changed"])
 
+    def test_translation_only_releases_the_launcher(self):
+        self.write("App/Resources/ro.lproj/Localizable.strings", '"Play" = "Joacă";')
+        catalog = self.confirmed()
+        self.write("App/Resources/ro.lproj/Localizable.strings", '"Play" = "Pornește jocul";')
+        updated = self.changed(catalog)
+        self.assertEqual(updated["modules"], [])
+        self.assertTrue(updated["launcher"]["changed"])
+
     def test_shared_header_only_rebuilds_actual_dependents(self):
         catalog = self.confirmed()
         self.write("Modules/_Shared/Shared.h", "// changed backend")

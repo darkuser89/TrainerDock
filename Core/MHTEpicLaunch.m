@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-only
+#import "MHTLocalization.h"
 #import "MHTEpicLaunch.h"
 #import <CommonCrypto/CommonDigest.h>
 #include <mach-o/dyld.h>
@@ -106,7 +107,7 @@ static NSDictionary *EFindManifest(NSString *directory,NSDictionary *game,NSDict
 }
 static BOOL ERestore(NSDictionary *journal,NSError **error){
     NSData *original=[[NSData alloc]initWithBase64EncodedString:journal[@"original"] options:0],*mutation=[[NSData alloc]initWithBase64EncodedString:journal[@"mutation"] options:0];
-    NSData *current=ERead(journal[@"manifest"],NO,ELimit);if(!original.length||!mutation.length||!current)return EFail(error,@"Die Epic-Wiederherstellung benötigt eine Prüfung; das Journal bleibt erhalten.");
+    NSData *current=ERead(journal[@"manifest"],NO,ELimit);if(!original.length||!mutation.length||!current)return EFail(error,MHTLocalized(@"Die Epic-Wiederherstellung benötigt eine Prüfung; das Journal bleibt erhalten."));
     if([current isEqual:original])return YES;
     if(![current isEqual:mutation]){
         // Epic may serialize its cached start assignment again when it exits.
@@ -117,9 +118,9 @@ static BOOL ERestore(NSDictionary *journal,NSError **error){
         NSMutableDictionary *replay=[actual mutableCopy];
         BOOL own=[actual[@"LaunchExecutable"]isEqual:journal[@"nonce"]]&&EPatch(current,journal[@"nonce"])!=nil;
         if(expected[@"bNeedsValidation"]==(__bridge id)kCFBooleanFalse&&actual[@"bNeedsValidation"]==(__bridge id)kCFBooleanTrue)replay[@"bNeedsValidation"]=@NO;
-        if(!own||![replay isEqual:expected])return EFail(error,@"Epic hat die Startmetadaten inzwischen geändert. Die neueren Daten und das Wiederherstellungsjournal bleiben erhalten.");
+        if(!own||![replay isEqual:expected])return EFail(error,MHTLocalized(@"Epic hat die Startmetadaten inzwischen geändert. Die neueren Daten und das Wiederherstellungsjournal bleiben erhalten."));
     }
-    if(!EAtomic(journal[@"manifest"],original,[journal[@"mode"]unsignedShortValue]))return EFail(error,@"Die ursprünglichen Epic-Startmetadaten konnten nicht wiederhergestellt werden.");return YES;
+    if(!EAtomic(journal[@"manifest"],original,[journal[@"mode"]unsignedShortValue]))return EFail(error,MHTLocalized(@"Die ursprünglichen Epic-Startmetadaten konnten nicht wiederhergestellt werden."));return YES;
 }
 static BOOL EJournalValid(NSDictionary *journal,NSString *state,NSString *manifests){
     if(![journal[@"version"]isEqual:@1]||!EToken(journal[@"nonce"])||![journal[@"nonce"]hasPrefix:@"TrainerDock-Epic-"])return NO;
@@ -132,13 +133,13 @@ static BOOL EJournalValid(NSDictionary *journal,NSString *state,NSString *manife
     return [journal[@"mode"]isKindOfClass:NSNumber.class]&&[journal[@"mode"]unsignedIntegerValue]<=0777;
 }
 static BOOL ECleanup(NSDictionary *journal,NSString *journalPath,NSDictionary *processes,NSError **error){
-    if(![EJSON(ERead(journalPath,YES,ELimit*3))isEqual:journal])return EFail(error,@"Das Epic-Wiederherstellungsjournal wurde verändert; die gesicherten Dateien bleiben zur Prüfung erhalten.");
-    if(!processes||EHasPath(processes,journal[@"broker"],0))return EFail(error,@"Der Epic-Starthelfer läuft noch. Bitte den Start abwarten; kein zweiter Start wurde ausgeführt.");
-    for(NSString *key in @[@"broker",@"config"]){NSString *path=journal[key];struct stat s;if(lstat(path.fileSystemRepresentation,&s)){if(errno==ENOENT)continue;return EFail(error,@"Der Epic-Starthelfer konnte nicht bereinigt werden.");}
-        if(!S_ISREG(s.st_mode)||s.st_uid!=getuid()||![EHash(path)isEqual:journal[[key stringByAppendingString:@"SHA256"]]])return EFail(error,@"Eine eigene Epic-Helferdatei wurde verändert; sie bleibt zur Prüfung erhalten.");
-        if(unlink(path.fileSystemRepresentation))return EFail(error,@"Der Epic-Starthelfer konnte nicht bereinigt werden.");}
-    NSString *receipt=journal[@"receipt"];struct stat s;if(!lstat(receipt.fileSystemRepresentation,&s)){if(!S_ISREG(s.st_mode)||s.st_uid!=getuid()||(s.st_mode&077)||unlink(receipt.fileSystemRepresentation))return EFail(error,@"Die Epic-Startbestätigung konnte nicht bereinigt werden.");}
-    if(!ESyncDirectory([journal[@"broker"]stringByDeletingLastPathComponent])||unlink(journalPath.fileSystemRepresentation)||!ESyncDirectory(journalPath.stringByDeletingLastPathComponent))return EFail(error,@"Das Epic-Wiederherstellungsjournal bleibt zur Prüfung erhalten.");return YES;
+    if(![EJSON(ERead(journalPath,YES,ELimit*3))isEqual:journal])return EFail(error,MHTLocalized(@"Das Epic-Wiederherstellungsjournal wurde verändert; die gesicherten Dateien bleiben zur Prüfung erhalten."));
+    if(!processes||EHasPath(processes,journal[@"broker"],0))return EFail(error,MHTLocalized(@"Der Epic-Starthelfer läuft noch. Bitte den Start abwarten; kein zweiter Start wurde ausgeführt."));
+    for(NSString *key in @[@"broker",@"config"]){NSString *path=journal[key];struct stat s;if(lstat(path.fileSystemRepresentation,&s)){if(errno==ENOENT)continue;return EFail(error,MHTLocalized(@"Der Epic-Starthelfer konnte nicht bereinigt werden."));}
+        if(!S_ISREG(s.st_mode)||s.st_uid!=getuid()||![EHash(path)isEqual:journal[[key stringByAppendingString:@"SHA256"]]])return EFail(error,MHTLocalized(@"Eine eigene Epic-Helferdatei wurde verändert; sie bleibt zur Prüfung erhalten."));
+        if(unlink(path.fileSystemRepresentation))return EFail(error,MHTLocalized(@"Der Epic-Starthelfer konnte nicht bereinigt werden."));}
+    NSString *receipt=journal[@"receipt"];struct stat s;if(!lstat(receipt.fileSystemRepresentation,&s)){if(!S_ISREG(s.st_mode)||s.st_uid!=getuid()||(s.st_mode&077)||unlink(receipt.fileSystemRepresentation))return EFail(error,MHTLocalized(@"Die Epic-Startbestätigung konnte nicht bereinigt werden."));}
+    if(!ESyncDirectory([journal[@"broker"]stringByDeletingLastPathComponent])||unlink(journalPath.fileSystemRepresentation)||!ESyncDirectory(journalPath.stringByDeletingLastPathComponent))return EFail(error,MHTLocalized(@"Das Epic-Wiederherstellungsjournal bleibt zur Prüfung erhalten."));return YES;
 }
 static int ELock(NSString *state){
     if(!EPrivateDirectory(state,YES))return -1;NSString *path=[state stringByAppendingPathComponent:@"epic.lock"];int fd=open(path.fileSystemRepresentation,O_RDWR|O_CREAT|O_NOFOLLOW,0600);if(fd<0)return -1;struct stat s;
@@ -190,9 +191,9 @@ static int ELock(NSString *state){
     if((self=[super init])){_brokerURL=[url copy];_manifestDirectory=[manifests copy];_stateDirectory=[state copy];_clientRunning=[client copy];_processes=[processes copy];_openURI=[open copy];_queue=dispatch_queue_create("local.trainerdock.epic-launch",DISPATCH_QUEUE_SERIAL);}return self;
 }
 - (BOOL)recoverLocked:(NSError **)error{
-    NSString *path=[self.stateDirectory stringByAppendingPathComponent:@"epic.json"];struct stat s;if(lstat(path.fileSystemRepresentation,&s))return errno==ENOENT?YES:EFail(error,@"Das Epic-Wiederherstellungsjournal ist nicht lesbar.");
-    NSDictionary *journal=EJSON(ERead(path,YES,ELimit*3));if(!EJournalValid(journal,self.stateDirectory,self.manifestDirectory))return EFail(error,@"Das Epic-Wiederherstellungsjournal passt nicht zu dieser Installation und bleibt erhalten.");
-    if(self.clientRunning())return EFail(error,@"Bitte Epic Games Launcher regulär beenden. Sein Startcache und das Wiederherstellungsjournal bleiben bis dahin gesichert.");
+    NSString *path=[self.stateDirectory stringByAppendingPathComponent:@"epic.json"];struct stat s;if(lstat(path.fileSystemRepresentation,&s))return errno==ENOENT?YES:EFail(error,MHTLocalized(@"Das Epic-Wiederherstellungsjournal ist nicht lesbar."));
+    NSDictionary *journal=EJSON(ERead(path,YES,ELimit*3));if(!EJournalValid(journal,self.stateDirectory,self.manifestDirectory))return EFail(error,MHTLocalized(@"Das Epic-Wiederherstellungsjournal passt nicht zu dieser Installation und bleibt erhalten."));
+    if(self.clientRunning())return EFail(error,MHTLocalized(@"Bitte Epic Games Launcher regulär beenden. Sein Startcache und das Wiederherstellungsjournal bleiben bis dahin gesichert."));
     return ERestore(journal,error)&&ECleanup(journal,path,self.processes(),error);
 }
 - (void)releaseCleanup:(MHTEpicOperation *)operation{
@@ -202,9 +203,9 @@ static int ELock(NSString *state){
 }
 - (BOOL)completeCleanup:(NSError **)error{
     MHTEpicOperation *operation=self.cleanupOperation;if(!operation)return YES;
-    if(self.clientRunning())return EFail(error,@"Bitte Epic Games Launcher regulär beenden. Die gesicherten Startmetadaten werden danach abschließend wiederhergestellt.");
+    if(self.clientRunning())return EFail(error,MHTLocalized(@"Bitte Epic Games Launcher regulär beenden. Die gesicherten Startmetadaten werden danach abschließend wiederhergestellt."));
     NSDictionary *processes=self.processes();
-    if(!processes||EHasPath(processes,operation.journal[@"broker"],0))return EFail(error,@"Der Epic-Starthelfer läuft noch; die Wiederherstellung bleibt gesichert.");
+    if(!processes||EHasPath(processes,operation.journal[@"broker"],0))return EFail(error,MHTLocalized(@"Der Epic-Starthelfer läuft noch; die Wiederherstellung bleibt gesichert."));
     BOOL ok=ERestore(operation.journal,error)&&ECleanup(operation.journal,operation.journalPath,processes,error);
     // On foreign changes leave every remaining file and the journal in place,
     // but release the in-memory lease so an explicit recovery can report them.
@@ -218,10 +219,10 @@ static int ELock(NSString *state){
     dispatch_source_set_event_handler(operation.timer,^{[weakSelf completeCleanup:NULL];});dispatch_resume(operation.timer);
 }
 - (BOOL)recoverPendingTransactions:(NSError **)error{
-    NSAssert(NSThread.isMainThread,@"Epic API requires the main queue");if(self.pending)return EFail(error,@"Ein Epic-Start wird bereits vorbereitet.");
+    NSAssert(NSThread.isMainThread,@"Epic API requires the main queue");if(self.pending)return EFail(error,MHTLocalized(@"Ein Epic-Start wird bereits vorbereitet."));
     __block BOOL ok=NO;__block NSError *failure=nil;dispatch_sync(self.queue,^{
         if(![self completeCleanup:&failure])return;
-        int lock=ELock(self.stateDirectory);if(lock<0){failure=EError(@"Ein anderer TrainerDock-Start ist aktiv oder die private Startablage ist nicht zugänglich.");return;}
+        int lock=ELock(self.stateDirectory);if(lock<0){failure=EError(MHTLocalized(@"Ein anderer TrainerDock-Start ist aktiv oder die private Startablage ist nicht zugänglich."));return;}
         ok=[self recoverLocked:&failure];close(lock);
     });if(!ok&&error)*error=failure;return ok;
 }
@@ -239,15 +240,15 @@ static int ELock(NSString *state){
     dispatch_async(dispatch_get_main_queue(),^{if(self.pending==operation)self.pending=nil;void(^completion)(NSRunningApplication *,NSError *)=operation.completion;operation.completion=nil;if(completion)completion(app,error);});
 }
 - (void)tick:(MHTEpicOperation *)operation{
-    if(operation.finished)return;if(operation.cancelled){[self finish:operation app:nil error:EError(@"Der Epic-Start wurde abgebrochen; kein weiterer Start wurde ausgeführt.")];return;}
+    if(operation.finished)return;if(operation.cancelled){[self finish:operation app:nil error:EError(MHTLocalized(@"Der Epic-Start wurde abgebrochen; kein weiterer Start wurde ausgeführt."))];return;}
     NSDictionary *receipt=EJSON(ERead(operation.journal[@"receipt"],YES,16384));
     if(receipt){
         NSNumber *pid=receipt[@"pid"];NSString *started=receipt[@"started"];
-        if(![receipt[@"nonce"]isEqual:operation.journal[@"nonce"]]||![pid isKindOfClass:NSNumber.class]||pid.intValue<=0||!EText(started)||![@[@"exec-attempt",@"exec-failed"]containsObject:receipt[@"state"]]){[self finish:operation app:nil error:EError(@"Die Epic-Startbestätigung passt nicht zum angeforderten Start.")];return;}
+        if(![receipt[@"nonce"]isEqual:operation.journal[@"nonce"]]||![pid isKindOfClass:NSNumber.class]||pid.intValue<=0||!EText(started)||![@[@"exec-attempt",@"exec-failed"]containsObject:receipt[@"state"]]){[self finish:operation app:nil error:EError(MHTLocalized(@"Die Epic-Startbestätigung passt nicht zum angeforderten Start."))];return;}
         NSError *error=nil;if(!operation.acknowledged){if(!ERestore(operation.journal,&error)){[self finish:operation app:nil error:error];return;}operation.acknowledged=YES;}
-        if([receipt[@"state"]isEqual:@"exec-failed"]){[self finish:operation app:nil error:EError(@"Der Epic-Starthelfer konnte das unveränderte Originalspiel nicht starten.")];return;}
+        if([receipt[@"state"]isEqual:@"exec-failed"]){[self finish:operation app:nil error:EError(MHTLocalized(@"Der Epic-Starthelfer konnte das unveränderte Originalspiel nicht starten."))];return;}
         NSDictionary *process=self.processes()[pid];
-        if(process&&![process[@"started"]isEqual:started]){[self finish:operation app:nil error:EError(@"Die Epic-Prozesskennung wurde inzwischen wiederverwendet; kein weiterer Start wurde ausgeführt.")];return;}
+        if(process&&![process[@"started"]isEqual:started]){[self finish:operation app:nil error:EError(MHTLocalized(@"Die Epic-Prozesskennung wurde inzwischen wiederverwendet; kein weiterer Start wurde ausgeführt."))];return;}
         if([process[@"path"]isEqual:operation.game[@"executable"]]&&!operation.checkingApp){
             operation.checkingApp=YES;dispatch_async(dispatch_get_main_queue(),^{
                 NSRunningApplication *app=[NSRunningApplication runningApplicationWithProcessIdentifier:pid.intValue];
@@ -256,24 +257,24 @@ static int ELock(NSString *state){
             });
         }
     }
-    if(NSProcessInfo.processInfo.systemUptime>=operation.deadline){BOOL running=EHasPath(self.processes(),operation.game[@"executable"],0);[self finish:operation app:nil error:EError(running?@"Das Originalspiel läuft, ist aber noch nicht als App registriert. Bitte diese Instanz prüfen; es wurde keine zweite gestartet.":@"Epic hat den Trainerstart nicht rechtzeitig bestätigt. Bitte Epic Games Launcher regulär beenden und den Start erneut auswählen.")];}
+    if(NSProcessInfo.processInfo.systemUptime>=operation.deadline){BOOL running=EHasPath(self.processes(),operation.game[@"executable"],0);[self finish:operation app:nil error:EError(running?MHTLocalized(@"Das Originalspiel läuft, ist aber noch nicht als App registriert. Bitte diese Instanz prüfen; es wurde keine zweite gestartet."):MHTLocalized(@"Epic hat den Trainerstart nicht rechtzeitig bestätigt. Bitte Epic Games Launcher regulär beenden und den Start erneut auswählen."))];}
 }
 - (void)prepare:(MHTEpicOperation *)operation{
     NSError *error=nil;if(![self completeCleanup:&error]){[self finish:operation app:nil error:error];return;}
-    operation.lock=ELock(self.stateDirectory);if(operation.lock<0||![self recoverLocked:&error]){[self finish:operation app:nil error:error?:EError(@"Ein anderer Epic-Start ist aktiv oder die Startablage ist nicht zugänglich.")];return;}
-    if(operation.cancelled){[self finish:operation app:nil error:EError(@"Der Epic-Start wurde abgebrochen.")];return;}
+    operation.lock=ELock(self.stateDirectory);if(operation.lock<0||![self recoverLocked:&error]){[self finish:operation app:nil error:error?:EError(MHTLocalized(@"Ein anderer Epic-Start ist aktiv oder die Startablage ist nicht zugänglich."))];return;}
+    if(operation.cancelled){[self finish:operation app:nil error:EError(MHTLocalized(@"Der Epic-Start wurde abgebrochen."))];return;}
     NSDictionary *manifest=EFindManifest(self.manifestDirectory,operation.game,operation.profile);
-    if(!manifest||!EEnvironment(operation.environment,operation.game[@"executable"])||EHasPath(self.processes(),operation.game[@"executable"],0)){[self finish:operation app:nil error:EError(@"Epic-Installation oder Trainerumgebung passt nicht zum geprüften Profil, oder das Spiel läuft bereits.")];return;}
+    if(!manifest||!EEnvironment(operation.environment,operation.game[@"executable"])||EHasPath(self.processes(),operation.game[@"executable"],0)){[self finish:operation app:nil error:EError(MHTLocalized(@"Epic-Installation oder Trainerumgebung passt nicht zum geprüften Profil, oder das Spiel läuft bereits."))];return;}
     NSData *broker=EReadBroker(self.brokerURL.path);NSString *sha=EHash(operation.game[@"executable"]);
-    if(!broker.length||!sha.length){[self finish:operation app:nil error:EError(@"Der native Epic-Starthelfer oder das Originalspiel ist nicht lesbar.")];return;}
+    if(!broker.length||!sha.length){[self finish:operation app:nil error:EError(MHTLocalized(@"Der native Epic-Starthelfer oder das Originalspiel ist nicht lesbar."))];return;}
     NSString *nonce=[@"TrainerDock-Epic-"stringByAppendingString:NSUUID.UUID.UUIDString],*brokerPath=[manifest[@"root"]stringByAppendingPathComponent:nonce],*configPath=[brokerPath stringByAppendingString:@".json"],*receipt=[self.stateDirectory stringByAppendingPathComponent:[nonce stringByAppendingString:@".receipt"]];
     NSData *config=EEncode(@{@"target":operation.game[@"executable"],@"targetSHA256":sha,@"environment":operation.environment,@"receipt":receipt,@"expires":@(NSDate.date.timeIntervalSince1970+100),@"nonce":nonce});
     NSData *mutation=EPatch(manifest[@"original"],nonce);struct stat original;
-    if(config.length>65536||!config||!mutation||lstat([manifest[@"manifest"]fileSystemRepresentation],&original)){[self finish:operation app:nil error:EError(@"Die private Epic-Starttransaktion konnte nicht vorbereitet werden.")];return;}
+    if(config.length>65536||!config||!mutation||lstat([manifest[@"manifest"]fileSystemRepresentation],&original)){[self finish:operation app:nil error:EError(MHTLocalized(@"Die private Epic-Starttransaktion konnte nicht vorbereitet werden."))];return;}
     NSDictionary *journal=@{@"version":@1,@"manifest":manifest[@"manifest"],@"original":[manifest[@"original"]base64EncodedStringWithOptions:0],@"mutation":[mutation base64EncodedStringWithOptions:0],@"mode":@(original.st_mode&0777),@"broker":brokerPath,@"config":configPath,@"receipt":receipt,@"nonce":nonce,@"target":operation.game[@"executable"],@"brokerSHA256":EHashData(broker),@"configSHA256":EHashData(config)};
     operation.journalPath=[self.stateDirectory stringByAppendingPathComponent:@"epic.json"];
-    if(!EAtomic(operation.journalPath,EEncode(journal),0600)){[self finish:operation app:nil error:EError(@"Das private Epic-Wiederherstellungsjournal konnte nicht gesichert werden.")];return;}operation.journal=journal;
-    if(!EWriteNew(brokerPath,broker,0700)||!EWriteNew(configPath,config,0600)||!ESyncDirectory(manifest[@"root"])||![ERead(manifest[@"manifest"],NO,ELimit)isEqual:manifest[@"original"]]||!EAtomic(manifest[@"manifest"],mutation,original.st_mode&0777)){[self finish:operation app:nil error:EError(@"Epic-Startmetadaten wurden verändert oder der Starthelfer konnte nicht vorbereitet werden.")];return;}
+    if(!EAtomic(operation.journalPath,EEncode(journal),0600)){[self finish:operation app:nil error:EError(MHTLocalized(@"Das private Epic-Wiederherstellungsjournal konnte nicht gesichert werden."))];return;}operation.journal=journal;
+    if(!EWriteNew(brokerPath,broker,0700)||!EWriteNew(configPath,config,0600)||!ESyncDirectory(manifest[@"root"])||![ERead(manifest[@"manifest"],NO,ELimit)isEqual:manifest[@"original"]]||!EAtomic(manifest[@"manifest"],mutation,original.st_mode&0777)){[self finish:operation app:nil error:EError(MHTLocalized(@"Epic-Startmetadaten wurden verändert oder der Starthelfer konnte nicht vorbereitet werden."))];return;}
     NSString *ids=[NSString stringWithFormat:@"%@:%@:%@",operation.profile[@"epicNamespace"],manifest[@"item"][@"CatalogItemId"],operation.profile[@"epicAppName"]];NSString *encoded=[ids stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.alphanumericCharacterSet];NSURL *uri=[NSURL URLWithString:[NSString stringWithFormat:@"com.epicgames.launcher://apps/%@?action=launch&silent=true",encoded]];
     operation.deadline=NSProcessInfo.processInfo.systemUptime+90;
     operation.timer=dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER,0,0,self.queue);dispatch_source_set_timer(operation.timer,dispatch_time(DISPATCH_TIME_NOW,0),100*NSEC_PER_MSEC,20*NSEC_PER_MSEC);
@@ -281,15 +282,15 @@ static int ELock(NSString *state){
     dispatch_async(dispatch_get_main_queue(),^{
         if(self.pending!=operation||operation.cancelled)return;
         BOOL closed=!self.clientRunning();BOOL opened=closed&&uri&&self.openURI(uri);
-        if(!opened)dispatch_async(self.queue,^{[self finish:operation app:nil error:EError(closed?@"Der offizielle Epic-Start konnte nicht angefordert werden.":@"Bitte Epic Games Launcher regulär beenden und den Trainerstart erneut auswählen.")];});
+        if(!opened)dispatch_async(self.queue,^{[self finish:operation app:nil error:EError(closed?MHTLocalized(@"Der offizielle Epic-Start konnte nicht angefordert werden."):MHTLocalized(@"Bitte Epic Games Launcher regulär beenden und den Trainerstart erneut auswählen."))];});
     });
 }
 - (void)launchGame:(NSDictionary *)game profile:(NSDictionary *)profile environment:(NSDictionary<NSString *,NSString *> *)environment completion:(void (^)(NSRunningApplication *,NSError *))completion{
     NSAssert(NSThread.isMainThread,@"Epic API requires the main queue");
-    if(self.pending||self.clientRunning()){completion(nil,EError(self.pending?@"Ein Epic-Start wird bereits vorbereitet.":@"Bitte Epic Games Launcher regulär beenden und den Trainerstart erneut auswählen."));return;}
+    if(self.pending||self.clientRunning()){completion(nil,EError(self.pending?MHTLocalized(@"Ein Epic-Start wird bereits vorbereitet."):MHTLocalized(@"Bitte Epic Games Launcher regulär beenden und den Trainerstart erneut auswählen.")));return;}
     MHTEpicOperation *operation=[MHTEpicOperation new];operation.game=[game copy];operation.profile=[profile copy];operation.environment=[environment copy];operation.completion=[completion copy];self.pending=operation;dispatch_async(self.queue,^{[self prepare:operation];});
 }
-- (void)cancelPendingLaunch{NSAssert(NSThread.isMainThread,@"Epic API requires the main queue");MHTEpicOperation *operation=self.pending;if(operation)dispatch_sync(self.queue,^{operation.cancelled=YES;[self finish:operation app:nil error:EError(@"Der Epic-Start wurde abgebrochen. Die ursprünglichen Startmetadaten werden wiederhergestellt.")];});}
+- (void)cancelPendingLaunch{NSAssert(NSThread.isMainThread,@"Epic API requires the main queue");MHTEpicOperation *operation=self.pending;if(operation)dispatch_sync(self.queue,^{operation.cancelled=YES;[self finish:operation app:nil error:EError(MHTLocalized(@"Der Epic-Start wurde abgebrochen. Die ursprünglichen Startmetadaten werden wiederhergestellt."))];});}
 @end
 
 static BOOL EBrokerReceipt(NSString *path,NSString *nonce,NSString *state,BOOL create){

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-only
+#import "MHTLocalization.h"
 #import "MHTTrainerLibrary.h"
 #import "MHTTrainerStore.h"
 #import "MHTAppearance.h"
@@ -35,16 +36,16 @@
 - (instancetype)initWithStore:(MHTTrainerStore *)store protectedRuntimePaths:(NSSet<NSString *> *(^)(void))paths {
     NSWindow *window=[[NSWindow alloc]initWithContentRect:NSMakeRect(0,0,1000,680) styleMask:NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskMiniaturizable|NSWindowStyleMaskResizable backing:NSBackingStoreBuffered defer:NO];
     if((self=[super initWithWindow:window])){
-        _store=store;_protectedPaths=[paths copy];window.title=@"Trainer laden & verwalten";window.minSize=NSMakeSize(840,540);window.releasedWhenClosed=NO;
+        _store=store;_protectedPaths=[paths copy];window.title=MHTLocalized(@"Trainer laden & verwalten");window.minSize=NSMakeSize(840,540);window.releasedWhenClosed=NO;
         window.appearance=[NSAppearance appearanceNamed:NSAppearanceNameDarkAqua];window.backgroundColor=NSColor.windowBackgroundColor;
         [window setFrameAutosaveName:@"TrainerDock.TrainerLibrary"];
         NSView *sidebar=[NSView new];NSGlassEffectView *glass=[NSGlassEffectView new];glass.identifier=@"MHT.TrainerLibrary.Glass";glass.style=NSGlassEffectViewStyleRegular;glass.effectIsInteractive=YES;glass.cornerRadius=18;glass.contentView=sidebar;
-        _search=[NSSearchField new];_search.placeholderString=@"Trainer suchen";_search.delegate=self;
-        _scope=[NSSegmentedControl segmentedControlWithLabels:@[@"Alle",@"Geladen",@"Updates"] trackingMode:NSSegmentSwitchTrackingSelectOne target:self action:@selector(filter:)];_scope.selectedSegment=0;_scope.controlSize=NSControlSizeSmall;
+        _search=[NSSearchField new];_search.placeholderString=MHTLocalized(@"Trainer suchen");_search.delegate=self;
+        _scope=[NSSegmentedControl segmentedControlWithLabels:@[MHTLocalized(@"Alle"),MHTLocalized(@"Geladen"),MHTLocalized(@"Updates")] trackingMode:NSSegmentSwitchTrackingSelectOne target:self action:@selector(filter:)];_scope.selectedSegment=0;_scope.controlSize=NSControlSizeSmall;
         NSScrollView *scroll=[NSScrollView new];scroll.hasVerticalScroller=YES;scroll.autohidesScrollers=YES;scroll.drawsBackground=NO;scroll.translatesAutoresizingMaskIntoConstraints=NO;
         _table=[NSTableView new];[_table addTableColumn:[[NSTableColumn alloc]initWithIdentifier:@"trainer"]];_table.headerView=nil;_table.rowHeight=60;_table.intercellSpacing=NSMakeSize(0,4);_table.backgroundColor=NSColor.clearColor;_table.style=NSTableViewStyleSourceList;_table.delegate=self;_table.dataSource=self;scroll.documentView=_table;
         _summary=[NSTextField wrappingLabelWithString:@""];_summary.font=[NSFont systemFontOfSize:11];_summary.textColor=NSColor.secondaryLabelColor;
-        NSStackView *left=MHTStack(@[MHTLabel(@"Trainer",22,NSFontWeightBold),_summary,_search,_scope,scroll],YES,12);MHTFill(left,sidebar,16);
+        NSStackView *left=MHTStack(@[MHTLabel(MHTLocalized(@"Trainer"),22,NSFontWeightBold),_summary,_search,_scope,scroll],YES,12);MHTFill(left,sidebar,16);
         left.distribution=NSStackViewDistributionFill;[scroll setContentHuggingPriority:1 forOrientation:NSLayoutConstraintOrientationVertical];scroll.identifier=@"MHT.TrainerLibrary.SidebarScroll";
         for(NSView *v in @[_summary,_search,_scope,scroll])[v.widthAnchor constraintEqualToAnchor:left.widthAnchor].active=YES;
         [glass.widthAnchor constraintEqualToConstant:260].active=YES;[scroll.heightAnchor constraintGreaterThanOrEqualToConstant:180].active=YES;
@@ -53,9 +54,9 @@
         [glass.heightAnchor constraintEqualToAnchor:body.heightAnchor].active=YES;[details.heightAnchor constraintEqualToAnchor:body.heightAnchor].active=YES;
         _progress=[NSProgressIndicator new];_progress.style=NSProgressIndicatorStyleSpinning;_progress.controlSize=NSControlSizeSmall;_progress.displayedWhenStopped=NO;
         _status=MHTLabel(@"",11,NSFontWeightRegular);_status.textColor=NSColor.secondaryLabelColor;
-        _refresh=[NSButton buttonWithTitle:@"Nach Trainerupdates suchen" target:self action:@selector(refreshCatalog:)];_refresh.bezelStyle=NSBezelStyleGlass;_refresh.image=[NSImage imageWithSystemSymbolName:@"arrow.clockwise" accessibilityDescription:nil];_refresh.imagePosition=NSImageLeading;
-        _updateAll=[NSButton buttonWithTitle:@"Alle installierten Trainer aktualisieren" target:self action:@selector(updateAllInstalled:)];_updateAll.bezelStyle=NSBezelStyleGlass;_updateAll.identifier=@"MHT.TrainerLibrary.UpdateAll";
-        _updateAll.toolTip=@"Prüft den Katalog und lädt neue Versionen deiner installierten Trainer. Bisherige Versionen bleiben erhalten.";
+        _refresh=[NSButton buttonWithTitle:MHTLocalized(@"Nach Trainerupdates suchen") target:self action:@selector(refreshCatalog:)];_refresh.bezelStyle=NSBezelStyleGlass;_refresh.image=[NSImage imageWithSystemSymbolName:@"arrow.clockwise" accessibilityDescription:nil];_refresh.imagePosition=NSImageLeading;
+        _updateAll=[NSButton buttonWithTitle:MHTLocalized(@"Alle installierten Trainer aktualisieren") target:self action:@selector(updateAllInstalled:)];_updateAll.bezelStyle=NSBezelStyleGlass;_updateAll.identifier=@"MHT.TrainerLibrary.UpdateAll";
+        _updateAll.toolTip=MHTLocalized(@"Prüft den Katalog und lädt neue Versionen deiner installierten Trainer. Bisherige Versionen bleiben erhalten.");
         for(NSButton *button in @[_refresh,_updateAll])[button setContentCompressionResistancePriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationHorizontal];
         [_status setContentCompressionResistancePriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationHorizontal];
         NSStackView *footer=MHTStack(@[_progress,_status,MHTSpacer(),_updateAll,_refresh],NO,10);
@@ -84,17 +85,17 @@
     BOOL installed=NO;for(MHTModule *module in self.modules)installed|=module.installed;
     self.updateAll.enabled=installed && !busy;
     if(busy)[self.progress startAnimation:nil];else [self.progress stopAnimation:nil];
-    if(self.updatingAll)self.status.stringValue=self.updateMessage ?: @"Trainerupdates werden vorbereitet …";
-    else if(self.store.refreshing)self.status.stringValue=@"Trainerkatalog wird geprüft …";
-    else if(self.store.installingIdentifiers.count)self.status.stringValue=@"Trainer wird geladen und geprüft …";
-    else if(self.store.lastError)self.status.stringValue=[@"Offline/Fehler · " stringByAppendingString:self.store.lastError.localizedDescription];
+    if(self.updatingAll)self.status.stringValue=self.updateMessage ?: MHTLocalized(@"Trainerupdates werden vorbereitet …");
+    else if(self.store.refreshing)self.status.stringValue=MHTLocalized(@"Trainerkatalog wird geprüft …");
+    else if(self.store.installingIdentifiers.count)self.status.stringValue=MHTLocalized(@"Trainer wird geladen und geprüft …");
+    else if(self.store.lastError)self.status.stringValue=[MHTLocalized(@"Offline/Fehler · ") stringByAppendingString:self.store.lastError.localizedDescription];
 }
 - (void)controlTextDidChange:(NSNotification *)notification {if(notification.object==self.search)[self filter:nil];}
 - (void)filter:(id)sender {
     (void)sender;NSString *query=self.search.stringValue;NSMutableArray *visible=[NSMutableArray new];NSUInteger installed=0,updates=0,migrations=0;
     for(MHTModule *m in self.modules){BOOL has=m.installed;installed+=has;migrations+=m.packageMigrationAvailable;updates+=m.updateAvailable && !m.packageMigrationAvailable;
         if((self.scope.selectedSegment!=1 || has) && (self.scope.selectedSegment!=2 || m.updateAvailable) && (!query.length || [m.name localizedStandardContainsString:query]))[visible addObject:m];}
-    self.summary.stringValue=migrations ? [NSString stringWithFormat:@"%lu geladen · %lu Updates\n%lu GitHub-Pakete zur Übernahme",(unsigned long)installed,(unsigned long)updates,(unsigned long)migrations] : [NSString stringWithFormat:@"%lu geladen · %lu Updates",(unsigned long)installed,(unsigned long)updates];self.visibleModules=visible;[self.table reloadData];
+    self.summary.stringValue=migrations ? [NSString stringWithFormat:MHTLocalized(@"%lu geladen · %lu Updates\n%lu GitHub-Pakete zur Übernahme"),(unsigned long)installed,(unsigned long)updates,(unsigned long)migrations] : [NSString stringWithFormat:MHTLocalized(@"%lu geladen · %lu Updates"),(unsigned long)installed,(unsigned long)updates];self.visibleModules=visible;[self.table reloadData];
     NSInteger selected=0;for(NSUInteger i=0;i<visible.count;i++)if([[visible[i] identifier] isEqual:self.selectedID])selected=i;
     if(visible.count){self.selectedID=[visible[selected] identifier];[self.table selectRowIndexes:[NSIndexSet indexSetWithIndex:selected] byExtendingSelection:NO];}
     else self.selectedID=nil;
@@ -103,7 +104,7 @@
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {(void)tableView;return self.visibleModules.count;}
 - (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)column row:(NSInteger)row {
     (void)tableView;(void)column;MHTModule *m=self.visibleModules[row];BOOL installed=m.installed;
-    NSTextField *name=MHTLabel(m.name,12,NSFontWeightSemibold),*state=MHTLabel(m.packageMigrationAvailable?@"GitHub-Paket verfügbar":m.updateAvailable?@"Update verfügbar":installed?@"Trainer geladen":@"Zum Download",10,NSFontWeightRegular);state.textColor=m.updateAvailable?NSColor.systemCyanColor:NSColor.secondaryLabelColor;
+    NSTextField *name=MHTLabel(m.name,12,NSFontWeightSemibold),*state=MHTLabel(m.packageMigrationAvailable?MHTLocalized(@"GitHub-Paket verfügbar"):m.updateAvailable?MHTLocalized(@"Update verfügbar"):installed?MHTLocalized(@"Trainer geladen"):MHTLocalized(@"Zum Download"),10,NSFontWeightRegular);state.textColor=m.updateAvailable?NSColor.systemCyanColor:NSColor.secondaryLabelColor;
     NSStackView *text=MHTStack(@[name,state],YES,4);[name.widthAnchor constraintEqualToAnchor:text.widthAnchor].active=YES;[state.widthAnchor constraintEqualToAnchor:text.widthAnchor].active=YES;
     NSTableCellView *cell=[NSTableCellView new];cell.textField=name;MHTFill(MHTStack(@[MHTIconView(MHTGameIcon(m,nil),36,m.name),text],NO,10),cell,6);return cell;
 }
@@ -119,36 +120,36 @@
 - (void)renderDetail {
     for(NSView *v in self.detail.arrangedSubviews.copy){[self.detail removeArrangedSubview:v];[v removeFromSuperview];}
     MHTModule *selected=nil;for(MHTModule *m in self.modules)if([m.identifier isEqual:self.selectedID]){selected=m;break;}
-    if(!selected){[self addDetail:MHTLabel(@"Kein passender Trainer",20,NSFontWeightSemibold)];[self addDetail:MHTLabel(@"Wähle einen anderen Filter oder lade den Katalog neu.",12,NSFontWeightRegular)];return;}
+    if(!selected){[self addDetail:MHTLabel(MHTLocalized(@"Kein passender Trainer"),20,NSFontWeightSemibold)];[self addDetail:MHTLabel(MHTLocalized(@"Wähle einen anderen Filter oder lade den Katalog neu."),12,NSFontWeightRegular)];return;}
     NSStackView *heading=MHTStack(@[MHTIconView(MHTGameIcon(selected,nil),48,selected.name),MHTLabel(selected.name,23,NSFontWeightBold)],NO,14);[self addDetail:heading];
-    NSTextField *hint=[NSTextField wrappingLabelWithString:selected.packageMigrationAvailable ? @"Dein bisheriger Trainer bleibt erhalten. Das einzeln ladbare GitHub-Paket verwendet dieselbe Versionsnummer." : @"Downloads ergänzen deine installierten Trainer. Bisherige Versionen bleiben erhalten."];hint.textColor=NSColor.secondaryLabelColor;[self addDetail:hint];
+    NSTextField *hint=[NSTextField wrappingLabelWithString:selected.packageMigrationAvailable ? MHTLocalized(@"Dein bisheriger Trainer bleibt erhalten. Das einzeln ladbare GitHub-Paket verwendet dieselbe Versionsnummer.") : MHTLocalized(@"Downloads ergänzen deine installierten Trainer. Bisherige Versionen bleiben erhalten.")];hint.textColor=NSColor.secondaryLabelColor;[self addDetail:hint];
     NSArray<MHTModule *> *installed=[self.store installedVersionsForIdentifier:selected.identifier];NSArray<NSDictionary *> *versions=[self.store versionsForIdentifier:selected.identifier];BOOL running=[self runningIdentifier:selected.identifier],busy=self.updatingAll || [self.store.installingIdentifiers containsObject:selected.identifier];
-    [self addDetail:MHTLabel(@"Installierte Versionen",14,NSFontWeightSemibold)];
-    if(!installed.count)[self addDetail:MHTLabel(@"Für dieses Spiel ist noch kein Trainer geladen.",12,NSFontWeightRegular)];
+    [self addDetail:MHTLabel(MHTLocalized(@"Installierte Versionen"),14,NSFontWeightSemibold)];
+    if(!installed.count)[self addDetail:MHTLabel(MHTLocalized(@"Für dieses Spiel ist noch kein Trainer geladen."),12,NSFontWeightRegular)];
     for(MHTModule *m in installed){
         BOOL chosen=[m.directory isEqual:selected.directory];
-        NSTextField *title=MHTLabel([NSString stringWithFormat:@"Version %@",m.version],13,NSFontWeightSemibold);title.identifier=@"MHT.TrainerVersion.Title";
+        NSTextField *title=MHTLabel([NSString stringWithFormat:MHTLocalized(@"Version %@"),m.version],13,NSFontWeightSemibold);title.identifier=@"MHT.TrainerVersion.Title";
         [title setContentCompressionResistancePriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationHorizontal];
-        NSTextField *origin=MHTLabel([m.installRevision isEqual:m.version] ? @"GitHub-Paket" : @"Übernommener Trainer",11,NSFontWeightRegular);origin.textColor=NSColor.secondaryLabelColor;
-        NSMutableOrderedSet *stores=[NSMutableOrderedSet new];for(NSDictionary *p in m.profiles)[stores addObject:[NSString stringWithFormat:@"%@ · Spiel %@",p[@"store"],p[@"gameVersion"] ?: p[@"version"]]];
+        NSTextField *origin=MHTLabel([m.installRevision isEqual:m.version] ? MHTLocalized(@"GitHub-Paket") : MHTLocalized(@"Übernommener Trainer"),11,NSFontWeightRegular);origin.textColor=NSColor.secondaryLabelColor;
+        NSMutableOrderedSet *stores=[NSMutableOrderedSet new];for(NSDictionary *p in m.profiles)[stores addObject:[NSString stringWithFormat:MHTLocalized(@"%@ · Spiel %@"),p[@"store"],p[@"gameVersion"] ?: p[@"version"]]];
         NSTextField *subtitle=MHTLabel([stores.array componentsJoinedByString:@" / "],10,NSFontWeightRegular);subtitle.textColor=NSColor.secondaryLabelColor;subtitle.toolTip=subtitle.stringValue;
         NSStackView *labels=MHTStack(@[title,origin,subtitle],YES,5);[labels setHuggingPriority:1 forOrientation:NSLayoutConstraintOrientationHorizontal];
         for(NSTextField *label in @[title,origin,subtitle]){[label.widthAnchor constraintEqualToAnchor:labels.widthAnchor].active=YES;label.toolTip=label.stringValue;}
-        MHTTrainerLibraryAction *activate=[self action:chosen?@"Ausgewählt":@"Verwenden" selector:@selector(selectVersion:)];activate.module=m;activate.enabled=!chosen && !running && !busy;activate.identifier=@"MHT.TrainerVersion.Select";
-        MHTTrainerLibraryAction *remove=[self action:@"Löschen" selector:@selector(removeVersion:)];remove.module=m;remove.contentTintColor=NSColor.systemRedColor;remove.enabled=!busy;remove.identifier=@"MHT.TrainerVersion.Delete";
+        MHTTrainerLibraryAction *activate=[self action:chosen?MHTLocalized(@"Ausgewählt"):MHTLocalized(@"Verwenden") selector:@selector(selectVersion:)];activate.module=m;activate.enabled=!chosen && !running && !busy;activate.identifier=@"MHT.TrainerVersion.Select";
+        MHTTrainerLibraryAction *remove=[self action:MHTLocalized(@"Löschen") selector:@selector(removeVersion:)];remove.module=m;remove.contentTintColor=NSColor.systemRedColor;remove.enabled=!busy;remove.identifier=@"MHT.TrainerVersion.Delete";
         for(NSButton *button in @[activate,remove])[button setContentHuggingPriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationHorizontal];
-        if([(self.protectedPaths ? self.protectedPaths() : [NSSet set]) containsObject:m.runtimePath]){remove.enabled=NO;remove.toolTip=@"Diese Version wird gerade von einem Spiel verwendet.";}
+        if([(self.protectedPaths ? self.protectedPaths() : [NSSet set]) containsObject:m.runtimePath]){remove.enabled=NO;remove.toolTip=MHTLocalized(@"Diese Version wird gerade von einem Spiel verwendet.");}
         NSStackView *line=MHTStack(@[labels,activate,remove],NO,10);NSBox *card=MHTCard(line,14);card.identifier=@"MHT.TrainerVersion.Installed";[self addDetail:card];
     }
-    [self addDetail:MHTLabel(@"Verfügbare Versionen",14,NSFontWeightSemibold)];
+    [self addDetail:MHTLabel(MHTLocalized(@"Verfügbare Versionen"),14,NSFontWeightSemibold)];
     for(NSDictionary *v in versions){
         BOOL present=NO;for(MHTModule *m in installed)if([m.version isEqual:v[@"version"]] && [m.installRevision isEqual:m.version])present=YES;
-        NSTextField *title=MHTLabel([NSString stringWithFormat:@"Version %@",v[@"version"]],13,NSFontWeightSemibold);
+        NSTextField *title=MHTLabel([NSString stringWithFormat:MHTLocalized(@"Version %@"),v[@"version"]],13,NSFontWeightSemibold);
         title.identifier=@"MHT.TrainerVersion.Title";
         [title setContentCompressionResistancePriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationHorizontal];
-        BOOL downloadable=[v[@"downloadAvailable"] boolValue];NSString *state=present?@"Bereits installiert":downloadable?[NSByteCountFormatter stringFromByteCount:[v[@"size"] longLongValue] countStyle:NSByteCountFormatterCountStyleFile]:@"Noch nicht veröffentlicht";
+        BOOL downloadable=[v[@"downloadAvailable"] boolValue];NSString *state=present?MHTLocalized(@"Bereits installiert"):downloadable?[NSByteCountFormatter stringFromByteCount:[v[@"size"] longLongValue] countStyle:NSByteCountFormatterCountStyleFile]:MHTLocalized(@"Noch nicht veröffentlicht");
         NSTextField *subtitle=MHTLabel(state,10,NSFontWeightRegular);subtitle.textColor=NSColor.secondaryLabelColor;
-        MHTTrainerLibraryAction *load=[self action:present?@"Geladen":busy?@"Wird geladen …":@"Herunterladen" selector:@selector(installVersion:)];load.version=v;load.moduleID=selected.identifier;load.enabled=downloadable&&!present&&!busy;load.identifier=@"MHT.TrainerVersion.Download";
+        MHTTrainerLibraryAction *load=[self action:present?MHTLocalized(@"Geladen"):busy?MHTLocalized(@"Wird geladen …"):MHTLocalized(@"Herunterladen") selector:@selector(installVersion:)];load.version=v;load.moduleID=selected.identifier;load.enabled=downloadable&&!present&&!busy;load.identifier=@"MHT.TrainerVersion.Download";
         // Let the text column take the spare width, rather than competing
         // with a spacer while its truncating labels collapse to a few pixels.
         NSStackView *labels=MHTStack(@[title,subtitle],YES,5);
@@ -158,21 +159,21 @@
         [load setContentCompressionResistancePriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationHorizontal];
         NSBox *card=MHTCard(MHTStack(@[labels,load],NO,10),14);card.identifier=@"MHT.TrainerVersion.Available";[self addDetail:card];
     }
-    if(!versions.count)[self addDetail:MHTLabel(@"Keine Downloadversion im aktuellen Katalog.",12,NSFontWeightRegular)];
-    if(running)[self addDetail:MHTLabel(@"Spiel läuft · Versionswechsel nach dem regulären Spielende möglich.",11,NSFontWeightRegular)];
+    if(!versions.count)[self addDetail:MHTLabel(MHTLocalized(@"Keine Downloadversion im aktuellen Katalog."),12,NSFontWeightRegular)];
+    if(running)[self addDetail:MHTLabel(MHTLocalized(@"Spiel läuft · Versionswechsel nach dem regulären Spielende möglich."),11,NSFontWeightRegular)];
 }
 - (void)refreshCatalog:(id)sender {
     (void)sender;if(self.updatingAll)return;__weak MHTTrainerLibrary *weakSelf=self;
-    [self.store refreshCatalogWithCompletion:^(NSError *error){MHTTrainerLibrary *owner=weakSelf;if(!owner)return;owner.status.stringValue=error?[@"Katalog nicht erreichbar · " stringByAppendingString:error.localizedDescription]:@"Trainerkatalog ist aktuell.";[owner reloadForIdentifier:owner.selectedID];if(owner.didChange)owner.didChange();}];
+    [self.store refreshCatalogWithCompletion:^(NSError *error){MHTTrainerLibrary *owner=weakSelf;if(!owner)return;owner.status.stringValue=error?[MHTLocalized(@"Katalog nicht erreichbar · ") stringByAppendingString:error.localizedDescription]:MHTLocalized(@"Trainerkatalog ist aktuell.");[owner reloadForIdentifier:owner.selectedID];if(owner.didChange)owner.didChange();}];
 }
 - (void)updateAllInstalled:(id)sender {
     (void)sender;if(self.updatingAll || self.store.refreshing || self.store.installingIdentifiers.count)return;
     self.updatingAll=YES;self.updateIndex=0;self.updatedCount=0;self.updateQueue=@[];self.updateErrors=[NSMutableArray new];
-    self.status.toolTip=nil;self.updateMessage=@"Trainerkatalog wird geprüft …";[self reloadForIdentifier:self.selectedID];
+    self.status.toolTip=nil;self.updateMessage=MHTLocalized(@"Trainerkatalog wird geprüft …");[self reloadForIdentifier:self.selectedID];
     // Keep this explicitly requested operation alive if its window is closed.
     [self.store refreshCatalogWithCompletion:^(NSError *error){
-        if(error){[self finishUpdates:[@"Katalog nicht erreichbar · " stringByAppendingString:error.localizedDescription]];return;}
-        self.updateMessage=@"Installierte Trainer werden geprüft …";[self reloadForIdentifier:self.selectedID];
+        if(error){[self finishUpdates:[MHTLocalized(@"Katalog nicht erreichbar · ") stringByAppendingString:error.localizedDescription]];return;}
+        self.updateMessage=MHTLocalized(@"Installierte Trainer werden geprüft …");[self reloadForIdentifier:self.selectedID];
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED,0),^{
             NSArray *queue=[self.store updatesForInstalledTrainers];
             dispatch_async(dispatch_get_main_queue(),^{self.updateQueue=queue;[self installNextUpdate];});
@@ -181,14 +182,14 @@
 }
 - (void)installNextUpdate {
     if(self.updateIndex>=self.updateQueue.count){
-        NSString *message=self.updateErrors.count ? [NSString stringWithFormat:@"%lu aktualisiert · %lu fehlgeschlagen. Details im Hinweistext.",(unsigned long)self.updatedCount,(unsigned long)self.updateErrors.count] : self.updateQueue.count ? [NSString stringWithFormat:@"%lu Trainer aktualisiert. Bisherige Versionen bleiben erhalten.",(unsigned long)self.updatedCount] : @"Alle installierten Trainer sind aktuell.";
+        NSString *message=self.updateErrors.count ? [NSString stringWithFormat:MHTLocalized(@"%lu aktualisiert · %lu fehlgeschlagen. Details im Hinweistext."),(unsigned long)self.updatedCount,(unsigned long)self.updateErrors.count] : self.updateQueue.count ? [NSString stringWithFormat:MHTLocalized(@"%lu Trainer aktualisiert. Bisherige Versionen bleiben erhalten."),(unsigned long)self.updatedCount] : MHTLocalized(@"Alle installierten Trainer sind aktuell.");
         [self finishUpdates:message];return;
     }
     NSDictionary *item=self.updateQueue[self.updateIndex];
-    self.updateMessage=[NSString stringWithFormat:@"%lu von %lu · %@ wird aktualisiert …",(unsigned long)self.updateIndex+1,(unsigned long)self.updateQueue.count,item[@"name"]];[self reloadForIdentifier:self.selectedID];
+    self.updateMessage=[NSString stringWithFormat:MHTLocalized(@"%lu von %lu · %@ wird aktualisiert …"),(unsigned long)self.updateIndex+1,(unsigned long)self.updateQueue.count,item[@"name"]];[self reloadForIdentifier:self.selectedID];
     [self.store installVersion:item[@"version"] forIdentifier:item[@"id"] completion:^(MHTModule *module,NSError *error){
         if(module && !error)self.updatedCount++;
-        else [self.updateErrors addObject:[NSString stringWithFormat:@"%@: %@",item[@"name"],error.localizedDescription ?: @"Trainer konnte nicht installiert werden."]];
+        else [self.updateErrors addObject:[NSString stringWithFormat:@"%@: %@",item[@"name"],error.localizedDescription ?: MHTLocalized(@"Trainer konnte nicht installiert werden.")]];
         self.updateIndex++;if(self.didChange)self.didChange();
         dispatch_async(dispatch_get_main_queue(),^{[self installNextUpdate];});
     }];
@@ -201,19 +202,19 @@
 }
 - (void)installVersion:(MHTTrainerLibraryAction *)sender {
     if(self.updatingAll)return;
-    self.status.stringValue=@"Trainer wird heruntergeladen und geprüft …";__weak MHTTrainerLibrary *weakSelf=self;
-    [self.store installVersion:sender.version forIdentifier:sender.moduleID completion:^(MHTModule *module,NSError *error){MHTTrainerLibrary *owner=weakSelf;if(!owner)return;owner.status.stringValue=error.localizedDescription ?: [NSString stringWithFormat:@"%@ · Version %@ ist bereit.",module.name,module.version];[owner reloadForIdentifier:owner.selectedID];if(owner.didChange)owner.didChange();}];
+    self.status.stringValue=MHTLocalized(@"Trainer wird heruntergeladen und geprüft …");__weak MHTTrainerLibrary *weakSelf=self;
+    [self.store installVersion:sender.version forIdentifier:sender.moduleID completion:^(MHTModule *module,NSError *error){MHTTrainerLibrary *owner=weakSelf;if(!owner)return;owner.status.stringValue=error.localizedDescription ?: [NSString stringWithFormat:MHTLocalized(@"%@ · Version %@ ist bereit."),module.name,module.version];[owner reloadForIdentifier:owner.selectedID];if(owner.didChange)owner.didChange();}];
 }
 - (void)selectVersion:(MHTTrainerLibraryAction *)sender {
     if(self.updatingAll)return;
-    if([self runningIdentifier:sender.module.identifier]){self.status.stringValue=@"Versionswechsel nach dem regulären Spielende möglich.";return;}
-    NSError *error=nil;if([self.store selectModule:sender.module error:&error]){self.status.stringValue=[NSString stringWithFormat:@"Version %@ ausgewählt.",sender.module.version];if(self.didChange)self.didChange();}else self.status.stringValue=error.localizedDescription;
+    if([self runningIdentifier:sender.module.identifier]){self.status.stringValue=MHTLocalized(@"Versionswechsel nach dem regulären Spielende möglich.");return;}
+    NSError *error=nil;if([self.store selectModule:sender.module error:&error]){self.status.stringValue=[NSString stringWithFormat:MHTLocalized(@"Version %@ ausgewählt."),sender.module.version];if(self.didChange)self.didChange();}else self.status.stringValue=error.localizedDescription;
     [self reloadForIdentifier:sender.module.identifier];
 }
 - (void)removeVersion:(MHTTrainerLibraryAction *)sender {
     if(self.updatingAll)return;
     NSError *error=nil;NSSet *protected=self.protectedPaths ? self.protectedPaths() : [NSSet set];
-    if([self.store removeModule:sender.module protectedRuntimePaths:protected error:&error]){self.status.stringValue=[NSString stringWithFormat:@"Version %@ entfernt. Einstellungen und Spielstände bleiben erhalten.",sender.module.version];if(self.didChange)self.didChange();}else self.status.stringValue=error.localizedDescription;
+    if([self.store removeModule:sender.module protectedRuntimePaths:protected error:&error]){self.status.stringValue=[NSString stringWithFormat:MHTLocalized(@"Version %@ entfernt. Einstellungen und Spielstände bleiben erhalten."),sender.module.version];if(self.didChange)self.didChange();}else self.status.stringValue=error.localizedDescription;
     [self reloadForIdentifier:sender.module.identifier];
 }
 @end

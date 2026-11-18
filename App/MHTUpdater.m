@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-only
+#import "MHTLocalization.h"
 #import "MHTUpdater.h"
 #import "MHTUpdatePackage.h"
 #import "MHTTrainerStore.h"
@@ -62,26 +63,26 @@ static NSString *const checkedKey=@"TrainerDock.LastUpdateCheck";
         dispatch_async(dispatch_get_main_queue(),^{
             MHTUpdater *self=weakSelf;if(!self || generation!=self.generation)return;
             self.busy=NO;self.task=nil;NSError *failure=error;NSDictionary *release=nil;
-            if(!failure && [(NSHTTPURLResponse *)response statusCode]!=200)failure=[NSError errorWithDomain:@"TrainerDock.Update" code:1 userInfo:@{NSLocalizedDescriptionKey:@"GitHub ist gerade nicht erreichbar. Bitte später erneut versuchen."}];
+            if(!failure && [(NSHTTPURLResponse *)response statusCode]!=200)failure=[NSError errorWithDomain:@"TrainerDock.Update" code:1 userInfo:@{NSLocalizedDescriptionKey:MHTLocalized(@"GitHub ist gerade nicht erreichbar. Bitte später erneut versuchen.")}];
             if(!failure && data.length<=2*1024*1024){
                 id json=[NSJSONSerialization JSONObjectWithData:data options:0 error:&failure];
                 if(!failure)release=MHTNewRelease(json,NSBundle.mainBundle.infoDictionary[@"CFBundleShortVersionString"],&failure);
-            }else if(!failure)failure=[NSError errorWithDomain:@"TrainerDock.Update" code:1 userInfo:@{NSLocalizedDescriptionKey:@"Die GitHub-Antwort ist zu groß."}];
-            if(failure){if(manual)[self message:@"Updateprüfung fehlgeschlagen" detail:failure.localizedDescription];return;}
+            }else if(!failure)failure=[NSError errorWithDomain:@"TrainerDock.Update" code:1 userInfo:@{NSLocalizedDescriptionKey:MHTLocalized(@"Die GitHub-Antwort ist zu groß.")}];
+            if(failure){if(manual)[self message:MHTLocalized(@"Updateprüfung fehlgeschlagen") detail:failure.localizedDescription];return;}
             [NSUserDefaults.standardUserDefaults setObject:NSDate.date forKey:checkedKey];
-            if(!release){if(manual)[self message:@"TrainerDock ist aktuell" detail:[NSString stringWithFormat:@"Version %@ ist installiert.",NSBundle.mainBundle.infoDictionary[@"CFBundleShortVersionString"]]];return;}
-            NSAlert *alert=[NSAlert new];alert.messageText=[NSString stringWithFormat:@"TrainerDock %@ ist verfügbar",release[@"version"]];
-            alert.informativeText=@"TrainerDock herunterladen und installieren? Deine gespeicherten Trainer und Versionen bleiben erhalten. TrainerDock wird anschließend neu gestartet.";
-            [alert addButtonWithTitle:@"Laden und installieren"];[alert addButtonWithTitle:@"Später"];
+            if(!release){if(manual)[self message:MHTLocalized(@"TrainerDock ist aktuell") detail:[NSString stringWithFormat:MHTLocalized(@"Version %@ ist installiert."),NSBundle.mainBundle.infoDictionary[@"CFBundleShortVersionString"]]];return;}
+            NSAlert *alert=[NSAlert new];alert.messageText=[NSString stringWithFormat:MHTLocalized(@"TrainerDock %@ ist verfügbar"),release[@"version"]];
+            alert.informativeText=MHTLocalized(@"TrainerDock herunterladen und installieren? Deine gespeicherten Trainer und Versionen bleiben erhalten. TrainerDock wird anschließend neu gestartet.");
+            [alert addButtonWithTitle:MHTLocalized(@"Laden und installieren")];[alert addButtonWithTitle:MHTLocalized(@"Später")];
             if([alert runModal]==NSAlertFirstButtonReturn)[self download:release];
         });
     }];[self.task resume];
 }
 - (void)showProgress {
-    self.panel=[[NSPanel alloc]initWithContentRect:NSMakeRect(0,0,420,130) styleMask:NSWindowStyleMaskTitled backing:NSBackingStoreBuffered defer:NO];self.panel.title=@"TrainerDock aktualisieren";
-    self.status=[NSTextField labelWithString:@"Update wird geladen …"];self.status.frame=NSMakeRect(20,82,380,22);[self.panel.contentView addSubview:self.status];
+    self.panel=[[NSPanel alloc]initWithContentRect:NSMakeRect(0,0,420,130) styleMask:NSWindowStyleMaskTitled backing:NSBackingStoreBuffered defer:NO];self.panel.title=MHTLocalized(@"TrainerDock aktualisieren");
+    self.status=[NSTextField labelWithString:MHTLocalized(@"Update wird geladen …")];self.status.frame=NSMakeRect(20,82,380,22);[self.panel.contentView addSubview:self.status];
     self.progress=[[NSProgressIndicator alloc]initWithFrame:NSMakeRect(20,56,380,16)];self.progress.indeterminate=NO;self.progress.minValue=0;self.progress.maxValue=1;[self.panel.contentView addSubview:self.progress];
-    NSButton *cancel=[NSButton buttonWithTitle:@"Abbrechen" target:self action:@selector(cancel:)];cancel.frame=NSMakeRect(290,12,110,30);cancel.keyEquivalent=@"\e";[self.panel.contentView addSubview:cancel];
+    NSButton *cancel=[NSButton buttonWithTitle:MHTLocalized(@"Abbrechen") target:self action:@selector(cancel:)];cancel.frame=NSMakeRect(290,12,110,30);cancel.keyEquivalent=@"\e";[self.panel.contentView addSubview:cancel];
     [self.panel center];[self.panel makeKeyAndOrderFront:nil];
 }
 - (void)download:(NSDictionary *)release {
@@ -89,7 +90,7 @@ static NSString *const checkedKey=@"TrainerDock.LastUpdateCheck";
     NSString *pattern=[destination.URLByDeletingLastPathComponent.path stringByAppendingPathComponent:@".TrainerDock-update-XXXXXX"];
     char *buffer=strdup(pattern.fileSystemRepresentation);char *created=mkdtemp(buffer);
     if(created)self.stage=[NSURL fileURLWithFileSystemRepresentation:created isDirectory:YES relativeToURL:nil];free(buffer);
-    if(!self.stage){[self message:@"Update kann nicht installiert werden" detail:@"Bitte TrainerDock zuerst in einen beschreibbaren Ordner verschieben, zum Beispiel Programme im eigenen Benutzerordner."];return;}
+    if(!self.stage){[self message:MHTLocalized(@"Update kann nicht installiert werden") detail:MHTLocalized(@"Bitte TrainerDock zuerst in einen beschreibbaren Ordner verschieben, zum Beispiel Programme im eigenen Benutzerordner.")];return;}
     self.busy=YES;self.candidateRelease=release;[self showProgress];
     self.task=[self.session downloadTaskWithURL:[NSURL URLWithString:release[@"url"]]];[self.task resume];
 }
@@ -114,7 +115,7 @@ static NSString *const checkedKey=@"TrainerDock.LastUpdateCheck";
     (void)session;
     // URLSession removes location after this callback: finish validation/extraction here, off main.
     __block NSDictionary *release=nil;__block NSURL *stage=nil;__block NSUInteger generation=0;
-    dispatch_sync(dispatch_get_main_queue(),^{if(task==self.task){release=self.candidateRelease;stage=self.stage;generation=self.generation;self.extracting=YES;self.status.stringValue=@"Update wird geprüft …";}});
+    dispatch_sync(dispatch_get_main_queue(),^{if(task==self.task){release=self.candidateRelease;stage=self.stage;generation=self.generation;self.extracting=YES;self.status.stringValue=MHTLocalized(@"Update wird geprüft …");}});
     if(!stage)return;NSError *error=nil;NSURL *archive=[stage URLByAppendingPathComponent:@"Update.zip"];
     BOOL ok=[(NSHTTPURLResponse *)task.response statusCode]==200 && [NSFileManager.defaultManager moveItemAtURL:location toURL:archive error:&error];
     if(ok)ok=MHTVerifyUpdateArchive(archive,release,&error) && MHTExtractUpdate(archive,stage,&error) && MHTValidateUpdateApp([stage URLByAppendingPathComponent:@"TrainerDock.app"],release[@"version"],&error);
@@ -122,7 +123,7 @@ static NSString *const checkedKey=@"TrainerDock.LastUpdateCheck";
     dispatch_async(dispatch_get_main_queue(),^{
         if(generation!=self.generation || task!=self.task){[NSFileManager.defaultManager removeItemAtURL:stage error:nil];return;}
         self.task=nil;self.extracting=NO;
-        if(!ok){[self finishWithError:error.localizedDescription ?: @"Das Update konnte nicht geladen werden."];return;}
+        if(!ok){[self finishWithError:error.localizedDescription ?: MHTLocalized(@"Das Update konnte nicht geladen werden.")];return;}
         [self scheduleInstallation];
     });
 }
@@ -133,18 +134,18 @@ static NSString *const checkedKey=@"TrainerDock.LastUpdateCheck";
 - (void)finishWithError:(NSString *)message {
     [self.waitTimer invalidate];self.waitTimer=nil;self.pendingInstall=NO;self.busy=NO;self.handingOff=NO;self.candidateRelease=nil;
     [self.panel close];self.panel=nil;if(self.stage)[NSFileManager.defaultManager removeItemAtURL:self.stage error:nil];self.stage=nil;
-    if(message)[self message:@"Update nicht installiert" detail:message];
+    if(message)[self message:MHTLocalized(@"Update nicht installiert") detail:message];
 }
 - (void)scheduleInstallation {
     if(self.runningGames && self.runningGames()){
-        self.pendingInstall=YES;self.status.stringValue=@"Bereit · wartet auf das Ende deiner Spiele";
+        self.pendingInstall=YES;self.status.stringValue=MHTLocalized(@"Bereit · wartet auf das Ende deiner Spiele");
         __weak MHTUpdater *weakSelf=self;self.waitTimer=[NSTimer scheduledTimerWithTimeInterval:2 repeats:YES block:^(NSTimer *timer){MHTUpdater *self=weakSelf;if(!self){[timer invalidate];return;}if(self.runningGames && self.runningGames())return;[timer invalidate];self.waitTimer=nil;self.pendingInstall=NO;[self install];}];return;
     }[self install];
 }
 - (void)install {
     if(self.runningGames && self.runningGames()){[self scheduleInstallation];return;}
     self.handingOff=YES;for(NSView *view in self.panel.contentView.subviews)if([view isKindOfClass:NSButton.class])[(NSButton *)view setEnabled:NO];
-    self.status.stringValue=@"TrainerDock wird neu gestartet …";
+    self.status.stringValue=MHTLocalized(@"TrainerDock wird neu gestartet …");
     NSURL *stage=self.stage,*app=NSBundle.mainBundle.bundleURL.URLByResolvingSymlinksInPath,*helper=[stage URLByAppendingPathComponent:@"Updater"],*plan=[stage URLByAppendingPathComponent:@"Plan.plist"];
     NSMutableSet *games=[NSMutableSet new];
     MHTTrainerStore *trainerStore=MHTTrainerStore.sharedStore;
@@ -171,7 +172,7 @@ static NSString *const checkedKey=@"TrainerDock.LastUpdateCheck";
         NSURL *ready=[stage URLByAppendingPathComponent:@"Ready"];NSDate *deadline=[NSDate dateWithTimeIntervalSinceNow:5];
         while(installer.running && ![NSFileManager.defaultManager fileExistsAtPath:ready.path] && deadline.timeIntervalSinceNow>0)[NSThread sleepForTimeInterval:0.05];
         BOOL ok=[NSFileManager.defaultManager fileExistsAtPath:ready.path];
-        dispatch_async(dispatch_get_main_queue(),^{if(generation!=self.generation)return;if(ok){[NSApp terminate:nil];}else [self finishWithError:@"Der Updatehelfer konnte nicht gestartet werden."];});
+        dispatch_async(dispatch_get_main_queue(),^{if(generation!=self.generation)return;if(ok){[NSApp terminate:nil];}else [self finishWithError:MHTLocalized(@"Der Updatehelfer konnte nicht gestartet werden.")];});
     });
 }
 @end

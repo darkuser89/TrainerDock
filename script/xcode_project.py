@@ -94,6 +94,14 @@ def generate():
 
     products = []
     targets = []
+    languages = ("en", "de", "ro")
+    localized_strings = [
+        add("localization:" + language, "PBXFileReference", lastKnownFileType="text.plist.strings",
+            name=language, path=f"App/Resources/{language}.lproj/Localizable.strings", sourceTree="SOURCE_ROOT")
+        for language in languages
+    ]
+    localizations = add("localizations", "PBXVariantGroup", children=localized_strings,
+                        name="Localizable.strings", sourceTree="<group>")
 
     def native(name, sources, settings, phases_before=(), phases_after=(), app=False, tool=False):
         files = [add(name + ":compile:" + p, "PBXBuildFile", fileRef=ref(p)) for p in sources]
@@ -104,8 +112,9 @@ def generate():
         phases = [*phases_before, phase, frameworks]
         if app:
             license_file = add("app:license", "PBXBuildFile", fileRef=ref("LICENSE"))
+            strings_file = add("app:localizations", "PBXBuildFile", fileRef=localizations)
             phases.append(add("app:resources", "PBXResourcesBuildPhase", buildActionMask=2147483647,
-                              files=[license_file], runOnlyForDeploymentPostprocessing=0))
+                              files=[license_file, strings_file], runOnlyForDeploymentPostprocessing=0))
             phases.append(shell("app:icon", "Build macOS app icon", "icon",
                                 ["$(SRCROOT)/App/Resources/TrainerDock.png", "$(SRCROOT)/script/xcode_support.py"],
                                 ["$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/TrainerDock.icns"]))
@@ -142,6 +151,7 @@ def generate():
         PRODUCT_NAME="TrainerDock", PRODUCT_BUNDLE_IDENTIFIER="local.trainerdock.launcher",
         INFOPLIST_FILE="Config/Info.plist",
         GENERATE_INFOPLIST_FILE="NO", CONFIGURATION_BUILD_DIR="$(TRAINERDOCK_BUILD_ROOT)",
+        GCC_PREPROCESSOR_DEFINITIONS=["$(inherited)", "MHT_LAUNCHER_LOCALIZATION=1"],
         HEADER_SEARCH_PATHS=["$(SRCROOT)/App", "$(SRCROOT)/Core", "$(SRCROOT)/ModuleSDK", "$(TRAINERDOCK_ARCHIVE_INCLUDE)"],
         OTHER_LDFLAGS=links+["-larchive.2"]), phases_after=[embed_broker], app=True)
     objects[app]["dependencies"].append(add("app:depends:broker", "PBXTargetDependency", target=broker))
@@ -205,7 +215,9 @@ def generate():
         deps = [add(name + ":depends:" + target, "PBXTargetDependency", target=target) for target in dependencies]
         inputs = checks + ["$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/" + p
                            for p in ("TrainerDock", "TrainerDockEpicBroker")]
-        inputs += ["$(SRCROOT)/Tests/" + p for p in ("MHTTests.m", "GameIdentityTests.m", "LauncherLayoutTests.m", "UpdaterTests.m", "test_xcode_project.py")]
+        inputs += ["$(SRCROOT)/Tests/" + p for p in ("MHTTests.m", "GameIdentityTests.m", "LauncherLayoutTests.m", "UpdaterTests.m", "test_xcode_project.py", "test_localization.py")]
+        inputs += [f"$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/Resources/{language}.lproj/Localizable.strings"
+                   for language in languages]
         inputs += ["$(SRCROOT)/" + p for p in ("Tests/EpicLaunch/MHTEpicLaunchTests.m",
                                                "Core/MHTEpicLaunch.m", "Core/MHTEpicLaunch.h")]
         inputs.append("$(SRCROOT)/script/xcode_project.py")
@@ -227,10 +239,14 @@ def generate():
         for path in sorted(folder.iterdir(), key=lambda p: (p.is_file(), p.name.casefold())):
             if path.name.startswith(".") or path.name == "__pycache__":
                 continue
+            if folder == ROOT / "App/Resources" and path.suffix == ".lproj":
+                continue
             if path.is_dir():
                 children.append(group(path))
             else:
                 children.append(ref(str(path.relative_to(ROOT))))
+        if folder == ROOT / "App/Resources":
+            children.append(localizations)
         return add("group:" + str(folder.relative_to(ROOT)), "PBXGroup", children=children,
                    name=folder.name, sourceTree="<group>")
 
@@ -240,7 +256,7 @@ def generate():
     main_group = add("main-group", "PBXGroup", children=groups, sourceTree="<group>")
     root = add("project", "PBXProject", attributes=dict(BuildIndependentTargetsInParallel="YES", LastUpgradeCheck="2720"),
                buildConfigurationList=configurations("project", {}), compatibilityVersion="Xcode 14.0",
-               developmentRegion="de", hasScannedForEncodings=0, knownRegions=["de", "en", "Base"],
+               developmentRegion="en", hasScannedForEncodings=0, knownRegions=[*languages, "Base"],
                mainGroup=main_group, productRefGroup=identifier("products"), projectDirPath="", projectRoot="", targets=targets)
     project_data = dict(archiveVersion=1, classes={}, objectVersion=56, objects=objects, rootObject=root)
     write_changed(PROJECT / "project.pbxproj", ("// !$*UTF8*$!\n" + openstep(project_data) + "\n").encode())

@@ -11,6 +11,33 @@
 			"path" = "Config/TrainerDock.xcconfig";
 			"sourceTree" = "SOURCE_ROOT";
 		};
+		"47BB37F8CABC41E686BF7236" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text.plist.strings";
+			"name" = "en";
+			"path" = "App/Resources/en.lproj/Localizable.strings";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"E7506DAC209629702A079688" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text.plist.strings";
+			"name" = "de";
+			"path" = "App/Resources/de.lproj/Localizable.strings";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"39C06F65F1EDCF265683F803" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text.plist.strings";
+			"name" = "ro";
+			"path" = "App/Resources/ro.lproj/Localizable.strings";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"E6FADD6F1D2EA8148EAB2FE9" = {
+			"isa" = "PBXVariantGroup";
+			"children" = ("47BB37F8CABC41E686BF7236", "E7506DAC209629702A079688", "39C06F65F1EDCF265683F803");
+			"name" = "Localizable.strings";
+			"sourceTree" = "<group>";
+		};
 		"0EF1C6533DCBE77A6050BE78" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.objc";
@@ -242,6 +269,16 @@
 			"isa" = "PBXBuildFile";
 			"fileRef" = "91335BD57E1BEDE5040E4AC9";
 		};
+		"DB40F5B59B1047770C88CD12" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Core/MHTLocalization.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"0F1FD6696242B5BC3DCC02CA" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "DB40F5B59B1047770C88CD12";
+		};
 		"75FDEDF139FD73E324B16235" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.objc";
@@ -285,7 +322,7 @@
 		"1694EF60C3A8EE056828BF55" = {
 			"isa" = "PBXSourcesBuildPhase";
 			"buildActionMask" = 2147483647;
-			"files" = ("816667EAA05D1566EF55C2A8", "8E1752935B1DFCB8BFF60B4E", "D3AF5CADB89B65166CDD9444", "82336DD7D099C5B3196679E2", "287321472DFF42170A741C39", "E938BE848E3750C74451C7A3", "430BF5B177B1147374591557", "8F170029D39DA07380B30926", "28ACFAFA28A31D1571AC0824", "AC5B5134B5BB60B05F6BA3FA", "A0618446616328E0C16B7E4D", "A3D4D281C87F97B48F6C3A64", "E442196840C1F5D424CD14CB", "7F1177AD655FCF5E75A5FD60", "2D055E32FF0EA40BE88949F1", "6EB00FA654B023CAF8380483", "E6A9196ED9AA76956E15D0C6", "CE4889B1E19CBC38F6CA3C2E");
+			"files" = ("816667EAA05D1566EF55C2A8", "8E1752935B1DFCB8BFF60B4E", "D3AF5CADB89B65166CDD9444", "82336DD7D099C5B3196679E2", "287321472DFF42170A741C39", "E938BE848E3750C74451C7A3", "430BF5B177B1147374591557", "8F170029D39DA07380B30926", "28ACFAFA28A31D1571AC0824", "AC5B5134B5BB60B05F6BA3FA", "A0618446616328E0C16B7E4D", "A3D4D281C87F97B48F6C3A64", "E442196840C1F5D424CD14CB", "7F1177AD655FCF5E75A5FD60", "0F1FD6696242B5BC3DCC02CA", "2D055E32FF0EA40BE88949F1", "6EB00FA654B023CAF8380483", "E6A9196ED9AA76956E15D0C6", "CE4889B1E19CBC38F6CA3C2E");
 			"runOnlyForDeploymentPostprocessing" = 0;
 		};
 		"8FD1CA41DCCFF74B72CD7ADE" = {
@@ -304,10 +341,14 @@
 			"isa" = "PBXBuildFile";
 			"fileRef" = "BD84DAF23E7F5FEBD0301663";
 		};
+		"537C695C030C3E3559B28E42" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "E6FADD6F1D2EA8148EAB2FE9";
+		};
 		"88EAC1297EFC578EA1E87A58" = {
 			"isa" = "PBXResourcesBuildPhase";
 			"buildActionMask" = 2147483647;
-			"files" = ("A6D7A5B904478D9A8881D839");
+			"files" = ("A6D7A5B904478D9A8881D839", "537C695C030C3E3559B28E42");
 			"runOnlyForDeploymentPostprocessing" = 0;
 		};
 		"42414E89EEC00F8C7B0C416D" = {
@@ -348,6 +389,7 @@
 				"INFOPLIST_FILE" = "Config/Info.plist";
 				"GENERATE_INFOPLIST_FILE" = "NO";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)";
+				"GCC_PREPROCESSOR_DEFINITIONS" = ("$(inherited)", "MHT_LAUNCHER_LOCALIZATION=1");
 				"HEADER_SEARCH_PATHS" = ("$(SRCROOT)/App", "$(SRCROOT)/Core", "$(SRCROOT)/ModuleSDK", "$(TRAINERDOCK_ARCHIVE_INCLUDE)");
 				"OTHER_LDFLAGS" = ("$(inherited)", "-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++", "-larchive.2");
 				"CODE_SIGN_INJECT_BASE_ENTITLEMENTS" = "YES";
@@ -363,6 +405,7 @@
 				"INFOPLIST_FILE" = "Config/Info.plist";
 				"GENERATE_INFOPLIST_FILE" = "NO";
 				"CONFIGURATION_BUILD_DIR" = "$(TRAINERDOCK_BUILD_ROOT)";
+				"GCC_PREPROCESSOR_DEFINITIONS" = ("$(inherited)", "MHT_LAUNCHER_LOCALIZATION=1");
 				"HEADER_SEARCH_PATHS" = ("$(SRCROOT)/App", "$(SRCROOT)/Core", "$(SRCROOT)/ModuleSDK", "$(TRAINERDOCK_ARCHIVE_INCLUDE)");
 				"OTHER_LDFLAGS" = ("$(inherited)", "-framework", "AppKit", "-framework", "Security", "-framework", "QuartzCore", "-framework", "Carbon", "-framework", "UniformTypeIdentifiers", "-lc++", "-larchive.2");
 			};
@@ -7355,7 +7398,7 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDockEpicBroker", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/UpdaterTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/Tests/EpicLaunch/MHTEpicLaunchTests.m", "$(SRCROOT)/Core/MHTEpicLaunch.m", "$(SRCROOT)/Core/MHTEpicLaunch.h", "$(SRCROOT)/script/xcode_project.py", "$(TRAINERDOCK_BUILD_ROOT)/Modules/balatro.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/control.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/crimson-desert.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/cyberpunk-2077.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dead-island-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/death-stranding.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dome-keeper.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dredge.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/escape-from-duckov.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/frostpunk-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/house-flipper.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/inzoi.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/lies-of-p.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/no-mans-sky.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/prodeus.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-3.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-4.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-7.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-village.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/robocop.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/stray.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/terraria.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/the-long-dark.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/turok.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/turok-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-crawlers.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-survivors.mhtmodule/Module.json");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDockEpicBroker", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/UpdaterTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/Tests/test_localization.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/Resources/en.lproj/Localizable.strings", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/Resources/de.lproj/Localizable.strings", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/Resources/ro.lproj/Localizable.strings", "$(SRCROOT)/Tests/EpicLaunch/MHTEpicLaunchTests.m", "$(SRCROOT)/Core/MHTEpicLaunch.m", "$(SRCROOT)/Core/MHTEpicLaunch.h", "$(SRCROOT)/script/xcode_project.py", "$(TRAINERDOCK_BUILD_ROOT)/Modules/balatro.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/control.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/crimson-desert.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/cyberpunk-2077.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dead-island-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/death-stranding.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dome-keeper.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/dredge.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/escape-from-duckov.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/frostpunk-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/house-flipper.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/inzoi.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/lies-of-p.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/no-mans-sky.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/prodeus.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-3.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-4.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-7.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/resident-evil-village.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/robocop.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/stray.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/terraria.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/the-long-dark.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/turok.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/turok-2.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-crawlers.mhtmodule/Module.json", "$(TRAINERDOCK_BUILD_ROOT)/Modules/vampire-survivors.mhtmodule/Module.json");
 			"outputPaths" = ("$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Verify launcher, module signatures and layout";
 			"shellPath" = "/bin/bash";
@@ -7398,7 +7441,7 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDockEpicBroker", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/UpdaterTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/Tests/EpicLaunch/MHTEpicLaunchTests.m", "$(SRCROOT)/Core/MHTEpicLaunch.m", "$(SRCROOT)/Core/MHTEpicLaunch.h", "$(SRCROOT)/script/xcode_project.py");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDock", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/MacOS/TrainerDockEpicBroker", "$(SRCROOT)/Tests/MHTTests.m", "$(SRCROOT)/Tests/GameIdentityTests.m", "$(SRCROOT)/Tests/LauncherLayoutTests.m", "$(SRCROOT)/Tests/UpdaterTests.m", "$(SRCROOT)/Tests/test_xcode_project.py", "$(SRCROOT)/Tests/test_localization.py", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/Resources/en.lproj/Localizable.strings", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/Resources/de.lproj/Localizable.strings", "$(TRAINERDOCK_BUILD_ROOT)/TrainerDock.app/Contents/Resources/ro.lproj/Localizable.strings", "$(SRCROOT)/Tests/EpicLaunch/MHTEpicLaunchTests.m", "$(SRCROOT)/Core/MHTEpicLaunch.m", "$(SRCROOT)/Core/MHTEpicLaunch.h", "$(SRCROOT)/script/xcode_project.py");
 			"outputPaths" = ("$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Verify launcher, module signatures and layout";
 			"shellPath" = "/bin/bash";
@@ -7441,7 +7484,7 @@
 		};
 		"DC88D5694081BCC3FFDB10E5" = {
 			"isa" = "PBXGroup";
-			"children" = ("A5F3530F42F5CD3510514C43");
+			"children" = ("A5F3530F42F5CD3510514C43", "E6FADD6F1D2EA8148EAB2FE9");
 			"name" = "Resources";
 			"sourceTree" = "<group>";
 		};
@@ -7529,6 +7572,12 @@
 			"path" = "Core/MHTEpicLaunch.h";
 			"sourceTree" = "SOURCE_ROOT";
 		};
+		"E1A15B1ADACCC050F2AECEEB" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Core/MHTLocalization.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
 		"ACFB5E962E9F4D466158B4CB" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.h";
@@ -7549,7 +7598,7 @@
 		};
 		"2BA340BF271E1A0E2D6B10FC" = {
 			"isa" = "PBXGroup";
-			"children" = ("A07675CF7C65916A421CD5BF", "CE3FD9523DC9D280BDBBD69F", "80BB4B2A2BB7BDC714683597", "FD40B31E7DB1485ED64E6BF7", "77E0D995C1A0B31A0CE463C4", "EE09981FD6F3DAA33195E160", "6CA6132F2A5226AF8401CF9A", "91335BD57E1BEDE5040E4AC9", "ACFB5E962E9F4D466158B4CB", "75FDEDF139FD73E324B16235", "1E6D10BB4CF13678C3C77DFB", "30F9740DCC41216715F312F7", "B3BA87D8EB83AEED7D4B57CD", "B5E48D959C5A50E3527F8C61");
+			"children" = ("A07675CF7C65916A421CD5BF", "CE3FD9523DC9D280BDBBD69F", "80BB4B2A2BB7BDC714683597", "FD40B31E7DB1485ED64E6BF7", "77E0D995C1A0B31A0CE463C4", "EE09981FD6F3DAA33195E160", "6CA6132F2A5226AF8401CF9A", "91335BD57E1BEDE5040E4AC9", "E1A15B1ADACCC050F2AECEEB", "DB40F5B59B1047770C88CD12", "ACFB5E962E9F4D466158B4CB", "75FDEDF139FD73E324B16235", "1E6D10BB4CF13678C3C77DFB", "30F9740DCC41216715F312F7", "B3BA87D8EB83AEED7D4B57CD", "B5E48D959C5A50E3527F8C61");
 			"name" = "Core";
 			"sourceTree" = "<group>";
 		};
@@ -12635,6 +12684,12 @@
 			"path" = "Tests/test_distribution.py";
 			"sourceTree" = "SOURCE_ROOT";
 		};
+		"1D161C603E22B824794BF4D9" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Tests/test_localization.py";
+			"sourceTree" = "SOURCE_ROOT";
+		};
 		"54F9CF01D24044637CF3D68C" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "text";
@@ -12667,7 +12722,7 @@
 		};
 		"6DC4FAD667A85B8567F612FB" = {
 			"isa" = "PBXGroup";
-			"children" = ("95B85911D95C09F76077731D", "C558322C90F7C824EA333596", "9681BA565B80261048F375D6", "578887ED95FE266FE7E3C8CC", "774BF8DD634424BA7BD916BA", "3C9AA7F0D72E39A723213356", "7C8B042B8ED93392153A6649", "9ABCB2D9903EA261D4B7675F", "5AF284A3CC275F9661B07490", "AAA2EB948E4ACFEE43FAC82B", "03650C185D48D9578C8C1873", "D462BEEFAEB93437D38C2C9F", "47F172D0BD1D471CF0388A64", "C8438F0955C23E64B24CBFF4", "414BA22E27DAEE16828FD8D3", "2028435DB50D71B9AC2D9152", "C7937F2CF58FBDC42DD73A82", "7D0D1D652FDFB086D12FFBD3", "E23C8F9FADE485BB2413FC4D", "70352AD347BDDCBB3E9C2D71", "A0B8D4F7790FF0A7CD35B821", "453BCC9F40C25129A11AFE42", "66C06B56AC0DB42568B2CB8C", "9F9A7451392F18218D813F04", "E664071C6F2BCF7EE1084992", "0AB8D325CA82C5A2F0E18B6F", "C3BD1762E47CFABFCD557C0D", "8959DF4A9F4735B4184ED876", "92DBD7E0020F60B671F92774", "FE179AB05960397A0672CCDC", "272738046A71249570292AA4", "DAB207F704FDB6B20BDD3AA5", "92301B6E4315211EDE150A05", "EE99C02AC506535CD0888494", "30F4F96B94531703CD468051", "EE7A8D448A4C0FE99920A155", "46494363C1164468D58AC7DD", "619756B388236A8F9381AE69", "7392DD52806320306589C2A7", "DB9AF736CFC1402AD48660C4", "54F9CF01D24044637CF3D68C", "8B873C8801208A32F871EEF6", "C10871D3BA468B9911412563", "3D3477CCF699C841A7E9A36D", "C20FA7C518ADBFC4CFB3FE75");
+			"children" = ("95B85911D95C09F76077731D", "C558322C90F7C824EA333596", "9681BA565B80261048F375D6", "578887ED95FE266FE7E3C8CC", "774BF8DD634424BA7BD916BA", "3C9AA7F0D72E39A723213356", "7C8B042B8ED93392153A6649", "9ABCB2D9903EA261D4B7675F", "5AF284A3CC275F9661B07490", "AAA2EB948E4ACFEE43FAC82B", "03650C185D48D9578C8C1873", "D462BEEFAEB93437D38C2C9F", "47F172D0BD1D471CF0388A64", "C8438F0955C23E64B24CBFF4", "414BA22E27DAEE16828FD8D3", "2028435DB50D71B9AC2D9152", "C7937F2CF58FBDC42DD73A82", "7D0D1D652FDFB086D12FFBD3", "E23C8F9FADE485BB2413FC4D", "70352AD347BDDCBB3E9C2D71", "A0B8D4F7790FF0A7CD35B821", "453BCC9F40C25129A11AFE42", "66C06B56AC0DB42568B2CB8C", "9F9A7451392F18218D813F04", "E664071C6F2BCF7EE1084992", "0AB8D325CA82C5A2F0E18B6F", "C3BD1762E47CFABFCD557C0D", "8959DF4A9F4735B4184ED876", "92DBD7E0020F60B671F92774", "FE179AB05960397A0672CCDC", "272738046A71249570292AA4", "DAB207F704FDB6B20BDD3AA5", "92301B6E4315211EDE150A05", "EE99C02AC506535CD0888494", "30F4F96B94531703CD468051", "EE7A8D448A4C0FE99920A155", "46494363C1164468D58AC7DD", "619756B388236A8F9381AE69", "7392DD52806320306589C2A7", "DB9AF736CFC1402AD48660C4", "1D161C603E22B824794BF4D9", "54F9CF01D24044637CF3D68C", "8B873C8801208A32F871EEF6", "C10871D3BA468B9911412563", "3D3477CCF699C841A7E9A36D", "C20FA7C518ADBFC4CFB3FE75");
 			"name" = "Tests";
 			"sourceTree" = "<group>";
 		};
@@ -13022,9 +13077,9 @@
 			};
 			"buildConfigurationList" = "F905B102B4F13BD6617D8EB3";
 			"compatibilityVersion" = "Xcode 14.0";
-			"developmentRegion" = "de";
+			"developmentRegion" = "en";
 			"hasScannedForEncodings" = 0;
-			"knownRegions" = ("de", "en", "Base");
+			"knownRegions" = ("en", "de", "ro", "Base");
 			"mainGroup" = "19F479106CE8C3BA8C106518";
 			"productRefGroup" = "0A3E27B8CA818264D75C8D81";
 			"projectDirPath" = "";

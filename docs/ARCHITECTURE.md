@@ -276,3 +276,27 @@ Die vollständige Anbindung, Featurelogik, Auswahl und das native Ingame-Overlay
 liegen im unabhängigen Trainermodul. Der Launcher kennt keine IL2CPP-Klassen.
 Die explizite Originalfreigabe dieses Steam-Builds verwendet vollständige SHA-256-
 Dateiprüfung; sie ist kein automatischer Ersatzweg bei Signaturfehlern.
+
+## App-Sprache
+
+`Core/MHTLocalization.*` lädt die nativen `Localizable.strings` aus `en.lproj`,
+`de.lproj` und `ro.lproj`. Die primäre macOS-/App-Sprachpräferenz bestimmt die
+Oberfläche; regionale Varianten werden normalisiert, alle anderen Sprachen
+verwenden Englisch, auch wenn eine weitere bevorzugte Sprache Deutsch ist.
+Die frühe Auflösung vor AppKit setzt nur den flüchtigen Argumentbereich auf
+diese effektive Sprache, damit native Dialoge und eigene Texte übereinstimmen.
+Globale macOS-Einstellungen bleiben unverändert.
+
+Die manuelle Auswahl verwendet Apples app-eigenen `AppleLanguages`-Schlüssel.
+„Systemsprache“ entfernt nur diesen Override. Änderungen gelten nach einem
+App-Neustart; „Systemsprache“ bleibt als Auswahl erhalten. Die Host-Übersetzung
+verwendet ausschließlich `MHT_LAUNCHER_LOCALIZATION`; eigenständige Prüfwerkzeuge
+bleiben ohne Ressourcen lauffähig. Der gemeinsame Spielprüfer `GameIdentity.m`
+ist unverändert: Seine Meldungen werden an der Host-Grenze übersetzt, damit
+bestehende Trainerbibliotheken keine neuen Eingaben oder Versionen erhalten.
+Die Ingame-Trainer behalten ihre eigenen Katalogtexte.
+
+`Tests/test_localization.py` prüft die vollständigen Sprachschlüssel und nativen
+Formatargumente. Die nativen Launcherprüfungen kontrollieren Menüs, Einstellungen,
+englischen Fallback, Verifier-Meldungen und die gespeicherte Wahl in einem neuen
+Prozess. Dies startet keine Spiele und benötigt keine neuen Trainerpakete.
