@@ -97,6 +97,51 @@ Nur Launcher-Releases `vX.Y.Z` sind stabil. Dadurch findet der bestehende
 GitHub-App-Updater weiterhin ausschließlich App-Updates. Neue Trainerpakete
 benötigen keine neue App-Veröffentlichung.
 
+## Getrennte CI-Jobs und manuelle Auswahl
+
+Der Workflow verwendet einen gemeinsamen bestätigten Bauplan und getrennte Jobs:
+
+1. `plan` prüft Verträge, Inhalte und den manuellen Scope. Versionen werden nur
+   für tatsächlich geänderte Produkte gewählt. Ein unveränderter Stand beendet
+   den Workflow ohne Produktbuild und ohne Veröffentlichung.
+2. `contracts` prüft die nativen Speicher-/Archivgrenzen einmal. `build_trainers`
+   baut pro geänderter Modul-ID einen eigenen Release-Job, mit höchstens drei
+   parallelen Jobs. Ein Fehler bricht andere Matrixprüfungen nicht vorzeitig ab.
+3. `publish_trainers` prüft die vollständigen Artefakte aller geplanten Trainer
+   vor der ersten Veröffentlichung und aktualisiert anschließend geordnet den
+   bestätigten Katalog. Bei fehlenden oder fehlgeschlagenen Builds gibt es keine
+   Teilveröffentlichung.
+4. `build_launcher` läuft nur bei App-Änderungen. Auf Veröffentlichungsrefs wartet
+   er auf den bestätigten Trainerkatalog; eine reine Appänderung braucht keine
+   Trainer-Builds. PR-Vorschauen verwenden ausschließlich den alten bestätigten
+   Katalog, niemals URLs noch unveröffentlichter Trainerpakete.
+5. `publish_launcher` prüft Apppaket und Quell-/Katalogbindung und veröffentlicht
+   danach das stabile App-Release. Nur die beiden geordneten Publisher besitzen
+   Schreibrechte; PRs und andere Branches veröffentlichen nichts.
+
+Die Jobs verwenden jeweils einen eigenen isolierten Runner mit dem üblichen
+externen Buildpfad. `script/ci_products.py` überträgt den vollständigen Plan,
+Ausgangskatalog, Quellcommit und deren SHA-256-Bindungen. Paketartefakte enthalten
+nur ZIP, Metadaten und den Beleg für die final versiegelten Bytes, keine Xcode-
+Buildbäume oder Spielabhängigkeiten. Das ist kein Buildcache und keine zusätzliche
+Signatur. Die bisherigen unveränderlichen Releases und Veröffentlichungstransaktionen
+bleiben maßgeblich. Artefakte werden sieben Tage aufbewahrt; fehlen sie oder war
+bereits eine Veröffentlichung teilweise erfolgreich, den ganzen Workflow mit
+frischer Planung starten, statt alte Versionsnummern/Belege zurechtzubiegen.
+
+Unter **Actions → Build and release TrainerDock → Run workflow** gibt es:
+
+- `auto`: vollständiger tatsächlicher Änderungsplan.
+- `launcher`: prüft „nur App“; tatsächlich mitbetroffene Trainer führen zu einer
+  klaren Fehlermeldung, nicht zu einem abgeschnittenen Plan.
+- `trainers`: prüft die kommagetrennten stabilen Modul-IDs in `modules`; leer
+  bedeutet alle geänderten Trainer. Weitere geänderte Produkte oder gemeinsame
+  Abhängigkeiten dürfen nicht still ausgelassen werden.
+
+Die Auswahl erzwingt keinen Neubau unveränderter Produkte. Bestehende SDK-
+Abhängigkeiten bleiben erhalten. Änderungen an diesem Workflow allein sind kein
+App-/Trainerupdate und rechtfertigen keine neuen Produktversionen.
+
 ## Neue Trainer und Spielupdates veröffentlichen
 
 ### Neue Trainer ohne App-Update

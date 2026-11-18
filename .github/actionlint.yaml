@@ -1,0 +1,4 @@
+# Repository runner label already used by the successful native releases.
+self-hosted-runner:
+  labels:
+    - xcode-27

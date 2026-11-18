@@ -135,6 +135,17 @@ bei Änderungen lokal neu kompilieren und die Bausteine bewusst aktualisieren.
 Kein stiller Hashwechsel und keine Ersatz- oder Testassembly. Details:
 `docs/RELEASING.md`. Ad-hoc-Signierung ist keine Notarisierung.
 
+CI verwendet getrennte Jobs für Planung, native Vertragsprüfungen, einzelne
+Trainer-Builds (Matrix, höchstens drei parallel), geordnete Trainer-/Katalog-
+Veröffentlichung sowie App-Build und App-Veröffentlichung. Nur Publisher schreiben
+auf GitHub. `script/ci_products.py` bindet jobübergreifend Plan, Ausgangskatalog,
+Quellcommit und versiegelte Paketbytes; diese Belege niemals verändern oder bei
+fehlenden Artefakten durch lokale Binaries ersetzen. Auf Veröffentlichungsrefs
+wartet der App-Build auf den bestätigten Trainerkatalog; PRs verwenden ausschließlich
+bereits veröffentlichte Downloads. Die manuelle Auswahl `auto`/`launcher`/`trainers`
+ist eine Scope-Prüfung, kein Force-Build und kein Filter für geteilte Abhängigkeiten.
+Details und Wiederanlauf stehen in `docs/RELEASING.md`.
+
 ### Neue Trainer und Spielupdates einzeln ausliefern
 
 - Neues Spiel: mit `script/new_module.py` eine neue stabile Modul-ID anlegen;
