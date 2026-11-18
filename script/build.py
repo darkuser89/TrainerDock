@@ -172,6 +172,11 @@ def trainer(module_dir, modules_dir, stage, common, native_objects=None, archite
         compile_arch(ROOT/native_test,native_obj,[source,ROOT/"ModuleSDK"],config.get("defines",[]))
         native_exe=stage/(tag+"-NativeContractTests")
         link_arch([native_obj,common,*[obj for name,obj in objects.items() if name!="Runtime.m"]],native_exe);run([native_exe])
+    for index,test_source in enumerate(config.get("standaloneContractTests",[])):
+        test_obj=stage/(tag+f"-StandaloneContract-{index}.o")
+        compile_arch(ROOT/test_source,test_obj,[source,ROOT/"ModuleSDK"],config.get("defines",[]))
+        test_exe=stage/(tag+f"-StandaloneContract-{index}")
+        link_arch([test_obj],test_exe);run([test_exe])
     dpi_obj=stage/(tag+"-HiDPITests.o")
     compile_arch(ROOT/"Tests/HiDPITests.m",dpi_obj,[source,ROOT/"ModuleSDK"],config.get("defines",[])+(["TEST_CRIMSON=1"] if family=="CrimsonDesert" else []))
     dpi_exe=stage/(tag+"-HiDPITests")

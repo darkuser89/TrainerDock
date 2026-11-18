@@ -173,6 +173,7 @@ def generate():
         if contract:
             test_sources.append(contract)
         if config_data.get("rendererTests"):test_sources.append(config_data["rendererTests"])
+        test_sources += config_data.get("standaloneContractTests",[])
         inputs += ["$(SRCROOT)/" + p for p in test_sources]
         before = []
         if config_data.get("managed"):

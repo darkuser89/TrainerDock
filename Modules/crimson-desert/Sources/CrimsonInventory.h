@@ -1,40 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 // Private native inventory bindings. All selection discovery stays on GameThread;
 // the queued transaction carries stable actor/item numbers, never UI pointers.
-struct ItemBinding {uint16_t inventory=UINT16_MAX,info=UINT16_MAX;int16_t slot=-1;uint64_t number=UINT64_MAX;int64_t count=0;};
-void *inventoryComponent(void *actor) {return native<void *(*)(void *)>(0x1d3367c)(actor);}
-void *findBoundItem(void *actor,ItemBinding &binding,bool searchNumber) {
-    void *component=inventoryComponent(actor);if(!component)return nullptr;
-    unsigned inventories=read<uint32_t>(component,0x20);if(inventories>128)return nullptr;
-    for(unsigned i=0;i<inventories;i++) {
-        void *inventory=native<void *(*)(void *,unsigned)>(0x1d34850)(component,i);if(!inventory)continue;
-        uint16_t index=read<uint16_t>(inventory,0x10);
-        if(binding.inventory!=UINT16_MAX && binding.inventory!=index)continue;
-        int slots=read<int16_t>(inventory,8);if(slots<0 || slots>4096)continue;
-        for(int slot=0;slot<slots;slot++) {
-            void *item=native<void *(*)(void *,int16_t)>(0x1a6a66c)(inventory,slot);
-            if(!item || !native<bool(*)(const void *)>(0x1a71ae8)(item))continue;
-            if(binding.info!=UINT16_MAX && read<uint16_t>(item,8)!=binding.info)continue;
-            uint64_t number=read<uint64_t>(item);
-            if(!number || number==UINT64_MAX)continue;
-            if(searchNumber && number!=binding.number)continue;
-            if(!searchNumber && binding.number!=UINT64_MAX)return nullptr; // ambiguous wallet
-            binding.inventory=index;binding.slot=slot;binding.number=number;
-            binding.info=read<uint16_t>(item,8);binding.count=read<int64_t>(item,0x10);
-            if(searchNumber)return item;
-        }
-    }
-    if(!searchNumber && binding.number!=UINT64_MAX)return findBoundItem(actor,binding,true);
-    return nullptr;
-}
-void *walletItem(void *actor,ItemBinding &binding) {
-    void *infos=native<void *(*)(uint16_t)>(0x1b38c48)(6);
-    if(!infos)return nullptr;
-    binding.info=read<uint16_t>(infos,0xf0);
-    if(binding.info==UINT16_MAX)return nullptr;
-    binding.inventory=native<uint16_t(*)(void *,uint16_t,uint8_t)>(0xf56b88)(actor,binding.info,0);
-    return findBoundItem(actor,binding,false);
-}
+#include "CrimsonItemLookup.h"
 NSDictionary *selectionDiagnostic;
 void *selectedItem(void *actor,ItemBinding &binding) {
     void *context=native<void *(*)()>(0x47dedf4)();
@@ -47,7 +14,7 @@ void *selectedItem(void *actor,ItemBinding &binding) {
     for(uint32_t i=0;i<count;i++) {
         void *mode=read<void *>(modes,i*sizeof(void *));if(!mode)continue;
         void *candidate=native<void *(*)(void *,const char *)>(0x2e9cad0)(mode,"InventoryEquipmentPanel");
-        if(!candidate || read<uintptr_t>(candidate)!=imageBase+0x80cd500)continue;
+        if(!candidate || read<uintptr_t>(candidate)!=address(0x80cd500))continue;
         void *element=read<void *>(candidate,8);
         bool displayed=element && native<bool(*)(void *)>(0x29095e0)(element);
         diag[@"mode"]=@(i);diag[@"displayed"]=@(displayed);diag[@"tab"]=@(read<uint8_t>(candidate,0x2d0));
@@ -66,7 +33,7 @@ void *selectedItem(void *actor,ItemBinding &binding) {
     if(!script)return nullptr;
     void *vtable=read<void *>(script);
     auto matches=reinterpret_cast<bool(*)(void *,const void *)>(read<uintptr_t>(vtable,0x1a8));
-    bool matched=matches && matches(script,reinterpret_cast<void *>(imageBase+0x9091cfc));diag[@"typeMatched"]=@(matched);
+    bool matched=matches && matches(script,reinterpret_cast<void *>(address(0x9091cfc)));diag[@"typeMatched"]=@(matched);
     if(!matched)return nullptr;
     void *item=static_cast<uint8_t *>(script)+0x8b8;
     if(!native<bool(*)(const void *)>(0x1a71ae8)(item))item=static_cast<uint8_t *>(script)+0x610;
@@ -158,5 +125,6 @@ NSDictionary *inventoryDiagnostic(void *actor) {
         }
         [list addObject:@{@"index":@(read<uint16_t>(inv,0x10)),@"slots":@(slots),@"items":items}];
     }
-    return @{@"component":@(component!=nullptr),@"count":@(count),@"moneyInventory":@(native<uint16_t(*)()>(0x195676c)()),@"inventories":list};
+    ItemBinding wallet;walletItem(actor,wallet);
+    return @{@"component":@(component!=nullptr),@"count":@(count),@"moneyInventory":@(wallet.inventory),@"inventories":list};
 }

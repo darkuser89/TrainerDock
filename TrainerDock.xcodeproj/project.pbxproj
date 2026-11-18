@@ -907,7 +907,7 @@
 			"isa" = "PBXShellScriptBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = ();
-			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/crimson-desert/Module.json", "$(SRCROOT)/Modules/crimson-desert/Build.json", "$(SRCROOT)/Modules/crimson-desert/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/OverlayRuntimeWindowTests.m", "$(TARGET_BUILD_DIR)/Trainer.dylib");
+			"inputPaths" = ("$(SRCROOT)/script/build.py", "$(SRCROOT)/script/managed.py", "$(SRCROOT)/script/xcode_support.py", "$(SRCROOT)/Modules/crimson-desert/Module.json", "$(SRCROOT)/Modules/crimson-desert/Build.json", "$(SRCROOT)/Modules/crimson-desert/Sources/LICENSE", "$(SRCROOT)/script/trainer_distribution.py", "$(SRCROOT)/Tests/HiDPITests.m", "$(SRCROOT)/Tests/BridgeTests.m", "$(SRCROOT)/Tests/OverlayRuntimeWindowTests.m", "$(SRCROOT)/Tests/CrimsonDesert/NativeBindingsTests.mm", "$(SRCROOT)/Tests/CrimsonDesert/InventoryTests.mm", "$(TARGET_BUILD_DIR)/Trainer.dylib");
 			"outputPaths" = ("$(TARGET_BUILD_DIR)/Module.json", "$(TARGET_BUILD_DIR)/TrainerConfig.json", "$(TARGET_BUILD_DIR)/LICENSE", "$(TARGET_TEMP_DIR)/verified.stamp");
 			"name" = "Catalog, bridge, native and HiDPI checks";
 			"shellPath" = "/bin/bash";
@@ -8201,6 +8201,12 @@
 			"path" = "Modules/crimson-desert/Sources/CrimsonBuild.h";
 			"sourceTree" = "SOURCE_ROOT";
 		};
+		"5D7FC6F816EF76747BDB5BDE" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/crimson-desert/Sources/CrimsonBuild466.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
 		"DFAC48B77BC07D23B7F13FB6" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.h";
@@ -8211,6 +8217,12 @@
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.h";
 			"path" = "Modules/crimson-desert/Sources/CrimsonInventory.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"23762F3C721A2E9208F096B4" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "Modules/crimson-desert/Sources/CrimsonItemLookup.h";
 			"sourceTree" = "SOURCE_ROOT";
 		};
 		"EBEE0BBC0CC2866F2895C811" = {
@@ -8287,7 +8299,7 @@
 		};
 		"B046E1D04B558591AE4D76E0" = {
 			"isa" = "PBXGroup";
-			"children" = ("8B4B690FD2BCAA1F3C780F7A", "437993CBF0EEE1342BDF4FF5", "57DCB4E4887AA2AF34058B8F", "DFAC48B77BC07D23B7F13FB6", "B2EF62CA61CA564D5EE12181", "EBEE0BBC0CC2866F2895C811", "AC59EF2CA7EE512B9C7411E3", "966A5185B60193985292063D", "1654C40EF97AEA6CED515C34", "620BD98DFF1C5E0C17DFA691", "52187221652B6C226335FD75", "F7E58AAA1D0B38F23DA30BBA", "85373B53F342D52EFEF0DE06", "7AF33C5CBF1C0C71D899E9C4", "58610D0CE9F6ED700B39FEE3", "4D2E3AA7B3EEA198697AB31D", "DF4B81B6AC31774D6B0395A7", "60870ACEA09DF9BEBEA978B4", "037A2FB434E046E50E1F04CA", "834EE3794C8D469153BBF1C1", "62FC4EC2533B52197A117FA5", "24A701691BAB4440FDA9ECEC", "3ADDA6657DE8C49CED4F8073", "24B5E7BB309414CDFF0A7D2E", "9C10017A01C8D7044365AF31", "A0297CCA771D491C9CE298AB", "B8A360585D074CB24FE5DE11", "2A2A0F50FB5F371C5A7F6057", "7A37253F84694DB00C2D0896");
+			"children" = ("8B4B690FD2BCAA1F3C780F7A", "437993CBF0EEE1342BDF4FF5", "57DCB4E4887AA2AF34058B8F", "5D7FC6F816EF76747BDB5BDE", "DFAC48B77BC07D23B7F13FB6", "B2EF62CA61CA564D5EE12181", "23762F3C721A2E9208F096B4", "EBEE0BBC0CC2866F2895C811", "AC59EF2CA7EE512B9C7411E3", "966A5185B60193985292063D", "1654C40EF97AEA6CED515C34", "620BD98DFF1C5E0C17DFA691", "52187221652B6C226335FD75", "F7E58AAA1D0B38F23DA30BBA", "85373B53F342D52EFEF0DE06", "7AF33C5CBF1C0C71D899E9C4", "58610D0CE9F6ED700B39FEE3", "4D2E3AA7B3EEA198697AB31D", "DF4B81B6AC31774D6B0395A7", "60870ACEA09DF9BEBEA978B4", "037A2FB434E046E50E1F04CA", "834EE3794C8D469153BBF1C1", "62FC4EC2533B52197A117FA5", "24A701691BAB4440FDA9ECEC", "3ADDA6657DE8C49CED4F8073", "24B5E7BB309414CDFF0A7D2E", "9C10017A01C8D7044365AF31", "A0297CCA771D491C9CE298AB", "B8A360585D074CB24FE5DE11", "2A2A0F50FB5F371C5A7F6057", "7A37253F84694DB00C2D0896");
 			"name" = "Sources";
 			"sourceTree" = "<group>";
 		};
@@ -11357,6 +11369,24 @@
 			"path" = "Tests/CrimsonDesert/IngameProbe.m";
 			"sourceTree" = "SOURCE_ROOT";
 		};
+		"40D337BF183F413B34C73F09" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/CrimsonDesert/InventoryTests.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"3BF1942AC185BF9483BB2603" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "Tests/CrimsonDesert/Launch.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"FC28D11881C331D624DF6AEC" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.cpp.objcpp";
+			"path" = "Tests/CrimsonDesert/NativeBindingsTests.mm";
+			"sourceTree" = "SOURCE_ROOT";
+		};
 		"02AEFD003AEF4589F643D152" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "text";
@@ -11365,7 +11395,7 @@
 		};
 		"9681BA565B80261048F375D6" = {
 			"isa" = "PBXGroup";
-			"children" = ("990A1D8834DD35E9DBD1C0B6", "1CA461CBC685F60FADF40DC6", "02AEFD003AEF4589F643D152");
+			"children" = ("990A1D8834DD35E9DBD1C0B6", "1CA461CBC685F60FADF40DC6", "40D337BF183F413B34C73F09", "3BF1942AC185BF9483BB2603", "FC28D11881C331D624DF6AEC", "02AEFD003AEF4589F643D152");
 			"name" = "CrimsonDesert";
 			"sourceTree" = "<group>";
 		};

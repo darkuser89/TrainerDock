@@ -25,5 +25,9 @@
     "MHTGlassIntensity.m",
     "MHTOverlayHost.m"
   ],
-  "nativeContractTests": "Tests/OverlayRuntimeWindowTests.m"
+  "nativeContractTests": "Tests/OverlayRuntimeWindowTests.m",
+  "standaloneContractTests": [
+    "Tests/CrimsonDesert/NativeBindingsTests.mm",
+    "Tests/CrimsonDesert/InventoryTests.mm"
+  ]
 }

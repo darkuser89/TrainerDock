@@ -446,3 +446,13 @@ bisherigen einzelnen `architecture` verwenden. Alle Profilarchitekturen müssen
 exakt den versiegelten Mach-O-Slices entsprechen; jede Slice bleibt macOS 27+.
 Prüfungen pro CPU und übereinstimmende Kataloge sind Pflicht. Solche Pakete benötigen
 mindestens TrainerDock 1.2.6; der Launcher selbst bleibt arm64.
+
+## Crimson Desert: eng begrenzte Originalfreigabe
+
+Nach fehlerfreier Steam-Dateiprüfung hat der Nutzer ausschließlich Steam-Build
+**26636972**, Version **1.0.35 (466)**, arm64-UUID
+`B5C91E74-E921-3891-A1E9-B9BAAB7D0A9D` für `sha256-original` genehmigt.
+Die vier erfassten Originaldateien müssen ihren 30 lückenlosen SHA-256-Abschnitten
+entsprechen. Keine stillen Hashupdates, Signaturänderungen oder weiteren Builds.
+Die Buildfreigabe ist keine pauschale Spielstartfreigabe; Offlineprüfungen sind
+kein Ingame-Nachweis. Build 450 und seine getrennten Bindungen bleiben erhalten.

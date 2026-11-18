@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-only
-// Bindings for the inspected macOS arm64 Steam build 1.0.35 (450) only.
+// Separate exact bindings for Steam bundle builds 450 and 466.
 #import "CrimsonNative.h"
 extern "C" {
 #import "MemoryAccess.h"
@@ -14,16 +14,24 @@ extern "C" {
 #include <vector>
 #include <map>
 #import "CrimsonBuild.h"
+#import "CrimsonBuild466.h"
 
 namespace {
 uintptr_t imageBase;
 bool checked, supported;
+unsigned buildNumber;
 NSString *buildFailure;
-template<typename T> T native(uintptr_t offset) { return reinterpret_cast<T>(imageBase+offset); }
+uintptr_t address(uintptr_t key) {
+    uintptr_t offset=buildNumber==466 ? CDOffset466(key) : key;
+    // A missing binding is a programming error, never permission to use 450.
+    if(!offset)__builtin_trap();
+    return imageBase+offset;
+}
+template<typename T> T native(uintptr_t offset) { return reinterpret_cast<T>(address(offset)); }
 template<typename T> T read(const void *p, size_t offset=0) {
     T value{}; MTReadMemory(static_cast<const uint8_t *>(p)+offset,&value,sizeof(value)); return value;
 }
-void *context(uintptr_t slot) { return read<void *>(reinterpret_cast<void *>(imageBase+slot)); }
+void *context(uintptr_t slot) { return read<void *>(reinterpret_cast<void *>(address(slot))); }
 bool loading(void *ctx) {
     void *gameplay=ctx ? read<void *>(ctx,0x20) : nullptr;
     void *processor=gameplay ? read<void *>(gameplay,0x1f70) : nullptr;
@@ -84,7 +92,7 @@ BOOL onServerThread(dispatch_block_t work) {
     if(!framework || !native<bool(*)(void *)>(0x7d9010)(framework))return NO;
     static dispatch_once_t once;
     dispatch_once(&once,^{
-        MTReadMemory(reinterpret_cast<void *>(imageBase+0x8f8ba88),serverTask,sizeof(serverTask));
+        MTReadMemory(reinterpret_cast<void *>(address(0x8f8ba88)),serverTask,sizeof(serverTask));
         uintptr_t original=read<uintptr_t>(serverTask);
         MTReadMemory(reinterpret_cast<void *>(original),serverVtable,sizeof(serverVtable));
         serverVtable[3]=reinterpret_cast<uintptr_t>(invokeServerTask);
@@ -136,7 +144,7 @@ void drainPending() {
     void *gameplay=ctx ? read<void *>(ctx,0x20) : nullptr;
     void *timer=gameplay ? read<void *>(gameplay,0x1fb0) : nullptr;
     // Constructor and all three native callers agree on this owner and vtable.
-    if(!timer || read<uintptr_t>(timer)!=imageBase+0x8679c28) { retryPending(); return; }
+    if(!timer || read<uintptr_t>(timer)!=address(0x8679c28)) { retryPending(); return; }
     NSArray *blocks;
     { std::lock_guard<std::mutex> guard(pendingLock); blocks=[pending copy]; }
     for(dispatch_block_t block in blocks) {
@@ -174,15 +182,23 @@ BOOL CDCorrectBuild(void) {
         const auto *c=reinterpret_cast<const load_command *>(pos);
         if(c->cmdsize<sizeof(*c) || pos+c->cmdsize>end) return NO;
         if(c->cmd==LC_UUID && c->cmdsize==sizeof(uuid_command)) {
-            uuid=!memcmp(reinterpret_cast<const uuid_command *>(c)->uuid,CDExpectedUUID,16);
+            const uint8_t *identity=reinterpret_cast<const uuid_command *>(c)->uuid;
+            if(!memcmp(identity,CDExpectedUUID,16))buildNumber=450;
+            else if(!memcmp(identity,CDExpectedUUID466,16))buildNumber=466;
+            uuid=buildNumber!=0;
         }
         pos+=c->cmdsize;
     }
     if(!uuid) {buildFailure=@"Unexpected executable UUID";return NO;}
     imageBase=reinterpret_cast<uintptr_t>(h);
-    for(const auto &entry:CDEntryChecks) {
+    auto matches=[&](const auto &entry) {
         uint8_t bytes[sizeof(entry.bytes)];
-        if(!MTReadMemory(reinterpret_cast<void *>(imageBase+entry.offset),bytes,sizeof(bytes)) || memcmp(bytes,entry.bytes,sizeof(bytes))) {buildFailure=[NSString stringWithFormat:@"Instruction prefix mismatch at 0x%lx",entry.offset];return NO;}
+        return MTReadMemory(reinterpret_cast<void *>(imageBase+entry.offset),bytes,sizeof(bytes)) && !memcmp(bytes,entry.bytes,sizeof(bytes));
+    };
+    if(buildNumber==466) {
+        for(const auto &entry:CDEntryChecks466)if(!matches(entry)){buildFailure=@"Native Bindung für Build 466 weicht ab.";return NO;}
+    } else for(const auto &entry:CDEntryChecks) {
+        if(!matches(entry)){buildFailure=@"Native Bindung für Build 450 weicht ab.";return NO;}
     }
     supported=true; return YES;
 }
@@ -195,6 +211,7 @@ void CDOnGameThread(dispatch_block_t work) {
 NSDictionary *CDReadPlayer(void) {
     char threadName[128]{}; pthread_getname_np(pthread_self(),threadName,sizeof(threadName));
     NSMutableDictionary *result=[@{@"buildMatched":@(CDCorrectBuild()),@"thread":@(threadName),@"mainThread":@(NSThread.isMainThread)} mutableCopy];
+    result[@"buildNumber"]=@(buildNumber);
     if(lastRequest) result[@"lastRequest"]=lastRequest;
     @synchronized(NSProcessInfo.processInfo){if(serverObservation)result[@"server"]=serverObservation;if(quantityObservation)result[@"quantityResult"]=quantityObservation;}
     if(!supported) return result;
@@ -279,6 +296,9 @@ BOOL CDRequestEffect(unsigned feature,BOOL wanted,double value,uint32_t expected
 BOOL CDSetPlayerStatRatio(unsigned kind,double ratio,uint32_t expectedActorKey) {
     char threadName[128]{};pthread_getname_np(pthread_self(),threadName,sizeof(threadName));
     if(!CDCorrectBuild() || strcmp(threadName,"GameThread") || kind>2 || !std::isfinite(ratio) || ratio<0 || ratio>1) return NO;
+    // Optional diagnostic export, not a catalog feature. Its separate cheat-RPC
+    // ABI has not been verified for 466; never dispatch the 450 RPC there.
+    if(buildNumber==466)return NO;
     void *ctx=context(0x8f72700);
     if(loading(ctx)) return NO;
     void *manager=ctx ? read<void *>(ctx,0x30) : nullptr;
