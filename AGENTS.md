@@ -482,3 +482,10 @@ Die vier erfassten Originaldateien müssen ihren 30 lückenlosen SHA-256-Abschni
 entsprechen. Keine stillen Hashupdates, Signaturänderungen oder weiteren Builds.
 Die Buildfreigabe ist keine pauschale Spielstartfreigabe; Offlineprüfungen sind
 kein Ingame-Nachweis. Build 450 und seine getrennten Bindungen bleiben erhalten.
+
+Nach erneut fehlerfreier Steam-Dateiprüfung hat der Nutzer zusätzlich ausschließlich
+Steam-Build **26776744**, Version **1.0.35 (476)**, arm64-UUID
+`5E55CDE9-AFDB-31CF-961C-33FB92AB43F1` für `sha256-original` genehmigt.
+Auch dieses Profil bindet vier Originaldateien mit 30 lückenlosen SHA-256-Abschnitten.
+`CrimsonBuild476.h` enthält eigene native Bindungen; unbekannte Adressen dürfen
+nicht auf Build 450 oder 466 zurückfallen. Die bisherigen Profile bleiben erhalten.

@@ -25,8 +25,9 @@ static void prepare(unsigned build) {
     auto *header=(mach_header_64 *)testImage.mutableBytes;
     *header={MH_MAGIC_64,CPU_TYPE_ARM64,CPU_SUBTYPE_ARM64_ALL,MH_EXECUTE,1,sizeof(uuid_command),0,0};
     auto *uuid=(uuid_command *)(header+1);uuid->cmd=LC_UUID;uuid->cmdsize=sizeof(*uuid);
-    memcpy(uuid->uuid,build==466 ? CDExpectedUUID466 : CDExpectedUUID,16);
-    if(build==466)for(const auto &entry:CDEntryChecks466)memcpy((uint8_t *)header+entry.offset,entry.bytes,32);
+    memcpy(uuid->uuid,build==476 ? CDExpectedUUID476 : build==466 ? CDExpectedUUID466 : CDExpectedUUID,16);
+    if(build==476)for(const auto &entry:CDEntryChecks476)memcpy((uint8_t *)header+entry.offset,entry.bytes,32);
+    else if(build==466)for(const auto &entry:CDEntryChecks466)memcpy((uint8_t *)header+entry.offset,entry.bytes,32);
     else for(const auto &entry:CDEntryChecks)memcpy((uint8_t *)header+entry.offset,entry.bytes,32);
 }
 int main(void) {@autoreleasepool {
@@ -44,6 +45,13 @@ int main(void) {@autoreleasepool {
     for(const auto &entry:CDEntryChecks466)require(address(entry.key)==imageBase+entry.offset);
     for(const auto &entry:CDGlobals466)require(address(entry.key)==imageBase+entry.offset);
     require(CDOffset466(0xf56b88)==0 && CDOffset466(0x442e5e4)==0 && CDOffset466(0x195676c)==0x1969b0c && CDOffset466(0xdeadbeef)==0);
+    prepare(476);require(CDCorrectBuild() && buildNumber==476);
+    for(const auto &entry:CDEntryChecks476)require(address(entry.key)==imageBase+entry.offset);
+    for(const auto &entry:CDGlobals476)require(address(entry.key)==imageBase+entry.offset);
+    require(CDOffset476(0xf56b88)==0 && CDOffset476(0x442e5e4)==0 && CDOffset476(0x195676c)==0x196c5c4 && CDOffset476(0xdeadbeef)==0);
+    for(const auto &entry:CDEntryChecks476) {
+        prepare(476);((uint8_t *)testImage.mutableBytes)[entry.offset]^=1;require(!CDCorrectBuild());
+    }
     // Every individual instruction guard must reject corruption independently.
     for(const auto &entry:CDEntryChecks466) {
         prepare(466);((uint8_t *)testImage.mutableBytes)[entry.offset]^=1;require(!CDCorrectBuild());
@@ -51,6 +59,9 @@ int main(void) {@autoreleasepool {
     prepare(466);((uuid_command *)((mach_header_64 *)testImage.mutableBytes+1))->uuid[0]^=1;require(!CDCorrectBuild());
     prepare(466);((mach_header_64 *)testImage.mutableBytes)->cputype=CPU_TYPE_X86_64;require(!CDCorrectBuild());
     prepare(466);((mach_header_64 *)testImage.mutableBytes)->sizeofcmds=0;require(!CDCorrectBuild());
-    NSLog(@"PASS: both original build gates, exact relocation, 75 corrupted guards, unknown UUID/CPU/header; no game started.");
+    prepare(476);((uuid_command *)((mach_header_64 *)testImage.mutableBytes+1))->uuid[0]^=1;require(!CDCorrectBuild());
+    prepare(476);((mach_header_64 *)testImage.mutableBytes)->cputype=CPU_TYPE_X86_64;require(!CDCorrectBuild());
+    prepare(476);((mach_header_64 *)testImage.mutableBytes)->sizeofcmds=0;require(!CDCorrectBuild());
+    NSLog(@"PASS: three exact original build gates, 150 individually corrupted relocated guards, unknown UUID/CPU/header; no game started.");
     return 0;
 }}

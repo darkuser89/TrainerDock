@@ -41,6 +41,7 @@ int main(){
     put<uint16_t>(itemA,8,50);put<uint16_t>(itemB,8,42);put<int64_t>(itemB,0x10,125);
     put<uint16_t>(infos,0xc8,42);put<uint16_t>(infos,0xf0,42);
     ItemBinding binding;require(walletItem(nullptr,binding)==itemB.data() && binding.inventory==1 && binding.count==125);
+    buildNumber=476;binding={};require(walletItem(nullptr,binding)==itemB.data() && binding.inventory==1 && binding.count==125);
     ItemBinding previous=binding;put<uint64_t>(itemB,0,201);require(!findBoundItem(nullptr,binding,true));require(binding.number==previous.number);
     put<uint64_t>(itemB,0,200);put<uint16_t>(itemA,8,42);binding={};require(walletItem(nullptr,binding)==itemB.data());
     ItemBinding wildcard;wildcard.info=42;require(!findBoundItem(nullptr,wildcard,false));
@@ -51,5 +52,5 @@ int main(){
     put<int16_t>(bagB,8,-1);binding={};require(!walletItem(nullptr,binding));
     put<int16_t>(bagB,8,4097);binding={};require(!walletItem(nullptr,binding));
     put<uint32_t>(component,0x20,129);binding={};require(!walletItem(nullptr,binding));
-    puts("PASS: real wallet lookup, both builds, separate bank money, ambiguous targets, owner/item change, corrupt bounds; removed helper unreachable.");
+    puts("PASS: real wallet lookup, all three builds, separate bank money, ambiguous targets, owner/item change, corrupt bounds; removed helper unreachable.");
 }

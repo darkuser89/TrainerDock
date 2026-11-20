@@ -20,7 +20,7 @@ den aktuellen Katalog. Eine kompatible vorhandene App genügt.
 |---|---|---|---|
 | Balatro | Steam | 1.0.1o-FULL (Build 17459173) | |
 | Control Ultimate Edition | Steam / Mac App Store | Steam 1.34; MAS 1.33.1 / 1.371 | |
-| Crimson Desert | Steam | Bundle 1.0.35 (Builds 450 und 466; Steam 26636972) | |
+| Crimson Desert | Steam | Bundle 1.0.35 (Builds 450, 466 und 476; Steam 26636972 / 26776744) | |
 | Cyberpunk 2077 | Steam | 2.5.0 | |
 | Dead Island 2 | Steam / Mac App Store | 0.6.4 | **Steam: nur Uncut-Version; MAS: nur German-Cut-Version** |
 | Death Stranding Director’s Cut | Mac App Store | 1.004 (Bundle 1.1.4) | |

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "crimson-desert",
   "name": "Crimson Desert",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "profiles": [
     {
       "id": "crimson-steam-arm64-1.0.35-plus12",
@@ -257,6 +257,245 @@
           "offset": 58720256,
           "length": 1182176,
           "sha256": "e58984e01bc962f18ab3823b6e207d2c220c9d4e8a1ae14c29aa8102c7e28bf3"
+        }
+      ],
+      "integrityApproval": "user-confirmed-steam-original"
+    },
+    {
+      "id": "crimson-steam-arm64-26776744",
+      "name": "Crimson Desert · Steam · Build 476",
+      "enabled": true,
+      "bundleIdentifier": "com.pearlabyss.CrimsonDesert.steam",
+      "executable": "CrimsonDesert_Steam",
+      "uuids": [
+        "5E55CDE9-AFDB-31CF-961C-33FB92AB43F1"
+      ],
+      "teamIdentifier": "57S64SYSTT",
+      "version": "1.0.35",
+      "steamAppId": "3321460",
+      "store": "Steam",
+      "launchEnvironment": {
+        "SteamAppId": "3321460",
+        "SteamGameId": "3321460"
+      },
+      "steamBuildId": "26776744",
+      "signatureScope": "sha256-original",
+      "integrityFiles": [
+        "Contents/Info.plist",
+        "Contents/MacOS/CrimsonDesert_Steam",
+        "Contents/MacOS/libsteam_api.dylib",
+        "Contents/Frameworks/libmetalirconverter.dylib"
+      ],
+      "fileChecks": [
+        {
+          "path": "Contents/Info.plist",
+          "fileSize": 1994,
+          "offset": 0,
+          "length": 1994,
+          "sha256": "eeac35f32a09e40e48a6d124b0f202fa618bbd89a06324171982278da75ab0eb"
+        },
+        {
+          "path": "Contents/MacOS/CrimsonDesert_Steam",
+          "fileSize": 164994448,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "cd2f09e814bd1467899fc4ba4f1da6c5b473fb204b064f7a98e8188c9a648365"
+        },
+        {
+          "path": "Contents/MacOS/CrimsonDesert_Steam",
+          "fileSize": 164994448,
+          "offset": 8388608,
+          "length": 8388608,
+          "sha256": "127df5d4f4382eca096e5b18cd8eea73089cf869fb47d58b24a5e0b803f26115"
+        },
+        {
+          "path": "Contents/MacOS/CrimsonDesert_Steam",
+          "fileSize": 164994448,
+          "offset": 16777216,
+          "length": 8388608,
+          "sha256": "2eb293d04e129bdc4874012027c956e92053d7020176ca6a4fd988bd0df70489"
+        },
+        {
+          "path": "Contents/MacOS/CrimsonDesert_Steam",
+          "fileSize": 164994448,
+          "offset": 25165824,
+          "length": 8388608,
+          "sha256": "56f0e396c6153fac60df8be97ef2dc4badebca7db0ab2f311805fabc34437695"
+        },
+        {
+          "path": "Contents/MacOS/CrimsonDesert_Steam",
+          "fileSize": 164994448,
+          "offset": 33554432,
+          "length": 8388608,
+          "sha256": "b856128dea28e95b75daeca7b953fe36215a60c22021cef2a4f093106bf91570"
+        },
+        {
+          "path": "Contents/MacOS/CrimsonDesert_Steam",
+          "fileSize": 164994448,
+          "offset": 41943040,
+          "length": 8388608,
+          "sha256": "14a8caa4e9e11ebc76582bec081933b7cfc31ed19dcbdba7b885d9df22ef655a"
+        },
+        {
+          "path": "Contents/MacOS/CrimsonDesert_Steam",
+          "fileSize": 164994448,
+          "offset": 50331648,
+          "length": 8388608,
+          "sha256": "8cda8b4bf9ec05efc78fcb6067445555bca4eb2d705e053036e7d73b2779aedb"
+        },
+        {
+          "path": "Contents/MacOS/CrimsonDesert_Steam",
+          "fileSize": 164994448,
+          "offset": 58720256,
+          "length": 8388608,
+          "sha256": "3d8c42300be8dc76f58554525db40da722a4d0c15f9cbc463830765fcf16f943"
+        },
+        {
+          "path": "Contents/MacOS/CrimsonDesert_Steam",
+          "fileSize": 164994448,
+          "offset": 67108864,
+          "length": 8388608,
+          "sha256": "6dadfede67a85dd4022c55bd6c9e503fa838c3abec823c9cd8f8cd3bb4877126"
+        },
+        {
+          "path": "Contents/MacOS/CrimsonDesert_Steam",
+          "fileSize": 164994448,
+          "offset": 75497472,
+          "length": 8388608,
+          "sha256": "93ced73b47339be4e5af02f0c7480e2bc4a135cf514db5dece92322845e7841d"
+        },
+        {
+          "path": "Contents/MacOS/CrimsonDesert_Steam",
+          "fileSize": 164994448,
+          "offset": 83886080,
+          "length": 8388608,
+          "sha256": "c285128bec9f1303f322b420d45844850e1365dc3b7a3ea0159d27cbcbc60beb"
+        },
+        {
+          "path": "Contents/MacOS/CrimsonDesert_Steam",
+          "fileSize": 164994448,
+          "offset": 92274688,
+          "length": 8388608,
+          "sha256": "bab7d32c613a1751f79aa217f1db01e8c9f16736e77f01f6a3f82f9d43e4e12e"
+        },
+        {
+          "path": "Contents/MacOS/CrimsonDesert_Steam",
+          "fileSize": 164994448,
+          "offset": 100663296,
+          "length": 8388608,
+          "sha256": "02db1a1c7f9794264a02ee1e69fd6d5b8cc554d69ea79e3bd19c7e2f3359cda9"
+        },
+        {
+          "path": "Contents/MacOS/CrimsonDesert_Steam",
+          "fileSize": 164994448,
+          "offset": 109051904,
+          "length": 8388608,
+          "sha256": "556f5d145fcda1024056ff98f4dba1d1ad486d4b105a6e08b670514ad5f77a0b"
+        },
+        {
+          "path": "Contents/MacOS/CrimsonDesert_Steam",
+          "fileSize": 164994448,
+          "offset": 117440512,
+          "length": 8388608,
+          "sha256": "e628168b682270392d5bb91be91575ae6c205312e8faaa38ebda99de7c4dafce"
+        },
+        {
+          "path": "Contents/MacOS/CrimsonDesert_Steam",
+          "fileSize": 164994448,
+          "offset": 125829120,
+          "length": 8388608,
+          "sha256": "a4aa27df7ac8f6110a7f01e525130d91de891022f42646ee05bf43e379f94b78"
+        },
+        {
+          "path": "Contents/MacOS/CrimsonDesert_Steam",
+          "fileSize": 164994448,
+          "offset": 134217728,
+          "length": 8388608,
+          "sha256": "56ff9571c83bfb4d86f3a4a528a149b2a8fbc59491de443b779fe6e84cc094c6"
+        },
+        {
+          "path": "Contents/MacOS/CrimsonDesert_Steam",
+          "fileSize": 164994448,
+          "offset": 142606336,
+          "length": 8388608,
+          "sha256": "d61061bc0a4817362d3a0d2c7b6e1168fbfc33ba2b48feadd665c61a4a73a2d6"
+        },
+        {
+          "path": "Contents/MacOS/CrimsonDesert_Steam",
+          "fileSize": 164994448,
+          "offset": 150994944,
+          "length": 8388608,
+          "sha256": "d67376fc3afafd8f4d942bcced56b6738b34baa36701143b08824185b642e007"
+        },
+        {
+          "path": "Contents/MacOS/CrimsonDesert_Steam",
+          "fileSize": 164994448,
+          "offset": 159383552,
+          "length": 5610896,
+          "sha256": "09836593db90e10f47622806df57b716fbf0dd9c647d2f4cf9371d8d2cbb7c19"
+        },
+        {
+          "path": "Contents/MacOS/libsteam_api.dylib",
+          "fileSize": 413632,
+          "offset": 0,
+          "length": 413632,
+          "sha256": "39570db9857e296e0c19ea6aad4604690e631fe612045e0761d4c4bac1ec34f9"
+        },
+        {
+          "path": "Contents/Frameworks/libmetalirconverter.dylib",
+          "fileSize": 59902432,
+          "offset": 0,
+          "length": 8388608,
+          "sha256": "f3a13291eb5b7febe919fd03ffa28d2e52b9550fcec3e52c776ece4cc204d281"
+        },
+        {
+          "path": "Contents/Frameworks/libmetalirconverter.dylib",
+          "fileSize": 59902432,
+          "offset": 8388608,
+          "length": 8388608,
+          "sha256": "a18e3f04b873aaf93a2e342dabab4ab01cd54bdd511b46a36eac34db5854e905"
+        },
+        {
+          "path": "Contents/Frameworks/libmetalirconverter.dylib",
+          "fileSize": 59902432,
+          "offset": 16777216,
+          "length": 8388608,
+          "sha256": "e234a2c617a457a6fa7fa56de7f0303e8efa406bf888f1d003ed2cf607b27ed5"
+        },
+        {
+          "path": "Contents/Frameworks/libmetalirconverter.dylib",
+          "fileSize": 59902432,
+          "offset": 25165824,
+          "length": 8388608,
+          "sha256": "a732dd78f487b2fc2e034b7e837cbe30f07bd4006ab760c505f273ac294b9f05"
+        },
+        {
+          "path": "Contents/Frameworks/libmetalirconverter.dylib",
+          "fileSize": 59902432,
+          "offset": 33554432,
+          "length": 8388608,
+          "sha256": "e7a1108e74e5c4d11328349b06dafa627e4db3c78ca4a8e3aaee8b62032c418c"
+        },
+        {
+          "path": "Contents/Frameworks/libmetalirconverter.dylib",
+          "fileSize": 59902432,
+          "offset": 41943040,
+          "length": 8388608,
+          "sha256": "bd2ba7e257afc8f31d1a4dcfeb84f78f965ef57d7b45849fc0b4b7df9ddeeabf"
+        },
+        {
+          "path": "Contents/Frameworks/libmetalirconverter.dylib",
+          "fileSize": 59902432,
+          "offset": 50331648,
+          "length": 8388608,
+          "sha256": "cf6b7afa58bfe8b04efdb38e604195974204e8ce0b253841c5f1b5292f80c046"
+        },
+        {
+          "path": "Contents/Frameworks/libmetalirconverter.dylib",
+          "fileSize": 59902432,
+          "offset": 58720256,
+          "length": 1182176,
+          "sha256": "970a3c1d89b00c264062043ef825e4c99d968131ac5de644a256cd2e0078c68d"
         }
       ],
       "integrityApproval": "user-confirmed-steam-original"

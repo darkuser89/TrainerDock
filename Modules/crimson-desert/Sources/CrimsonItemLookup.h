@@ -30,9 +30,9 @@ void *findBoundItem(void *actor,ItemBinding &binding,bool searchNumber) {
 void *walletItem(void *actor,ItemBinding &binding) {
     void *infos=native<void *(*)(uint16_t)>(0x1b38c48)(6);
     if(!infos)return nullptr;
-    binding.info=read<uint16_t>(infos,buildNumber==466 ? 0xc8 : 0xf0);
+    binding.info=read<uint16_t>(infos,buildNumber==450 ? 0xf0 : 0xc8);
     if(binding.info==UINT16_MAX)return nullptr;
-    if(buildNumber==466) {
+    if(buildNumber==466 || buildNumber==476) {
         // The metadata getter returns an inventory KIND (3), not an index.
         // The original dispatcher at 0x1a80ee0 maps that kind to bag index 1;
         // its branch and output store are pinned by CDEntryChecks466.

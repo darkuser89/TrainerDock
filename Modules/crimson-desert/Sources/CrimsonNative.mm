@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-only
-// Separate exact bindings for Steam bundle builds 450 and 466.
+// Separate exact bindings for Steam bundle builds 450, 466 and 476.
 #import "CrimsonNative.h"
 extern "C" {
 #import "MemoryAccess.h"
@@ -15,6 +15,7 @@ extern "C" {
 #include <map>
 #import "CrimsonBuild.h"
 #import "CrimsonBuild466.h"
+#import "CrimsonBuild476.h"
 
 namespace {
 uintptr_t imageBase;
@@ -22,7 +23,7 @@ bool checked, supported;
 unsigned buildNumber;
 NSString *buildFailure;
 uintptr_t address(uintptr_t key) {
-    uintptr_t offset=buildNumber==466 ? CDOffset466(key) : key;
+    uintptr_t offset=buildNumber==476 ? CDOffset476(key) : buildNumber==466 ? CDOffset466(key) : buildNumber==450 ? key : 0;
     // A missing binding is a programming error, never permission to use 450.
     if(!offset)__builtin_trap();
     return imageBase+offset;
@@ -185,6 +186,7 @@ BOOL CDCorrectBuild(void) {
             const uint8_t *identity=reinterpret_cast<const uuid_command *>(c)->uuid;
             if(!memcmp(identity,CDExpectedUUID,16))buildNumber=450;
             else if(!memcmp(identity,CDExpectedUUID466,16))buildNumber=466;
+            else if(!memcmp(identity,CDExpectedUUID476,16))buildNumber=476;
             uuid=buildNumber!=0;
         }
         pos+=c->cmdsize;
@@ -195,7 +197,9 @@ BOOL CDCorrectBuild(void) {
         uint8_t bytes[sizeof(entry.bytes)];
         return MTReadMemory(reinterpret_cast<void *>(imageBase+entry.offset),bytes,sizeof(bytes)) && !memcmp(bytes,entry.bytes,sizeof(bytes));
     };
-    if(buildNumber==466) {
+    if(buildNumber==476) {
+        for(const auto &entry:CDEntryChecks476)if(!matches(entry)){buildFailure=@"Native Bindung für Build 476 weicht ab.";return NO;}
+    } else if(buildNumber==466) {
         for(const auto &entry:CDEntryChecks466)if(!matches(entry)){buildFailure=@"Native Bindung für Build 466 weicht ab.";return NO;}
     } else for(const auto &entry:CDEntryChecks) {
         if(!matches(entry)){buildFailure=@"Native Bindung für Build 450 weicht ab.";return NO;}
@@ -297,8 +301,8 @@ BOOL CDSetPlayerStatRatio(unsigned kind,double ratio,uint32_t expectedActorKey) 
     char threadName[128]{};pthread_getname_np(pthread_self(),threadName,sizeof(threadName));
     if(!CDCorrectBuild() || strcmp(threadName,"GameThread") || kind>2 || !std::isfinite(ratio) || ratio<0 || ratio>1) return NO;
     // Optional diagnostic export, not a catalog feature. Its separate cheat-RPC
-    // ABI has not been verified for 466; never dispatch the 450 RPC there.
-    if(buildNumber==466)return NO;
+    // Diagnostic-only RPC remains unbound on later builds; never use the 450 ABI.
+    if(buildNumber!=450)return NO;
     void *ctx=context(0x8f72700);
     if(loading(ctx)) return NO;
     void *manager=ctx ? read<void *>(ctx,0x30) : nullptr;

@@ -35,13 +35,14 @@ def page_pair(mach, offset, load=False):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('app', type=Path)
+    parser.add_argument('--allow-disabled', action='store_true', help='Nur Offlineprüfung eines noch nicht ingame bestätigten Profils')
     args = parser.parse_args()
     info = plistlib.loads((args.app / 'Contents/Info.plist').read_bytes())
     build = info['CFBundleVersion']
-    require(info['CFBundleIdentifier'] == 'com.pearlabyss.CrimsonDesert.steam' and build in ('450', '466'), 'Wrong original build')
+    require(info['CFBundleIdentifier'] == 'com.pearlabyss.CrimsonDesert.steam' and build in ('450', '466', '476'), 'Wrong original build')
     mach = Mach(args.app / 'Contents/MacOS/CrimsonDesert_Steam')
     identity = subprocess.check_output(['xcrun', 'dwarfdump', '--uuid', str(mach.path)], text=True)
-    uuid = {'450': '6D8EEB01-C410-39A0-8460-D3CDAE923532', '466': 'B5C91E74-E921-3891-A1E9-B9BAAB7D0A9D'}[build]
+    uuid = {'450': '6D8EEB01-C410-39A0-8460-D3CDAE923532', '466': 'B5C91E74-E921-3891-A1E9-B9BAAB7D0A9D', '476': '5E55CDE9-AFDB-31CF-961C-33FB92AB43F1'}[build]
     require(uuid + ' (arm64)' in identity, 'Wrong original UUID')
     source = ROOT / 'Modules/crimson-desert/Sources'
     header = (source / 'CrimsonBuild.h').read_text()
@@ -50,11 +51,11 @@ def main():
     require(len(probes) == 76, 'Incomplete native probes')
     relocated = {key: key for key in probes}
     profile = next(p for p in json.loads((source.parent / 'Module.json').read_text())['profiles'] if uuid in p['uuids'])
-    require(profile['enabled'], 'New profile is not ready')
+    require(profile['enabled'] or args.allow_disabled, 'New profile is not ready')
     if build == '450':
         subprocess.run(['codesign', '--verify', '--strict', str(args.app)], check=True)
     else:
-        require(profile.get('steamBuildId') == '26636972' and profile.get('signatureScope') == 'sha256-original'
+        require(profile.get('steamBuildId') == {'466': '26636972', '476': '26776744'}[build] and profile.get('signatureScope') == 'sha256-original'
                 and profile.get('integrityApproval') == 'user-confirmed-steam-original', 'Missing exact original approval')
         expected_files = set(profile['integrityFiles'])
         require(len(expected_files) == 4 and expected_files == {c['path'] for c in profile['fileChecks']}, 'Incomplete original files')
@@ -69,7 +70,7 @@ def main():
                     require(len(data) == chunk['length'] and hashlib.sha256(data).hexdigest() == chunk['sha256'], 'Changed original bytes')
                     position += len(data)
             require(position == original.stat().st_size, 'Incomplete original hash coverage')
-        header466 = (source / 'CrimsonBuild466.h').read_text()
+        header466 = (source / f'CrimsonBuild{build}.h').read_text()
         entries = [(int(key, 16), int(offset, 16), bytes(int(v, 16) for v in re.findall(r'0x[0-9a-f]+', raw)))
                    for key, offset, raw in re.findall(r'\{(0x[0-9a-f]+),(0x[0-9a-f]+),\{([^}]+)\}\}', header466)]
         require(len(entries) == 75 and len({e[0] for e in entries}) == 75, 'Incomplete/duplicate 466 bindings')
@@ -82,9 +83,9 @@ def main():
     # even when their prologue looks nearby/similar: no x1 dereference or call.
     constructor = relocated[0x1f97c9c]
     require(mach.words(mach.base + constructor, mach.base + constructor + 16) ==
-            (0xf900181f, 0x52800248, 0x79000008 if build == '466' else 0x39000008, 0xd65f03c0),
+            (0xf900181f, 0x52800248, 0x79000008 if build in ('466', '476') else 0x39000008, 0xd65f03c0),
             'Wrong no-argument DropValue constructor ABI')
-    if build == '466':
+    if build in ('466', '476'):
         money_getter = relocated[0x195676c]
         words = mach.words(mach.base + money_getter, mach.base + money_getter + 28)
         require(words[:3] == (0xa9bf7bfd, 0x910003fd, 0x52800880)
@@ -102,8 +103,8 @@ def main():
     inventory = (source / 'CrimsonInventory.h').read_text() + (source / 'CrimsonItemLookup.h').read_text()
     calls = {int(a, 16) for a in re.findall(r'native<[^;\n]+?>\((0x[0-9a-f]+)\)', native + effects + inventory)}
     # This diagnostic RPC is intentionally rejected on 466, before resolving it.
-    if build == '466':
-        require('if(buildNumber==466)return NO;' in native.split('BOOL CDSetPlayerStatRatio', 1)[1], 'Unverified diagnostic RPC reachable')
+    if build in ('466', '476'):
+        require('if(buildNumber!=450)return NO;' in native.split('BOOL CDSetPlayerStatRatio', 1)[1], 'Unverified diagnostic RPC reachable')
         calls.discard(0x442e5e4)
         calls.discard(0xf56b88)
     require(calls <= relocated.keys(), 'Native function without exact runtime guard')
@@ -113,14 +114,18 @@ def main():
     bindings466 = [(0x7e5b28, 0x8dedb60, True), (0x3fcd460, 0x8fafd30, True),
                    (0x8a21e0, 0x8fc9040, False), (0x4097ac8, 0x86baf88, False),
                    (0x2a30b8, 0x810cab0, False), (0x49889f0, 0x90d0288, False)]
-    if build == '466':
+    bindings476 = [(0x7e7038, 0x8df1ba0, True), (0x3fd0fdc, 0x8fb3d70, True),
+                   (0x8a3720, 0x8fcd080, False), (0x409b644, 0x86be858, False),
+                   (0x2a2f98, 0x8110aa0, False), (0x498d24c, 0x90d4360, False)]
+    actual_bindings = {'450': bindings450, '466': bindings466, '476': bindings476}[build]
+    if build in ('466', '476'):
         globals466 = {int(key, 16): int(offset, 16) for key, offset in
                       re.findall(r'\{(0x[0-9a-f]+),(0x[0-9a-f]+)\}', header466)}
-        require(globals466 == {old[1]: new[1] for old, new in zip(bindings450, bindings466)}, 'Runtime globals disagree with original callers')
-    for offset, expected, load in bindings466 if build == '466' else bindings450:
+        require(globals466 == {old[1]: new[1] for old, new in zip(bindings450, actual_bindings)}, 'Runtime globals disagree with original callers')
+    for offset, expected, load in actual_bindings:
         require(page_pair(mach, offset, load) == expected, 'Changed global owner/type binding')
-    for offset, expected in [(0x86baf88 if build == '466' else 0x8679c28, 'N2pa18ClientTimerManagerE'),
-                             (0x810cab0 if build == '466' else 0x80cd500, 'N2pa14uiCommonScript39UIGamePlayControlRootInventoryEquipmentE')]:
+    for offset, expected in [(actual_bindings[3][1], 'N2pa18ClientTimerManagerE'),
+                             (actual_bindings[4][1], 'N2pa14uiCommonScript39UIGamePlayControlRootInventoryEquipmentE')]:
         rtti = mach.pointer(mach.base + offset - 8)
         require(mach.string(mach.pointer(rtti + 8)) == expected, 'Wrong native owner RTTI')
     require(profile['uuids'] == [uuid], 'Manifest/runtime identity mismatch')

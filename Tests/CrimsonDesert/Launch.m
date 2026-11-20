@@ -4,13 +4,14 @@
 #import "GameIdentity.h"
 #import "MHTProtocol.h"
 int main(int argc,const char *argv[]){@autoreleasepool{
- if(argc!=2)return 2;
+ if(argc<2 || argc>4)return 2;
  NSString *root=@(argv[1]);
- NSString *bundle=@"/Volumes/Mac Games/SteamLibrary/steamapps/common/Crimson Desert/CrimsonDesert_Steam.app";
+ NSString *bundle=argc==4 ? @(argv[3]) : @"/Volumes/Mac Games/SteamLibrary/steamapps/common/Crimson Desert/CrimsonDesert_Steam.app";
  NSString *module=[NSHomeDirectory() stringByAppendingPathComponent:@"Library/Developer/TrainerDock/Modules/crimson-desert.mhtmodule"];
- NSString *configuration=[module stringByAppendingPathComponent:@"TrainerConfig.json"];
+ NSString *configuration=[root stringByAppendingPathComponent:@"TrainerConfig.json"];
+ if(![NSFileManager.defaultManager fileExistsAtPath:configuration])configuration=[module stringByAppendingPathComponent:@"TrainerConfig.json"];
  NSError *failure=nil;NSDictionary *config=MTLoadConfiguration(configuration,&failure);
- NSDictionary *profile=MTFindProfile(config,@"crimson-steam-arm64-26636972");
+ NSDictionary *profile=MTFindProfile(config,argc>=3 ? @(argv[2]) : @"crimson-steam-arm64-26636972");
  NSDictionary *game=MTInspectGame(bundle,profile,&failure);
  if(!game){fprintf(stderr,"%s\n",failure.localizedDescription.UTF8String);return 1;}
  if(MTExecutableIsRunning(game[@"executable"]) || [NSRunningApplication runningApplicationsWithBundleIdentifier:profile[@"bundleIdentifier"]].count){fputs("Spiel läuft bereits; kein zweiter Start.\n",stderr);return 2;}
